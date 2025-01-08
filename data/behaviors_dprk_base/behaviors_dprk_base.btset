@@ -1,0 +1,12 @@
+{
+  "name": "behaviors_dprk_base",
+  "trees": [
+    "SquadOverwatch\\AlternatingRetreat.bt"
+  ],
+  "initScripts": [
+    "SquadOverwatch\\DPRKsquad.class.lua",
+    "classes.lua"
+  ],
+  "parameters": {},
+  "capabilities": {}
+}
