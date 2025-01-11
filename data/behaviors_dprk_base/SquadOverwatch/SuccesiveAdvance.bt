@@ -1,0 +1,408 @@
+{
+  "name": "Wait and listen",
+  "id": "bb7acc50-d490-4bdb-8ace-e6455447c2ff",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "67ce5d77-ff67-4b14-8390-6f88d43ea10d",
+      "type": "waitUntil",
+      "condition": [
+        "return loc.Done"
+      ]
+    },
+    {
+      "name": "Recalculate Leader",
+      "id": "77052674-e422-4288-8585-60fef9af3424",
+      "type": "scriptAction",
+      "script": [
+        "if Leader ==nil or not Leader:IsAlive() then",
+        "    local soldiers = {}",
+        "    for fireteam in self:GetChildGroups() do",
+        "        for soldier in fireteam:GetEntities() do",
+        "            if soldier:IsAlive() then",
+        "                loc.Leader = soldier",
+        "            end",
+        "        end",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Recalculate teams",
+      "id": "d019e76b-5965-47ab-b373-b12a264286a9",
+      "type": "scriptAction",
+      "script": [
+        "if #loc.locations ~= self:GetChildGroupCount() then",
+        "for member in self:GetChildGroups() do",
+        "loc.locations[member] = 0--TODO: detect location on path",
+        "end",
+        "end"
+      ]
+    },
+    {
+      "name": "Path calculation",
+      "id": "692d40b2-8af1-4d2e-9809-ede698ffb4e4",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Recalculate path",
+          "id": "12a83bea-54bc-4d50-a7ae-de9f24dc4104",
+          "type": "scriptAction",
+          "script": [
+            "if  loc.pathFuture ==nil  then",
+            "loc.pathFuture = FindPath(loc.Leader:GetPosition(),arg.orderData.destination)",
+            "loc.slots = {}",
+            "end"
+          ]
+        },
+        {
+          "name": "GetRecalculatedPath",
+          "id": "05a55c3f-c30b-4013-83f5-f9e5f1cdeaa3",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.pathFuture:IsReady() == true then",
+            "loc.path = loc.pathFuture:Value()",
+            "loc.pathFuture =nil",
+            "loc.waypoints = {}",
+            "local segmentLenght = 70",
+            "local count = 0",
+            "for loopvar = 0, loc.path:Length(), segmentLenght do",
+            "   loc.waypoints[count] = loc.path:PositionAlongPath(loopvar);",
+            "   count = count+1",
+            "end",
+            "loc.waypoints[count] =arg.orderData.destination",
+            "return true",
+            "end",
+            "return false"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "b6be34e4-0b42-4d92-921e-bd41763046bd",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        },
+        {
+          "id": "9feb76c7-09f8-4b69-a508-23da4d4b2067",
+          "type": "scriptCondition",
+          "name": "Recalculation needed?",
+          "script": [
+            "return loc.path ==nil and arg.orderData ~=nil and arg.orderData.destination ~=nil --Add a check if the waypoint is changed maybe"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DrawPath",
+      "id": "55eb707c-ab19-4241-8751-94fdc1a525c8",
+      "type": "scriptAction",
+      "script": [
+        "if loc.path ~=nil then",
+        "ai_core_public.draw.Path(loc.path,1,0,0,1,Vec3(0,0,2))",
+        "",
+        "for n,point in pairs(loc.waypoints) do",
+        "ai_core_public.draw.Circle(point+Vec3(0,0,2),1,1,1,0,1)",
+        "end",
+        "end"
+      ]
+    },
+    {
+      "name": "Slots calculation",
+      "id": "2cf2d527-c6cb-42e8-888b-7176b4be40dd",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Recalculate Slots",
+          "id": "f5330910-11ec-4ca3-a94f-09a3dbe897aa",
+          "type": "scriptAction",
+          "script": [
+            "local minloc = #loc.locations",
+            "for _,pos in pairs(loc.locations) do",
+            "    if pos<minloc then",
+            "    minloc = pos",
+            "    end",
+            "end",
+            "if minloc+1<#loc.waypoints then",
+            "    minloc = minloc+1--if we are not at the end yet we draw the side slots on the next one otherwise on us.",
+            "end",
+            "--find min of locations end",
+            "if minloc>=#loc.waypoints then",
+            "    loc.Done = true",
+            "    return true",
+            "end",
+            "",
+            "local position = loc.waypoints[minloc]--vector value",
+            "local dir",
+            "if minloc+1<#loc.waypoints then",
+            "    dir = (loc.waypoints[minloc+1]-position):Normalized()",
+            "elseif minloc>0 then",
+            "    dir = (position-loc.waypoints[minloc-1]):Normalized()",
+            "else",
+            "    dir = Vec3(1,0,0)",
+            "end",
+            "local perp = dir:RightPerpendicularXY()",
+            "loc.slots = {}",
+            "loc.slotsFutures = {}",
+            "for i = 0, #loc.locations-1 do",
+            "    if i == 0 then ",
+            "    \tloc.slots[0] = position",
+            "    elseif i%2==1 then",
+            "        loc.slotsFutures[i] =FindPath(position, position + loc.TeamSeparation *(i+1)/2 * perp) --The (i+1) is so that they dont alternate weirdly (non symetricly)",
+            "    else",
+            "        loc.slotsFutures[i] = FindPath(position,position - loc.TeamSeparation *i/2*perp)",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "GetRecalculatedSlots",
+          "id": "cacf5e76-12a9-4caa-bf41-de313f1d997e",
+          "type": "waitUntil",
+          "condition": [
+            "for _,future in pairs(loc.slotsFutures) do ",
+            "    if not future:IsReady() then",
+            "        return false",
+            "    end",
+            "end",
+            "for i,future in pairs(loc.slotsFutures) do ",
+            "    loc.slots[i] = future:Value():PositionAlongPath(loc.TeamSeparation)",
+            "end",
+            "",
+            "",
+            "return true"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "7bb29ac8-ea99-43c1-98cc-880a494a5f49",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        },
+        {
+          "id": "7ae71db1-a777-45a4-b5db-7d40631213a8",
+          "type": "scriptCondition",
+          "name": "Recalculation of slots needed?",
+          "script": [
+            "local minloc = #loc.locations",
+            "for _,pos in pairs(loc.locations) do",
+            "    if pos<minloc then",
+            "    minloc = pos",
+            "    end",
+            "end",
+            "if loc.currentLoc<minloc then",
+            "loc.currentLoc = minloc",
+            "loc.slots = {}",
+            "end",
+            "return loc.path ~=nil and arg.orderData ~=nil and arg.orderData.destination ~=nil and #loc.slots <#loc.locations"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Draw Slots",
+      "id": "167c5bf0-9390-423b-aa9e-32f75aff52f7",
+      "type": "scriptAction",
+      "script": [
+        "if  #loc.slots ==#loc.locations then",
+        "for _,slot in pairs(loc.slots) do",
+        "ai_core_public.draw.Circle(slot+Vec3(0,0,2),1,1,0,0,1)",
+        "end",
+        "end"
+      ]
+    },
+    {
+      "name": "Fireteam command sender",
+      "id": "04ad5dba-013f-4c6e-86b1-349908311728",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Prepare data for reference",
+          "id": "6c20e5e8-1866-4f11-b640-fac00b882662",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.MovingTeam == nil and loc.waypoints ~=nil and  #loc.slots ==#loc.locations then",
+            "local min = 99999",
+            "local minteam",
+            "for group in self:GetChildGroups() do",
+            "    if loc.locations[group]<min then",
+            "        min = loc.locations[group]",
+            "        minteam = group",
+            "    end",
+            "end",
+            "loc.MovingTeam = minteam",
+            "loc.Subordinates = {}",
+            "table.insert(loc.Subordinates, minteam)",
+            "loc.SubordinatesData = InternalTable()",
+            "local team = 0 --send team to its appropriate slot",
+            "for key,value in pairs(loc.locations) do",
+            "    if key == minteam then",
+            "        if min+1<#loc.waypoints then",
+            "            loc.SubordinatesData[minteam] = {",
+            "                destination = loc.slots[team],",
+            "                heading = (loc.waypoints[min+1]-loc.slots[team]):AngleTo(Vec3(1,0,0))",
+            "            }",
+            "        else",
+            "            loc.SubordinatesData[minteam] = {",
+            "                destination = loc.slots[team],",
+            "                heading = arg.orderData.heading",
+            "            }",
+            "        end",
+            "        return true",
+            "    end",
+            "    team = team+1",
+            "end",
+            "end",
+            "return false"
+          ]
+        },
+        {
+          "name": "Move subordinates",
+          "id": "70db8549-ee79-43dc-adbc-b3a12f2f103a",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return {orderName = \"Advance\"}",
+            "subordinates": "return loc.Subordinates",
+            "subordinateData": "return loc.SubordinatesData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Movement finished",
+          "id": "837b4114-e2a1-4768-ba72-181501c27744",
+          "type": "scriptAction",
+          "script": [
+            "loc.locations[loc.MovingTeam] = loc.locations[loc.MovingTeam]+1",
+            "",
+            "if loc.locations[loc.MovingTeam]>#loc.waypoints then",
+            "    loc.Done = true",
+            "end",
+            "loc.MovingTeam = nil"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DrawLine",
+      "id": "c47d1afc-4596-449d-8157-12c572064899",
+      "type": "scriptAction",
+      "script": [
+        "if arg.orderData ~=nil and arg.orderData.destination ~=nil then",
+        "\tlocal node = self",
+        "\twhile type(node) == \"GroupBrain\" or type(node) == \"Group\" do",
+        "\t\tif node:GetEntityCount()==0 and node:GetChildGroupCount()~=0 then",
+        "\t\t\tnode = node:GetChildGroup(0)",
+        "\t\telseif node:GetEntityCount()~=0 then",
+        "\t\t\tDebugLine(node:GetEntity(0):GetPosition()+Vec3(0,0,2),arg.orderData.destination+Vec3(0,0,2), 1, 0, 0, 1)",
+        "\t\t\treturn true",
+        "\t\tend",
+        "\tend",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "bb7acc50-d490-4bdb-8ace-e6455447c2ff",
+        "position": "1937.5,358.5"
+      },
+      {
+        "id": "67ce5d77-ff67-4b14-8390-6f88d43ea10d",
+        "position": "1162.5,433.5"
+      },
+      {
+        "id": "77052674-e422-4288-8585-60fef9af3424",
+        "position": "1212.5,533.5"
+      },
+      {
+        "id": "d019e76b-5965-47ab-b373-b12a264286a9",
+        "position": "1387.5,546"
+      },
+      {
+        "id": "692d40b2-8af1-4d2e-9809-ede698ffb4e4",
+        "position": "1575,596"
+      },
+      {
+        "id": "12a83bea-54bc-4d50-a7ae-de9f24dc4104",
+        "position": "1200,758.5"
+      },
+      {
+        "id": "05a55c3f-c30b-4013-83f5-f9e5f1cdeaa3",
+        "position": "1287.5,846"
+      },
+      {
+        "id": "55eb707c-ab19-4241-8751-94fdc1a525c8",
+        "position": "1775,633.5"
+      },
+      {
+        "id": "2cf2d527-c6cb-42e8-888b-7176b4be40dd",
+        "position": "1787.5,858.5"
+      },
+      {
+        "id": "f5330910-11ec-4ca3-a94f-09a3dbe897aa",
+        "position": "1687.5,1096"
+      },
+      {
+        "id": "cacf5e76-12a9-4caa-bf41-de313f1d997e",
+        "position": "1975,1096"
+      },
+      {
+        "id": "167c5bf0-9390-423b-aa9e-32f75aff52f7",
+        "position": "1975,633.5"
+      },
+      {
+        "id": "04ad5dba-013f-4c6e-86b1-349908311728",
+        "position": "2150,583.5"
+      },
+      {
+        "id": "6c20e5e8-1866-4f11-b640-fac00b882662",
+        "position": "2050,771"
+      },
+      {
+        "id": "70db8549-ee79-43dc-adbc-b3a12f2f103a",
+        "position": "2250,771"
+      },
+      {
+        "id": "837b4114-e2a1-4768-ba72-181501c27744",
+        "position": "2575,771"
+      },
+      {
+        "id": "c47d1afc-4596-449d-8157-12c572064899",
+        "position": "2387.5,571"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2596",
+    "gridPadding": "0,8.50000000000034"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "path": "nil",
+    "MovingTeam": "nil",
+    "locations": "return {}",
+    "pathFuture": "nil",
+    "waypoints": "nil",
+    "Leader": "nil",
+    "SubordinatesData": "nil",
+    "Subordinates": "nil",
+    "slots": "return {}",
+    "TeamSeparation": "60",
+    "Done": "return false",
+    "slotsFutures": "nil",
+    "currentLoc": "return 0"
+  }
+}
