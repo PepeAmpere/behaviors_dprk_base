@@ -1,0 +1,96 @@
+{
+  "name": "<unnamed>",
+  "id": "41ce574c-96ae-4969-a44f-17030324686d",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
+      "type": "waitForever"
+    },
+    {
+      "name": "<unnamed>",
+      "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "<unnamed>",
+          "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Sensor",
+              "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_base",
+                "OP4sensor"
+              ],
+              "arguments": {
+                "EnemyPosition": "loc.enemyPosition"
+              }
+            },
+            {
+              "name": "ReactionPlaceholder",
+              "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
+              "type": "scriptAction",
+              "script": [
+                "DebugLog(\"I see them! Uiiiiii!\")"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "DefaultBehavior",
+          "id": "968dbf0d-33aa-4b0f-922e-71d278d973b0",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_base",
+            "AlternatingRetreat"
+          ],
+          "arguments": {}
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "41ce574c-96ae-4969-a44f-17030324686d",
+        "position": "1887.5,102"
+      },
+      {
+        "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
+        "position": "1562.5,252"
+      },
+      {
+        "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
+        "position": "2086,255"
+      },
+      {
+        "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+        "position": "1962.5,352"
+      },
+      {
+        "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+        "position": "1887.5,527"
+      },
+      {
+        "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
+        "position": "2125,539.5"
+      },
+      {
+        "id": "968dbf0d-33aa-4b0f-922e-71d278d973b0",
+        "position": "2324,436"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2402",
+    "gridPadding": "0,2"
+  },
+  "parameters": [],
+  "locals": {
+    "enemyPosition": "nil"
+  }
+}
