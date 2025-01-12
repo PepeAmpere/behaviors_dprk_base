@@ -1,7 +1,10 @@
 {
   "name": "behaviors_dprk_base",
   "trees": [
-    "SquadOverwatch\\AlternatingRetreat.bt"
+    "SquadOverwatch\\AlternatingRetreat.bt",
+    "SquadOverwatch\\SuccesiveAdvance.bt",
+    "OP4sensor.bt",
+    "VladaPlaceholder.bt"
   ],
   "initScripts": [
     "SquadOverwatch\\DPRKsquad.class.lua",
