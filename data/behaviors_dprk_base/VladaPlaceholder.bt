@@ -42,13 +42,15 @@
         },
         {
           "name": "DefaultBehavior",
-          "id": "968dbf0d-33aa-4b0f-922e-71d278d973b0",
+          "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
           "type": "reference",
           "target": [
             "behaviors_dprk_base",
-            "AlternatingRetreat"
+            "SuccesiveAdvance"
           ],
-          "arguments": {}
+          "arguments": {
+            "orderData": "arg.orderData"
+          }
         }
       ],
       "active": true
@@ -58,38 +60,44 @@
     "nodesInfo": [
       {
         "id": "41ce574c-96ae-4969-a44f-17030324686d",
-        "position": "1887.5,102"
+        "position": "1887.5,228.3"
       },
       {
         "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
-        "position": "1562.5,252"
+        "position": "1562.5,378.3"
       },
       {
         "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
-        "position": "2086,255"
+        "position": "2086,381.3"
       },
       {
         "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
-        "position": "1962.5,352"
+        "position": "1962.5,478.3"
       },
       {
         "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
-        "position": "1887.5,527"
+        "position": "1887.5,653.3"
       },
       {
         "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
-        "position": "2125,539.5"
+        "position": "2125,665.8"
       },
       {
-        "id": "968dbf0d-33aa-4b0f-922e-71d278d973b0",
-        "position": "2324,436"
+        "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
+        "position": "2437.5,603.3"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2402",
-    "gridPadding": "0,2"
+    "canvasSize": "3840,2530.3",
+    "gridPadding": "0,3.29999999999995"
   },
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
   "locals": {
     "enemyPosition": "nil"
   }
