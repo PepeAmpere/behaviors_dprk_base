@@ -35,7 +35,8 @@
               "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
               "type": "scriptAction",
               "script": [
-                "DebugLog(\"I see them! Uiiiiii!\")"
+                "DebugLog(\"I see them! Uiiiiii!\")",
+                "DebugLog(tostring(loc.enemyPosition))"
               ]
             }
           ]
@@ -63,6 +64,10 @@
         "position": "1887.5,228.3"
       },
       {
+        "id": "fc4e72ce-03da-4cad-bcda-dd43eda64b1e",
+        "position": "1762.5,803.3"
+      },
+      {
         "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
         "position": "1562.5,378.3"
       },
@@ -87,7 +92,19 @@
         "position": "2437.5,603.3"
       }
     ],
-    "editorObjects": [],
+    "editorObjects": [
+      {
+        "id": "fc4e72ce-03da-4cad-bcda-dd43eda64b1e",
+        "type": "comment",
+        "header": "Sensor  output",
+        "body": "EnemyPosition is a table in which value \"pos\" will contain the enemy position",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
     "canvasSize": "3840,2530.3",
     "gridPadding": "0,3.29999999999995"
   },
@@ -99,6 +116,6 @@
     }
   ],
   "locals": {
-    "enemyPosition": "nil"
+    "enemyPosition": "return {}"
   }
 }
