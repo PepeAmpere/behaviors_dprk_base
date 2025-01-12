@@ -21,6 +21,16 @@ return {
 				tree = 'AlternatingRetreat',
                 parameters = {},
             },
+            SuccessiveAdvance = {
+                description = 'SuccesiveAdvance',
+				tree = 'SuccesiveAdvance',
+                parameters = {},
+            },
+            RSuccesiveAdvance = {
+                description = 'SuccesiveAdvance with reaction',
+				tree = 'VladaPlaceholder',
+                parameters = {},
+            },
         },
     },
 }
