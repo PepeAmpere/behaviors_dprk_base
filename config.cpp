@@ -48,7 +48,7 @@ class CfgFunctions
 // Defines the new order as available from the Control AI - Military
 class CfgAvailableBehaviors
 {
-	class behaviors_dprk_base
+	class behaviors_dprk_AlternatingRetreat
 	{		
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
 		allowRotate = true;
@@ -58,6 +58,64 @@ class CfgAvailableBehaviors
 		description = "DPRK AlternatingRetreat that uses orderName Advance";				
 
 		orderName = "AlternatingRetreat";
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "false";
+				type = "boolean";
+			};
+		};
+	};
+	class behaviors_dprk_SuccessiveAdvance
+	{		
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		allowRotate = true;
+
+
+		displayname = "DPRK Successive Advance";
+		description = "DPRK Successive Advance that uses orderName Advance";				
+
+		orderName = "SuccessiveAdvance";
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "false";
+				type = "boolean";
+			};
+		};
+	};
+	class behaviors_dprk_Reaction
+	{		
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		allowRotate = true;
+
+
+		displayname = "DPRK SuccesiveAdvance Reaction";
+		description = "DPRK SuccesiveAdvance with reaction";
+
+		orderName = "RSuccesiveAdvance";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 		
 		class RootBehaviors
