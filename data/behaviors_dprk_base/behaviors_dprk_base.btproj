@@ -9,6 +9,9 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Reaction.bt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="SquadOverwatch\AlternatingRetreat.bt">
       <SubType>Content</SubType>
     </Content>
@@ -17,6 +20,18 @@
       <SubType>Content</SubType>
     </Content>
     <Content Include="classes.lua">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SquadOverwatch\AlternatingAdvance.bt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="SquadOverwatch\SuccesiveAdvance.bt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="OP4sensor.bt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="ChooseBehavior.bt">
       <SubType>Content</SubType>
     </Content>
   </ItemGroup>

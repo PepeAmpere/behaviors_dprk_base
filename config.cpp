@@ -106,14 +106,14 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
-	class behaviors_dprk_Reaction
+	class behaviors_dprk_SuccessiveAdvance_Reaction
 	{		
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
 		allowRotate = true;
 
 
-		displayname = "DPRK SuccesiveAdvance Reaction";
-		description = "DPRK SuccesiveAdvance with reaction";
+		displayname = "DPRK Reactive Succesive Advance";
+		description = "DPRK Succesive Advance with reaction";
 
 		orderName = "RSuccesiveAdvance";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
@@ -131,6 +131,64 @@ class CfgAvailableBehaviors
 			{
 				displayName = "debugEnabled";
 				value = "false";
+				type = "boolean";
+			};
+		};
+	};
+	class behaviors_dprk_AlternatingAdvance
+	{
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		allowRotate = true; // you also get direction
+
+
+		displayname = "DPRK Alternating Advance";
+		description = "DPRK Alternating Advance";				
+
+		orderName = "AlternatingAdvance"; // it will implicitly have position as well
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "true";
+				type = "boolean";
+			};
+		};
+	};
+	class behaviors_dprk_AlternatingAdvance_Reaction
+	{
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		allowRotate = true; // you also get direction
+
+
+		displayname = "DPRK Reactive Alternating Advance";
+		description = "DPRK Alternating Advance with reaction";				
+
+		orderName = "RAlternatingAdvance"; // it will implicitly have position as well
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "true";
 				type = "boolean";
 			};
 		};

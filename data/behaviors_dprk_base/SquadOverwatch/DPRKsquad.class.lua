@@ -28,7 +28,17 @@ return {
             },
             RSuccesiveAdvance = {
                 description = 'SuccesiveAdvance with reaction',
-				tree = 'VladaPlaceholder',
+				tree = 'ChooseBehavior',
+                parameters = {},
+            },
+            AlternatingAdvance = {
+                description = 'Squad Alternating Advance',
+                tree = 'AlternatingAdvance',
+                parameters = {},
+            },
+            RAlternatingAdvance = {
+                description = 'Squad Alternating Advance with reaction',
+                tree = 'ChooseBehavior',
                 parameters = {},
             },
         },

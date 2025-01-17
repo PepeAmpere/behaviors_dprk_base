@@ -1,0 +1,262 @@
+{
+  "name": "<unnamed>",
+  "id": "41ce574c-96ae-4969-a44f-17030324686d",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
+      "type": "waitForever"
+    },
+    {
+      "name": "<unnamed>",
+      "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "<unnamed>",
+          "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Sensor",
+              "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_base",
+                "OP4sensor"
+              ],
+              "arguments": {
+                "EnemyPosition": "loc.enemyPosition"
+              }
+            },
+            {
+              "name": "<unnamed>",
+              "id": "4b721ff8-6ede-4db2-96bd-eae43626106c",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "ReactionLog",
+                  "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
+                  "type": "scriptAction",
+                  "script": [
+                    "DebugLog(\"I see them! Uiiiiii!\")",
+                    "DebugLog(tostring(loc.enemyPosition))"
+                  ]
+                },
+                {
+                  "name": "Reaction Call",
+                  "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
+                  "type": "reference",
+                  "target": [
+                    "behaviors_dprk_base",
+                    "Reaction"
+                  ],
+                  "arguments": {
+                    "EnemyPosition": "loc.enemyPosition"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Is SA?",
+          "id": "afc727a3-e4c0-47dd-aba8-017df3823f96",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "SA",
+              "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "f38b7ac1-15dd-4358-b7fe-bab08814be6e",
+                  "type": "scriptCondition",
+                  "name": "Is order name SA?",
+                  "script": [
+                    "return arg.orderData.orderName == \"SuccessiveAdvance\" or arg.orderData.orderName == \"RSuccesiveAdvance\""
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_dprk_base",
+                "SuccesiveAdvance"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            },
+            {
+              "name": "Is AA?",
+              "id": "d695d4b2-5f29-4caa-8f95-d3f1111e57d4",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "AA",
+                  "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
+                  "type": "reference",
+                  "decorators": [
+                    {
+                      "id": "2b529a40-4e2a-40a1-86b7-3ccf0be621a6",
+                      "type": "scriptCondition",
+                      "name": "Is order name AA?",
+                      "script": [
+                        "return arg.orderData.orderName == \"AlternatingAdvance\" or arg.orderData.orderName == \"RAlternatingAdvance\""
+                      ]
+                    }
+                  ],
+                  "target": [
+                    "behaviors_dprk_base",
+                    "AlternatingAdvance"
+                  ],
+                  "arguments": {
+                    "orderData": "arg.orderData"
+                  }
+                },
+                {
+                  "name": "Is AR?",
+                  "id": "e75f656f-6ae8-4fc2-9301-3aa02e562131",
+                  "type": "selector",
+                  "subtrees": [
+                    {
+                      "name": "AR",
+                      "id": "6c618dbd-463c-420c-9797-56fb1114af16",
+                      "type": "reference",
+                      "decorators": [
+                        {
+                          "id": "b89d1f24-bf7f-44da-b885-4f3f40ba1a39",
+                          "type": "scriptCondition",
+                          "name": "Is order name AR?",
+                          "script": [
+                            "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingAdvance\""
+                          ]
+                        }
+                      ],
+                      "target": [
+                        "behaviors_dprk_base",
+                        "AlternatingAdvance"
+                      ],
+                      "arguments": {
+                        "orderData": "arg.orderData"
+                      }
+                    },
+                    {
+                      "name": "DefaultBehavior",
+                      "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_base",
+                        "AlternatingAdvance"
+                      ],
+                      "arguments": {
+                        "orderData": "arg.orderData"
+                      }
+                    }
+                  ],
+                  "active": true
+                }
+              ],
+              "active": true
+            }
+          ],
+          "active": true
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "41ce574c-96ae-4969-a44f-17030324686d",
+        "position": "1887.5,228.3"
+      },
+      {
+        "id": "fc4e72ce-03da-4cad-bcda-dd43eda64b1e",
+        "position": "1487.5,765.8"
+      },
+      {
+        "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
+        "position": "1562.5,378.3"
+      },
+      {
+        "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
+        "position": "2086,381.3"
+      },
+      {
+        "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+        "position": "1962.5,478.3"
+      },
+      {
+        "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+        "position": "1612.5,640.8"
+      },
+      {
+        "id": "4b721ff8-6ede-4db2-96bd-eae43626106c",
+        "position": "2062.5,703.3"
+      },
+      {
+        "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
+        "position": "1975,815.8"
+      },
+      {
+        "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
+        "position": "2187.5,815.8"
+      },
+      {
+        "id": "afc727a3-e4c0-47dd-aba8-017df3823f96",
+        "position": "2537.5,590.8"
+      },
+      {
+        "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
+        "position": "2437.5,815.8"
+      },
+      {
+        "id": "d695d4b2-5f29-4caa-8f95-d3f1111e57d4",
+        "position": "2837.5,715.8"
+      },
+      {
+        "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
+        "position": "2712.5,915.8"
+      },
+      {
+        "id": "e75f656f-6ae8-4fc2-9301-3aa02e562131",
+        "position": "3062.5,878.3"
+      },
+      {
+        "id": "6c618dbd-463c-420c-9797-56fb1114af16",
+        "position": "2975,1065.8"
+      },
+      {
+        "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
+        "position": "3325,1103.3"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "fc4e72ce-03da-4cad-bcda-dd43eda64b1e",
+        "type": "comment",
+        "header": "Sensor  output",
+        "body": "EnemyPosition is a table in which value \"pos\" will contain the enemy position",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "4034.59011544012,2530.3",
+    "gridPadding": "0,3.29999999999995"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "enemyPosition": "return {}"
+  }
+}
