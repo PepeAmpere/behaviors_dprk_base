@@ -1,16 +1,172 @@
 {
-  "name": "Wait Forever",
-  "id": "2b882311-053b-4ef1-87bc-70ddb19d06b7",
-  "type": "waitForever",
+  "name": "Reaction",
+  "id": "a0f1b210-138b-430c-a609-d74a688778b3",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "2b882311-053b-4ef1-87bc-70ddb19d06b7",
+      "type": "waitForever"
+    },
+    {
+      "name": "prepare and send order",
+      "id": "a3224c56-2a40-4730-8e99-e6fc51c0ff00",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "wait until fireteam leader ready",
+          "id": "b045ec54-9d02-477a-910f-a6588070b3cb",
+          "type": "waitUntil",
+          "condition": [
+            "loc.fireTeamLeader = nil",
+            "local fireTeamCount = self:GetChildGroupCount()",
+            "for i=0,fireTeamCount do    ",
+            "    local group = self:GetChildGroup(i)",
+            "    local teamLeader = group:GetLeader()",
+            "    if teamLeader:IsAlive() then",
+            "       loc.fireTeamLeader = teamLeader",
+            "       break ",
+            "    end",
+            "",
+            "    local soldiersCount = group:GetEntityCount()",
+            "    for s=0,soldiersCount do",
+            "        local soldier = group:GetEntity(i)",
+            "        if soldier:IsAlive() then",
+            "            loc.fireTeamLeader = soldier",
+            "            break ",
+            "        end",
+            "    end",
+            "end",
+            "",
+            "return loc.fireTeamLeader ~= nil"
+          ]
+        },
+        {
+          "name": "prepare order data",
+          "id": "cda50d04-e3c0-4900-81fe-6844d1a740e6",
+          "type": "scriptAction",
+          "script": [
+            "local position = arg.EnemyPosition.pos",
+            "loc.subOrderData = {orderName = \"Advance\", destination = position}",
+            "loc.subordinates = {}",
+            "loc.subordinateData = InternalTable()",
+            "local fireTeamsCount = self:GetChildGroupCount()",
+            "for i=0,fireTeamsCount-1 do",
+            "    local fireTeam = self:GetChildGroup(i)",
+            "    local subordinate = standard_behaviors.GetVehicleOrSelf(fireTeam)",
+            "    table.insert(loc.subordinates, subordinate)    ",
+            "    loc.subordinateData[subordinate] = {",
+            "            destination = position",
+            "    }",
+            "end"
+          ]
+        },
+        {
+          "name": "All soldiers advance to enemy",
+          "id": "c7494cdd-ce2e-40f7-91e0-7a896b89eb47",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.subOrderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Wait for data and Draw EnemyPosition",
+      "id": "e6be350b-8af8-4afb-9596-9419415ae2b9",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "wait until fireteam leader ready",
+          "id": "c41ed390-d7ac-4d19-bcc8-be01a4be0b0e",
+          "type": "waitUntil",
+          "condition": [
+            "return loc.fireTeamLeader ~= nil"
+          ]
+        },
+        {
+          "name": "Draw enemy position",
+          "id": "c4addb10-05cc-4a3a-88ef-41da7cf2a4d2",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "06bf3636-a25a-4ea8-871f-f30485fae1b9",
+              "type": "loopForever",
+              "name": "Draw every frame"
+            }
+          ],
+          "script": [
+            "local position = arg.EnemyPosition.pos",
+            "if position ~= nil then",
+            "    local OFFSET = Vec3(0,0,2)",
+            "    ai_core_public.draw.Circle(",
+            "                position + OFFSET, ",
+            "                3, ",
+            "                1, 0, 0, ",
+            "                1",
+            "    )",
+            "end"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "e6be350b-8af8-4afb-9596-9419415ae2b9",
+            "position": "2437.5,326.5"
+          },
+          {
+            "id": "c41ed390-d7ac-4d19-bcc8-be01a4be0b0e",
+            "position": "2362.5,414"
+          },
+          {
+            "id": "c4addb10-05cc-4a3a-88ef-41da7cf2a4d2",
+            "position": "2625,414"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
+        "id": "a0f1b210-138b-430c-a609-d74a688778b3",
+        "position": "1900,214"
+      },
+      {
         "id": "2b882311-053b-4ef1-87bc-70ddb19d06b7",
-        "position": "1795.5,291"
+        "position": "1387.5,301.5"
+      },
+      {
+        "id": "a3224c56-2a40-4730-8e99-e6fc51c0ff00",
+        "position": "1887.5,301.5"
+      },
+      {
+        "id": "b045ec54-9d02-477a-910f-a6588070b3cb",
+        "position": "1587.5,414"
+      },
+      {
+        "id": "cda50d04-e3c0-4900-81fe-6844d1a740e6",
+        "position": "1850,414"
+      },
+      {
+        "id": "c7494cdd-ce2e-40f7-91e0-7a896b89eb47",
+        "position": "2012.5,414"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2564.00000000002",
+    "gridPadding": "0,1.49999999999997"
   },
   "parameters": [
     {
@@ -19,5 +175,10 @@
       "defaultValue": "Vec3(0, 0, 0)"
     }
   ],
-  "locals": {}
+  "locals": {
+    "fireTeamLeader": "return nil",
+    "subOrderData": "return nil",
+    "subordinates": "return nil",
+    "subordinateData": "return nil"
+  }
 }

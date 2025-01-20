@@ -129,13 +129,13 @@
                           "type": "scriptCondition",
                           "name": "Is order name AR?",
                           "script": [
-                            "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingAdvance\""
+                            "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingRetreat\""
                           ]
                         }
                       ],
                       "target": [
                         "behaviors_dprk_base",
-                        "AlternatingAdvance"
+                        "AlternatingRetreat"
                       ],
                       "arguments": {
                         "orderData": "arg.orderData"
@@ -246,7 +246,7 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "4034.59011544012,2530.3",
+    "canvasSize": "4107.39011544012,2530.3",
     "gridPadding": "0,3.29999999999995"
   },
   "parameters": [

@@ -21,6 +21,11 @@ return {
 				tree = 'AlternatingRetreat',
                 parameters = {},
             },
+            RAlternatingRetreat = {
+                description = 'AlternatingRetreat with reaction',
+				tree = 'ChooseBehavior',
+                parameters = {},
+            },
             SuccessiveAdvance = {
                 description = 'SuccesiveAdvance',
 				tree = 'SuccesiveAdvance',

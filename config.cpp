@@ -54,8 +54,8 @@ class CfgAvailableBehaviors
 		allowRotate = true;
 
 
-		displayname = "DPRK AlternatingRetreat";
-		description = "DPRK AlternatingRetreat that uses orderName Advance";				
+		displayname = "DPRK Alternating Retreat";
+		description = "DPRK Alternating Retreat that uses orderName Advance";				
 
 		orderName = "AlternatingRetreat";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
@@ -77,6 +77,37 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
+	
+	class behaviors_dprk_AlternatingRetreat_Reaction
+	{		
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		allowRotate = true;
+
+
+		displayname = "DPRK Reactive Alternating Retreat";
+		description = "DPRK Alternating Retreat with reaction";
+
+		orderName = "RAlternatingRetreat";
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "false";
+				type = "boolean";
+			};
+		};
+	};
+	
 	class behaviors_dprk_SuccessiveAdvance
 	{		
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
