@@ -1,37 +1,110 @@
 {
-  "name": "Enemy detector",
-  "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
-  "type": "scriptAction",
+  "name": "<unnamed>",
+  "id": "7ff6da54-4d19-4fff-b9cb-4e03e152cd14",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Enemy detector",
+      "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
+      "type": "scriptAction",
+      "script": [
+        "if Buffer then return true end",
+        "",
+        "for fireteam in self:GetChildGroups() do",
+        "        for soldier in fireteam:GetEntities() do",
+        "            if soldier:IsAlive() then",
+        "                local nearbyEnemies = GetEntitiesInArea(",
+        "                Circle(soldier:GetPosition(), 100),",
+        "                { hasBrain = true, enemyOf = soldier })",
+        "                for i, entity in ipairs(nearbyEnemies) do",
+        "                  if entity:IsVisible(soldier) then",
+        "                    arg.EnemyPosition.pos = entity:GetPosition()",
+        "                    return true",
+        "                  end",
+        "                end",
+        "            end",
+        "        end",
+        "    end",
+        "",
+        "",
+        "return false"
+      ]
+    },
+    {
+      "name": "Hides running",
+      "id": "10000965-dd78-4d6b-b0e7-326672476760",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Until coolown finishes",
+          "id": "3f491123-76a2-4f26-9256-bf15fa5efb58",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Buffer",
+              "id": "35c7a1e0-cdf9-498d-8194-60d724ba583d",
+              "type": "wait",
+              "time": [
+                "2"
+              ]
+            },
+            {
+              "name": "Restore autosucceed to false",
+              "id": "c53c7664-a145-4427-b349-093b35859800",
+              "type": "scriptAction",
+              "script": [
+                "Buffer = false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Always Succeed but not a decorator",
+          "id": "511a1820-7306-41d5-8f04-5e146af7e83a",
+          "type": "scriptAction",
+          "script": [
+            "return true"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
+        "id": "7ff6da54-4d19-4fff-b9cb-4e03e152cd14",
+        "position": "1875,316"
+      },
+      {
         "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
-        "position": "1737.5,400"
+        "position": "1737.5,491"
+      },
+      {
+        "id": "10000965-dd78-4d6b-b0e7-326672476760",
+        "position": "2025,466"
+      },
+      {
+        "id": "3f491123-76a2-4f26-9256-bf15fa5efb58",
+        "position": "1987.5,591"
+      },
+      {
+        "id": "35c7a1e0-cdf9-498d-8194-60d724ba583d",
+        "position": "1875,703.5"
+      },
+      {
+        "id": "c53c7664-a145-4427-b349-093b35859800",
+        "position": "2100,703.5"
+      },
+      {
+        "id": "511a1820-7306-41d5-8f04-5e146af7e83a",
+        "position": "2275,578.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2491",
+    "gridPadding": "0,3.5"
   },
-  "script": [
-    "for fireteam in self:GetChildGroups() do",
-    "        for soldier in fireteam:GetEntities() do",
-    "            if soldier:IsAlive() then",
-    "                local nearbyEnemies = GetEntitiesInArea(",
-    "                Circle(soldier:GetPosition(), 100),",
-    "                { hasBrain = true, enemyOf = soldier })",
-    "                for i, entity in ipairs(nearbyEnemies) do",
-    "                  if entity:IsVisible(soldier) then",
-    "                    arg.EnemyPosition.pos = entity:GetPosition()",
-    "                    return true",
-    "                  end",
-    "                end",
-    "            end",
-    "        end",
-    "    end",
-    "",
-    "",
-    "return false"
-  ],
   "parameters": [
     {
       "name": "EnemyPosition",
@@ -40,5 +113,7 @@
       "evaluation": "passByReference"
     }
   ],
-  "locals": {}
+  "locals": {
+    "Buffer": "return false"
+  }
 }
