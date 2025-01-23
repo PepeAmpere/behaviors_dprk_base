@@ -4,64 +4,55 @@
   "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "Wait Forever",
-      "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
-      "type": "waitForever"
-    },
-    {
       "name": "<unnamed>",
       "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
       "type": "selector",
       "subtrees": [
         {
           "name": "<unnamed>",
-          "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+          "id": "4b721ff8-6ede-4db2-96bd-eae43626106c",
           "type": "sequence",
           "subtrees": [
             {
-              "name": "Sensor",
-              "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+              "name": "ReactionLog",
+              "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
+              "type": "scriptAction",
+              "script": [
+                "DebugLog(\"I see them! Uiiiiii!\")",
+                "DebugLog(tostring(loc.enemyPosition))"
+              ]
+            },
+            {
+              "name": "Reaction Call",
+              "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
               "type": "reference",
               "target": [
                 "behaviors_dprk_base",
-                "OP4sensor"
+                "Reaction"
               ],
               "arguments": {
                 "EnemyPosition": "loc.enemyPosition"
               }
             },
             {
-              "name": "<unnamed>",
-              "id": "4b721ff8-6ede-4db2-96bd-eae43626106c",
-              "type": "sequence",
-              "subtrees": [
-                {
-                  "name": "ReactionLog",
-                  "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
-                  "type": "scriptAction",
-                  "script": [
-                    "DebugLog(\"I see them! Uiiiiii!\")",
-                    "DebugLog(tostring(loc.enemyPosition))"
-                  ]
-                },
-                {
-                  "name": "Reaction Call",
-                  "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
-                  "type": "reference",
-                  "target": [
-                    "behaviors_dprk_base",
-                    "Reaction"
-                  ],
-                  "arguments": {
-                    "EnemyPosition": "loc.enemyPosition"
-                  }
-                }
+              "name": "Fail",
+              "id": "a2d11ced-e50e-448d-b8bb-dfe4375d3325",
+              "type": "fail"
+            }
+          ],
+          "decorators": [
+            {
+              "id": "405f5125-8c62-4bf1-ac87-bd1414adae79",
+              "type": "scriptCondition",
+              "name": "see enemy",
+              "script": [
+                "return loc.enemyPosition.pos ~= nil"
               ]
             }
           ]
         },
         {
-          "name": "Is SA?",
+          "name": "Pick behavior",
           "id": "afc727a3-e4c0-47dd-aba8-017df3823f96",
           "type": "selector",
           "subtrees": [
@@ -88,149 +79,156 @@
               }
             },
             {
-              "name": "Is AA?",
-              "id": "d695d4b2-5f29-4caa-8f95-d3f1111e57d4",
-              "type": "selector",
-              "subtrees": [
+              "name": "AA",
+              "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
+              "type": "reference",
+              "decorators": [
                 {
-                  "name": "AA",
-                  "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
-                  "type": "reference",
-                  "decorators": [
-                    {
-                      "id": "2b529a40-4e2a-40a1-86b7-3ccf0be621a6",
-                      "type": "scriptCondition",
-                      "name": "Is order name AA?",
-                      "script": [
-                        "return arg.orderData.orderName == \"AlternatingAdvance\" or arg.orderData.orderName == \"RAlternatingAdvance\""
-                      ]
-                    }
-                  ],
-                  "target": [
-                    "behaviors_dprk_base",
-                    "AlternatingAdvance"
-                  ],
-                  "arguments": {
-                    "orderData": "arg.orderData"
-                  }
-                },
-                {
-                  "name": "Is AR?",
-                  "id": "e75f656f-6ae8-4fc2-9301-3aa02e562131",
-                  "type": "selector",
-                  "subtrees": [
-                    {
-                      "name": "AR",
-                      "id": "6c618dbd-463c-420c-9797-56fb1114af16",
-                      "type": "reference",
-                      "decorators": [
-                        {
-                          "id": "b89d1f24-bf7f-44da-b885-4f3f40ba1a39",
-                          "type": "scriptCondition",
-                          "name": "Is order name AR?",
-                          "script": [
-                            "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingRetreat\""
-                          ]
-                        }
-                      ],
-                      "target": [
-                        "behaviors_dprk_base",
-                        "AlternatingRetreat"
-                      ],
-                      "arguments": {
-                        "orderData": "arg.orderData"
-                      }
-                    },
-                    {
-                      "name": "DefaultBehavior",
-                      "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
-                      "type": "reference",
-                      "target": [
-                        "behaviors_dprk_base",
-                        "AlternatingAdvance"
-                      ],
-                      "arguments": {
-                        "orderData": "arg.orderData"
-                      }
-                    }
-                  ],
-                  "active": true
+                  "id": "2b529a40-4e2a-40a1-86b7-3ccf0be621a6",
+                  "type": "scriptCondition",
+                  "name": "Is order name AA?",
+                  "script": [
+                    "return arg.orderData.orderName == \"AlternatingAdvance\" or arg.orderData.orderName == \"RAlternatingAdvance\""
+                  ]
                 }
               ],
-              "active": true
+              "target": [
+                "behaviors_dprk_base",
+                "AlternatingAdvance"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            },
+            {
+              "name": "AR",
+              "id": "6c618dbd-463c-420c-9797-56fb1114af16",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "b89d1f24-bf7f-44da-b885-4f3f40ba1a39",
+                  "type": "scriptCondition",
+                  "name": "Is order name AR?",
+                  "script": [
+                    "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingRetreat\""
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_dprk_base",
+                "AlternatingRetreat"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            },
+            {
+              "name": "DefaultBehavior",
+              "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_base",
+                "AlternatingAdvance"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
             }
           ],
           "active": true
         }
       ],
       "active": true
+    },
+    {
+      "name": "<unnamed>",
+      "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Sensor",
+          "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_base",
+            "OP4sensor"
+          ],
+          "arguments": {
+            "EnemyPosition": "loc.enemyPosition"
+          }
+        },
+        {
+          "name": "wait ",
+          "id": "7fe1c626-faa2-43b1-9d73-eea9e1a63b76",
+          "type": "wait",
+          "time": [
+            "2"
+          ]
+        }
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "41ce574c-96ae-4969-a44f-17030324686d",
-        "position": "1887.5,228.3"
+        "position": "2375,164.154545454545"
       },
       {
         "id": "fc4e72ce-03da-4cad-bcda-dd43eda64b1e",
-        "position": "1487.5,765.8"
-      },
-      {
-        "id": "547c82cc-9386-40d3-8f3f-8a41e0819980",
-        "position": "1562.5,378.3"
+        "position": "2850,539.154545454545"
       },
       {
         "id": "c66eaf96-f1f2-467f-a43c-3fb8ec25eb07",
-        "position": "2086,381.3"
-      },
-      {
-        "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
-        "position": "1962.5,478.3"
-      },
-      {
-        "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
-        "position": "1612.5,640.8"
+        "position": "2087.5,389.154545454545"
       },
       {
         "id": "4b721ff8-6ede-4db2-96bd-eae43626106c",
-        "position": "2062.5,703.3"
+        "position": "1825,601.654545454545"
       },
       {
         "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
-        "position": "1975,815.8"
+        "position": "1725,739.154545454545"
       },
       {
         "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
-        "position": "2187.5,815.8"
+        "position": "1937.5,739.154545454545"
+      },
+      {
+        "id": "a2d11ced-e50e-448d-b8bb-dfe4375d3325",
+        "position": "2112.5,751.654545454545"
       },
       {
         "id": "afc727a3-e4c0-47dd-aba8-017df3823f96",
-        "position": "2537.5,590.8"
+        "position": "2300,639.154545454545"
       },
       {
         "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
-        "position": "2437.5,815.8"
-      },
-      {
-        "id": "d695d4b2-5f29-4caa-8f95-d3f1111e57d4",
-        "position": "2837.5,715.8"
+        "position": "2200,864.154545454545"
       },
       {
         "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
-        "position": "2712.5,915.8"
-      },
-      {
-        "id": "e75f656f-6ae8-4fc2-9301-3aa02e562131",
-        "position": "3062.5,878.3"
+        "position": "2387.5,864.154545454545"
       },
       {
         "id": "6c618dbd-463c-420c-9797-56fb1114af16",
-        "position": "2975,1065.8"
+        "position": "2575,864.154545454545"
       },
       {
         "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
-        "position": "3325,1103.3"
+        "position": "2762.5,864.154545454545"
+      },
+      {
+        "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
+        "position": "2750,376.654545454545"
+      },
+      {
+        "id": "13efb6fa-2fa7-4571-aacb-5d22303f2eac",
+        "position": "2687.5,476.654545454545"
+      },
+      {
+        "id": "7fe1c626-faa2-43b1-9d73-eea9e1a63b76",
+        "position": "2862.5,476.654545454545"
       }
     ],
     "editorObjects": [
@@ -246,8 +244,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "4107.39011544012,2530.3",
-    "gridPadding": "0,3.29999999999995"
+    "canvasSize": "4107.39011544012,2616.15454545455",
+    "gridPadding": "0,1.65454545454542"
   },
   "parameters": [
     {
