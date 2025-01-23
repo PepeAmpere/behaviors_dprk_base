@@ -154,7 +154,8 @@
             "OP4sensor"
           ],
           "arguments": {
-            "EnemyPosition": "loc.enemyPosition"
+            "EnemyPosition": "loc.enemyPosition",
+            "destination": "arg.orderData.destination"
           }
         },
         {
