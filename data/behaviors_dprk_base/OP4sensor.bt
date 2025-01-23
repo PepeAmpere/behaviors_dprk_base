@@ -4,11 +4,57 @@
   "type": "sequence",
   "subtrees": [
     {
-      "name": "Here I calculate path",
-      "id": "99bda2df-81a7-4230-bcbd-edeed4d8fa66",
-      "type": "wait",
-      "time": [
-        "2"
+      "name": "Path calculation",
+      "id": "7baad046-b27d-4bd3-a9b2-f24412d8fda3",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Recalculate Leader",
+          "id": "92e0120a-a7a6-44b5-a3dd-50063e32f202",
+          "type": "scriptAction",
+          "script": [
+            "if loc.Leader ==nil or not loc.Leader:IsAlive() then",
+            "    local soldiers = {}",
+            "    for fireteam in self:GetChildGroups() do",
+            "        for soldier in fireteam:GetEntities() do",
+            "            if soldier:IsAlive() then",
+            "                loc.Leader = soldier",
+            "            end",
+            "        end",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Recalculate path",
+          "id": "ed3c68b9-b29a-468a-b966-b8c1f073fc67",
+          "type": "scriptAction",
+          "script": [
+            "if  loc.pathFuture ==nil  then",
+            "loc.pathFuture = FindPath(loc.Leader:GetPosition(),arg.destination)",
+            "end"
+          ]
+        },
+        {
+          "name": "GetRecalculatedPath",
+          "id": "6ed92937-d84d-4936-b75d-e3378a5d75f0",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.pathFuture:IsReady() == true then",
+            "loc.path = loc.pathFuture:Value()",
+            "loc.pathFuture =nil",
+            "return true",
+            "end",
+            "return false"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "42d1d43d-71d0-4a61-b90c-2b2c08fb8250",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        }
       ]
     },
     {
@@ -16,42 +62,113 @@
       "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
       "type": "scriptAction",
       "script": [
+        "local far = loc.path:PositionAlongPath(loc.CheckDistance)",
+        "local soldier = nil",
+        "",
         "for fireteam in self:GetChildGroups() do",
         "    for soldier in fireteam:GetEntities() do",
         "        if soldier:IsAlive() then",
+        "        loc.controlPoints = {}",
+        "            local rectangle = OrientedRectangle(soldier:GetPosition()+(far-soldier:GetPosition())/2, loc.CheckWidth, loc.CheckDistance/2, fireteam:GetHeading())",
+        "            for iSeg=1,4 do",
+        "                loc.controlPoints[iSeg] = rectangle:Vertex(iSeg)",
+        "            end",
         "            local nearbyEnemies = GetEntitiesInArea(",
-        "            Circle(soldier:GetPosition(), 100),",
-        "            { hasBrain = true, enemyOf = soldier })",
+        "                rectangle,",
+        "                    { hasBrain = true, enemyOf = soldier })",
         "            for i, entity in ipairs(nearbyEnemies) do",
         "                if entity:IsVisible(soldier) then",
-        "                arg.EnemyPosition.pos = entity:GetPosition()",
+        "                    arg.EnemyPosition.pos = entity:GetPosition()",
         "                return true",
         "                end",
         "            end",
+        "            break",
         "        end",
         "    end",
-        "end"
+        "end",
+        "arg.EnemyPosition.pos = nil",
+        "return true"
       ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "<unnamed>",
+      "id": "6cb41307-5370-48fa-900e-ffda14e6114f",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Draw Control points",
+          "id": "192a232c-3533-4f40-9ec5-0ea473a168b1",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "c75fd2cb-0547-4ad3-a1e8-5a00c4f0dd09",
+              "type": "loopForever",
+              "name": "Draw control points"
+            }
+          ],
+          "script": [
+            "if",
+            "    loc.controlPoints ~= nil",
+            "then",
+            "    local OFFSET = Vec3(0,0,2) -- draw up",
+            "    for i=1,#loc.controlPoints do",
+            "        ai_core_public.draw.Circle( -- a package we packed, supplied by PepeAmpere",
+            "                loc.controlPoints[i] + OFFSET,",
+            "                1,",
+            "                1, 0, 1, 1",
+            "            )",
+            "    end",
+            "end"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "6cb41307-5370-48fa-900e-ffda14e6114f",
+            "position": "2625,594.5"
+          },
+          {
+            "id": "192a232c-3533-4f40-9ec5-0ea473a168b1",
+            "position": "2749.54761904762,726.5"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "7ff6da54-4d19-4fff-b9cb-4e03e152cd14",
-        "position": "1875,316"
+        "position": "1875,432"
       },
       {
-        "id": "99bda2df-81a7-4230-bcbd-edeed4d8fa66",
-        "position": "1550,491"
+        "id": "7baad046-b27d-4bd3-a9b2-f24412d8fda3",
+        "position": "1625,644.5"
+      },
+      {
+        "id": "92e0120a-a7a6-44b5-a3dd-50063e32f202",
+        "position": "1287.5,819.5"
+      },
+      {
+        "id": "ed3c68b9-b29a-468a-b966-b8c1f073fc67",
+        "position": "1462.5,819.5"
+      },
+      {
+        "id": "6ed92937-d84d-4936-b75d-e3378a5d75f0",
+        "position": "1650,819.5"
       },
       {
         "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
-        "position": "1750,491"
+        "position": "2087.5,657"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2491",
-    "gridPadding": "0,3.5"
+    "canvasSize": "3840,2607",
+    "gridPadding": "0,7"
   },
   "parameters": [
     {
@@ -59,7 +176,19 @@
       "isOptional": true,
       "defaultValue": "Vec3(0, 0, 0)",
       "evaluation": "passByReference"
+    },
+    {
+      "name": "destination",
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
-  "locals": {}
+  "locals": {
+    "pathFuture": "nil",
+    "path": "nil",
+    "CheckDistance": "70",
+    "CheckWidth": "40",
+    "Leader": "nil",
+    "controlPoints": "nil"
+  }
 }
