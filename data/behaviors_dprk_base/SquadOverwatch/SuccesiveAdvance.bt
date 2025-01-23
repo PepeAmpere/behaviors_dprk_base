@@ -16,7 +16,7 @@
       "id": "77052674-e422-4288-8585-60fef9af3424",
       "type": "scriptAction",
       "script": [
-        "if Leader ==nil or not Leader:IsAlive() then",
+        "if loc.Leader ==nil or not loc.Leader:IsAlive() then",
         "    local soldiers = {}",
         "    for fireteam in self:GetChildGroups() do",
         "        for soldier in fireteam:GetEntities() do",
