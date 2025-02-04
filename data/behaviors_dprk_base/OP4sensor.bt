@@ -77,7 +77,7 @@
         "                rectangle,",
         "                    { hasBrain = true, enemyOf = soldier })",
         "            for i, entity in ipairs(nearbyEnemies) do",
-        "                if entity:IsVisible(soldier) then",
+        "                if entity:IsVisible(soldier) and entity:IsAlive() then -- add alive check here",
         "                    arg.EnemyPosition.pos = entity:GetPosition()",
         "                return true",
         "                end",
