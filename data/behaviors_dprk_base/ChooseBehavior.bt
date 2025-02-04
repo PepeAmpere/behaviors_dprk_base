@@ -31,7 +31,8 @@
                 "Reaction"
               ],
               "arguments": {
-                "EnemyPosition": "loc.rememberedPosition"
+                "EnemyPosition": "loc.rememberedPosition",
+                "debugEnabled": "arg.orderData.debugEnabled"
               }
             },
             {
@@ -221,15 +222,15 @@
       },
       {
         "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
-        "position": "1687.5,801.654545454545"
+        "position": "1712.5,814.154545454545"
       },
       {
         "id": "a6306d0b-ff23-488e-9762-d1d00666188a",
-        "position": "1912.5,789.154545454545"
+        "position": "1912.5,801.654545454545"
       },
       {
         "id": "a2d11ced-e50e-448d-b8bb-dfe4375d3325",
-        "position": "2100,789.154545454545"
+        "position": "2100,814.154545454545"
       },
       {
         "id": "afc727a3-e4c0-47dd-aba8-017df3823f96",
@@ -237,19 +238,19 @@
       },
       {
         "id": "8f354621-a479-41c7-8883-f7c2fb2afa90",
-        "position": "2200,889.154545454545"
+        "position": "2200,926.654545454545"
       },
       {
         "id": "96a6bdce-d530-43cf-8638-ef0ae9a0b1cd",
-        "position": "2387.5,889.154545454545"
+        "position": "2387.5,926.654545454545"
       },
       {
         "id": "6c618dbd-463c-420c-9797-56fb1114af16",
-        "position": "2575,889.154545454545"
+        "position": "2575,926.654545454545"
       },
       {
         "id": "9c264fd4-1619-4391-8d65-3ccb8f805e16",
-        "position": "2762.5,889.154545454545"
+        "position": "2762.5,926.654545454545"
       },
       {
         "id": "fa5adb97-93ca-405b-ae04-2e9a6586051e",
@@ -285,7 +286,7 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "4107.39011544012,2641.15454545455",
+    "canvasSize": "5412.9,2641.15454545455",
     "gridPadding": "0,1.65454545454542"
   },
   "parameters": [

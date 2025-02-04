@@ -4,226 +4,356 @@
   "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "wait for path then handle movement",
-      "id": "17919634-1abc-425d-9b4b-41427e99df08",
+      "name": "<unnamed>",
+      "id": "77f79f83-59f5-4193-8db9-9c2c3f37d82b",
       "type": "sequence",
       "subtrees": [
         {
-          "name": "Wait for path ready",
-          "id": "f2cb2817-59ef-4332-8bee-a6b6f26a2064",
-          "type": "waitUntil",
-          "condition": [
-            "return loc.path ~= nil"
-          ]
-        },
-        {
-          "name": "Is firesquad at destination or move there",
-          "id": "78dac5d9-35ab-4a2f-aa1d-e4f0b8e43b55",
+          "name": "Is there any big fireTeam",
+          "id": "44e4d089-f76e-4d89-9827-9de06cc8ef52",
           "type": "selector",
           "subtrees": [
             {
-              "name": "Wait till last squad is settled and succeed tree",
-              "id": "22caf228-ca67-4065-af70-79ca73fc7a8b",
+              "name": "prepare and send all to the destination",
+              "id": "86c0492d-0f87-4567-9794-94f9b2c2dff9",
               "type": "sequence",
               "subtrees": [
                 {
-                  "name": "wait 7s until firesquad takes cover",
-                  "id": "38f9ded0-9e3d-4de3-990a-2e7827c4c185",
-                  "type": "wait",
-                  "time": [
-                    "return 7"
+                  "name": "prepare order data",
+                  "id": "00cbb27a-d5b0-42cf-a43e-93b1efe50e6d",
+                  "type": "scriptAction",
+                  "script": [
+                    "local position = arg.orderData.destination",
+                    "",
+                    "loc.subOrderData = {orderName = \"Advance\", destination = position}",
+                    "loc.subordinates = {}",
+                    "loc.subordinateData = InternalTable()",
+                    "for child in self:GetChildGroups() do",
+                    "    local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+                    "    table.insert(loc.subordinates, subordinate)    ",
+                    "    loc.subordinateData[subordinate] = {",
+                    "        destination = position",
+                    "    }",
+                    "end"
                   ]
                 },
                 {
+                  "name": "Clear area for all subordinates",
+                  "id": "66d50744-b76f-49ae-955e-3dda10f36824",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderData",
+                    "subordinates": "return loc.subordinates",
+                    "subordinateData": "return loc.subordinateData",
+                    "update": "return false"
+                  }
+                },
+                {
                   "name": "Succeed",
-                  "id": "4b945e70-c600-472d-88a8-b94f3d170999",
+                  "id": "5f1f46f3-964d-4c5c-9566-64bf826cc063",
                   "type": "success"
                 }
               ],
               "decorators": [
                 {
-                  "id": "64f7690d-ffde-4122-9729-186938f2a93f",
+                  "id": "696a2652-7f03-4949-8ff6-e615835e55b6",
                   "type": "scriptCondition",
-                  "name": "FireSquad at target location?",
+                  "name": "no leader available",
                   "script": [
-                    "local fireTeamsCount = self:GetChildGroupCount()",
-                    "for i=0,fireTeamsCount-1 do",
-                    "    local fireTeam = self:GetChildGroup(i)",
-                    "    local soldiersCount = fireTeam:GetEntityCount()",
-                    "    for s=0, soldiersCount-1 do",
-                    "        local soldier = fireTeam:GetEntity(s)",
-                    "        if soldier:IsAlive() then",
-                    "            if soldier:GetPosition():Distance(arg.orderData.destination) > 40 then",
-                    "                return false ",
-                    "            end",
-                    "        end",
-                    "    end",
-                    "end",
-                    "",
-                    "if loc.runningFireTeam ~= nil then",
-                    "    return false",
-                    "end",
-                    "",
-                    "--maybe add check if they are all heading the right direction or all have stance prone?",
-                    "",
-                    "return true"
+                    "return loc.noLeaderAvailable == true"
                   ]
                 }
               ]
             },
             {
-              "name": "Is running squad at waypoint",
-              "id": "32b07214-bd3e-44cf-b0da-57e86d819211",
-              "type": "selector",
+              "name": "wait for path then handle movement",
+              "id": "17919634-1abc-425d-9b4b-41427e99df08",
+              "type": "sequence",
               "subtrees": [
                 {
-                  "name": "Wait for squad to take cover and choose another squad to run",
-                  "id": "4e4d5d27-987f-43b4-b922-caaa32b5525f",
-                  "type": "sequence",
-                  "subtrees": [
-                    {
-                      "name": "Set runningFireTeam nil to let other be chosen",
-                      "id": "5226f611-6463-4024-9cec-5d3ee071c030",
-                      "type": "scriptAction",
-                      "script": [
-                        "loc.runningFireTeam = nil"
-                      ]
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "52f9a6ee-0ef4-4fe1-92c6-b0739ba9b3b8",
-                      "type": "scriptCondition",
-                      "name": "running fireTeam at waypoint?",
-                      "script": [
-                        "if loc.runningFireTeam == nil then",
-                        "    --choose next fireTeam to run (furthest one)",
-                        "    local furthestFireTeam = nil",
-                        "    local furthestDistance = 0",
-                        "    local fireTeamsCount = self:GetChildGroupCount()",
-                        "    for i=0,fireTeamsCount-1 do",
-                        "        local fireTeam = self:GetChildGroup(i)",
-                        "        local soldiersCount = fireTeam:GetEntityCount()",
-                        "        local aliveSoldiersCount = 0",
-                        "        for s=0, soldiersCount-1 do",
-                        "                local soldier = fireTeam:GetEntity(s)",
-                        "                if soldier:IsAlive() then",
-                        "                    aliveSoldiersCount = aliveSoldiersCount + 1",
-                        "                end",
-                        "        end",
-                        "        if aliveSoldiersCount > 1 then",
-                        "            for s=0, soldiersCount-1 do",
-                        "                local soldier = fireTeam:GetEntity(s)",
-                        "                local distance = soldier:GetPosition():Distance(arg.orderData.destination)",
-                        "                if soldier:IsAlive() and distance > furthestDistance then",
-                        "                    furthestDistance = distance",
-                        "                    furthestFireTeam = fireTeam",
-                        "                end",
-                        "            end",
-                        "        end",
-                        "    end",
-                        "    loc.runningFireTeam = furthestFireTeam",
-                        "    ",
-                        "    --set proper waypoint for them",
-                        "    if loc.nextWaypointIndex < #loc.waypoints then",
-                        "       loc.nextWaypointIndex = loc.nextWaypointIndex+1 ",
-                        "    end",
-                        "end",
-                        "",
-                        "local fireTeam = loc.runningFireTeam",
-                        "local soldiersCount = fireTeam:GetEntityCount()",
-                        "local nextWaypointPosition = loc.waypoints[loc.nextWaypointIndex]",
-                        "",
-                        "--local headingToPrevWaypoint = loc.path:DirectionAlongPath(loc.nextWaypointIndex) - 180",
-                        "",
-                        "for s=0, soldiersCount-1 do",
-                        "    local soldier = fireTeam:GetEntity(s)",
-                        "    local distance = soldier:GetPosition():Distance(nextWaypointPosition)",
-                        "    --local heading = soldier:GetHeading()",
-                        "    if soldier:IsAlive() and distance < 5 then",
-                        "        --DebugLog(\"soldier distance: \" ..tostring(distance))",
-                        "        return true ",
-                        "    end",
-                        "end",
-                        "",
-                        "return false"
-                      ]
-                    }
+                  "name": "Wait for path ready",
+                  "id": "f2cb2817-59ef-4332-8bee-a6b6f26a2064",
+                  "type": "waitUntil",
+                  "condition": [
+                    "return loc.path ~= nil"
                   ]
                 },
                 {
-                  "name": "prepare and send order",
-                  "id": "b31b5a7d-2689-4451-b0b7-9128048fb3aa",
-                  "type": "sequence",
+                  "name": "Is firesquad at destination or move there",
+                  "id": "78dac5d9-35ab-4a2f-aa1d-e4f0b8e43b55",
+                  "type": "selector",
                   "subtrees": [
                     {
-                      "name": "prepare order data",
-                      "id": "a49e9721-012c-4a05-94e9-ae0e9f19f43f",
-                      "type": "scriptAction",
-                      "script": [
-                        "local position = loc.waypoints[loc.nextWaypointIndex]",
-                        "local distanceBetweenWaypoints = 50",
-                        "local headingToPrevWaypoint = loc.path:DirectionAlongPath(loc.nextWaypointIndex * distanceBetweenWaypoints) - 180",
-                        "",
-                        "loc.subOrderData = {orderName = \"Advance\", destination = position}",
-                        "loc.subordinates = {}",
-                        "loc.subordinateData = InternalTable()",
-                        "local subordinate = standard_behaviors.GetVehicleOrSelf(loc.runningFireTeam)",
-                        "table.insert(loc.subordinates, subordinate)    ",
-                        "loc.subordinateData[subordinate] = {",
-                        "    destination = position,",
-                        "    heading = headingToPrevWaypoint",
-                        "}",
-                        "",
-                        "--DebugLog(\"correct heading: \" ..tostring(headingToPrevWaypoint))",
-                        "",
-                        "--for child in self:GetChildGroups() do",
-                        "    --local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
-                        "    --table.insert(loc.subordinates, subordinate)    ",
-                        "    --loc.subordinateData[subordinate] = {",
-                        "       -- destination = position",
-                        "    --}",
-                        "--end"
-                      ]
-                    },
-                    {
-                      "name": "wait 7s until firesquad takes cover",
-                      "id": "ba3ba65b-5414-4fbe-9735-c22289006e93",
-                      "type": "wait",
-                      "time": [
-                        "return 7"
-                      ]
-                    },
-                    {
-                      "name": "Clear area for all subordinates",
-                      "id": "f10380f0-d393-46d2-80b5-0248edec9c8c",
-                      "type": "reference",
-                      "target": [
-                        "standard_behaviors",
-                        "ExecuteSubordinateOrder"
+                      "name": "Wait till last squad is settled and succeed tree",
+                      "id": "22caf228-ca67-4065-af70-79ca73fc7a8b",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "wait 7s until firesquad takes cover",
+                          "id": "38f9ded0-9e3d-4de3-990a-2e7827c4c185",
+                          "type": "wait",
+                          "time": [
+                            "return 7"
+                          ]
+                        },
+                        {
+                          "name": "Succeed",
+                          "id": "4b945e70-c600-472d-88a8-b94f3d170999",
+                          "type": "success"
+                        }
                       ],
-                      "arguments": {
-                        "orderData": "return loc.subOrderData",
-                        "subordinates": "return loc.subordinates",
-                        "subordinateData": "return loc.subordinateData",
-                        "update": "return false"
-                      }
+                      "decorators": [
+                        {
+                          "id": "64f7690d-ffde-4122-9729-186938f2a93f",
+                          "type": "scriptCondition",
+                          "name": "FireSquad at target location?",
+                          "script": [
+                            "local fireTeamsCount = self:GetChildGroupCount()",
+                            "for i=0,fireTeamsCount-1 do",
+                            "    local fireTeam = self:GetChildGroup(i)",
+                            "    local soldiersCount = fireTeam:GetEntityCount()",
+                            "    for s=0, soldiersCount-1 do",
+                            "        local soldier = fireTeam:GetEntity(s)",
+                            "        if soldier:IsAlive() then",
+                            "            if soldier:GetPosition():Distance(arg.orderData.destination) > 40 then",
+                            "                return false ",
+                            "            end",
+                            "        end",
+                            "    end",
+                            "end",
+                            "",
+                            "if loc.runningFireTeam ~= nil then",
+                            "    return false",
+                            "end",
+                            "",
+                            "--maybe add check if they are all heading the right direction or all have stance prone?",
+                            "",
+                            "return true"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Is running squad at waypoint",
+                      "id": "32b07214-bd3e-44cf-b0da-57e86d819211",
+                      "type": "selector",
+                      "subtrees": [
+                        {
+                          "name": "Wait for squad to take cover and choose another squad to run",
+                          "id": "4e4d5d27-987f-43b4-b922-caaa32b5525f",
+                          "type": "sequence",
+                          "subtrees": [
+                            {
+                              "name": "Set runningFireTeam nil to let other be chosen",
+                              "id": "5226f611-6463-4024-9cec-5d3ee071c030",
+                              "type": "scriptAction",
+                              "script": [
+                                "loc.runningFireTeam = nil"
+                              ]
+                            }
+                          ],
+                          "decorators": [
+                            {
+                              "id": "52f9a6ee-0ef4-4fe1-92c6-b0739ba9b3b8",
+                              "type": "scriptCondition",
+                              "name": "running fireTeam at waypoint?",
+                              "script": [
+                                "if loc.runningFireTeam == nil then",
+                                "    --choose next fireTeam to run (furthest one)",
+                                "    local furthestFireTeam = nil",
+                                "    local furthestDistance = 0",
+                                "    local fireTeamsCount = self:GetChildGroupCount()",
+                                "    for i=0,fireTeamsCount-1 do",
+                                "        local fireTeam = self:GetChildGroup(i)",
+                                "        local soldiersCount = fireTeam:GetEntityCount()",
+                                "        local aliveSoldiersCount = 0",
+                                "        for s=0, soldiersCount-1 do",
+                                "                local soldier = fireTeam:GetEntity(s)",
+                                "                if soldier:IsAlive() then",
+                                "                    aliveSoldiersCount = aliveSoldiersCount + 1",
+                                "                end",
+                                "        end",
+                                "        if aliveSoldiersCount > 1 then",
+                                "            for s=0, soldiersCount-1 do",
+                                "                local soldier = fireTeam:GetEntity(s)",
+                                "                local distance = soldier:GetPosition():Distance(arg.orderData.destination)",
+                                "                if soldier:IsAlive() and distance > furthestDistance then",
+                                "                    furthestDistance = distance",
+                                "                    furthestFireTeam = fireTeam",
+                                "                end",
+                                "            end",
+                                "        end",
+                                "    end",
+                                "    loc.runningFireTeam = furthestFireTeam",
+                                "    ",
+                                "    --set proper waypoint for them",
+                                "    if loc.nextWaypointIndex < #loc.waypoints then",
+                                "       loc.nextWaypointIndex = loc.nextWaypointIndex+1 ",
+                                "    end",
+                                "end",
+                                "",
+                                "if loc.runningFireTeam == nil then",
+                                "    return true",
+                                "end",
+                                "local fireTeam = loc.runningFireTeam",
+                                "local soldiersCount = fireTeam:GetEntityCount()",
+                                "local nextWaypointPosition = loc.waypoints[loc.nextWaypointIndex]",
+                                "",
+                                "--local headingToPrevWaypoint = loc.path:DirectionAlongPath(loc.nextWaypointIndex) - 180",
+                                "local aliveSoldiersCount = 0",
+                                "for s=0, soldiersCount-1 do",
+                                "    local soldier = fireTeam:GetEntity(s)",
+                                "    local distance = soldier:GetPosition():Distance(nextWaypointPosition)",
+                                "    if soldier:IsAlive() then",
+                                "        aliveSoldiersCount = aliveSoldiersCount + 1",
+                                "        if distance < 5 then",
+                                "            return true ",
+                                "        end",
+                                "    end",
+                                "end",
+                                "if aliveSoldiersCount > 1 then",
+                                "    return false",
+                                "end",
+                                "return true"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "prepare and send order",
+                          "id": "b31b5a7d-2689-4451-b0b7-9128048fb3aa",
+                          "type": "sequence",
+                          "subtrees": [
+                            {
+                              "name": "prepare order data",
+                              "id": "a49e9721-012c-4a05-94e9-ae0e9f19f43f",
+                              "type": "scriptAction",
+                              "script": [
+                                "local position = loc.waypoints[loc.nextWaypointIndex]",
+                                "local distanceBetweenWaypoints = 50",
+                                "local headingToPrevWaypoint = loc.path:DirectionAlongPath(loc.nextWaypointIndex * distanceBetweenWaypoints) - 180",
+                                "",
+                                "loc.subOrderData = {orderName = \"Advance\", destination = position}",
+                                "loc.subordinates = {}",
+                                "loc.subordinateData = InternalTable()",
+                                "local subordinate = standard_behaviors.GetVehicleOrSelf(loc.runningFireTeam)",
+                                "table.insert(loc.subordinates, subordinate)    ",
+                                "loc.subordinateData[subordinate] = {",
+                                "    destination = position,",
+                                "    heading = headingToPrevWaypoint",
+                                "}",
+                                "",
+                                "--DebugLog(\"correct heading: \" ..tostring(headingToPrevWaypoint))",
+                                "",
+                                "--for child in self:GetChildGroups() do",
+                                "    --local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+                                "    --table.insert(loc.subordinates, subordinate)    ",
+                                "    --loc.subordinateData[subordinate] = {",
+                                "       -- destination = position",
+                                "    --}",
+                                "--end"
+                              ]
+                            },
+                            {
+                              "name": "wait 7s until firesquad takes cover",
+                              "id": "ba3ba65b-5414-4fbe-9735-c22289006e93",
+                              "type": "wait",
+                              "time": [
+                                "return 7"
+                              ]
+                            },
+                            {
+                              "name": "Clear area for all subordinates",
+                              "id": "f10380f0-d393-46d2-80b5-0248edec9c8c",
+                              "type": "reference",
+                              "target": [
+                                "standard_behaviors",
+                                "ExecuteSubordinateOrder"
+                              ],
+                              "arguments": {
+                                "orderData": "return loc.subOrderData",
+                                "subordinates": "return loc.subordinates",
+                                "subordinateData": "return loc.subordinateData",
+                                "update": "return false"
+                              }
+                            }
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "04859bac-4b00-4b06-b603-9058e6988cd7",
+                          "type": "loopForever",
+                          "name": "Loop forever"
+                        }
+                      ],
+                      "active": true
                     }
-                  ]
+                  ],
+                  "active": true
                 }
-              ],
-              "decorators": [
-                {
-                  "id": "04859bac-4b00-4b06-b603-9058e6988cd7",
-                  "type": "loopForever",
-                  "name": "Loop forever"
-                }
-              ],
-              "active": true
+              ]
             }
           ],
           "active": true
         }
+      ]
+    },
+    {
+      "name": "Check if leader is still valid",
+      "id": "d19ebd42-5902-4863-987d-fe4fce568346",
+      "type": "scriptAction",
+      "decorators": [
+        {
+          "id": "e860a0b0-36d4-4bcc-9182-765f233584a0",
+          "type": "loopForever",
+          "name": "loop foreva"
+        }
+      ],
+      "script": [
+        "if loc.leaderTeam ~= nil then",
+        "    local aliveSoldiersCount = 0",
+        "    for s=0,loc.leaderTeam:GetEntityCount()-1 do",
+        "        local soldier = loc.leaderTeam:GetEntity(s)",
+        "        if soldier:IsAlive() then",
+        "            aliveSoldiersCount = aliveSoldiersCount + 1",
+        "        end",
+        "    end",
+        "    if aliveSoldiersCount < 2 then",
+        "        loc.fireTeamLeader = nil",
+        "        loc.leaderTeam = nil",
+        "    end",
+        "end",
+        "",
+        "if loc.fireTeamLeader == nil or not loc.fireTeamLeader:IsAlive() then",
+        "    loc.fireTeamLeader = nil",
+        "    loc.leaderTeam = nil",
+        "    local fireTeamCount = self:GetChildGroupCount()",
+        "    for i=0,fireTeamCount-1 do    ",
+        "        local group = self:GetChildGroup(i)",
+        "        local soldiersCount = group:GetEntityCount()",
+        "        local aliveSoldiersCount = 0",
+        "        for s=0,soldiersCount-1 do",
+        "            local soldier = group:GetEntity(s)",
+        "            if soldier:IsAlive() then",
+        "                aliveSoldiersCount = aliveSoldiersCount + 1",
+        "                if aliveSoldiersCount > 1 then",
+        "                    loc.fireTeamLeader = soldier",
+        "                    loc.leaderTeam = group",
+        "                    break",
+        "                end",
+        "            end",
+        "        end",
+        "    end",
+        "end",
+        "",
+        "if loc.fireTeamLeader == nil then",
+        "    loc.noLeaderAvailable = true",
+        "end"
       ]
     },
     {
@@ -236,31 +366,6 @@
           "id": "f2c7a05b-069c-4897-89a8-f838152304dc",
           "type": "waitUntil",
           "condition": [
-            "--local childEntityPos1 = self:GetChildGroup(0):GetEntity(0):GetPosition()",
-            "",
-            "",
-            "",
-            "loc.fireTeamLeader = nil",
-            "local fireTeamCount = self:GetChildGroupCount()",
-            "for i=0,fireTeamCount do    ",
-            "    local group = self:GetChildGroup(i)",
-            "",
-            "    local teamLeader = group:GetLeader()",
-            "    if teamLeader:IsAlive() then",
-            "       loc.fireTeamLeader = teamLeader",
-            "       break ",
-            "    end",
-            "",
-            "    local soldiersCount = group:GetEntityCount()",
-            "    for s=0,soldiersCount do",
-            "        local soldier = group:GetEntity(i)",
-            "        if soldier:IsAlive() then",
-            "            loc.fireTeamLeader = soldier",
-            "            break ",
-            "        end",
-            "    end",
-            "end",
-            "",
             "return loc.fireTeamLeader ~= nil"
           ]
         },
@@ -338,93 +443,140 @@
           ]
         },
         {
-          "name": "Get fireteams of count 1",
-          "id": "cdb7e30f-0ad7-44ba-bc9f-28f99b32977c",
-          "type": "scriptAction",
-          "script": [
-            "local fireTeamsCount = self:GetChildGroupCount()",
-            "loc.smallFireTeams = {}",
-            "for i=0,fireTeamsCount-1 do",
-            "    local fireTeam = self:GetChildGroup(i)",
-            "    local soldiersCount = fireTeam:GetEntityCount()",
-            "    local aliveSoldiersCount = 0",
-            "    for s=0, soldiersCount-1 do",
-            "            local soldier = fireTeam:GetEntity(s)",
-            "            --local distance = soldier:GetPosition():Distance(arg.orderData.destination)",
-            "            --if soldier:IsAlive() and distance > 40 then",
-            "            if soldier:IsAlive() then",
-            "                aliveSoldiersCount = aliveSoldiersCount + 1",
-            "            end",
-            "     end",
-            "    ",
-            "    if aliveSoldiersCount == 1 then",
-            "        for s=0, soldiersCount-1 do",
-            "            local soldier = fireTeam:GetEntity(s)",
-            "            if soldier:IsAlive() then",
-            "                loc.smallFireTeams[#loc.smallFireTeams+1] = fireTeam",
-            "            end",
-            "        end",
-            "    end",
-            "end",
-            "",
-            "--for child in self:GetChildGroups() do",
-            "    --local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
-            "    --table.insert(loc.subordinates, subordinate)    ",
-            "    --loc.subordinateData[subordinate] = {",
-            "       -- destination = position",
-            "    --}",
-            "--end"
-          ]
-        },
-        {
-          "name": "prepare and follow",
-          "id": "d2460527-fee0-474c-b938-942e039d2bb4",
-          "type": "sequence",
+          "name": "<unnamed>",
+          "id": "87d57bdf-39be-404e-a501-7c78ec6383ce",
+          "type": "selector",
           "subtrees": [
             {
-              "name": "prepare follow order data",
-              "id": "71b1e0e3-5304-4787-beb0-9dcbf22ec4da",
-              "type": "scriptAction",
-              "script": [
-                "loc.subOrderDataFollow = {orderName = \"Follow\", followedUnit = loc.fireTeamLeader}",
-                "loc.subordinatesFollow = {}",
-                "loc.subordinateDataFollow = InternalTable()",
-                "for i, fireTeam in ipairs(loc.smallFireTeams) do",
-                "    local subordinateFollow = standard_behaviors.GetVehicleOrSelf(fireTeam)",
-                "    table.insert(loc.subordinatesFollow, subordinateFollow)    ",
-                "    loc.subordinateDataFollow[subordinateFollow] = {",
-                "        followedUnit = loc.fireTeamLeader",
-                "    }",
-                "end",
-                "",
-                "--loc.subOrderData = {orderName = \"Advance\", destination = position}",
-                "--loc.subordinates = {}",
-                "--loc.subordinateData = InternalTable()",
-                "--for child in self:GetChildGroups() do",
-                "    --local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
-                "    --table.insert(loc.subordinates, subordinate)    ",
-                "    --loc.subordinateData[subordinate] = {",
-                "       -- destination = position",
-                "    --}",
-                "--end"
+              "name": "Wait Forever",
+              "id": "a0bd2872-81a1-4148-bba0-0b26ecfa8fea",
+              "type": "waitForever",
+              "decorators": [
+                {
+                  "id": "89c23da1-e43b-4f20-ad6c-dce1ac18e425",
+                  "type": "scriptCondition",
+                  "name": "no leader to follow",
+                  "script": [
+                    "return loc.noLeaderAvailable == true"
+                  ]
+                }
               ]
             },
             {
-              "name": "Clear area for all subordinates",
-              "id": "da73671d-4744-4ab5-8e63-490cecc8f7b6",
-              "type": "reference",
-              "target": [
-                "standard_behaviors",
-                "ExecuteSubordinateOrder"
+              "name": "Check if we should still follow the same leader",
+              "id": "06a5e704-a077-48a3-8699-a859b03c39f7",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "<unnamed>",
+                  "id": "1f56682a-e8e7-4e75-acf8-930861fa2ed1",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "prepare follow order data",
+                      "id": "71b1e0e3-5304-4787-beb0-9dcbf22ec4da",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.subOrderDataFollow = {orderName = \"Follow\", followedUnit = loc.leaderToFollow}",
+                        "loc.subordinatesFollow = {}",
+                        "loc.subordinateDataFollow = InternalTable()",
+                        "for i, fireTeam in ipairs(loc.smallFireTeams) do",
+                        "    local subordinateFollow = standard_behaviors.GetVehicleOrSelf(fireTeam)",
+                        "    table.insert(loc.subordinatesFollow, subordinateFollow)    ",
+                        "    loc.subordinateDataFollow[subordinateFollow] = {",
+                        "        followedUnit = loc.leaderToFollow",
+                        "    }",
+                        "end",
+                        "",
+                        "--loc.subOrderData = {orderName = \"Advance\", destination = position}",
+                        "--loc.subordinates = {}",
+                        "--loc.subordinateData = InternalTable()",
+                        "--for child in self:GetChildGroups() do",
+                        "    --local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+                        "    --table.insert(loc.subordinates, subordinate)    ",
+                        "    --loc.subordinateData[subordinate] = {",
+                        "       -- destination = position",
+                        "    --}",
+                        "--end"
+                      ]
+                    },
+                    {
+                      "name": "Clear area for all subordinates",
+                      "id": "437a60bb-79b2-47ac-a103-2f907df5e547",
+                      "type": "reference",
+                      "target": [
+                        "standard_behaviors",
+                        "ExecuteSubordinateOrder"
+                      ],
+                      "arguments": {
+                        "orderData": "return loc.subOrderDataFollow",
+                        "subordinates": "return loc.subordinatesFollow",
+                        "subordinateData": "return loc.subordinateDataFollow",
+                        "update": "return false"
+                      }
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "084bdd19-a607-4a57-8a53-f6238a0700d6",
+                      "type": "scriptCondition",
+                      "name": "check small fire teams count",
+                      "script": [
+                        "local fireTeamsCount = self:GetChildGroupCount()",
+                        "local singleFireTeams = {}",
+                        "for i=0,fireTeamsCount-1 do",
+                        "    local fireTeam = self:GetChildGroup(i)",
+                        "    local soldiersCount = fireTeam:GetEntityCount()",
+                        "    local aliveSoldiersCount = 0",
+                        "    for s=0, soldiersCount-1 do",
+                        "            local soldier = fireTeam:GetEntity(s)",
+                        "            if soldier:IsAlive() then",
+                        "                aliveSoldiersCount = aliveSoldiersCount + 1",
+                        "            end",
+                        "     end",
+                        "    ",
+                        "    if aliveSoldiersCount == 1 then",
+                        "        for s=0, soldiersCount-1 do",
+                        "            local soldier = fireTeam:GetEntity(s)",
+                        "            if soldier:IsAlive() then",
+                        "                singleFireTeams[#singleFireTeams+1] = fireTeam",
+                        "            end",
+                        "        end",
+                        "    end",
+                        "end",
+                        "if #singleFireTeams ~= #loc.smallFireTeams or loc.leaderToFollow == nil or not loc.leaderToFollow:IsAlive() then",
+                        "    loc.smallFireTeams = {}",
+                        "    loc.leaderToFollow = loc.fireTeamLeader",
+                        "    for i, team in ipairs(singleFireTeams) do",
+                        "        loc.smallFireTeams[#loc.smallFireTeams+1] = team",
+                        "    end",
+                        "    return true",
+                        "end",
+                        "return false"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Clear area for all subordinates",
+                  "id": "da73671d-4744-4ab5-8e63-490cecc8f7b6",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderDataFollow",
+                    "subordinates": "return loc.subordinatesFollow",
+                    "subordinateData": "return loc.subordinateDataFollow",
+                    "update": "return false"
+                  }
+                }
               ],
-              "arguments": {
-                "orderData": "return loc.subOrderDataFollow",
-                "subordinates": "return loc.subordinatesFollow",
-                "subordinateData": "return loc.subordinateDataFollow",
-                "update": "return false"
-              }
+              "active": true
             }
-          ]
+          ],
+          "active": true
         }
       ]
     },
@@ -500,53 +652,54 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Draw lines from leaders to waypoint",
-      "id": "e4568532-a4f6-4f0e-bca6-f77e38804d1c",
-      "type": "scriptAction",
-      "decorators": [
-        {
-          "id": "19d4aa36-3b47-47d4-8b29-33054740c4ce",
-          "type": "loopForever",
-          "name": "Draw every frame"
-        }
-      ],
+      "name": "Set all soldiers idle",
+      "id": "6dcfe5f9-7e35-4848-94b2-3fb02b7e8641",
+      "type": "reference",
       "meta": {
         "nodesInfo": [
           {
-            "id": "e4568532-a4f6-4f0e-bca6-f77e38804d1c",
-            "position": "3137.5,718.552685714284"
+            "id": "6dcfe5f9-7e35-4848-94b2-3fb02b7e8641",
+            "position": "733.68,763.274590476187"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "standard_behaviors",
+        "ExecuteSubordinateOrder"
+      ],
+      "arguments": {
+        "orderData": "return loc.subOrderData",
+        "subordinates": "return loc.subordinates",
+        "subordinateData": "return loc.subordinateData",
+        "update": "return false"
+      }
+    },
+    {
+      "name": "prepare order data",
+      "id": "8006d54d-880c-4041-8126-d5f0478a3fb1",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "8006d54d-880c-4041-8126-d5f0478a3fb1",
+            "position": "533.68,763.274590476187"
           }
         ],
         "editorObjects": []
       },
       "script": [
-        "local params = arg.orderData",
-        "local fireTeamsCount = self:GetChildGroupCount()",
+        "local position = arg.orderData.destination",
         "",
-        "for i=0,fireTeamsCount-1 do",
-        "    local fireTeam = self:GetChildGroup(i)",
-        "    local leader = fireTeam:GetLeader()",
-        "",
-        "    if not leader:IsAlive() then",
-        "        local soldiersCount = fireTeam:GetEntityCount()",
-        "",
-        "        for s=0, soldiersCount-1 do",
-        "            local soldier = fireTeam:GetEntity(s)",
-        "",
-        "            if soldier:IsAlive() then",
-        "                leader = soldier ",
-        "            end",
-        "        end",
-        "    end",
-        "    local OFFSET = Vec3(0,0,3)",
-        "    if leader:IsAlive() then",
-        "        ai_core_public.draw.Line(",
-        "            leader:GetPosition() + OFFSET,",
-        "            params.destination + OFFSET,",
-        "            1, 1, 0, 1",
-        "        )",
-        "        ",
-        "    end",
+        "loc.subOrderData = {orderName = \"Advance\", destination = position}",
+        "loc.subordinates = {}",
+        "loc.subordinateData = InternalTable()",
+        "for child in self:GetChildGroups() do",
+        "    local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+        "    table.insert(loc.subordinates, subordinate)    ",
+        "    loc.subordinateData[subordinate] = {",
+        "        destination = position",
+        "    }",
         "end"
       ]
     }
@@ -555,120 +708,160 @@
     "nodesInfo": [
       {
         "id": "9d340382-1648-4323-be7d-a539be304d1f",
-        "position": "2037.5,393.552685714285"
+        "position": "2208.68,563.274590476186"
+      },
+      {
+        "id": "77f79f83-59f5-4193-8db9-9c2c3f37d82b",
+        "position": "1408.68,613.274590476187"
+      },
+      {
+        "id": "44e4d089-f76e-4d89-9827-9de06cc8ef52",
+        "position": "1396.18,775.774590476187"
+      },
+      {
+        "id": "86c0492d-0f87-4567-9794-94f9b2c2dff9",
+        "position": "1158.68,875.774590476186"
+      },
+      {
+        "id": "00cbb27a-d5b0-42cf-a43e-93b1efe50e6d",
+        "position": "758.68,1075.77459047619"
+      },
+      {
+        "id": "66d50744-b76f-49ae-955e-3dda10f36824",
+        "position": "933.68,1075.77459047619"
+      },
+      {
+        "id": "5f1f46f3-964d-4c5c-9566-64bf826cc063",
+        "position": "1271.18,1075.77459047619"
       },
       {
         "id": "17919634-1abc-425d-9b4b-41427e99df08",
-        "position": "1575,506.052685714285"
+        "position": "1521.18,875.774590476186"
       },
       {
         "id": "f2cb2817-59ef-4332-8bee-a6b6f26a2064",
-        "position": "1350,593.552685714285"
+        "position": "1483.68,1100.77459047619"
       },
       {
         "id": "78dac5d9-35ab-4a2f-aa1d-e4f0b8e43b55",
-        "position": "1562.5,593.552685714285"
+        "position": "1683.68,1100.77459047619"
       },
       {
         "id": "22caf228-ca67-4065-af70-79ca73fc7a8b",
-        "position": "1175,681.052685714285"
+        "position": "1383.68,1213.27459047619"
       },
       {
         "id": "38f9ded0-9e3d-4de3-990a-2e7827c4c185",
-        "position": "1050,806.052685714284"
+        "position": "1133.68,1400.77459047619"
       },
       {
         "id": "4b945e70-c600-472d-88a8-b94f3d170999",
-        "position": "1337.5,806.052685714284"
+        "position": "1446.18,1400.77459047619"
       },
       {
         "id": "32b07214-bd3e-44cf-b0da-57e86d819211",
-        "position": "1650,681.052685714285"
+        "position": "1883.68,1225.77459047619"
       },
       {
         "id": "4e4d5d27-987f-43b4-b922-caaa32b5525f",
-        "position": "1075,931.052685714284"
+        "position": "1283.68,1488.27459047619"
       },
       {
         "id": "5226f611-6463-4024-9cec-5d3ee071c030",
-        "position": "1050,1056.05268571428"
+        "position": "1171.18,1638.27459047619"
       },
       {
         "id": "b31b5a7d-2689-4451-b0b7-9128048fb3aa",
-        "position": "1700,931.052685714284"
+        "position": "1946.18,1525.77459047619"
       },
       {
         "id": "a49e9721-012c-4a05-94e9-ae0e9f19f43f",
-        "position": "1500,1156.05268571429"
+        "position": "1633.68,1725.77459047619"
       },
       {
         "id": "ba3ba65b-5414-4fbe-9735-c22289006e93",
-        "position": "1662.5,1156.05268571429"
+        "position": "1833.68,1725.77459047619"
       },
       {
         "id": "f10380f0-d393-46d2-80b5-0248edec9c8c",
-        "position": "1937.5,1068.55268571429"
+        "position": "2108.68,1725.77459047619"
+      },
+      {
+        "id": "d19ebd42-5902-4863-987d-fe4fce568346",
+        "position": "1821.18,663.274590476186"
       },
       {
         "id": "aad9363e-f73e-4634-9294-ad91860e24c8",
-        "position": "2062.5,518.552685714285"
+        "position": "2221.18,663.274590476186"
       },
       {
         "id": "f2c7a05b-069c-4897-89a8-f838152304dc",
-        "position": "1900,606.052685714285"
+        "position": "2071.18,775.774590476185"
       },
       {
         "id": "2b57e4fd-62d7-4ef0-b004-3134987e18d8",
-        "position": "2062.5,731.052685714284"
+        "position": "2233.68,900.774590476184"
       },
       {
         "id": "ac6ff361-ff92-4e5c-868c-36fb167c41b2",
-        "position": "2162.5,606.052685714285"
+        "position": "2333.68,775.774590476185"
       },
       {
         "id": "b4a22600-18d6-4dae-80a8-e58aab0219d7",
-        "position": "2575,681.052685714285"
+        "position": "2633.68,663.274590476186"
       },
       {
         "id": "60649a14-bea6-4520-ac04-2b9b1e99b1b2",
-        "position": "2225,943.552685714284"
+        "position": "2633.68,763.274590476186"
       },
       {
-        "id": "cdb7e30f-0ad7-44ba-bc9f-28f99b32977c",
-        "position": "2412.5,943.552685714284"
+        "id": "87d57bdf-39be-404e-a501-7c78ec6383ce",
+        "position": "2858.68,763.274590476186"
       },
       {
-        "id": "d2460527-fee0-474c-b938-942e039d2bb4",
-        "position": "2712.5,943.552685714284"
+        "id": "a0bd2872-81a1-4148-bba0-0b26ecfa8fea",
+        "position": "2646.18,863.274590476186"
+      },
+      {
+        "id": "06a5e704-a077-48a3-8699-a859b03c39f7",
+        "position": "2846.18,925.774590476186"
+      },
+      {
+        "id": "1f56682a-e8e7-4e75-acf8-930861fa2ed1",
+        "position": "2596.18,1013.27459047619"
       },
       {
         "id": "71b1e0e3-5304-4787-beb0-9dcbf22ec4da",
-        "position": "2553.5,1078.01935238095"
+        "position": "2433.68,1175.77459047619"
+      },
+      {
+        "id": "437a60bb-79b2-47ac-a103-2f907df5e547",
+        "position": "2658.68,1175.77459047619"
       },
       {
         "id": "da73671d-4744-4ab5-8e63-490cecc8f7b6",
-        "position": "2791,1078.01935238095"
+        "position": "2983.68,1175.77459047619"
       },
       {
         "id": "523af7e9-059d-49b9-a5a7-9852c622ebb8",
-        "position": "2850,493.552685714285"
+        "position": "3196.18,613.274590476187"
       },
       {
         "id": "a75484b2-890e-4153-8a52-19fa59332d68",
-        "position": "2912.5,581.052685714285"
+        "position": "3208.68,700.774590476186"
       },
       {
         "id": "c551c11a-ebc5-45e9-9015-97afda312015",
-        "position": "2900,718.552685714284"
+        "position": "3221.18,838.274590476186"
       },
       {
         "id": "121ae642-2a80-42e4-bb1b-ea15f10e5ca8",
-        "position": "3175,581.052685714285"
+        "position": "3458.68,700.774590476186"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "4053.65000000001,2756.0526857143",
-    "gridPadding": "0,6.05268571428553"
+    "canvasSize": "4735.07305238097,2925.7745904762",
+    "gridPadding": "8.68000000000012,0.774590476186631"
   },
   "parameters": [
     {
@@ -690,6 +883,9 @@
     "smallFireTeams": "return {}",
     "subOrderDataFollow": "return nil",
     "subordinateDataFollow": "return nil",
-    "subordinatesFollow": "return nil"
+    "subordinatesFollow": "return nil",
+    "noLeaderAvailable": "return false",
+    "leaderToFollow": "return nil",
+    "leaderTeam": "return nil"
   }
 }

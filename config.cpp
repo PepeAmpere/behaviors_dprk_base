@@ -50,7 +50,7 @@ class CfgAvailableBehaviors
 {
 	class behaviors_dprk_AlternatingRetreat
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\ar.paa";
 		allowRotate = true;
 
 
@@ -80,7 +80,7 @@ class CfgAvailableBehaviors
 	
 	class behaviors_dprk_AlternatingRetreat_Reaction
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\ar.paa";
 		allowRotate = true;
 
 
@@ -110,7 +110,7 @@ class CfgAvailableBehaviors
 	
 	class behaviors_dprk_SuccessiveAdvance
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\sa.paa";
 		allowRotate = true;
 
 
@@ -139,7 +139,7 @@ class CfgAvailableBehaviors
 	};
 	class behaviors_dprk_SuccessiveAdvance_Reaction
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\sa.paa";
 		allowRotate = true;
 
 
@@ -168,7 +168,7 @@ class CfgAvailableBehaviors
 	};
 	class behaviors_dprk_AlternatingAdvance
 	{
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
 		allowRotate = true; // you also get direction
 
 
@@ -197,7 +197,7 @@ class CfgAvailableBehaviors
 	};
 	class behaviors_dprk_AlternatingAdvance_Reaction
 	{
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_sample.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
 		allowRotate = true; // you also get direction
 
 
