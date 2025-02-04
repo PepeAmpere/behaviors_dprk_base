@@ -109,27 +109,23 @@
                   "type": "scriptCondition",
                   "name": "?anyone alive?",
                   "script": [
-                    "function IsAnySoldierAlive(self)",
-                    "    local fireTeamCount = self:GetChildGroupCount()",
+                    "local fireTeamCount = self:GetChildGroupCount()",
                     "",
-                    "    for i = 1, fireTeamCount do    ",
-                    "        local iGroup = self:GetChildGroup(i - 1)",
-                    "        local soliderCount = iGroup:GetEntityCount()",
+                    "for i = 1, fireTeamCount do    ",
+                    "    local iGroup = self:GetChildGroup(i - 1)",
+                    "    local soliderCount = iGroup:GetEntityCount()",
                     "",
-                    "        for s = 1, soliderCount do",
-                    "            local soldier = iGroup:GetEntity(s - 1)",
-                    "            if soldier and soldier:IsAlive() then",
-                    "                DebugLog(\"At least one soldier is alive in group \"..i)",
-                    "                return true",
-                    "            end",
+                    "    for s = 1, soliderCount do",
+                    "        local soldier = iGroup:GetEntity(s - 1)",
+                    "        if soldier and soldier:IsAlive() then",
+                    "            DebugLog(\"At least one soldier is alive in group \"..i)",
+                    "            return true",
                     "        end",
                     "    end",
-                    "",
-                    "    DebugLog(\"No soldiers are alive.\")",
-                    "    return false",
                     "end",
                     "",
-                    "return IsAnySoldierAlive(self)"
+                    "DebugLog(\"No soldiers are alive.\")",
+                    "return false"
                   ]
                 }
               ]
@@ -170,6 +166,7 @@
             "loc.dataValidTable[\"path\"] = false",
             "loc.dataValidTable[\"controlPoints\"] = false",
             "loc.dataValidTable[\"orders\"] = false",
+            "loc.dataValidTable[\"gathered\"] = false",
             "",
             "DebugLog(\"Valid Table Set Up\")"
           ]
@@ -270,7 +267,11 @@
                         }
                       ],
                       "script": [
-                        "loc.pathQuery = FindPath(loc.foundLeader:GetPosition(), arg.orderData.destination)"
+                        "if loc.foundLeader then",
+                        "    loc.pathQuery = FindPath(loc.foundLeader:GetPosition(), arg.orderData.destination)",
+                        "else",
+                        "    loc.pathQuery = FindPath(self:GetLeaderGroup():GetLeader():GetPosition(), arg.orderData.destination)",
+                        "end"
                       ]
                     },
                     {
@@ -482,36 +483,98 @@
                           ]
                         },
                         {
-                          "name": "Give Orders",
-                          "id": "272cbfe9-3da4-4bb5-83b4-9c06f0eca175",
-                          "type": "parallel",
+                          "name": "<unnamed>",
+                          "id": "5a06dbeb-7e8f-44ef-889c-c9c5af2f2d66",
+                          "type": "selector",
                           "subtrees": [
                             {
-                              "name": "prepare and send order",
-                              "id": "0cfe8aec-4d9f-4045-9eda-c3f24c39d079",
+                              "name": "first all meet up with the leader",
+                              "id": "2e927807-bf0b-4b06-826b-f001f5933262",
                               "type": "sequence",
                               "subtrees": [
                                 {
                                   "name": "prepare order data",
-                                  "id": "89cbc79c-f003-400b-9827-9b1d8dc63d72",
+                                  "id": "840a3ebc-c74b-4551-863e-97fba1ac13c0",
                                   "type": "scriptAction",
                                   "script": [
-                                    "loc.subOrderData = loc.preparedOrders[loc.orderToPerformIndex][\"subOrderData\"]",
-                                    "loc.subordinates = loc.preparedOrders[loc.orderToPerformIndex][\"subordinates\"]",
-                                    "loc.subordinateData = loc.preparedOrders[loc.orderToPerformIndex][\"subordinateData\"]",
+                                    "if loc.foundLeader == nil then",
+                                    "    DebugLog(\"UNEXPECTEDLY LEADER IS NIL WHEN I WANT TO GROUP EVERYONE\")",
+                                    "    return",
+                                    "end",
                                     "",
-                                    "DebugLog(\"Sending order \"..loc.orderToPerformIndex)",
+                                    "-- Get order destination",
+                                    "local targetDestination = arg.orderData.destination",
+                                    "if targetDestination == nil then",
+                                    "    DebugLog(\"ERROR: arg.orderData.destination is NIL\")",
+                                    "    return",
+                                    "end",
                                     "",
+                                    "-- Find the closest alive leader to the targetDestination",
+                                    "local closestLeaderPosition = nil",
+                                    "local chosenGroup = nil",
+                                    "local minDistance = math.huge",
                                     "",
-                                    "-- loc.subOrderData = {orderName = \"Advance\", destination = arg.orderData.destination}",
-                                    "-- loc.subordinates = {loc.foundLeaderGroup}",
-                                    "-- loc.subordinateData = {}",
-                                    "-- loc.subordinateData = {destination = arg.orderData.destination}"
+                                    "for _, team in ipairs(loc.aliveFireTeams) do",
+                                    "    local teamLeader = team:GetLeader()",
+                                    "    if teamLeader and teamLeader:IsAlive() then",
+                                    "        local leaderPos = teamLeader:GetPosition()",
+                                    "        local distance = targetDestination:Distance(leaderPos)",
+                                    "",
+                                    "        if distance < minDistance then",
+                                    "            minDistance = distance",
+                                    "            closestLeaderPosition = leaderPos",
+                                    "            chosenGroup = team",
+                                    "        end",
+                                    "    end",
+                                    "end",
+                                    "",
+                                    "-- If no valid leader found, fall back to foundLeader's position",
+                                    "if closestLeaderPosition == nil then",
+                                    "    DebugLog(\"WARNING: No valid leader found in aliveFireTeams, using loc.foundLeader position\")",
+                                    "    closestLeaderPosition = loc.foundLeader:GetPosition()",
+                                    "    chosenGroup = loc.foundLeaderGroup",
+                                    "end",
+                                    "",
+                                    "-- Initialize order storage for Advance orders",
+                                    "loc.subOrderData = { orderName = \"Advance\", destination = closestLeaderPosition }",
+                                    "loc.subordinates = {}",
+                                    "loc.subordinateData = InternalTable()",
+                                    "",
+                                    "-- Function to process teams and assign orders",
+                                    "local function addTeamToAdvanceOrder(team)",
+                                    "    if team ~= chosenGroup then",
+                                    "        local subordinate = standard_behaviors.GetVehicleOrSelf(team)",
+                                    "        table.insert(loc.subordinates, subordinate)",
+                                    "        loc.subordinateData[subordinate] = {",
+                                    "            destination = closestLeaderPosition",
+                                    "        }",
+                                    "    else",
+                                    "        local subordinate = standard_behaviors.GetVehicleOrSelf(team)",
+                                    "        table.insert(loc.subordinates, subordinate)",
+                                    "        loc.subordinateData[subordinate] = {",
+                                    "            destination = closestLeaderPosition + Vec3(2,2,0)",
+                                    "        }",
+                                    "    end    ",
+                                    "end",
+                                    "",
+                                    "-- Assign Advance orders to all alive fire teams except the leader's team",
+                                    "for _, team in ipairs(loc.aliveFireTeams) do",
+                                    "    addTeamToAdvanceOrder(team)",
+                                    "end",
+                                    "",
+                                    "-- Assign Advance orders to all single-man teams except the leader's team",
+                                    "for _, team in ipairs(loc.singleManTeams) do",
+                                    "    addTeamToAdvanceOrder(team)",
+                                    "end",
+                                    "",
+                                    "-- Debug Logs",
+                                    "DebugLog(\"Setting all \" .. #loc.subordinates .. \" teams to advance to the closest leader's position.\")",
+                                    "DebugLog(\"Chosen leader position: \" .. tostring(closestLeaderPosition))"
                                   ]
                                 },
                                 {
                                   "name": "Clear area for all subordinates",
-                                  "id": "95a0a875-918d-4777-ae98-2e1c6edf09ea",
+                                  "id": "c7a09ba8-1836-44cd-b95b-ea08b1e31772",
                                   "type": "reference",
                                   "target": [
                                     "standard_behaviors",
@@ -525,122 +588,262 @@
                                   }
                                 },
                                 {
-                                  "name": "Increase Index",
-                                  "id": "ab815002-566d-4eec-b3fe-0c7bae85fe1c",
+                                  "name": "report grouping finished",
+                                  "id": "9ac85a70-b15c-467e-a027-4800064216b4",
                                   "type": "scriptAction",
                                   "script": [
-                                    "DebugLog(\"Order \"..loc.orderToPerformIndex..\" completed. Increasing order index to \"..loc.orderToPerformIndex + 1)",
-                                    "loc.orderToPerformIndex = loc.orderToPerformIndex + 1"
+                                    "loc.dataValidTable[\"gathered\"] = true",
+                                    "DebugLog(\"Everyone grouped with the leader\")"
                                   ]
-                                },
+                                }
+                              ],
+                              "decorators": [
                                 {
-                                  "name": "Check For Completion",
-                                  "id": "3ee10945-4671-4ff6-aad4-a6e652b06161",
-                                  "type": "scriptAction",
+                                  "id": "467140cf-5b0c-4043-a7f9-e58dcb3ea9e6",
+                                  "type": "scriptCondition",
+                                  "name": "If is leader and not gathered",
                                   "script": [
-                                    "if loc.orderToPerformIndex > loc.maxOrderIndex then",
-                                    "    DebugLog(\"All \"..loc.maxOrderIndex..\" orders completed. Sucessing the tree.\")",
-                                    "    loc.orderCompleted = true",
-                                    "end"
+                                    "return loc.foundLeader ~= nil and loc.dataValidTable[\"gathered\"] == false"
                                   ]
                                 }
                               ]
                             },
                             {
-                              "name": "rush end or continue",
-                              "id": "31eab7fc-c05d-4813-a443-1d77c5154be1",
-                              "type": "selector",
+                              "name": "Give Orders",
+                              "id": "272cbfe9-3da4-4bb5-83b4-9c06f0eca175",
+                              "type": "parallel",
                               "subtrees": [
                                 {
-                                  "name": "all advance to destination",
-                                  "id": "20870fcb-6112-48c4-b0dc-f9e7c1e082f6",
-                                  "type": "sequence",
+                                  "name": "AA if leader",
+                                  "id": "9e61c148-5c9f-44f6-bf87-4772aac16405",
+                                  "type": "selector",
                                   "subtrees": [
                                     {
-                                      "name": "prepare order data",
-                                      "id": "2e3ca50d-1c9c-405e-b759-6c0aa07c5591",
-                                      "type": "scriptAction",
-                                      "script": [
-                                        "loc.subOrderData = {orderName = \"Advance\", destination = arg.orderData.destination}",
-                                        "loc.subordinates = {loc.singleManTeams}",
-                                        "loc.subordinateData = {}",
-                                        "",
-                                        "DebugLog(\"Setting all \".. #loc.singleManTeams ..\" single man teams to rush the end \")"
+                                      "name": "prepare and send order",
+                                      "id": "0cfe8aec-4d9f-4045-9eda-c3f24c39d079",
+                                      "type": "sequence",
+                                      "subtrees": [
+                                        {
+                                          "name": "prepare order data",
+                                          "id": "89cbc79c-f003-400b-9827-9b1d8dc63d72",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "loc.subOrderData = loc.preparedOrders[loc.orderToPerformIndex][\"subOrderData\"]",
+                                            "loc.subordinates = loc.preparedOrders[loc.orderToPerformIndex][\"subordinates\"]",
+                                            "loc.subordinateData = loc.preparedOrders[loc.orderToPerformIndex][\"subordinateData\"]",
+                                            "",
+                                            "DebugLog(\"Sending order \"..loc.orderToPerformIndex)",
+                                            "",
+                                            "",
+                                            "-- loc.subOrderData = {orderName = \"Advance\", destination = arg.orderData.destination}",
+                                            "-- loc.subordinates = {loc.foundLeaderGroup}",
+                                            "-- loc.subordinateData = {}",
+                                            "-- loc.subordinateData = {destination = arg.orderData.destination}"
+                                          ]
+                                        },
+                                        {
+                                          "name": "Typical AA advance order",
+                                          "id": "95a0a875-918d-4777-ae98-2e1c6edf09ea",
+                                          "type": "reference",
+                                          "target": [
+                                            "standard_behaviors",
+                                            "ExecuteSubordinateOrder"
+                                          ],
+                                          "arguments": {
+                                            "orderData": "return loc.subOrderData",
+                                            "subordinates": "return loc.subordinates",
+                                            "subordinateData": "return loc.subordinateData",
+                                            "update": "return false"
+                                          }
+                                        },
+                                        {
+                                          "name": "Increase Index",
+                                          "id": "ab815002-566d-4eec-b3fe-0c7bae85fe1c",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "DebugLog(\"Order \"..loc.orderToPerformIndex..\" completed. Increasing order index to \"..loc.orderToPerformIndex + 1)",
+                                            "loc.orderToPerformIndex = loc.orderToPerformIndex + 1"
+                                          ]
+                                        },
+                                        {
+                                          "name": "Check For Completion",
+                                          "id": "3ee10945-4671-4ff6-aad4-a6e652b06161",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "if loc.orderToPerformIndex > loc.maxOrderIndex and loc.foundLeader ~= nil then",
+                                            "    DebugLog(\"All \"..loc.maxOrderIndex..\" orders completed. Sucessing the tree.\")",
+                                            "    loc.orderCompleted = true",
+                                            "end"
+                                          ]
+                                        }
+                                      ],
+                                      "decorators": [
+                                        {
+                                          "id": "0bbe2c0d-9287-4fd4-b7bb-cca844d8e9a9",
+                                          "type": "scriptCondition",
+                                          "name": "Is leader?",
+                                          "script": [
+                                            "return loc.foundLeader ~= nil"
+                                          ]
+                                        }
                                       ]
                                     },
                                     {
-                                      "name": "Clear area for all subordinates",
-                                      "id": "3c066406-8d2a-4695-a4f2-951f98044120",
-                                      "type": "reference",
-                                      "target": [
-                                        "standard_behaviors",
-                                        "ExecuteSubordinateOrder"
-                                      ],
-                                      "arguments": {
-                                        "orderData": "return loc.subOrderData",
-                                        "subordinates": "return loc.subordinates",
-                                        "subordinateData": "return loc.subordinateData",
-                                        "update": "return false"
-                                      }
+                                      "name": "Wait Forever",
+                                      "id": "e90bc70b-823e-4e79-9b01-0c8d096508ea",
+                                      "type": "waitForever"
                                     }
                                   ],
-                                  "decorators": [
-                                    {
-                                      "id": "60bd4eea-2a92-4ae5-ae5e-f802a78daefb",
-                                      "type": "scriptCondition",
-                                      "name": "No leader?",
-                                      "script": [
-                                        "return loc.foundLeader == nil"
-                                      ]
-                                    }
-                                  ]
+                                  "active": true
                                 },
                                 {
-                                  "name": "single teams follow leader",
-                                  "id": "b6a7f2d1-64ca-4a05-b2da-41e48f93c769",
-                                  "type": "sequence",
+                                  "name": "rush end or continue",
+                                  "id": "31eab7fc-c05d-4813-a443-1d77c5154be1",
+                                  "type": "selector",
                                   "subtrees": [
                                     {
-                                      "name": "Prepare single teams order data",
-                                      "id": "342b581c-c830-4ed3-bd8d-48d180bd9cad",
-                                      "type": "scriptAction",
-                                      "script": [
-                                        "loc.subOrderDataFollow = {orderName = \"Follow\", followedUnit = loc.foundLeader}",
-                                        "loc.subordinatesFollow = {}",
-                                        "loc.subordinateDataFollow = InternalTable()",
-                                        "for i, fireTeam in ipairs(loc.singleManTeams) do",
-                                        "    local subordinateFollow = standard_behaviors.GetVehicleOrSelf(fireTeam)",
-                                        "    table.insert(loc.subordinatesFollow, subordinateFollow)",
-                                        "    loc.subordinateDataFollow[subordinateFollow] = {",
-                                        "        followedUnit = loc.foundLeader",
-                                        "    }",
-                                        "end",
-                                        "",
-                                        "DebugLog(\"Setting all \".. #loc.singleManTeams ..\" single man teams to follow the leader\")"
+                                      "name": "all advance to destination",
+                                      "id": "20870fcb-6112-48c4-b0dc-f9e7c1e082f6",
+                                      "type": "sequence",
+                                      "subtrees": [
+                                        {
+                                          "name": "prepare order data",
+                                          "id": "2e3ca50d-1c9c-405e-b759-6c0aa07c5591",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "-- Get order destination",
+                                            "local targetDestination = arg.orderData.destination",
+                                            "if targetDestination == nil then",
+                                            "    DebugLog(\"ERROR: arg.orderData.destination is NIL\")",
+                                            "    return",
+                                            "end",
+                                            "",
+                                            "-- Initialize order storage for Advance orders",
+                                            "loc.subOrderData = { orderName = \"Advance\", destination = targetDestination }",
+                                            "loc.subordinates = {}",
+                                            "loc.subordinateData = InternalTable()",
+                                            "",
+                                            "-- Function to process teams and assign orders",
+                                            "local function addTeamToAdvanceOrder(team)",
+                                            "    if team ~= loc.foundLeaderGroup then",
+                                            "        local subordinate = standard_behaviors.GetVehicleOrSelf(team)",
+                                            "        table.insert(loc.subordinates, subordinate)",
+                                            "        loc.subordinateData[subordinate] = {",
+                                            "            destination = closestLeaderPosition",
+                                            "        }",
+                                            "    end",
+                                            "end",
+                                            "",
+                                            "-- Assign Advance orders to all alive fire teams except the leader's team",
+                                            "for _, team in ipairs(loc.aliveFireTeams) do",
+                                            "    addTeamToAdvanceOrder(team)",
+                                            "end",
+                                            "",
+                                            "-- Assign Advance orders to all single-man teams except the leader's team",
+                                            "for _, team in ipairs(loc.singleManTeams) do",
+                                            "    addTeamToAdvanceOrder(team)",
+                                            "end",
+                                            "",
+                                            "-- Debug Logs",
+                                            "DebugLog(\"Setting all \" .. #loc.subordinates .. \" teams to RUSH to the destination.\")"
+                                          ]
+                                        },
+                                        {
+                                          "name": "Send rushing to the end",
+                                          "id": "3c066406-8d2a-4695-a4f2-951f98044120",
+                                          "type": "reference",
+                                          "target": [
+                                            "standard_behaviors",
+                                            "ExecuteSubordinateOrder"
+                                          ],
+                                          "arguments": {
+                                            "orderData": "return loc.subOrderData",
+                                            "subordinates": "return loc.subordinates",
+                                            "subordinateData": "return loc.subordinateData",
+                                            "update": "return false"
+                                          }
+                                        },
+                                        {
+                                          "name": "Check For Completion",
+                                          "id": "db5c42bc-2256-48fc-b81c-9e01bcc9da8e",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "if loc.orderToPerformIndex > loc.maxOrderIndex then",
+                                            "    DebugLog(\"Everyone rushed to destination. Sucessing the tree.\")",
+                                            "    loc.orderCompleted = true",
+                                            "end"
+                                          ]
+                                        }
+                                      ],
+                                      "decorators": [
+                                        {
+                                          "id": "60bd4eea-2a92-4ae5-ae5e-f802a78daefb",
+                                          "type": "scriptCondition",
+                                          "name": "No leader?",
+                                          "script": [
+                                            "return loc.foundLeader == nil"
+                                          ]
+                                        }
                                       ]
                                     },
                                     {
-                                      "name": "Single Man Team Follows",
-                                      "id": "a97fbea3-02f9-4ac0-af33-d87f77e0ade8",
-                                      "type": "reference",
-                                      "target": [
-                                        "standard_behaviors",
-                                        "ExecuteSubordinateOrder"
-                                      ],
-                                      "arguments": {
-                                        "orderData": "return loc.subOrderDataFollow",
-                                        "subordinates": "return loc.subordinatesFollow",
-                                        "subordinateData": "return loc.subordinateDataFollow",
-                                        "update": "return false"
-                                      }
+                                      "name": "single teams follow leader",
+                                      "id": "b6a7f2d1-64ca-4a05-b2da-41e48f93c769",
+                                      "type": "sequence",
+                                      "subtrees": [
+                                        {
+                                          "name": "Prepare single teams order data",
+                                          "id": "342b581c-c830-4ed3-bd8d-48d180bd9cad",
+                                          "type": "scriptAction",
+                                          "script": [
+                                            "loc.subOrderDataFollow = {orderName = \"Follow\", followedUnit = loc.foundLeader}",
+                                            "loc.subordinatesFollow = {}",
+                                            "loc.subordinateDataFollow = InternalTable()",
+                                            "for i, fireTeam in ipairs(loc.singleManTeams) do",
+                                            "    if fireTeam:GetEntityCount() == 1 then",
+                                            "        local subordinateFollow = standard_behaviors.GetVehicleOrSelf(fireTeam)",
+                                            "        table.insert(loc.subordinatesFollow, subordinateFollow)",
+                                            "        loc.subordinateDataFollow[subordinateFollow] = {",
+                                            "            followedUnit = loc.foundLeader,",
+                                            "            spacing = 50",
+                                            "        }",
+                                            "    else",
+                                            "        local subordinateFollow = standard_behaviors.GetVehicleOrSelf(fireTeam)",
+                                            "        table.insert(loc.subordinatesFollow, subordinateFollow)",
+                                            "        loc.subordinateDataFollow[subordinateFollow] = {",
+                                            "            followedUnit = loc.foundLeader",
+                                            "        }",
+                                            "    end",
+                                            "end",
+                                            "",
+                                            "DebugLog(\"Setting all \".. #loc.singleManTeams ..\" single man teams to follow the leader\")"
+                                          ]
+                                        },
+                                        {
+                                          "name": "Single Man Team Follows",
+                                          "id": "a97fbea3-02f9-4ac0-af33-d87f77e0ade8",
+                                          "type": "reference",
+                                          "target": [
+                                            "standard_behaviors",
+                                            "ExecuteSubordinateOrder"
+                                          ],
+                                          "arguments": {
+                                            "orderData": "return loc.subOrderDataFollow",
+                                            "subordinates": "return loc.subordinatesFollow",
+                                            "subordinateData": "return loc.subordinateDataFollow",
+                                            "update": "return false"
+                                          }
+                                        }
+                                      ]
                                     }
-                                  ]
+                                  ],
+                                  "active": true
                                 }
                               ],
-                              "active": true
+                              "waitForAll": false
                             }
                           ],
-                          "waitForAll": false
+                          "active": true
                         }
                       ],
                       "active": true
@@ -848,56 +1051,88 @@
         "position": "2584.62008214718,1869.8761404908"
       },
       {
+        "id": "5a06dbeb-7e8f-44ef-889c-c9c5af2f2d66",
+        "position": "3167.83333333333,1975.18181818182"
+      },
+      {
+        "id": "2e927807-bf0b-4b06-826b-f001f5933262",
+        "position": "2472.12008214718,2094.8761404908"
+      },
+      {
+        "id": "840a3ebc-c74b-4551-863e-97fba1ac13c0",
+        "position": "2141.41666666666,2335.93181818182"
+      },
+      {
+        "id": "c7a09ba8-1836-44cd-b95b-ea08b1e31772",
+        "position": "2372.12008214718,2319.8761404908"
+      },
+      {
+        "id": "9ac85a70-b15c-467e-a027-4800064216b4",
+        "position": "2747.12008214718,2319.8761404908"
+      },
+      {
         "id": "272cbfe9-3da4-4bb5-83b4-9c06f0eca175",
-        "position": "3109.62008214718,1894.8761404908"
+        "position": "3597.12008214718,2069.8761404908"
+      },
+      {
+        "id": "9e61c148-5c9f-44f6-bf87-4772aac16405",
+        "position": "3559.62008214718,2207.3761404908"
       },
       {
         "id": "0cfe8aec-4d9f-4045-9eda-c3f24c39d079",
-        "position": "2985.34389167099,2057.02967584433"
+        "position": "3322.12008214718,2319.8761404908"
       },
       {
         "id": "89cbc79c-f003-400b-9827-9b1d8dc63d72",
-        "position": "2697.84389167099,2257.02967584433"
+        "position": "3034.62008214718,2532.3761404908"
       },
       {
         "id": "95a0a875-918d-4777-ae98-2e1c6edf09ea",
-        "position": "2935.34389167099,2244.52967584433"
+        "position": "3272.12008214718,2519.8761404908"
       },
       {
         "id": "ab815002-566d-4eec-b3fe-0c7bae85fe1c",
-        "position": "3297.84389167098,2219.52967584433"
+        "position": "3634.62008214717,2494.8761404908"
       },
       {
         "id": "3ee10945-4671-4ff6-aad4-a6e652b06161",
-        "position": "3547.84389167098,2219.52967584433"
+        "position": "3884.62008214717,2494.8761404908"
+      },
+      {
+        "id": "e90bc70b-823e-4e79-9b01-0c8d096508ea",
+        "position": "3743.18187691334,2341.64201350668"
       },
       {
         "id": "31eab7fc-c05d-4813-a443-1d77c5154be1",
-        "position": "4022.12008214718,2094.8761404908"
+        "position": "4359.62008214718,2319.8761404908"
       },
       {
         "id": "20870fcb-6112-48c4-b0dc-f9e7c1e082f6",
-        "position": "3897.12008214718,2269.8761404908"
+        "position": "4234.62008214718,2494.8761404908"
       },
       {
         "id": "2e3ca50d-1c9c-405e-b759-6c0aa07c5591",
-        "position": "3622.12008214718,2469.8761404908"
+        "position": "3959.62008214718,2694.8761404908"
       },
       {
         "id": "3c066406-8d2a-4695-a4f2-951f98044120",
-        "position": "3859.62008214718,2457.3761404908"
+        "position": "4197.12008214718,2682.3761404908"
+      },
+      {
+        "id": "db5c42bc-2256-48fc-b81c-9e01bcc9da8e",
+        "position": "4561.61044834191,2696.64201350668"
       },
       {
         "id": "b6a7f2d1-64ca-4a05-b2da-41e48f93c769",
-        "position": "4447.12008214718,2294.8761404908"
+        "position": "4934.62008214718,2507.3761404908"
       },
       {
         "id": "342b581c-c830-4ed3-bd8d-48d180bd9cad",
-        "position": "4309.62008214718,2444.8761404908"
+        "position": "4797.12008214718,2657.3761404908"
       },
       {
         "id": "a97fbea3-02f9-4ac0-af33-d87f77e0ade8",
-        "position": "4597.12008214718,2444.8761404908"
+        "position": "5084.62008214718,2657.3761404908"
       },
       {
         "id": "7bb0d5c4-3cd5-49ae-b6df-9abbd50b2cd3",
