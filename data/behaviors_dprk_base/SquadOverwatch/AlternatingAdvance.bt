@@ -38,63 +38,104 @@
                   "type": "scriptCondition",
                   "name": "?found leader?",
                   "script": [
-                    "-- try to find an alive soldier",
-                    "loc.foundLeader = nil",
-                    "loc.foundLeaderGroup = nil",
-                    "local leaderCandidate = nil",
-                    "",
-                    "-- iterate over the teams",
-                    "local fireTeamCount = self:GetChildGroupCount()",
-                    "",
-                    "for i = 1, fireTeamCount do    ",
-                    "    local iGroup = self:GetChildGroup(i - 1)",
+                    "-- If we already have a valid leader group, no need to recheck",
+                    "if loc.foundLeader ~= nil and loc.foundLeaderGroup ~= nil then",
+                    "    -- If loc.foundLeaderGroup has 2+ alive soldiers, return true",
                     "    local aliveCount = 0",
-                    "    ",
-                    "    -- Use GetEntityCount() instead",
-                    "    local soliderCount = iGroup:GetEntityCount()",
-                    "    --DebugLog(\"Entity count of group \"..i..\" is \"..soliderCount)",
-                    "",
-                    "    for s = 1, soliderCount do",
-                    "        local soldier = iGroup:GetEntity(s - 1) -- Use GetEntity instead of GetChildGroup",
+                    "    for s = 1, loc.foundLeaderGroup:GetEntityCount() do",
+                    "        local soldier = loc.foundLeaderGroup:GetEntity(s - 1)",
                     "        if soldier and soldier:IsAlive() then",
                     "            aliveCount = aliveCount + 1",
                     "        end",
                     "    end",
-                    "    --DebugLog(\"Dealing with group \"..i..\"; alive count is \"..aliveCount)",
+                    "    if aliveCount >= 2 then",
+                    "        return true",
+                    "    end",
                     "",
-                    "    -- Only consider this group if it has more than 1 alive member",
-                    "    if aliveCount > 1 then",
-                    "        -- try and get group leader",
-                    "        leaderCandidate = iGroup:GetLeader()",
-                    "        if leaderCandidate and leaderCandidate:IsAlive() then",
-                    "            loc.foundLeaderGroup = iGroup",
-                    "            loc.foundLeader = leaderCandidate",
-                    "            --DebugLog(\"Leader of group \"..i..\" is alive. Setting it as a leader.\")",
-                    "            break",
-                    "        end",
+                    "    -- Otherwise, invalidate loc.dataValidTable and look for a new leader",
+                    "    loc.dataValidTable = nil",
+                    "end",
                     "",
-                    "        -- if group leader is dead",
-                    "        -- iterate over the soldiers and try to find an alive one",
-                    "        for s = 1, soliderCount do",
-                    "            leaderCandidate = iGroup:GetEntity(s - 1) -- Use GetEntity instead",
-                    "            if leaderCandidate and leaderCandidate:IsAlive() then",
-                    "                loc.foundLeaderGroup = iGroup",
-                    "                loc.foundLeader = leaderCandidate",
-                    "                --DebugLog(\"Found a leader of group \"..i..\" Manually.\")",
-                    "                break",
-                    "            end",
+                    "",
+                    "-- Find the closest viable leader using deterministic logic",
+                    "loc.foundLeader = nil",
+                    "loc.foundLeaderGroup = nil",
+                    "local closestLeaderPosition = nil",
+                    "local minDistance = math.huge",
+                    "local targetDestination = arg.orderData.destination",
+                    "",
+                    "if targetDestination == nil then",
+                    "    DebugLog(\"ERROR: arg.orderData.destination is NIL\")",
+                    "    return false",
+                    "end",
+                    "",
+                    "-- Iterate over fire teams to find a valid leader",
+                    "local fireTeamCount = self:GetChildGroupCount()",
+                    "for i = 1, fireTeamCount do    ",
+                    "    local iGroup = self:GetChildGroup(i - 1)",
+                    "    local aliveCount = 0",
+                    "    local leaderCandidate = nil",
+                    "",
+                    "    local soliderCount = iGroup:GetEntityCount()",
+                    "",
+                    "    -- Count alive soldiers in the group",
+                    "    for s = 1, soliderCount do",
+                    "        local soldier = iGroup:GetEntity(s - 1)",
+                    "        if soldier and soldier:IsAlive() then",
+                    "            aliveCount = aliveCount + 1",
                     "        end",
                     "    end",
                     "",
-                    "    -- no one alive or insufficient members, try again for next fire team    ",
+                    "    -- Only consider groups with 2 or more alive soldiers",
+                    "    if aliveCount >= 2 then",
+                    "        -- Try to get the group leader first",
+                    "        leaderCandidate = iGroup:GetLeader()",
+                    "        ",
+                    "        if leaderCandidate and leaderCandidate:IsAlive() then",
+                    "            -- If leader is alive, calculate the distance to the target destination",
+                    "            local leaderPos = leaderCandidate:GetPosition()",
+                    "            local distance = targetDestination:Distance(leaderPos)",
+                    "",
+                    "            if distance < minDistance then",
+                    "                -- Update closest leader and group if this one is closer",
+                    "                minDistance = distance",
+                    "                loc.foundLeader = leaderCandidate",
+                    "                loc.foundLeaderGroup = iGroup",
+                    "                closestLeaderPosition = leaderPos",
+                    "            end",
+                    "",
+                    "        -- if leader candidate is nil or dead",
+                    "        else ",
+                    "            -- If the leader is dead, find another alive soldier",
+                    "            for s = 1, soliderCount do",
+                    "                leaderCandidate = iGroup:GetEntity(s - 1)",
+                    "                if leaderCandidate and leaderCandidate:IsAlive() then",
+                    "                    -- Calculate the distance to the target destination",
+                    "                    local leaderPos = leaderCandidate:GetPosition()",
+                    "                    local distance = targetDestination:Distance(leaderPos)",
+                    "",
+                    "                    if distance < minDistance then",
+                    "                        -- Update closest leader and group if this one is closer",
+                    "                        minDistance = distance",
+                    "                        loc.foundLeader = leaderCandidate",
+                    "                        loc.foundLeaderGroup = iGroup",
+                    "                        closestLeaderPosition = leaderPos",
+                    "                    end",
+                    "                    break -- Stop once we find an alive soldier to serve as the leader",
+                    "                end",
+                    "            end",
+                    "        end",
+                    "    end",
                     "end",
                     "",
+                    "-- If no valid leader found, return false",
                     "if loc.foundLeader == nil then",
                     "    DebugLog(\"No leader found\")",
                     "    return false",
-                    "else",
-                    "    return true",
-                    "end"
+                    "end",
+                    "",
+                    "-- Successfully found a leader, return true",
+                    "return true"
                   ]
                 }
               ]
@@ -514,6 +555,7 @@
                                     "local chosenGroup = nil",
                                     "local minDistance = math.huge",
                                     "",
+                                    "--[[",
                                     "for _, team in ipairs(loc.aliveFireTeams) do",
                                     "    local teamLeader = team:GetLeader()",
                                     "    if teamLeader and teamLeader:IsAlive() then",
@@ -527,6 +569,7 @@
                                     "        end",
                                     "    end",
                                     "end",
+                                    "--]]",
                                     "",
                                     "-- If no valid leader found, fall back to foundLeader's position",
                                     "if closestLeaderPosition == nil then",
@@ -551,9 +594,12 @@
                                     "    else",
                                     "        local subordinate = standard_behaviors.GetVehicleOrSelf(team)",
                                     "        table.insert(loc.subordinates, subordinate)",
+                                    "        -- Add a small vector towards the targetDestination (as per the TODO)",
+                                    "        local directionToTarget = (targetDestination - closestLeaderPosition):Normalized()  -- Vector pointing towards target",
+                                    "        local offsetVector = directionToTarget + directionToTarget  -- Small offset towards the target",
                                     "        loc.subordinateData[subordinate] = {",
-                                    "            destination = closestLeaderPosition + Vec3(2,2,0)",
-                                    "        }",
+                                    "            destination = closestLeaderPosition + offsetVector",
+                                    "        }      ",
                                     "    end    ",
                                     "end",
                                     "",
@@ -573,7 +619,7 @@
                                   ]
                                 },
                                 {
-                                  "name": "Clear area for all subordinates",
+                                  "name": "Gather around leader",
                                   "id": "c7a09ba8-1836-44cd-b95b-ea08b1e31772",
                                   "type": "reference",
                                   "target": [
@@ -976,188 +1022,188 @@
     "nodesInfo": [
       {
         "id": "2f63bc08-de32-4fdb-bd76-ff5f64026b56",
-        "position": "2672.12008214719,844.876140490805"
+        "position": "2674.704474239,844.876140490805"
       },
       {
         "id": "887581af-2a18-41bc-8cb0-105d52b42998",
-        "position": "1072.12008214718,1132.37614049081"
+        "position": "1074.70447423899,1132.37614049081"
       },
       {
         "id": "ea4709da-4d92-4b7c-9748-653b0d456fa9",
-        "position": "847.120082147185,1257.3761404908"
+        "position": "849.704474238992,1257.3761404908"
       },
       {
         "id": "da94f6e9-1953-46a7-a8a6-d92420ad40c9",
-        "position": "1247.12008214719,1282.3761404908"
+        "position": "1249.704474239,1282.3761404908"
       },
       {
         "id": "a081bed9-7910-4ddf-8f90-9242015b130d",
-        "position": "1034.62008214718,1407.3761404908"
+        "position": "1037.20447423899,1407.3761404908"
       },
       {
         "id": "810126b8-5433-4097-b25f-cd12318f62fc",
-        "position": "1234.62008214718,1419.8761404908"
+        "position": "1237.20447423899,1419.8761404908"
       },
       {
         "id": "91f75bf4-774f-49a8-a256-aa9f16e2bc6c",
-        "position": "1434.62008214718,1432.3761404908"
+        "position": "1437.20447423899,1432.3761404908"
       },
       {
         "id": "a10e69f8-93da-484e-8f1d-12346a715f9b",
-        "position": "1922.12008214718,1507.3761404908"
+        "position": "1924.70447423899,1507.3761404908"
       },
       {
         "id": "47760c95-811b-4fcd-9555-0876c118521f",
-        "position": "1672.12008214718,1594.8761404908"
+        "position": "1674.70447423899,1594.8761404908"
       },
       {
         "id": "a28e6cd2-d483-4de1-8da9-03fc13c93efd",
-        "position": "2072.12008214718,1569.8761404908"
+        "position": "2074.70447423899,1569.8761404908"
       },
       {
         "id": "d5a8f45f-82fc-4090-a05b-4a873ee45920",
-        "position": "1934.62008214718,1669.8761404908"
+        "position": "1937.20447423899,1669.8761404908"
       },
       {
         "id": "250000ce-93b0-4b68-93db-84459a7db542",
-        "position": "2209.62008214718,1632.3761404908"
+        "position": "2212.20447423899,1632.3761404908"
       },
       {
         "id": "ec4b20ec-9ef8-49d6-a3c9-38ffbcd26728",
-        "position": "2034.62008214718,1807.3761404908"
+        "position": "2037.20447423899,1807.3761404908"
       },
       {
         "id": "05d38b85-d666-4c97-823b-24ee816487e0",
-        "position": "1784.62008214718,1969.8761404908"
+        "position": "1787.20447423899,1969.8761404908"
       },
       {
         "id": "edd0e148-4e55-4a90-ac71-e34fd856549d",
-        "position": "2072.12008214718,1969.8761404908"
+        "position": "2074.70447423899,1969.8761404908"
       },
       {
         "id": "c674bd69-f639-4440-953f-d8b03a77b0bc",
-        "position": "2359.62008214718,1694.8761404908"
+        "position": "2362.20447423899,1694.8761404908"
       },
       {
         "id": "1221f95b-0654-4b1c-9f4a-b8f4c7f2e69c",
-        "position": "2284.62008214718,1869.8761404908"
+        "position": "2287.20447423899,1869.8761404908"
       },
       {
         "id": "f40efbab-f390-41bb-9dfa-5c52feb8d0eb",
-        "position": "2534.62008214718,1744.8761404908"
+        "position": "2537.20447423899,1744.8761404908"
       },
       {
         "id": "82764376-d9fb-48ce-ad66-f93568d2df2a",
-        "position": "2584.62008214718,1869.8761404908"
+        "position": "2587.20447423899,1869.8761404908"
       },
       {
         "id": "5a06dbeb-7e8f-44ef-889c-c9c5af2f2d66",
-        "position": "3167.83333333333,1975.18181818182"
+        "position": "3170.41772542514,1975.18181818182"
       },
       {
         "id": "2e927807-bf0b-4b06-826b-f001f5933262",
-        "position": "2472.12008214718,2094.8761404908"
+        "position": "2474.70447423899,2094.8761404908"
       },
       {
         "id": "840a3ebc-c74b-4551-863e-97fba1ac13c0",
-        "position": "2141.41666666666,2335.93181818182"
+        "position": "2144.00105875847,2335.93181818182"
       },
       {
         "id": "c7a09ba8-1836-44cd-b95b-ea08b1e31772",
-        "position": "2372.12008214718,2319.8761404908"
+        "position": "2374.70447423899,2319.8761404908"
       },
       {
         "id": "9ac85a70-b15c-467e-a027-4800064216b4",
-        "position": "2747.12008214718,2319.8761404908"
+        "position": "2749.70447423899,2319.8761404908"
       },
       {
         "id": "272cbfe9-3da4-4bb5-83b4-9c06f0eca175",
-        "position": "3597.12008214718,2069.8761404908"
+        "position": "3599.70447423899,2069.8761404908"
       },
       {
         "id": "9e61c148-5c9f-44f6-bf87-4772aac16405",
-        "position": "3559.62008214718,2207.3761404908"
+        "position": "3562.20447423899,2207.3761404908"
       },
       {
         "id": "0cfe8aec-4d9f-4045-9eda-c3f24c39d079",
-        "position": "3322.12008214718,2319.8761404908"
+        "position": "3324.70447423899,2319.8761404908"
       },
       {
         "id": "89cbc79c-f003-400b-9827-9b1d8dc63d72",
-        "position": "3034.62008214718,2532.3761404908"
+        "position": "3037.20447423899,2532.3761404908"
       },
       {
         "id": "95a0a875-918d-4777-ae98-2e1c6edf09ea",
-        "position": "3272.12008214718,2519.8761404908"
+        "position": "3274.70447423899,2519.8761404908"
       },
       {
         "id": "ab815002-566d-4eec-b3fe-0c7bae85fe1c",
-        "position": "3634.62008214717,2494.8761404908"
+        "position": "3637.20447423898,2494.8761404908"
       },
       {
         "id": "3ee10945-4671-4ff6-aad4-a6e652b06161",
-        "position": "3884.62008214717,2494.8761404908"
+        "position": "3887.20447423898,2494.8761404908"
       },
       {
         "id": "e90bc70b-823e-4e79-9b01-0c8d096508ea",
-        "position": "3743.18187691334,2341.64201350668"
+        "position": "3745.76626900514,2341.64201350668"
       },
       {
         "id": "31eab7fc-c05d-4813-a443-1d77c5154be1",
-        "position": "4359.62008214718,2319.8761404908"
+        "position": "4362.20447423899,2319.8761404908"
       },
       {
         "id": "20870fcb-6112-48c4-b0dc-f9e7c1e082f6",
-        "position": "4234.62008214718,2494.8761404908"
+        "position": "4237.20447423899,2494.8761404908"
       },
       {
         "id": "2e3ca50d-1c9c-405e-b759-6c0aa07c5591",
-        "position": "3959.62008214718,2694.8761404908"
+        "position": "3962.20447423899,2694.8761404908"
       },
       {
         "id": "3c066406-8d2a-4695-a4f2-951f98044120",
-        "position": "4197.12008214718,2682.3761404908"
+        "position": "4199.70447423899,2682.3761404908"
       },
       {
         "id": "db5c42bc-2256-48fc-b81c-9e01bcc9da8e",
-        "position": "4561.61044834191,2696.64201350668"
+        "position": "4564.19484043372,2696.64201350668"
       },
       {
         "id": "b6a7f2d1-64ca-4a05-b2da-41e48f93c769",
-        "position": "4934.62008214718,2507.3761404908"
+        "position": "4937.20447423899,2507.3761404908"
       },
       {
         "id": "342b581c-c830-4ed3-bd8d-48d180bd9cad",
-        "position": "4797.12008214718,2657.3761404908"
+        "position": "4799.70447423899,2657.3761404908"
       },
       {
         "id": "a97fbea3-02f9-4ac0-af33-d87f77e0ade8",
-        "position": "5084.62008214718,2657.3761404908"
+        "position": "5087.20447423899,2657.3761404908"
       },
       {
         "id": "7bb0d5c4-3cd5-49ae-b6df-9abbd50b2cd3",
-        "position": "2634.62008214718,1057.3761404908"
+        "position": "2637.20447423899,1057.3761404908"
       },
       {
         "id": "4419ca60-93fc-4049-b895-99a83ba977d9",
-        "position": "2522.12008214718,1182.3761404908"
+        "position": "2524.70447423899,1182.3761404908"
       },
       {
         "id": "79f475a1-2d9f-4a8d-931b-c9157f927e4c",
-        "position": "2759.62008214718,1182.3761404908"
+        "position": "2762.20447423899,1182.3761404908"
       },
       {
         "id": "ceafd781-ca4d-4c33-9092-ceea2a693ac7",
-        "position": "3122.12008214718,1182.3761404908"
+        "position": "3124.70447423899,1182.3761404908"
       },
       {
         "id": "2bbe1616-6ec0-491c-8f93-a4a766793b68",
-        "position": "3334.62008214718,1182.3761404908"
+        "position": "3337.20447423899,1182.3761404908"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "6738.38530332813,3638.12000940085",
-    "gridPadding": "9.6200821471838,7.37614049080477"
+    "canvasSize": "6740.96969541994,3638.12000940085",
+    "gridPadding": "12.2044742389911,7.37614049080477"
   },
   "parameters": [
     {
