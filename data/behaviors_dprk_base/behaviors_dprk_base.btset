@@ -5,6 +5,8 @@
     "Analysis\\FindMultiplePaths.bt",
     "Analysis\\FindPathDirect.bt",
     "Analysis\\FindPathSquadSafe.bt",
+    "SquadOverwatch\\AllTeamsDefendBack.bt",
+    "SquadOverwatch\\AllTeamsIdle.bt",
     "SquadOverwatch\\AlternatingAdvance.bt",
     "SquadOverwatch\\AlternatingRetreat.bt",
     "SquadOverwatch\\SuccesiveAdvance.bt",

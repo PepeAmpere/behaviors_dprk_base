@@ -1,0 +1,89 @@
+{
+  "name": "Set all teams Idle",
+  "id": "89ab7dfc-d08f-42f9-886a-4a00377c48ea",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "prepare order data",
+      "id": "f17e6854-29dc-428f-9b07-f6abdd42de5f",
+      "type": "scriptAction",
+      "script": [
+        "for child in self:GetDependentChildGroups() do",
+        "    local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+        "    table.insert(loc.subordinates, subordinate)    ",
+        "    loc.subordinateData[subordinate] = {}",
+        "end"
+      ]
+    },
+    {
+      "name": "Idle or just Timed-Success",
+      "id": "ed323e4a-8918-4a5c-b019-c3c00b8beb53",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Set all soldiers idle",
+          "id": "fb50f0a6-5524-47d9-97b6-0770ab17537e",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.suborderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Wait 2s ",
+          "id": "d02716b4-3143-48d7-8363-86153e3d8790",
+          "type": "wait",
+          "time": [
+            "return 2"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "89ab7dfc-d08f-42f9-886a-4a00377c48ea",
+        "position": "1762.5,50"
+      },
+      {
+        "id": "f17e6854-29dc-428f-9b07-f6abdd42de5f",
+        "position": "1612.5,200"
+      },
+      {
+        "id": "ed323e4a-8918-4a5c-b019-c3c00b8beb53",
+        "position": "1862.5,200"
+      },
+      {
+        "id": "fb50f0a6-5524-47d9-97b6-0770ab17537e",
+        "position": "1625,287.5"
+      },
+      {
+        "id": "d02716b4-3143-48d7-8363-86153e3d8790",
+        "position": "1987.5,287.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "suborderData": "return {orderName = \"Advance\"}",
+    "subordinates": "return {}",
+    "subordinateData": "return InternalTable()"
+  }
+}

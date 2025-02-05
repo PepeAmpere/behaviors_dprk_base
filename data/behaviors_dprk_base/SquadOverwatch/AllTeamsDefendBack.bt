@@ -1,0 +1,96 @@
+{
+  "name": "Set all teams Defend back where they are",
+  "id": "360757f6-ff63-4bb6-b607-d0b1dbb7de6f",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "prepare order data",
+      "id": "f3cbc6a4-6e15-4a91-b990-923a1ef2ba42",
+      "type": "scriptAction",
+      "script": [
+        "for child in self:GetDependentChildGroups() do",
+        "    local subordinate = standard_behaviors.GetVehicleOrSelf(child)",
+        "    if standard_behaviors.cls.IsOfClass(subordinate, 'Unit') then",
+        "        table.insert(loc.subordinates, subordinate)    ",
+        "        local currentPosition = subordinate:GetEntity(0):GetPosition()",
+        "        local headingVector = currentPosition - arg.orderData.destination",
+        "        loc.subordinateData[subordinate] = {",
+        "            destination = currentPosition,",
+        "            heading = MathExt.Vec3ToHeading(headingVector)",
+        "        }",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Idle or just Timed-Success",
+      "id": "dcd2d09f-821c-4689-87a0-9cb55153812a",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Set all soldiers Defend back",
+          "id": "729023cb-0880-4f0c-bc3a-94ecbce5f51d",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.suborderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Wait 2s ",
+          "id": "a828dc9a-3e77-4ee2-8c39-cf413d0b1df9",
+          "type": "wait",
+          "time": [
+            "return 2"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "360757f6-ff63-4bb6-b607-d0b1dbb7de6f",
+        "position": "1650,94.5"
+      },
+      {
+        "id": "f3cbc6a4-6e15-4a91-b990-923a1ef2ba42",
+        "position": "1587.5,207"
+      },
+      {
+        "id": "dcd2d09f-821c-4689-87a0-9cb55153812a",
+        "position": "1837.5,207"
+      },
+      {
+        "id": "729023cb-0880-4f0c-bc3a-94ecbce5f51d",
+        "position": "1600,294.5"
+      },
+      {
+        "id": "a828dc9a-3e77-4ee2-8c39-cf413d0b1df9",
+        "position": "1962.5,294.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2407",
+    "gridPadding": "0,7"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "suborderData": "return {orderName = \"Advance\"}",
+    "subordinates": "return {}",
+    "subordinateData": "return InternalTable()"
+  }
+}
