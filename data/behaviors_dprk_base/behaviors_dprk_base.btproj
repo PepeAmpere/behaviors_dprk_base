@@ -9,12 +9,22 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Analysis\AnalysisTest.bt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Analysis\FindPathDirect.bt">
+      <SubType>Content</SubType>
+    </Content>
+    <Content Include="Analysis\FindPathSquadSafe.bt">
+      <SubType>Content</SubType>
+    </Content>
     <Content Include="Reaction.bt">
       <SubType>Content</SubType>
     </Content>
     <Content Include="SquadOverwatch\AlternatingRetreat.bt">
       <SubType>Content</SubType>
     </Content>
+    <Folder Include="Analysis" />
     <Folder Include="SquadOverwatch" />
     <Content Include="SquadOverwatch\DPRKsquad.class.lua">
       <SubType>Content</SubType>

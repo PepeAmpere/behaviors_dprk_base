@@ -1,0 +1,151 @@
+{
+  "name": "Find Path and debug",
+  "id": "1475e4f7-ec54-4cb1-867b-ac0acf0540f8",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait to Find Path",
+      "id": "b051ce6c-c974-42f7-8690-857f8b90e94a",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "prepare data",
+          "id": "36128da8-66cd-4529-bf63-c05f93bb71ba",
+          "type": "scriptAction",
+          "script": [
+            "loc.pathQuery = {",
+            "    startPosition = self:GetChildGroup(0):GetEntity(0):GetPosition(),",
+            "    endPosition = arg.orderData.destination,",
+            "}"
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "0daa38f2-7c77-4794-99ec-2999f7acd8d2",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Example reference",
+              "id": "e23f64c7-2524-4d2c-8388-b909d2ba1cfd",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "1ea81ceb-f980-4742-974d-15e434436550",
+                  "type": "scriptCondition",
+                  "name": "arg.orderData.analysisType",
+                  "script": [
+                    "return arg.orderData.analysisType == 0"
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_dprk_base",
+                "FindPathDirect"
+              ],
+              "arguments": {
+                "pathQuery": "return loc.pathQuery"
+              }
+            },
+            {
+              "name": "Example reference",
+              "id": "31d1fe1a-81e4-4a8b-b94a-786c9080eebb",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_base",
+                "FindPathSquadSafe"
+              ],
+              "arguments": {
+                "pathQuery": "return loc.pathQuery"
+              }
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "find path",
+          "id": "6af8cbef-15a8-4216-8c0e-f96df16fcfb8",
+          "type": "scriptAction",
+          "script": [
+            "loc.path = loc.pathQuery.path"
+          ]
+        },
+        {
+          "name": "Wait Forever",
+          "id": "95096710-9f2e-44c6-91df-bcab4e984bad",
+          "type": "waitForever"
+        }
+      ]
+    },
+    {
+      "name": "draw path",
+      "id": "ab541768-8d5d-4958-8485-44783e2acd3a",
+      "type": "scriptAction",
+      "script": [
+        "if",
+        "    loc.path ~= nil",
+        "then",
+        "    local OFFSET = Vec3(0,0,2) -- draw up",
+        "    ai_core_public.draw.Path( -- a package we packed, supplied by PepeAmpere",
+        "        loc.path,",
+        "        1, 0, 1, 1,",
+        "        OFFSET",
+        "    )",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "1475e4f7-ec54-4cb1-867b-ac0acf0540f8",
+        "position": "1525,92"
+      },
+      {
+        "id": "b051ce6c-c974-42f7-8690-857f8b90e94a",
+        "position": "1531.5,220"
+      },
+      {
+        "id": "36128da8-66cd-4529-bf63-c05f93bb71ba",
+        "position": "1300,304.5"
+      },
+      {
+        "id": "0daa38f2-7c77-4794-99ec-2999f7acd8d2",
+        "position": "1525,329.5"
+      },
+      {
+        "id": "e23f64c7-2524-4d2c-8388-b909d2ba1cfd",
+        "position": "1387.5,429.5"
+      },
+      {
+        "id": "31d1fe1a-81e4-4a8b-b94a-786c9080eebb",
+        "position": "1612.5,442"
+      },
+      {
+        "id": "6af8cbef-15a8-4216-8c0e-f96df16fcfb8",
+        "position": "1719,307.5"
+      },
+      {
+        "id": "95096710-9f2e-44c6-91df-bcab4e984bad",
+        "position": "1900,304.5"
+      },
+      {
+        "id": "ab541768-8d5d-4958-8485-44783e2acd3a",
+        "position": "1725,154.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2417",
+    "gridPadding": "0,4.5"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "pathQuery": "return nil",
+    "path": "return nil"
+  }
+}

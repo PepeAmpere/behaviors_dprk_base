@@ -46,6 +46,11 @@ return {
                 tree = 'ChooseBehavior',
                 parameters = {},
             },
+            AnalysisTest = {
+                description = 'Behavior for testing squad level analysis',
+                tree = 'AnalysisTest',
+                parameters = {},
+            },
         },
     },
 }

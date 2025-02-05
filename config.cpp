@@ -224,4 +224,39 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
+	class behaviors_dprk_AnalysisTest
+	{
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\analysis.paa";
+		allowRotate = true; // you also get direction
+
+
+		displayname = "DPRK Analysis";
+		description = "DPRK Analysis (Development Only)";				
+
+		orderName = "AnalysisTest"; // it will implicitly have position as well
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "true";
+				type = "boolean";
+			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
+		};
+	};
 };

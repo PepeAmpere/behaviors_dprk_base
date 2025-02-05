@@ -1,0 +1,187 @@
+{
+  "name": "Wait to Find Path",
+  "id": "183ec976-0c14-44ff-a81a-10e820110a78",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "positions defined",
+      "id": "b2f900ce-6647-492c-b8cd-80c942eb944b",
+      "type": "waitUntil",
+      "condition": [
+        "return arg.pathQuery ~= nil and",
+        "    arg.pathQuery.startPosition ~= nil and ",
+        "    arg.pathQuery.endPosition ~= nil"
+      ]
+    },
+    {
+      "name": "find path",
+      "id": "598b88e7-18f4-41f2-a4b4-4372c5eb1a9f",
+      "type": "scriptAction",
+      "script": [
+        "loc.pathFuture = FindPath(arg.pathQuery.startPosition, arg.pathQuery.endPosition)"
+      ]
+    },
+    {
+      "name": "loc.pathFuture",
+      "id": "3242b75f-fc79-41d7-89ba-a68076b37da0",
+      "type": "waitUntil",
+      "condition": [
+        "return loc.pathFuture:IsReady()"
+      ]
+    },
+    {
+      "name": "save path",
+      "id": "ee214980-2239-4c23-b130-5ed13f3dd9b1",
+      "type": "scriptAction",
+      "script": [
+        "arg.pathQuery.path = loc.pathFuture:Value()",
+        "loc.pathFuture = nil"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Find Path and debug",
+      "id": "4c43d409-8cc2-49ea-b477-80f9a177c662",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Wait to Find Path",
+          "id": "a847d016-111f-482f-8f72-35d4b5e718f8",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "prepare data",
+              "id": "ad1d2fdc-0d28-4e0b-b2c3-ebceebaf4bd1",
+              "type": "scriptAction",
+              "script": [
+                "loc.pathQuery = {",
+                "    startPosition = self:GetChildGroup(0):GetEntity(0):GetPosition(),",
+                "    endPosition = arg.orderData.destination,",
+                "}"
+              ]
+            },
+            {
+              "name": "Example reference",
+              "id": "13cdf56c-9b9f-4a39-bb17-b205530ce548",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_base",
+                "FindPathDirect"
+              ],
+              "arguments": {
+                "pathQuery": "return loc.pathQuery"
+              }
+            },
+            {
+              "name": "find path",
+              "id": "37422aa6-3216-4c83-a0b7-98a5f61ef64a",
+              "type": "scriptAction",
+              "script": [
+                "loc.path = loc.pathQuery.path"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "draw path",
+          "id": "cad12914-6248-4453-b3b9-36e38ca8a420",
+          "type": "scriptAction",
+          "script": [
+            "if",
+            "    loc.path ~= nil",
+            "then",
+            "    local OFFSET = Vec3(0,0,2) -- draw up",
+            "    ai_core_public.draw.Path( -- a package we packed, supplied by PepeAmpere",
+            "        loc.path,",
+            "        1, 0, 1, 1,",
+            "        OFFSET",
+            "    )",
+            "end"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "4c43d409-8cc2-49ea-b477-80f9a177c662",
+            "position": "1700,600"
+          },
+          {
+            "id": "a847d016-111f-482f-8f72-35d4b5e718f8",
+            "position": "1700,675"
+          },
+          {
+            "id": "ad1d2fdc-0d28-4e0b-b2c3-ebceebaf4bd1",
+            "position": "1515.5,775"
+          },
+          {
+            "id": "13cdf56c-9b9f-4a39-bb17-b205530ce548",
+            "position": "1700,750"
+          },
+          {
+            "id": "37422aa6-3216-4c83-a0b7-98a5f61ef64a",
+            "position": "1887.5,762.5"
+          },
+          {
+            "id": "cad12914-6248-4453-b3b9-36e38ca8a420",
+            "position": "1900,662.5"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "183ec976-0c14-44ff-a81a-10e820110a78",
+        "position": "1687.5,350"
+      },
+      {
+        "id": "ce35a7ea-f808-4fca-9f43-f92cbda178a4",
+        "position": "1687.5,250"
+      },
+      {
+        "id": "b2f900ce-6647-492c-b8cd-80c942eb944b",
+        "position": "1387.5,462.5"
+      },
+      {
+        "id": "598b88e7-18f4-41f2-a4b4-4372c5eb1a9f",
+        "position": "1587.5,462.5"
+      },
+      {
+        "id": "3242b75f-fc79-41d7-89ba-a68076b37da0",
+        "position": "1787.5,462.5"
+      },
+      {
+        "id": "ee214980-2239-4c23-b130-5ed13f3dd9b1",
+        "position": "1962.5,462.5"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "ce35a7ea-f808-4fca-9f43-f92cbda178a4",
+        "type": "comment",
+        "header": "pathQuery",
+        "body": "=> startPosition (Vec3)\r\n=> endPosition (Vec3)\r\n=> path (return value, path)",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "pathQuery",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "pathFuture": "return nil"
+  }
+}
