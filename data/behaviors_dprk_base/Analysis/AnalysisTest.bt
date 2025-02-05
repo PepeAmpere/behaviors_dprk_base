@@ -1,5 +1,5 @@
 {
-  "name": "Find Path and debug",
+  "name": "Find Path and Debug",
   "id": "1475e4f7-ec54-4cb1-867b-ac0acf0540f8",
   "type": "supervisedParallel",
   "subtrees": [
@@ -13,60 +13,42 @@
           "id": "36128da8-66cd-4529-bf63-c05f93bb71ba",
           "type": "scriptAction",
           "script": [
-            "loc.pathQuery = {",
-            "    startPosition = self:GetChildGroup(0):GetEntity(0):GetPosition(),",
-            "    endPosition = arg.orderData.destination,",
-            "}"
+            "loc.pathQuery = InternalTable()",
+            "loc.teams = InternalTable()",
+            "",
+            "for fireteam in self:GetDependentChildGroups() do",
+            "    loc.teams[fireteam] = true",
+            "    loc.pathQuery[fireteam] = {",
+            "        startPosition = fireteam:GetEntity(0):GetPosition(),",
+            "        endPosition = arg.orderData.destination,",
+            "    } ",
+            "end"
           ]
         },
         {
-          "name": "<unnamed>",
-          "id": "0daa38f2-7c77-4794-99ec-2999f7acd8d2",
-          "type": "selector",
-          "subtrees": [
-            {
-              "name": "Example reference",
-              "id": "e23f64c7-2524-4d2c-8388-b909d2ba1cfd",
-              "type": "reference",
-              "decorators": [
-                {
-                  "id": "1ea81ceb-f980-4742-974d-15e434436550",
-                  "type": "scriptCondition",
-                  "name": "arg.orderData.analysisType",
-                  "script": [
-                    "return arg.orderData.analysisType == 0"
-                  ]
-                }
-              ],
-              "target": [
-                "behaviors_dprk_base",
-                "FindPathDirect"
-              ],
-              "arguments": {
-                "pathQuery": "return loc.pathQuery"
-              }
-            },
-            {
-              "name": "Example reference",
-              "id": "31d1fe1a-81e4-4a8b-b94a-786c9080eebb",
-              "type": "reference",
-              "target": [
-                "behaviors_dprk_base",
-                "FindPathSquadSafe"
-              ],
-              "arguments": {
-                "pathQuery": "return loc.pathQuery"
-              }
-            }
+          "name": "Find multiple paths",
+          "id": "b39540e5-be55-4dcb-b2a0-45ddb5d86905",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_base",
+            "FindMultiplePaths"
           ],
-          "active": true
+          "arguments": {
+            "orderData": "return arg.orderData",
+            "instancesKeys": "return loc.teams",
+            "instancesData": "return loc.pathQuery"
+          }
         },
         {
-          "name": "find path",
-          "id": "6af8cbef-15a8-4216-8c0e-f96df16fcfb8",
+          "name": "collect data",
+          "id": "96098fd8-267f-4366-a5c6-0d426036745a",
           "type": "scriptAction",
           "script": [
-            "loc.path = loc.pathQuery.path"
+            "loc.paths = {}",
+            "",
+            "for fireteam, queryData in pairs(loc.pathQuery) do",
+            "    loc.paths[#loc.paths + 1] = loc.pathQuery[fireteam].path",
+            "end"
           ]
         },
         {
@@ -77,19 +59,24 @@
       ]
     },
     {
-      "name": "draw path",
+      "name": "Draw paths",
       "id": "ab541768-8d5d-4958-8485-44783e2acd3a",
       "type": "scriptAction",
       "script": [
+        "local paths = loc.paths",
         "if",
-        "    loc.path ~= nil",
+        "    paths ~= nil",
         "then",
         "    local OFFSET = Vec3(0,0,2) -- draw up",
-        "    ai_core_public.draw.Path( -- a package we packed, supplied by PepeAmpere",
-        "        loc.path,",
-        "        1, 0, 1, 1,",
-        "        OFFSET",
-        "    )",
+        "    local pathsCount = #loc.paths",
+        "    for i=1, pathsCount do",
+        "        local path = loc.paths[i]",
+        "        ai_core_public.draw.Path( -- a package we packed, supplied by PepeAmpere",
+        "            path,",
+        "            1-i/pathsCount, 0, i/pathsCount, 1,",
+        "            OFFSET",
+        "        )        ",
+        "    end",
         "end"
       ]
     }
@@ -98,54 +85,48 @@
     "nodesInfo": [
       {
         "id": "1475e4f7-ec54-4cb1-867b-ac0acf0540f8",
-        "position": "1525,92"
+        "position": "1525,77"
       },
       {
         "id": "b051ce6c-c974-42f7-8690-857f8b90e94a",
-        "position": "1531.5,220"
+        "position": "1525,214.5"
       },
       {
         "id": "36128da8-66cd-4529-bf63-c05f93bb71ba",
-        "position": "1300,304.5"
+        "position": "1300,339.5"
       },
       {
-        "id": "0daa38f2-7c77-4794-99ec-2999f7acd8d2",
-        "position": "1525,329.5"
+        "id": "b39540e5-be55-4dcb-b2a0-45ddb5d86905",
+        "position": "1525,339.5"
       },
       {
-        "id": "e23f64c7-2524-4d2c-8388-b909d2ba1cfd",
-        "position": "1387.5,429.5"
-      },
-      {
-        "id": "31d1fe1a-81e4-4a8b-b94a-786c9080eebb",
-        "position": "1612.5,442"
-      },
-      {
-        "id": "6af8cbef-15a8-4216-8c0e-f96df16fcfb8",
-        "position": "1719,307.5"
+        "id": "96098fd8-267f-4366-a5c6-0d426036745a",
+        "position": "1725,339.5"
       },
       {
         "id": "95096710-9f2e-44c6-91df-bcab4e984bad",
-        "position": "1900,304.5"
+        "position": "1925,339.5"
       },
       {
         "id": "ab541768-8d5d-4958-8485-44783e2acd3a",
-        "position": "1725,154.5"
+        "position": "1725,214.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2417",
-    "gridPadding": "0,4.5"
+    "canvasSize": "3840,2452",
+    "gridPadding": "0,2"
   },
   "parameters": [
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],
   "locals": {
     "pathQuery": "return nil",
-    "path": "return nil"
+    "paths": "return nil",
+    "teams": "return nil"
   }
 }

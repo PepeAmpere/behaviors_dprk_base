@@ -1,5 +1,5 @@
 *.paa
-*.btproj*
+*.btproj
 *.VBSControlEditor_suo
 *.cache
 *.btsets

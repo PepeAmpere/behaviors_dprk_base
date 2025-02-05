@@ -1,0 +1,107 @@
+{
+  "name": "Wait to Find Path",
+  "id": "e3a3f332-7fda-4f5a-8f5e-89c3025a1fba",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "pick analysis",
+      "id": "acaec514-b244-41cb-b8c9-87b0af5e226f",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Example reference",
+          "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "35c19701-4b6c-400d-b558-b652b2fb883a",
+              "type": "scriptCondition",
+              "name": "arg.orderData.analysisType",
+              "script": [
+                "return arg.orderData.analysisType == 0"
+              ]
+            }
+          ],
+          "target": [
+            "behaviors_dprk_base",
+            "FindPathDirect"
+          ],
+          "arguments": {
+            "pathQuery": "return arg.instancesData[loc.childInstance]"
+          }
+        },
+        {
+          "name": "Example reference",
+          "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_base",
+            "FindPathSquadSafe"
+          ],
+          "arguments": {
+            "pathQuery": "return arg.instancesData[loc.childInstance]"
+          }
+        }
+      ],
+      "active": true
+    }
+  ],
+  "decorators": [
+    {
+      "id": "48da8522-5d52-44df-b579-4a17ee4e4127",
+      "type": "dynamicParallel",
+      "name": "Find paths for all instances",
+      "waitForAll": true,
+      "instanceTable": [
+        "if arg.instancesKeys ~= nil then",
+        "    return arg.instancesKeys",
+        "end"
+      ],
+      "variableName": "childInstance"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "e3a3f332-7fda-4f5a-8f5e-89c3025a1fba",
+        "position": "1650,314.5"
+      },
+      {
+        "id": "acaec514-b244-41cb-b8c9-87b0af5e226f",
+        "position": "1675,452"
+      },
+      {
+        "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
+        "position": "1537.5,539.5"
+      },
+      {
+        "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
+        "position": "1762.5,552"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2402",
+    "gridPadding": "0,2"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    },
+    {
+      "name": "instancesKeys",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    },
+    {
+      "name": "instancesData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "childInstance": "return nil"
+  }
+}

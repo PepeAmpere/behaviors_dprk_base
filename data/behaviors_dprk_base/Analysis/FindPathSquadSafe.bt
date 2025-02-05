@@ -80,7 +80,7 @@
               }
             },
             {
-              "name": "find path",
+              "name": "collect path",
               "id": "a29894d2-9ac5-482b-a76e-75df6c0299d6",
               "type": "scriptAction",
               "script": [

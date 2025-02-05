@@ -2,6 +2,7 @@
   "name": "behaviors_dprk_base",
   "trees": [
     "Analysis\\AnalysisTest.bt",
+    "Analysis\\FindMultiplePaths.bt",
     "Analysis\\FindPathDirect.bt",
     "Analysis\\FindPathSquadSafe.bt",
     "SquadOverwatch\\AlternatingAdvance.bt",
