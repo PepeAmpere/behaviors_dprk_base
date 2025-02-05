@@ -21,9 +21,9 @@ return {
 				tree = 'AlternatingRetreat',
                 parameters = {},
             },
-            RAlternatingRetreat = {
+            AlternatingRetreatAutonomous = {
                 description = 'AlternatingRetreat with reaction',
-				tree = 'ChooseBehavior',
+				tree = 'AutonomousBehavior',
                 parameters = {},
             },
             SuccessiveAdvance = {
@@ -31,9 +31,9 @@ return {
 				tree = 'SuccesiveAdvance',
                 parameters = {},
             },
-            RSuccesiveAdvance = {
+            SuccessiveAdvanceAutonomous = {
                 description = 'SuccesiveAdvance with reaction',
-				tree = 'ChooseBehavior',
+				tree = 'AutonomousBehavior',
                 parameters = {},
             },
             AlternatingAdvance = {
@@ -41,9 +41,9 @@ return {
                 tree = 'AlternatingAdvance',
                 parameters = {},
             },
-            RAlternatingAdvance = {
+            AlternatingAdvanceAutonomous = {
                 description = 'Squad Alternating Advance with reaction',
-                tree = 'ChooseBehavior',
+                tree = 'AutonomousBehavior',
                 parameters = {},
             },
             AnalysisTest = {

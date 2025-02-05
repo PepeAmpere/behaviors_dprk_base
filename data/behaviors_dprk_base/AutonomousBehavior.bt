@@ -79,7 +79,7 @@
                   "type": "scriptCondition",
                   "name": "Is order name SA?",
                   "script": [
-                    "return arg.orderData.orderName == \"SuccessiveAdvance\" or arg.orderData.orderName == \"RSuccesiveAdvance\""
+                    "return arg.orderData.orderName == \"SuccessiveAdvance\" or arg.orderData.orderName == \"SuccessiveAdvanceAutonomous\""
                   ]
                 }
               ],
@@ -101,7 +101,7 @@
                   "type": "scriptCondition",
                   "name": "Is order name AA?",
                   "script": [
-                    "return arg.orderData.orderName == \"AlternatingAdvance\" or arg.orderData.orderName == \"RAlternatingAdvance\""
+                    "return arg.orderData.orderName == \"AlternatingAdvance\" or arg.orderData.orderName == \"AlternatingAdvanceAutonomous\""
                   ]
                 }
               ],
@@ -123,7 +123,7 @@
                   "type": "scriptCondition",
                   "name": "Is order name AR?",
                   "script": [
-                    "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"RAlternatingRetreat\""
+                    "return arg.orderData.orderName == \"AlternatingRetreat\" or arg.orderData.orderName == \"AlternatingRetreatAutonomous\""
                   ]
                 }
               ],

@@ -568,6 +568,11 @@
                             "subordinateData": "return loc.subordinateDataFollow",
                             "update": "return false"
                           }
+                        },
+                        {
+                          "name": "Wait Forever",
+                          "id": "baddf439-4cd2-4b15-9f19-adf19268701c",
+                          "type": "waitForever"
                         }
                       ]
                     }
@@ -1014,6 +1019,10 @@
       {
         "id": "a97fbea3-02f9-4ac0-af33-d87f77e0ade8",
         "position": "4497.86283074267,1999.3761404908"
+      },
+      {
+        "id": "baddf439-4cd2-4b15-9f19-adf19268701c",
+        "position": "4847.86283074266,2011.8761404908"
       },
       {
         "id": "8fbafd5d-20a4-45d5-98b3-a722a56fb701",

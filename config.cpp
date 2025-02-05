@@ -78,16 +78,16 @@ class CfgAvailableBehaviors
 		};
 	};
 	
-	class behaviors_dprk_AlternatingRetreat_Reaction
+	class behaviors_dprk_AlternatingRetreatAutonomous
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\ar.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\ara.paa";
 		allowRotate = true;
 
 
-		displayname = "DPRK Reactive Alternating Retreat";
+		displayname = "DPRK Alternating Retreat Autonomously";
 		description = "DPRK Alternating Retreat with reaction";
 
-		orderName = "RAlternatingRetreat";
+		orderName = "AlternatingRetreatAutonomous";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 		
 		class RootBehaviors
@@ -104,6 +104,18 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "false";
 				type = "boolean";
+			};
+			class autonomyCorridorWidth
+			{
+				displayName = "autonomyCorridorWidth";
+				value = "50";
+				type = "number";
+			};
+			class autonomyDistance
+			{
+				displayName = "autonomyDistance";
+				value = "200";
+				type = "number";
 			};
 		};
 	};
@@ -137,16 +149,16 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
-	class behaviors_dprk_SuccessiveAdvance_Reaction
+	class behaviors_dprk_SuccessiveAdvanceAutonomous
 	{		
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\sa.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\saa.paa";
 		allowRotate = true;
 
 
-		displayname = "DPRK Reactive Succesive Advance";
+		displayname = "DPRK Succesive Advance Autonomously";
 		description = "DPRK Succesive Advance with reaction";
 
-		orderName = "RSuccesiveAdvance";
+		orderName = "SuccessiveAdvanceAutonomous";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 		
 		class RootBehaviors
@@ -163,6 +175,18 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "false";
 				type = "boolean";
+			};
+			class autonomyCorridorWidth
+			{
+				displayName = "autonomyCorridorWidth";
+				value = "50";
+				type = "number";
+			};
+			class autonomyDistance
+			{
+				displayName = "autonomyDistance";
+				value = "200";
+				type = "number";
 			};
 		};
 	};
@@ -195,16 +219,16 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
-	class behaviors_dprk_AlternatingAdvance_Reaction
+	class behaviors_dprk_AlternatingAdvanceAutonomous
 	{
-		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aaa.paa";
 		allowRotate = true; // you also get direction
 
 
-		displayname = "DPRK Reactive Alternating Advance";
+		displayname = "DPRK Alternating Advance Autonomously";
 		description = "DPRK Alternating Advance with reaction";				
 
-		orderName = "RAlternatingAdvance"; // it will implicitly have position as well
+		orderName = "AlternatingAdvanceAutonomous"; // it will implicitly have position as well
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 		
 		class RootBehaviors
@@ -221,6 +245,18 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "true";
 				type = "boolean";
+			};
+			class autonomyCorridorWidth
+			{
+				displayName = "autonomyCorridorWidth";
+				value = "50";
+				type = "number";
+			};
+			class autonomyDistance
+			{
+				displayName = "autonomyDistance";
+				value = "200";
+				type = "number";
 			};
 		};
 	};
