@@ -18,8 +18,8 @@
               "id": "3e1982b5-20f3-4d31-a81f-591b9076d774",
               "type": "scriptAction",
               "script": [
-                "DebugLog(\"I see them! Uiiiiii!\")",
-                "DebugLog(tostring(loc.rememberedPosition))"
+                "-- DebugLog(\"I see them! Uiiiiii!\")",
+                "-- DebugLog(tostring(loc.rememberedPosition))"
               ]
             },
             {
@@ -185,7 +185,7 @@
           "type": "scriptAction",
           "script": [
             "if loc.sensorData.closestEnemyPosition ~= nil then",
-            "    DebugLog(\"Enemies seen!\")",
+            "    -- DebugLog(\"Enemies seen!\")",
             "    loc.lastTimeSeenEnemy = GetScenarioTime()",
             "    loc.rememberedPosition = loc.sensorData.closestEnemyPosition",
             "end"
@@ -208,9 +208,12 @@
       "script": [
         "local paths = loc.sensorData.paths",
         "if",
-        "    arg.orderData.debugEnabled",
+        "    arg.orderData.advancedDebugType ~= nil",
         "then",
-        "    if paths ~= nil then",
+        "    if",
+        "        arg.orderData.advancedDebugType >= 2 and",
+        "        paths ~= nil",
+        "    then",
         "        local OFFSET = Vec3(0,0,2) -- draw up",
         "        local pathsCount = #paths",
         "        for i=1, pathsCount do",
@@ -222,8 +225,11 @@
         "            )        ",
         "        end",
         "    end",
-        "    if loc.sensorData and",
-        "        loc.sensorData.simplePoints ~= nil ",
+        "",
+        "    if",
+        "        arg.orderData.advancedDebugType >= 1 and",
+        "        loc.sensorData and",
+        "        loc.sensorData.simplePoints ~= nil",
         "    then",
         "        ai_core_public.draw.PolygonOnSurface(loc.sensorData.simplePoints, 0, 1, 1, 1, Vec3(0,0,25))",
         "    end",

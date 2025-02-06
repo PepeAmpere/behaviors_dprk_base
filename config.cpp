@@ -75,6 +75,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
 			class analysisType
 			{
 				displayName = "analysisType";
@@ -111,6 +117,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
 			class analysisType
 			{
 				displayName = "analysisType";
@@ -123,9 +135,9 @@ class CfgAvailableBehaviors
 				value = "50";
 				type = "number";
 			};
-			class autonomyDistance
+			class detectionDistance
 			{
-				displayName = "autonomyDistance";
+				displayName = "detectionDistance";
 				value = "200";
 				type = "number";
 			};
@@ -158,6 +170,12 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "false";
 				type = "boolean";
+			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
 			};
 			class analysisType
 			{
@@ -194,6 +212,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
 			class analysisType
 			{
 				displayName = "analysisType";
@@ -206,9 +230,9 @@ class CfgAvailableBehaviors
 				value = "50";
 				type = "number";
 			};
-			class autonomyDistance
+			class detectionDistance
 			{
-				displayName = "autonomyDistance";
+				displayName = "detectionDistance";
 				value = "200";
 				type = "number";
 			};
@@ -240,6 +264,12 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "true";
 				type = "boolean";
+			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
 			};
 			class analysisType
 			{
@@ -276,6 +306,12 @@ class CfgAvailableBehaviors
 				value = "true";
 				type = "boolean";
 			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
 			class analysisType
 			{
 				displayName = "analysisType";
@@ -288,9 +324,9 @@ class CfgAvailableBehaviors
 				value = "50";
 				type = "number";
 			};
-			class autonomyDistance
+			class detectionDistance
 			{
-				displayName = "autonomyDistance";
+				displayName = "detectionDistance";
 				value = "200";
 				type = "number";
 			};
@@ -322,6 +358,12 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "true";
 				type = "boolean";
+			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
 			};
 			class analysisType
 			{
