@@ -6,6 +6,7 @@
     "Analysis\\FindPathDirect.bt",
     "Analysis\\FindPathSquadSafe.bt",
     "DPRKsquad\\AllTeamsDefendBack.bt",
+    "DPRKsquad\\AllTeamsDefendFront.bt",
     "DPRKsquad\\AllTeamsIdle.bt",
     "DPRKsquad\\AlternatingAdvance.bt",
     "DPRKsquad\\AlternatingRetreat.bt",
