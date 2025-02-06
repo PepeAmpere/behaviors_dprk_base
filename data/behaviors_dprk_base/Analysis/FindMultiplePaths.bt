@@ -10,7 +10,7 @@
       "subtrees": [
         {
           "name": "Example reference",
-          "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
+          "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
           "type": "reference",
           "decorators": [
             {
@@ -18,13 +18,13 @@
               "type": "scriptCondition",
               "name": "arg.orderData.analysisType",
               "script": [
-                "return arg.orderData.analysisType == 0"
+                "return arg.orderData.analysisType == 1"
               ]
             }
           ],
           "target": [
             "behaviors_dprk_base",
-            "FindPathDirect"
+            "FindPathSquadSafe"
           ],
           "arguments": {
             "pathQuery": "return arg.instancesData[loc.childInstance]"
@@ -32,11 +32,11 @@
         },
         {
           "name": "Example reference",
-          "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
+          "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
           "type": "reference",
           "target": [
             "behaviors_dprk_base",
-            "FindPathSquadSafe"
+            "FindPathDirect"
           ],
           "arguments": {
             "pathQuery": "return arg.instancesData[loc.childInstance]"
@@ -71,12 +71,12 @@
         "position": "1675,452"
       },
       {
-        "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
-        "position": "1537.5,539.5"
+        "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
+        "position": "1525,539.5"
       },
       {
-        "id": "523e30e1-5a72-4c79-962b-cf69c7d64ddc",
-        "position": "1762.5,552"
+        "id": "c2de6754-82c8-4ea8-9ce1-749bd8c93a88",
+        "position": "1750,539.5"
       }
     ],
     "editorObjects": [],
@@ -87,6 +87,7 @@
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     },
     {
@@ -98,6 +99,7 @@
     {
       "name": "instancesData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],

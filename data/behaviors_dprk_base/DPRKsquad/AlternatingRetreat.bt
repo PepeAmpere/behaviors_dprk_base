@@ -146,87 +146,88 @@
                   ]
                 },
                 {
-                  "name": "Ask for paths",
-                  "id": "86b69024-8272-48e5-8cee-aabdb11adc0e",
-                  "type": "scriptAction",
-                  "decorators": [
+                  "name": "Find paths for each team",
+                  "id": "d8d4e776-ec4a-492f-aed5-96a53a3324a4",
+                  "type": "sequence",
+                  "subtrees": [
                     {
-                      "id": "93c9dd60-c053-40ab-b5a6-fa89e841b527",
-                      "type": "waitUntil",
-                      "name": "Wait Until Path Ready",
-                      "condition": [
+                      "name": "prepare data old",
+                      "id": "50b78665-684e-45ce-920f-bb6e26f94752",
+                      "type": "scriptAction",
+                      "script": [
                         "local position = arg.orderData.destination",
                         "",
-                        "if position == nil then",
-                        "    return false",
-                        "end",
-                        "if #loc.paths == 0 then",
-                        "    --return true",
-                        "end",
-                        "--return false",
-                        "return true"
-                      ]
-                    }
-                  ],
-                  "script": [
-                    "local position = arg.orderData.destination",
-                    "",
-                    "local fireTeamsCount = self:GetChildGroupCount()",
-                    "loc.fireTeamLeaders = {}",
-                    "loc.fireTeams = {}",
-                    "for i = 1, fireTeamsCount do",
-                    "    local fireTeam = self:GetChildGroup(i-1)",
-                    "    local aliveSoldiersCount = 0",
-                    "    local soldiersCount = fireTeam:GetEntityCount()",
-                    "    for s=1, soldiersCount do",
-                    "        local soldier = fireTeam:GetEntity(s-1)",
-                    "        if soldier:IsAlive() then -- and fireTeamLeaders[i] == nil or not fireTeamLeaders[i]:IsAlive() then",
-                    "            aliveSoldiersCount = aliveSoldiersCount + 1",
-                    "            if aliveSoldiersCount > 1 then",
-                    "                loc.fireTeamLeaders[#loc.fireTeamLeaders+1] = soldier",
-                    "                break",
-                    "            end",
-                    "        end",
-                    "    end",
-                    "    if aliveSoldiersCount > 1 then",
-                    "        loc.fireTeams[#loc.fireTeams+1] = fireTeam",
-                    "    end",
-                    "end",
-                    "if #loc.fireTeams == 1 then",
-                    "    loc.noLeaderAvailable = true",
-                    "end",
-                    "loc.pathQueries = {}",
-                    "for i = 1, #loc.fireTeamLeaders do",
-                    "    loc.pathQueries[i] = FindPath(loc.fireTeamLeaders[i]:GetPosition(),position)",
-                    "end",
-                    "--DebugLog(\" #loc.fireTeamLeaders: \" ..tostring(#loc.fireTeamLeaders))",
-                    "--DebugLog(\" #loc.pathQueries: \" ..tostring(#loc.pathQueries))"
-                  ]
-                },
-                {
-                  "name": "Fetch paths",
-                  "id": "3e2d2b75-c507-4460-a714-7fd76c14b505",
-                  "type": "scriptAction",
-                  "decorators": [
-                    {
-                      "id": "7ccdf261-5606-4ad6-84d2-be714088b2ef",
-                      "type": "waitUntil",
-                      "name": "Wait Until Paths Ready",
-                      "condition": [
-                        "for i = 1, #loc.pathQueries do",
-                        "    if not loc.pathQueries[i]:IsReady() then",
-                        "        return false",
+                        "local fireTeamsCount = self:GetChildGroupCount()",
+                        "loc.fireTeamLeaders = {}",
+                        "loc.fireTeams = {}",
+                        "for i = 1, fireTeamsCount do",
+                        "    local fireTeam = self:GetChildGroup(i-1)",
+                        "    local aliveSoldiersCount = 0",
+                        "    local soldiersCount = fireTeam:GetEntityCount()",
+                        "    for s=1, soldiersCount do",
+                        "        local soldier = fireTeam:GetEntity(s-1)",
+                        "        if soldier:IsAlive() then -- and fireTeamLeaders[i] == nil or not fireTeamLeaders[i]:IsAlive() then",
+                        "            aliveSoldiersCount = aliveSoldiersCount + 1",
+                        "            if aliveSoldiersCount > 1 then",
+                        "                loc.fireTeamLeaders[#loc.fireTeamLeaders+1] = soldier",
+                        "                break",
+                        "            end",
+                        "        end",
+                        "    end",
+                        "    if aliveSoldiersCount > 1 then",
+                        "        loc.fireTeams[#loc.fireTeams+1] = fireTeam",
                         "    end",
                         "end",
+                        "if #loc.fireTeams == 1 then",
+                        "    loc.noLeaderAvailable = true",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "prepare data",
+                      "id": "c213a029-b7cd-4ab5-b3f9-ccb1171a4ac8",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.pathQuery = InternalTable()",
+                        "loc.teamsTable = InternalTable()",
                         "",
-                        "return true"
+                        "for i=1, #loc.fireTeams do",
+                        "    local thisTeam = loc.fireTeams[i]",
+                        "    loc.teamsTable[thisTeam] = true",
+                        "    loc.pathQuery[thisTeam] = {",
+                        "        startPosition = thisTeam:GetEntity(0):GetPosition(),",
+                        "        endPosition = arg.orderData.destination,",
+                        "    } ",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "Find multiple paths",
+                      "id": "0d024160-8cc2-4b7b-88be-e3b5799f0bdc",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_base",
+                        "FindMultiplePaths"
+                      ],
+                      "arguments": {
+                        "orderData": "return arg.orderData",
+                        "instancesKeys": "return loc.teamsTable",
+                        "instancesData": "return loc.pathQuery"
+                      }
+                    },
+                    {
+                      "name": "collect data",
+                      "id": "2167a4b9-db35-4c9d-a558-70041212ab06",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.paths = {}",
+                        "",
+                        "for i=1, #loc.fireTeams do",
+                        "    local thisTeam = loc.fireTeams[i]",
+                        "    loc.paths[#loc.paths + 1] = loc.pathQuery[thisTeam].path",
+                        "end"
                       ]
                     }
-                  ],
-                  "script": [
-                    "for i = 1, #loc.pathQueries do",
-                    "    loc.paths[i] = loc.pathQueries[i]:Value()",
-                    "end"
                   ]
                 },
                 {
@@ -568,6 +569,110 @@
       "active": true
     }
   ],
+  "unlinked-trees": [
+    {
+      "name": "Ask for paths",
+      "id": "86b69024-8272-48e5-8cee-aabdb11adc0e",
+      "type": "scriptAction",
+      "decorators": [
+        {
+          "id": "93c9dd60-c053-40ab-b5a6-fa89e841b527",
+          "type": "waitUntil",
+          "name": "Wait Until Path Ready",
+          "condition": [
+            "local position = arg.orderData.destination",
+            "",
+            "if position == nil then",
+            "    return false",
+            "end",
+            "if #loc.paths == 0 then",
+            "    --return true",
+            "end",
+            "--return false",
+            "return true"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "86b69024-8272-48e5-8cee-aabdb11adc0e",
+            "position": "2924.5,1925.78649523809"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local position = arg.orderData.destination",
+        "",
+        "local fireTeamsCount = self:GetChildGroupCount()",
+        "loc.fireTeamLeaders = {}",
+        "loc.fireTeams = {}",
+        "for i = 1, fireTeamsCount do",
+        "    local fireTeam = self:GetChildGroup(i-1)",
+        "    local aliveSoldiersCount = 0",
+        "    local soldiersCount = fireTeam:GetEntityCount()",
+        "    for s=1, soldiersCount do",
+        "        local soldier = fireTeam:GetEntity(s-1)",
+        "        if soldier:IsAlive() then -- and fireTeamLeaders[i] == nil or not fireTeamLeaders[i]:IsAlive() then",
+        "            aliveSoldiersCount = aliveSoldiersCount + 1",
+        "            if aliveSoldiersCount > 1 then",
+        "                loc.fireTeamLeaders[#loc.fireTeamLeaders+1] = soldier",
+        "                break",
+        "            end",
+        "        end",
+        "    end",
+        "    if aliveSoldiersCount > 1 then",
+        "        loc.fireTeams[#loc.fireTeams+1] = fireTeam",
+        "    end",
+        "end",
+        "if #loc.fireTeams == 1 then",
+        "    loc.noLeaderAvailable = true",
+        "end",
+        "loc.pathQueries = {}",
+        "for i = 1, #loc.fireTeamLeaders do",
+        "    loc.pathQueries[i] = FindPath(loc.fireTeamLeaders[i]:GetPosition(),position)",
+        "end",
+        "--DebugLog(\" #loc.fireTeamLeaders: \" ..tostring(#loc.fireTeamLeaders))",
+        "--DebugLog(\" #loc.pathQueries: \" ..tostring(#loc.pathQueries))"
+      ]
+    },
+    {
+      "name": "Fetch paths",
+      "id": "3e2d2b75-c507-4460-a714-7fd76c14b505",
+      "type": "scriptAction",
+      "decorators": [
+        {
+          "id": "7ccdf261-5606-4ad6-84d2-be714088b2ef",
+          "type": "waitUntil",
+          "name": "Wait Until Paths Ready",
+          "condition": [
+            "for i = 1, #loc.pathQueries do",
+            "    if not loc.pathQueries[i]:IsReady() then",
+            "        return false",
+            "    end",
+            "end",
+            "",
+            "return true"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "3e2d2b75-c507-4460-a714-7fd76c14b505",
+            "position": "3099.5,1925.78649523809"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for i = 1, #loc.pathQueries do",
+        "    loc.paths[i] = loc.pathQueries[i]:Value()",
+        "end"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
@@ -577,6 +682,14 @@
       {
         "id": "c765caa3-b893-403a-bb6c-dcfb7c5be9d8",
         "position": "4174.5,1113.28649523809"
+      },
+      {
+        "id": "c41a7132-9fc9-4101-9c2b-8950571fd016",
+        "position": "2769.28571428571,1497.78649523809"
+      },
+      {
+        "id": "1b04efa7-63a5-414b-8b02-dc00eea83280",
+        "position": "2774.5,1875.78649523809"
       },
       {
         "id": "1cfca328-2f4d-4497-ad95-8ef0e9883f9e",
@@ -624,55 +737,67 @@
       },
       {
         "id": "36361d03-9339-4676-8ecd-7c694905a661",
-        "position": "2799.5,1538.28649523809"
+        "position": "2587,1538.28649523809"
       },
       {
-        "id": "86b69024-8272-48e5-8cee-aabdb11adc0e",
-        "position": "2962,1538.28649523809"
+        "id": "d8d4e776-ec4a-492f-aed5-96a53a3324a4",
+        "position": "3099.5,1538.28649523809"
       },
       {
-        "id": "3e2d2b75-c507-4460-a714-7fd76c14b505",
-        "position": "3149.5,1538.28649523809"
+        "id": "50b78665-684e-45ce-920f-bb6e26f94752",
+        "position": "2787,1675.78649523809"
+      },
+      {
+        "id": "c213a029-b7cd-4ab5-b3f9-ccb1171a4ac8",
+        "position": "2949.5,1675.78649523809"
+      },
+      {
+        "id": "0d024160-8cc2-4b7b-88be-e3b5799f0bdc",
+        "position": "3112,1675.78649523809"
+      },
+      {
+        "id": "2167a4b9-db35-4c9d-a558-70041212ab06",
+        "position": "3274.5,1675.78649523809"
       },
       {
         "id": "1c093503-254d-48d9-a59c-f36ac9b81b6c",
-        "position": "3337,1538.28649523809"
+        "position": "3524.5,1538.28649523809"
       },
       {
         "id": "a49e9721-012c-4a05-94e9-ae0e9f19f43f",
-        "position": "3499.5,1538.28649523809"
+        "position": "3687,1538.28649523809"
       },
       {
         "id": "71b1e0e3-5304-4787-beb0-9dcbf22ec4da",
-        "position": "3662,1538.28649523809"
+        "position": "3862,1538.28649523809"
       },
       {
         "id": "6ef23d72-8214-42b7-ae28-8a53d267264c",
-        "position": "3887,1538.28649523809"
+        "position": "4087,1538.28649523809"
       },
       {
         "id": "cf6863f6-9c85-43fa-81f3-8568b8761e6c",
-        "position": "3574.5,1713.28649523809"
+        "position": "3787,1700.78649523809"
       },
       {
         "id": "c12cccd7-1392-4bd5-9306-3102f6aedb5a",
-        "position": "3387,1813.28649523809"
+        "position": "3599.5,1800.78649523809"
       },
       {
         "id": "c3f44006-0f2a-4a79-84bb-46e6e39491cf",
-        "position": "3612,1813.28649523809"
+        "position": "3824.5,1800.78649523809"
       },
       {
         "id": "c6bb5ee9-67b3-4a30-968a-49d9ae6564b9",
-        "position": "3987,1700.78649523809"
+        "position": "4124.5,1700.78649523809"
       },
       {
         "id": "f10380f0-d393-46d2-80b5-0248edec9c8c",
-        "position": "3687,1925.78649523809"
+        "position": "3862,1913.28649523809"
       },
       {
         "id": "ba3ba65b-5414-4fbe-9735-c22289006e93",
-        "position": "4037,1925.78649523809"
+        "position": "4124.5,1850.78649523809"
       },
       {
         "id": "5a416f60-bb11-4749-b20b-af9f1b9f7334",
@@ -680,11 +805,11 @@
       },
       {
         "id": "437a60bb-79b2-47ac-a103-2f907df5e547",
-        "position": "4299.5,1913.28649523809"
+        "position": "4324.5,1913.28649523809"
       },
       {
         "id": "9ebcb39e-b690-4b44-b9e0-c0d51b1f7cf8",
-        "position": "4679.46825396826,1924.02062222222"
+        "position": "4587,1850.78649523809"
       },
       {
         "id": "d19ebd42-5902-4863-987d-fe4fce568346",
@@ -713,6 +838,32 @@
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
         "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "c41a7132-9fc9-4101-9c2b-8950571fd016",
+        "type": "comment",
+        "header": "New path logic",
+        "body": "",
+        "bodyAlignment": "Left",
+        "width": 708.42857142857133,
+        "height": 362.57142857142958,
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "1b04efa7-63a5-414b-8b02-dc00eea83280",
+        "type": "comment",
+        "header": "Old explicit path request",
+        "body": "",
+        "bodyAlignment": "Left",
+        "width": 708.42857142857133,
+        "height": 195.42857142857235,
+        "headerBackground": "#FFF4A460",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FFFFEBCD",
         "boxForeground": "#FF000000"
       }
     ],
@@ -746,6 +897,7 @@
     "leaderToFollow": "return nil",
     "leaderTeam": "return nil",
     "fireTeamLeaders": "return {}",
-    "fireTeams": "return {}"
+    "fireTeams": "return {}",
+    "teamsTable": "return nil"
   }
 }

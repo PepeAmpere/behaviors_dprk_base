@@ -1,68 +1,199 @@
 {
-  "name": "<unnamed>",
-  "id": "7ff6da54-4d19-4fff-b9cb-4e03e152cd14",
+  "name": "Wait to Find Path",
+  "id": "87631876-4810-4bee-9db0-ec6a0bec1b5e",
   "type": "sequence",
   "subtrees": [
     {
-      "name": "Path calculation",
-      "id": "7baad046-b27d-4bd3-a9b2-f24412d8fda3",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Recalculate Leader",
-          "id": "92e0120a-a7a6-44b5-a3dd-50063e32f202",
-          "type": "scriptAction",
-          "script": [
-            "if loc.Leader ==nil or not loc.Leader:IsAlive() then",
-            "    local soldiers = {}",
-            "    for fireteam in self:GetChildGroups() do",
-            "        for soldier in fireteam:GetEntities() do",
-            "            if soldier:IsAlive() then",
-            "                loc.Leader = soldier",
-            "            end",
-            "        end",
-            "    end",
-            "end"
-          ]
-        },
-        {
-          "name": "Recalculate path",
-          "id": "ed3c68b9-b29a-468a-b966-b8c1f073fc67",
-          "type": "scriptAction",
-          "script": [
-            "if  loc.pathFuture ==nil  then",
-            "loc.pathFuture = FindPath(loc.Leader:GetPosition(),arg.destination)",
-            "end"
-          ]
-        },
-        {
-          "name": "GetRecalculatedPath",
-          "id": "6ed92937-d84d-4936-b75d-e3378a5d75f0",
-          "type": "waitUntil",
-          "condition": [
-            "if loc.pathFuture:IsReady() == true then",
-            "loc.path = loc.pathFuture:Value()",
-            "loc.pathFuture =nil",
-            "return true",
-            "end",
-            "return false"
-          ]
-        }
+      "name": "prepare data",
+      "id": "efe35773-06f5-4c56-b359-899b3cd66805",
+      "type": "scriptAction",
+      "script": [
+        "loc.pathQuery = InternalTable()",
+        "loc.teams = InternalTable()",
+        "",
+        "for fireteam in self:GetDependentChildGroups() do",
+        "    loc.teams[fireteam] = true",
+        "    loc.pathQuery[fireteam] = {",
+        "        startPosition = fireteam:GetEntity(0):GetPosition(),",
+        "        endPosition = arg.orderData.destination,",
+        "    } ",
+        "end"
+      ]
+    },
+    {
+      "name": "Find multiple paths",
+      "id": "275c05f5-e87b-4841-bd7b-9153558ab020",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_base",
+        "FindMultiplePaths"
       ],
-      "decorators": [
-        {
-          "id": "42d1d43d-71d0-4a61-b90c-2b2c08fb8250",
-          "type": "succeeder",
-          "name": "Always Succeed"
-        }
+      "arguments": {
+        "orderData": "return arg.orderData",
+        "instancesKeys": "return loc.teams",
+        "instancesData": "return loc.pathQuery"
+      }
+    },
+    {
+      "name": "collect data",
+      "id": "2d3b6296-ad30-4b65-bca5-da0246a5ab8c",
+      "type": "scriptAction",
+      "script": [
+        "arg.sensorData.paths = {}",
+        "",
+        "for fireteam, queryData in pairs(loc.pathQuery) do",
+        "    arg.sensorData.paths[#arg.sensorData.paths + 1] = loc.pathQuery[fireteam].path",
+        "end"
+      ]
+    },
+    {
+      "name": "define area",
+      "id": "15d2e894-559e-4510-b7dc-0839cd7beb22",
+      "type": "scriptAction",
+      "script": [
+        "arg.sensorData.pointsAroundPath = {}",
+        "",
+        "local paths = arg.sensorData.paths",
+        "local allPointsData = arg.sensorData.pointsAroundPath",
+        "",
+        "local spi, spl, lpi, lpl = FindPathsExtremes(paths)",
+        "",
+        "-- DebugLog(spi .. \" + \" .. spl .. \" + \" .. lpi .. \" + \" .. lpl)",
+        "",
+        "local lineStart = paths[lpi]:Start()",
+        "local lineEnd = arg.orderData.destination",
+        "local directionVector = lineEnd - lineStart",
+        "local unitVector = directionVector:Normalized()",
+        "local unitVectorRight = unitVector:RightPerpendicularXY()",
+        "local unitVectorLeft = -unitVectorRight",
+        "",
+        "-- bottom right",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- right",
+        "for i=0, lpl, 20 do",
+        "    local posOnPath = paths[lpi]:PositionAlongPath(i)",
+        "    allPointsData[#allPointsData + 1] = {",
+        "        position = posOnPath + loc.CheckWidth*unitVectorRight,",
+        "        direction = MathExt.Vec3ToHeading(directionVector),",
+        "        r = 0, g = 0, b = 1, a = 1,            ",
+        "    }",
+        "end",
+        "",
+        "-- top right",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- top left",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- left",
+        "for i=lpl, 1, -20 do",
+        "    local posOnPath = paths[lpi]:PositionAlongPath(i)",
+        "    allPointsData[#allPointsData + 1] = {",
+        "        position = posOnPath + loc.CheckWidth*unitVectorLeft,",
+        "        direction = MathExt.Vec3ToHeading(directionVector),",
+        "        r = 0, g = 0, b = 1, a = 1,            ",
+        "    }",
+        "end",
+        "",
+        "-- bottom left",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "",
+        "--[[",
+        "for i=5, spl, 15 do",
+        "    local stepPoints = {}",
+        "    local stepDirections = {}",
+        "    local averageDirection = 0",
+        "    for p=1, #paths do",
+        "        stepPoints[p] = paths[p]:PositionAlongPath(i)",
+        "",
+        "        local direction = paths[p]:DirectionAlongPath(i)",
+        "        stepDirections[p] = direction",
+        "        averageDirection = averageDirection + direction",
+        "",
+        "        allPointsData[#allPointsData + 1] = {",
+        "            position = stepPoints[p],",
+        "            direction = direction,",
+        "            r = 1, g = 0, b = 1, a = 1,            ",
+        "        }",
+        "    end",
+        "    averageDirection = averageDirection / #paths",
+        "end",
+        "]]--"
       ]
     },
     {
       "name": "Enemy detector on path",
-      "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
+      "id": "f8ae0fb5-54b9-40e5-a0d0-3cbf5b34db3a",
       "type": "scriptAction",
       "script": [
-        "local far = loc.path:PositionAlongPath(loc.CheckDistance)",
+        "local simplePoints = {}",
+        "for i=1, #arg.sensorData.pointsAroundPath do",
+        "    simplePoints[#simplePoints + 1] = arg.sensorData.pointsAroundPath[i].position",
+        "end",
+        "local polygon = Polygon(simplePoints)",
+        "arg.sensorData.polygonAroundPath = polygon",
+        "arg.sensorData.simplePoints = simplePoints",
+        "",
+        "for fireteam in self:GetDependentChildGroups() do",
+        "    for soldier in fireteam:GetEntities() do",
+        "        if soldier:IsAlive() then",
+        "            local nearbyEnemies = GetEntitiesInArea(",
+        "                polygon,",
+        "                    { ",
+        "                        hasBrain = true, ",
+        "                        enemyOf = soldier ",
+        "                    }",
+        "            )",
+        "            for i, entity in ipairs(nearbyEnemies) do",
+        "                if entity:IsVisible(soldier) and entity:IsAlive() then -- add alive check here",
+        "                    arg.sensorData.closestEnemyPosition = entity:GetPosition()",
+        "                return true",
+        "                end",
+        "            end",
+        "            break",
+        "        end",
+        "    end",
+        "end",
+        "arg.sensorData.closestEnemyPosition = nil",
+        "return true"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Enemy detector on path",
+      "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
+            "position": "2300,944.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local path = arg.sensorData.paths[1]",
+        "local far = path:PositionAlongPath(loc.CheckDistance)",
         "local soldier = nil",
         "",
         "for fireteam in self:GetChildGroups() do",
@@ -78,7 +209,7 @@
         "                    { hasBrain = true, enemyOf = soldier })",
         "            for i, entity in ipairs(nearbyEnemies) do",
         "                if entity:IsVisible(soldier) and entity:IsAlive() then -- add alive check here",
-        "                    arg.EnemyPosition.pos = entity:GetPosition()",
+        "                    arg.sensorData.closestEnemyPosition = entity:GetPosition()",
         "                return true",
         "                end",
         "            end",
@@ -86,84 +217,36 @@
         "        end",
         "    end",
         "end",
-        "arg.EnemyPosition.pos = nil",
+        "arg.sensorData.closestEnemyPosition = nil",
         "return true"
       ]
-    }
-  ],
-  "unlinked-trees": [
-    {
-      "name": "<unnamed>",
-      "id": "6cb41307-5370-48fa-900e-ffda14e6114f",
-      "type": "supervisedParallel",
-      "subtrees": [
-        {
-          "name": "Draw Control points",
-          "id": "192a232c-3533-4f40-9ec5-0ea473a168b1",
-          "type": "scriptAction",
-          "decorators": [
-            {
-              "id": "c75fd2cb-0547-4ad3-a1e8-5a00c4f0dd09",
-              "type": "loopForever",
-              "name": "Draw control points"
-            }
-          ],
-          "script": [
-            "if",
-            "    loc.controlPoints ~= nil",
-            "then",
-            "    local OFFSET = Vec3(0,0,2) -- draw up",
-            "    for i=1,#loc.controlPoints do",
-            "        ai_core_public.draw.Circle( -- a package we packed, supplied by PepeAmpere",
-            "                loc.controlPoints[i] + OFFSET,",
-            "                1,",
-            "                1, 0, 1, 1",
-            "            )",
-            "    end",
-            "end"
-          ]
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "6cb41307-5370-48fa-900e-ffda14e6114f",
-            "position": "2625,594.5"
-          },
-          {
-            "id": "192a232c-3533-4f40-9ec5-0ea473a168b1",
-            "position": "2749.54761904762,726.5"
-          }
-        ],
-        "editorObjects": []
-      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "7ff6da54-4d19-4fff-b9cb-4e03e152cd14",
-        "position": "1875,432"
+        "id": "87631876-4810-4bee-9db0-ec6a0bec1b5e",
+        "position": "1637.5,694.5"
       },
       {
-        "id": "7baad046-b27d-4bd3-a9b2-f24412d8fda3",
-        "position": "1625,644.5"
+        "id": "efe35773-06f5-4c56-b359-899b3cd66805",
+        "position": "1412.5,819.5"
       },
       {
-        "id": "92e0120a-a7a6-44b5-a3dd-50063e32f202",
-        "position": "1287.5,819.5"
+        "id": "275c05f5-e87b-4841-bd7b-9153558ab020",
+        "position": "1637.5,819.5"
       },
       {
-        "id": "ed3c68b9-b29a-468a-b966-b8c1f073fc67",
-        "position": "1462.5,819.5"
+        "id": "2d3b6296-ad30-4b65-bca5-da0246a5ab8c",
+        "position": "1837.5,819.5"
       },
       {
-        "id": "6ed92937-d84d-4936-b75d-e3378a5d75f0",
-        "position": "1650,819.5"
+        "id": "15d2e894-559e-4510-b7dc-0839cd7beb22",
+        "position": "2037.5,819.5"
       },
       {
-        "id": "67f5ae7a-95dc-4c4f-82b3-ef345a252d32",
-        "position": "2087.5,657"
+        "id": "f8ae0fb5-54b9-40e5-a0d0-3cbf5b34db3a",
+        "position": "2287.5,832"
       }
     ],
     "editorObjects": [],
@@ -172,23 +255,23 @@
   },
   "parameters": [
     {
-      "name": "EnemyPosition",
-      "isOptional": true,
-      "defaultValue": "Vec3(0, 0, 0)",
+      "name": "orderData",
+      "isOptional": false,
       "evaluation": "passByReference"
     },
     {
-      "name": "destination",
+      "name": "sensorData",
       "isOptional": false,
-      "defaultValue": ""
+      "defaultValue": "",
+      "evaluation": "passByReference"
     }
   ],
   "locals": {
-    "pathFuture": "nil",
-    "path": "nil",
-    "CheckDistance": "70",
-    "CheckWidth": "40",
-    "Leader": "nil",
-    "controlPoints": "nil"
+    "pathQuery": "return nil",
+    "CheckDistance": "return arg.orderData.autonomyDistance",
+    "CheckWidth": "return arg.orderData.autonomyCorridorWidth",
+    "Leader": "return nil",
+    "controlPoints": "return nil",
+    "teams": "return nil"
   }
 }

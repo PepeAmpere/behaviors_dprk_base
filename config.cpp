@@ -75,6 +75,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
 		};
 	};
 	
@@ -105,6 +111,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
 			class autonomyCorridorWidth
 			{
 				displayName = "autonomyCorridorWidth";
@@ -127,7 +139,7 @@ class CfgAvailableBehaviors
 
 
 		displayname = "DPRK Successive Advance";
-		description = "DPRK Successive Advance that uses orderName Advance";				
+		description = "DPRK Successive Advance Advance";				
 
 		orderName = "SuccessiveAdvance";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
@@ -147,6 +159,12 @@ class CfgAvailableBehaviors
 				value = "false";
 				type = "boolean";
 			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
 		};
 	};
 	class behaviors_dprk_SuccessiveAdvanceAutonomous
@@ -155,8 +173,8 @@ class CfgAvailableBehaviors
 		allowRotate = true;
 
 
-		displayname = "DPRK Succesive Advance Autonomously";
-		description = "DPRK Succesive Advance with reaction";
+		displayname = "DPRK Successive Advance Autonomously";
+		description = "DPRK Successive Advance with reaction";
 
 		orderName = "SuccessiveAdvanceAutonomous";
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
@@ -175,6 +193,12 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "false";
 				type = "boolean";
+			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
 			};
 			class autonomyCorridorWidth
 			{
@@ -217,6 +241,12 @@ class CfgAvailableBehaviors
 				value = "true";
 				type = "boolean";
 			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
 		};
 	};
 	class behaviors_dprk_AlternatingAdvanceAutonomous
@@ -245,6 +275,12 @@ class CfgAvailableBehaviors
 				displayName = "debugEnabled";
 				value = "true";
 				type = "boolean";
+			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
 			};
 			class autonomyCorridorWidth
 			{

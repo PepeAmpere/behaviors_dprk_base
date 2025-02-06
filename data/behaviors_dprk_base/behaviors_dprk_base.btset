@@ -15,6 +15,7 @@
     "Reaction.bt"
   ],
   "initScripts": [
+    "Analysis\\analytics.lua",
     "DPRKsquad\\DPRKsquad.class.lua",
     "classes.lua"
   ],
