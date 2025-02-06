@@ -99,7 +99,7 @@
       "id": "55eb707c-ab19-4241-8751-94fdc1a525c8",
       "type": "scriptAction",
       "script": [
-        "if loc.path ~=nil then",
+        "if arg.orderData.debugEnabled and loc.path ~=nil then",
         "ai_core_public.draw.Path(loc.path,1,0,0,1,Vec3(0,0,2))",
         "",
         "for n,point in pairs(loc.waypoints) do",
@@ -206,7 +206,7 @@
       "id": "167c5bf0-9390-423b-aa9e-32f75aff52f7",
       "type": "scriptAction",
       "script": [
-        "if  #loc.slots ==#loc.locations then",
+        "if arg.orderData.debugEnabled and  #loc.slots ==#loc.locations then",
         "for _,slot in pairs(loc.slots) do",
         "ai_core_public.draw.Circle(slot+Vec3(0,0,2),1,1,0,0,1)",
         "end",
@@ -293,7 +293,7 @@
       "id": "c47d1afc-4596-449d-8157-12c572064899",
       "type": "scriptAction",
       "script": [
-        "if arg.orderData ~=nil and arg.orderData.destination ~=nil then",
+        "if arg.orderData ~=nil and arg.orderData.debugEnabled and arg.orderData.destination ~=nil then",
         "\tlocal node = self",
         "\twhile type(node) == \"GroupBrain\" or type(node) == \"Group\" do",
         "\t\tif node:GetEntityCount()==0 and node:GetChildGroupCount()~=0 then",
