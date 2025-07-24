@@ -1,0 +1,215 @@
+{
+  "name": "Wait and listen",
+  "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+      "type": "waitForever"
+    },
+    {
+      "name": "Can see Target?",
+      "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Move",
+          "id": "856255ba-e06c-405c-be0a-1d079a279458",
+          "type": "move",
+          "decorators": [
+            {
+              "id": "9748139b-d03c-4fb2-800f-3dc5179b6f90",
+              "type": "scriptCondition",
+              "name": "LOS check",
+              "script": [
+                "loc.target = arg.orderData.area.center;",
+                "loc.target = Vec3(loc.target:X(), loc.target:Y(),loc.target:Z()+1);",
+                "DebugLog(tostring(self:IsClearSightTo(loc.target)));",
+                "DebugLog(tostring(arg.orderData.area.center));",
+                "return not self:IsClearSightTo(loc.target);"
+              ]
+            }
+          ],
+          "position": [
+            "return loc.target;"
+          ]
+        },
+        {
+          "name": "Can Shoot?",
+          "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Reload",
+              "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+              "type": "reloadWeapon",
+              "decorators": [
+                {
+                  "id": "f680b687-da5f-46a2-a07c-2bf8aac0f6db",
+                  "type": "scriptCondition",
+                  "name": "Need to reload?",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds <1;"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Aim&Shoot",
+              "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Aim",
+                  "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:ReqHeadingAimAtPos(arg.orderData.area.center, 1)",
+                    "self:SetFiringDispersion( 2 )",
+                    "--DebugLog(arg.orderData.area.center);"
+                  ]
+                },
+                {
+                  "name": "Shoot",
+                  "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+                  "type": "fire",
+                  "rounds": [
+                    "3"
+                  ],
+                  "forced": true
+                },
+                {
+                  "name": "Cooldown 2s",
+                  "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+                  "type": "wait",
+                  "time": [
+                    "2"
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": true
+        }
+      ],
+      "active": true
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Debug nodes",
+      "id": "6c184d94-13e5-4580-b07c-ee5e8a7a35b4",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Head twist",
+          "id": "a2799654-1727-4a28-8772-7ef941ffe9c0",
+          "type": "headLookRelative",
+          "pitch": [
+            "90"
+          ],
+          "yaw": [
+            "90"
+          ],
+          "roll": [
+            "90"
+          ]
+        },
+        {
+          "name": "DebugMessage",
+          "id": "fe6e670e-45f5-43bd-8ac4-6611ccbd8907",
+          "type": "scriptAction",
+          "script": [
+            "DebugLog(\"he?\");"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "6c184d94-13e5-4580-b07c-ee5e8a7a35b4",
+            "position": "1100,2075.5"
+          },
+          {
+            "id": "a2799654-1727-4a28-8772-7ef941ffe9c0",
+            "position": "987.5,2200.5"
+          },
+          {
+            "id": "fe6e670e-45f5-43bd-8ac4-6611ccbd8907",
+            "position": "1137.5,2200.5"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "<unnamed>",
+      "id": "39e947bd-50b8-47c1-9028-720fedeae419",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "39e947bd-50b8-47c1-9028-720fedeae419",
+            "position": "1850,2063"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "DebugLog(tostring(arg.orderData.area.center));"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+        "position": "1587.5,1525.5"
+      },
+      {
+        "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+        "position": "1375,1538"
+      },
+      {
+        "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
+        "position": "1637.18253968254,1668.96428571428"
+      },
+      {
+        "id": "856255ba-e06c-405c-be0a-1d079a279458",
+        "position": "1600,1850.5"
+      },
+      {
+        "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+        "position": "1850,1688"
+      },
+      {
+        "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+        "position": "1850,1775.5"
+      },
+      {
+        "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+        "position": "2050,1725.5"
+      },
+      {
+        "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+        "position": "2050,1813"
+      },
+      {
+        "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+        "position": "2200,1813"
+      },
+      {
+        "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+        "position": "2350,1813"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,3963",
+    "gridPadding": "0,0.5"
+  },
+  "parameters": [],
+  "locals": {
+    "target": "nil"
+  }
+}

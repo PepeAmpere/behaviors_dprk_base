@@ -1,0 +1,24 @@
+{
+  "name": "behaviors_suppress",
+  "trees": [
+    "Analysis\\AnalysisTest.bt",
+    "Analysis\\FindMultiplePaths.bt",
+    "Analysis\\FindPathDirect.bt",
+    "Analysis\\FindPathSquadSafe.bt",
+    "Suppressor\\H_Suppress.bt",
+    "Suppressor\\H_Suppress_run.bt",
+    "Suppressor\\H_Suppress_run_own_pathfind.bt",
+    "Suppressor\\Stare_in_the_void.bt",
+    "SuppressorTeam\\H_SuppressTeam_run_own_pathfind.bt",
+    "SuppressorSquad\\H_SuppressSquad.bt"
+  ],
+  "initScripts": [
+    "Analysis\\analytics.lua",
+    "Suppressor\\Suppressor.class.lua",
+    "SuppressorTeam\\SuppressorTeam.class.lua",
+    "SuppressorSquad\\SuppressorSquad.class.lua",
+    "classes.lua"
+  ],
+  "parameters": {},
+  "capabilities": {}
+}

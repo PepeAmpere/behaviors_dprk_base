@@ -1,0 +1,110 @@
+{
+  "name": "Wait and listen",
+  "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+      "type": "waitForever"
+    },
+    {
+      "name": "Can Shoot?",
+      "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "f680b687-da5f-46a2-a07c-2bf8aac0f6db",
+              "type": "scriptCondition",
+              "name": "Need to reload?",
+              "script": [
+                "return self:GetCurrentMagazine().rounds <1;"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Aim&Shoot",
+          "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Aim",
+              "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingAimAtPos(arg.orderData.destination, 1)",
+                "self:SetFiringDispersion( 2 )",
+                "--DebugLog(arg.orderData.area.center);"
+              ]
+            },
+            {
+              "name": "Shoot",
+              "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+              "type": "fire",
+              "rounds": [
+                "3"
+              ],
+              "forced": true
+            },
+            {
+              "name": "Cooldown 2s",
+              "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+              "type": "wait",
+              "time": [
+                "2"
+              ]
+            }
+          ]
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+        "position": "1587.5,1525.5"
+      },
+      {
+        "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+        "position": "1375,1538"
+      },
+      {
+        "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+        "position": "1850,1688"
+      },
+      {
+        "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+        "position": "1850,1775.5"
+      },
+      {
+        "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+        "position": "2050,1725.5"
+      },
+      {
+        "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+        "position": "2050,1813"
+      },
+      {
+        "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+        "position": "2200,1813"
+      },
+      {
+        "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+        "position": "2350,1813"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,3963",
+    "gridPadding": "0,0.5"
+  },
+  "parameters": [],
+  "locals": {}
+}

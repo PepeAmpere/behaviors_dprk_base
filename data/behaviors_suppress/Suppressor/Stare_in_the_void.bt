@@ -1,0 +1,404 @@
+{
+  "name": "Wait and listen",
+  "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+      "type": "waitForever"
+    },
+    {
+      "name": "look for targets",
+      "id": "0c609845-7efc-4556-a9d3-a53d44c9fcd9",
+      "type": "scriptAction",
+      "script": [
+        "-- infantryman soldier override reaction",
+        "loc.visibleEnemies = self:GetVisibleEnemies(50)"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "e9a19612-8730-4739-8141-2d2c22e3c06d",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "fight",
+          "id": "638418f6-2d97-45ea-8329-a135388a5f48",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "select target",
+              "id": "2723f672-abc2-43d5-9311-131322ba2cd1",
+              "type": "scriptAction",
+              "script": [
+                "loc.target = loc.visibleEnemies[math.random(#loc.visibleEnemies)]"
+              ]
+            },
+            {
+              "name": "Aim",
+              "id": "3299afad-ea00-47fa-9616-8012736c42a0",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingAimAtEntity(loc.target)"
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "c3c5669f-930e-47ec-ab5f-ed426a430220",
+              "type": "fire",
+              "rounds": [
+                "50"
+              ],
+              "forced": false
+            },
+            {
+              "name": "Reload",
+              "id": "34bd858e-2044-44c2-aab4-3296adac98ec",
+              "type": "reloadWeapon"
+            }
+          ],
+          "decorators": [
+            {
+              "id": "6b568854-c758-40e6-b102-7970bbda0109",
+              "type": "scriptCondition",
+              "name": "reaction",
+              "script": [
+                "if #loc.visibleEnemies > 0 then",
+                "    return true",
+                "else",
+                "    loc.target = nil",
+                "    return false",
+                "end"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "d7ad6813-fe45-47e7-bf9d-76384af656a4",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Move",
+              "id": "7ffe3ee0-2eef-4bd0-93b0-8faa6b43f693",
+              "type": "move",
+              "position": [
+                "local i = 0",
+                "for _,point in pairs( loc.circles) do",
+                "    if i==loc.NextCorner then",
+                "        return point",
+                "    end",
+                "    i=i+1",
+                "end",
+                "return self:GetPosition()"
+              ]
+            },
+            {
+              "name": "1s",
+              "id": "edc88a9c-b400-4c15-8650-55c7be24d48e",
+              "type": "wait",
+              "time": [
+                "return 1"
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "1bdefbdf-8be0-4030-9e1d-dd08a575192e",
+              "type": "scriptAction",
+              "script": [
+                "local i = 0",
+                "for _,point in pairs( loc.circles) do",
+                "\tif i==loc.NextCorner then",
+                "\t\tif self:GetPosition():Distance(point)<1 then",
+                "\t\t\tloc.NextCorner =loc.NextCorner+1",
+                "\t\tend",
+                "\tend",
+                "\ti=i+1",
+                "end"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "8967800c-63bd-411b-a0d1-694ae2a1f7b6",
+              "type": "scriptCondition",
+              "name": "reaction",
+              "script": [
+                "if loc.NextCorner ~=nil then",
+                "\tif loc.circles~={} then",
+                "\t\treturn true",
+                "\tend",
+                "end",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Wait Forever",
+          "id": "fd84175c-9ff6-4d6c-92b4-72803067d406",
+          "type": "waitForever"
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Check message",
+      "id": "c984af80-a12b-4023-aeee-b22069851115",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "MinotaurPositionUpdate",
+          "id": "a2b0e72e-a85c-4f7d-b6c6-9b2830f0e5dc",
+          "type": "messageHandler",
+          "handler": [
+            "if msg.value.position then",
+            "    loc.lastMinPos = msg.value.position",
+            "end"
+          ]
+        },
+        {
+          "name": "RequestPath",
+          "id": "c43c0f9a-7ae4-4029-aa8b-aa117a229a8a",
+          "type": "scriptAction",
+          "script": [
+            "if loc.lastMinPos ~=nil",
+            "then",
+            "loc.PathFuture = FindPath(self:GetPosition(),loc.lastMinPos)",
+            "end"
+          ]
+        },
+        {
+          "name": "Await path",
+          "id": "d4585c35-63ef-46a5-81d1-6b496f8b4e62",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.PathFuture:IsReady() then",
+            "loc.path = loc.PathFuture:Value()",
+            "loc.NextCorner =0",
+            "local count = loc.path:GetSegmentCount()",
+            "loc.circles = {}",
+            "if count>2 then",
+            "    for p = 0, count-2 do",
+            "        local a = loc.path:GetSegmentStart(p)",
+            "        local b = loc.path:GetSegmentStart(p+1)",
+            "        local c = loc.path:GetSegmentEnd(p+1)",
+            "        local P = b-a",
+            "        local Q = c-b",
+            "        local ang = P:AngleTo(Q)",
+            "        if math.abs(ang)>30 then",
+            "            loc.circles[p]=b;",
+            "        ",
+            "        end",
+            "    end",
+            "end",
+            "",
+            "return true",
+            "else",
+            "return false",
+            "end"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "DrawPath",
+      "id": "f1982d58-2ea9-4480-a068-26cceeb05bb9",
+      "type": "scriptAction",
+      "script": [
+        "if loc.path ~=nil then",
+        "ai_core_public.draw.Path(loc.path,1,0,0,1,Vec3(0,0,2))",
+        "",
+        "for _,point in pairs( loc.circles) do",
+        "ai_core_public.draw.Circle(point+Vec3(0,0,2),1,1,1,0,1)",
+        "end",
+        "",
+        "end"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "<unnamed>",
+      "id": "afa884f0-daa1-4bc9-9a4e-d86cb1750e65",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "<unnamed>",
+          "id": "9d3199ad-d477-4a1b-bbf1-96813c017ec0",
+          "type": "scriptAction",
+          "script": [
+            "loc.wait = false"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "31498fed-7042-42f1-b12e-fcd3a210b362",
+          "type": "scriptCondition",
+          "name": "Switch to the next corner",
+          "script": [
+            "local i = 0",
+            "for _,point in pairs( loc.circles) do",
+            "\tif i==loc.NextCorner then",
+            "\t\tif self:GetPosition():Distance(point)<1 then",
+            "\t\t\treturn true",
+            "\t\tend",
+            "\tend",
+            "\ti=i+1",
+            "end",
+            "return false"
+          ]
+        },
+        {
+          "id": "9309f371-ac69-4e6b-9c88-1f79c2bcfeb8",
+          "type": "scriptCondition",
+          "name": "Are we waitng?",
+          "script": [
+            "return loc.wait"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "afa884f0-daa1-4bc9-9a4e-d86cb1750e65",
+            "position": "1462.5,2463"
+          },
+          {
+            "id": "9d3199ad-d477-4a1b-bbf1-96813c017ec0",
+            "position": "1462.5,2588"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "<unnamed>",
+      "id": "0ae48177-d089-4dd6-b321-51ec2d8c3b20",
+      "type": "selector",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "0ae48177-d089-4dd6-b321-51ec2d8c3b20",
+            "position": "1737.5,2500.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+        "position": "1768.5,1697"
+      },
+      {
+        "id": "f98ba228-ab3a-4e36-b492-7ed0b3001ae7",
+        "position": "625,2100.5"
+      },
+      {
+        "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+        "position": "1100,1838"
+      },
+      {
+        "id": "0c609845-7efc-4556-a9d3-a53d44c9fcd9",
+        "position": "1350,1863"
+      },
+      {
+        "id": "e9a19612-8730-4739-8141-2d2c22e3c06d",
+        "position": "1612.5,1838"
+      },
+      {
+        "id": "638418f6-2d97-45ea-8329-a135388a5f48",
+        "position": "1062.5,2013"
+      },
+      {
+        "id": "2723f672-abc2-43d5-9311-131322ba2cd1",
+        "position": "675,2138"
+      },
+      {
+        "id": "3299afad-ea00-47fa-9616-8012736c42a0",
+        "position": "875,2200.5"
+      },
+      {
+        "id": "c3c5669f-930e-47ec-ab5f-ed426a430220",
+        "position": "1050,2213"
+      },
+      {
+        "id": "34bd858e-2044-44c2-aab4-3296adac98ec",
+        "position": "1225,2225.5"
+      },
+      {
+        "id": "d7ad6813-fe45-47e7-bf9d-76384af656a4",
+        "position": "1500,1963"
+      },
+      {
+        "id": "7ffe3ee0-2eef-4bd0-93b0-8faa6b43f693",
+        "position": "1362.5,2088"
+      },
+      {
+        "id": "edc88a9c-b400-4c15-8650-55c7be24d48e",
+        "position": "1487.5,2150.5"
+      },
+      {
+        "id": "1bdefbdf-8be0-4030-9e1d-dd08a575192e",
+        "position": "1612.5,2225.5"
+      },
+      {
+        "id": "fd84175c-9ff6-4d6c-92b4-72803067d406",
+        "position": "1725,2150.5"
+      },
+      {
+        "id": "c984af80-a12b-4023-aeee-b22069851115",
+        "position": "1837.5,1838"
+      },
+      {
+        "id": "a2b0e72e-a85c-4f7d-b6c6-9b2830f0e5dc",
+        "position": "1725,2025.5"
+      },
+      {
+        "id": "c43c0f9a-7ae4-4029-aa8b-aa117a229a8a",
+        "position": "1937.5,2025.5",
+        "width": 145.0
+      },
+      {
+        "id": "d4585c35-63ef-46a5-81d1-6b496f8b4e62",
+        "position": "2062.5,2138"
+      },
+      {
+        "id": "f1982d58-2ea9-4480-a068-26cceeb05bb9",
+        "position": "2037.5,1838"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "f98ba228-ab3a-4e36-b492-7ed0b3001ae7",
+        "type": "comment",
+        "header": "Too fancy for our purposes but good enough",
+        "body": "",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,3963",
+    "gridPadding": "0,0.5"
+  },
+  "parameters": [],
+  "locals": {
+    "lastMinPos": "nil",
+    "PathFuture": "nil",
+    "path": "nil",
+    "circles": "return {}",
+    "NextCorner": "nil",
+    "visibleEnemies": "return {}",
+    "target": "nil",
+    "wait": "false"
+  }
+}

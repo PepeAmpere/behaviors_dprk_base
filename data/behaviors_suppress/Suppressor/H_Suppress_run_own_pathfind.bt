@@ -1,0 +1,509 @@
+{
+  "name": "Wait and listen",
+  "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+      "type": "waitForever"
+    },
+    {
+      "name": "Recalculate Leader",
+      "id": "71c3f619-c407-48da-a306-695ed2bd4be3",
+      "type": "scriptAction",
+      "script": [
+        "if loc.Leader ==nil or not loc.Leader:IsAlive() then",
+        "    loc.Leader=self;",
+        "end"
+      ]
+    },
+    {
+      "name": "Reset target",
+      "id": "642eaf35-0f04-4309-9c4b-a8f442c04094",
+      "type": "scriptAction",
+      "script": [
+        "loc.target = arg.orderData.area.center;",
+        "loc.target = Vec3(loc.target:X(), loc.target:Y(),loc.target:Z()+1);",
+        "--DebugLog(tostring(self:IsClearSightTo(loc.target)));",
+        "--DebugLog(tostring(arg.orderData.area.center));"
+      ]
+    },
+    {
+      "name": "Path calculation",
+      "id": "628aeb2d-773b-4da4-a70f-42f5b6aa6cde",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "prepare data",
+          "id": "2a259f74-b0f0-4930-9ab3-15ab737a7043",
+          "type": "scriptAction",
+          "script": [
+            "loc.pathQuery = InternalTable()",
+            "loc.pathQuery.startPosition = self:GetPosition()",
+            "loc.pathQuery.endPosition = loc.target"
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "1b081cdb-8e89-4219-90d3-b3e85608eccb",
+          "type": "reference",
+          "target": [
+            "behaviors_suppress",
+            "FindPathSquadSafe"
+          ],
+          "arguments": {
+            "pathQuery": "return loc.pathQuery"
+          }
+        },
+        {
+          "name": "collect data",
+          "id": "5f967604-d46a-4143-abc1-59240c6088c7",
+          "type": "scriptAction",
+          "script": [
+            "loc.paths = {}",
+            "",
+            "for fireteam, queryData in pairs(loc.pathQuery) do",
+            "    loc.paths[#loc.paths + 1] = loc.pathQuery.path",
+            "end"
+          ]
+        },
+        {
+          "name": "define area",
+          "id": "17143387-9e26-40cd-a1d1-203555235515",
+          "type": "scriptAction",
+          "script": [
+            "loc.pointsAroundPath = {}",
+            "",
+            "local paths = loc.paths",
+            "local allPointsData = loc.pointsAroundPath",
+            "",
+            "local spi, spl, lpi, lpl = FindPathsExtremes(paths)",
+            "",
+            "-- DebugLog(spi .. \" + \" .. spl .. \" + \" .. lpi .. \" + \" .. lpl)",
+            "",
+            "local lineStart = paths[lpi]:Start()",
+            "local lineEnd = loc.target",
+            "local directionVector = lineEnd - lineStart",
+            "local direction = MathExt.Vec3ToHeading(directionVector)",
+            "local unitVector = directionVector:Normalized()",
+            "local unitVectorRight = unitVector:RightPerpendicularXY()",
+            "local unitVectorLeft = -unitVectorRight",
+            "",
+            "-- bottom right",
+            "allPointsData[#allPointsData + 1] = {",
+            "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+            "    direction = MathExt.Vec3ToHeading(directionVector),",
+            "    r = 1, g = 0, b = 1, a = 1,            ",
+            "}",
+            "",
+            "-- right",
+            "for i=0, spl, 20 do",
+            "    local mostRightIndex = 0",
+            "    local mostRightDistance = 0",
+            "    local mostRightPoint",
+            "    for p=1, #paths do",
+            "        local thisPathLenght = paths[p]:Length()",
+            "        local mostRightCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
+            "        local rightness = mostRightCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
+            "        local isRight = mostRightCandidate:IsLeftOfLine(lineEnd, direction + 180)",
+            "        if",
+            "            rightness > mostRightDistance and",
+            "            isRight",
+            "        then",
+            "            mostRightIndex = p",
+            "            mostRightDistance = rightness",
+            "            mostRightPoint = mostRightCandidate",
+            "        end",
+            "    end",
+            "    if mostRightPoint then",
+            "        allPointsData[#allPointsData + 1] = {",
+            "            position = mostRightPoint + loc.CheckWidth*unitVectorRight,",
+            "            direction = MathExt.Vec3ToHeading(directionVector),",
+            "            r = 0, g = 0, b = 1, a = 1,            ",
+            "        }",
+            "    end",
+            "end",
+            "",
+            "-- top right",
+            "allPointsData[#allPointsData + 1] = {",
+            "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+            "    direction = MathExt.Vec3ToHeading(directionVector),",
+            "    r = 1, g = 0, b = 1, a = 1,            ",
+            "}",
+            "",
+            "-- top left",
+            "allPointsData[#allPointsData + 1] = {",
+            "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+            "    direction = MathExt.Vec3ToHeading(directionVector),",
+            "    r = 1, g = 0, b = 1, a = 1,            ",
+            "}",
+            "",
+            "-- left",
+            "for i=spl, 0, -20 do",
+            "    local mostLeftIndex = 0",
+            "    local mostLeftDistance = 0",
+            "    local mostLeftPoint",
+            "    for p=1, #paths do",
+            "        local thisPathLenght = paths[p]:Length()",
+            "        local mostLeftCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
+            "        local leftness = mostLeftCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
+            "        local isLeft = mostLeftCandidate:IsLeftOfLine(lineStart, direction)",
+            "        if",
+            "            leftness > mostLeftDistance and",
+            "            isLeft",
+            "        then",
+            "            mostLeftIndex = p",
+            "            mostLeftDistance = leftness",
+            "            mostLeftPoint = mostLeftCandidate",
+            "        end",
+            "    end",
+            "    if mostLeftPoint then",
+            "        allPointsData[#allPointsData + 1] = {",
+            "            position = mostLeftPoint + loc.CheckWidth*unitVectorLeft,",
+            "            direction = MathExt.Vec3ToHeading(directionVector),",
+            "            r = 0, g = 0, b = 1, a = 1,            ",
+            "        }",
+            "    end",
+            "end",
+            "",
+            "-- bottom left",
+            "allPointsData[#allPointsData + 1] = {",
+            "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+            "    direction = MathExt.Vec3ToHeading(directionVector),",
+            "    r = 1, g = 0, b = 1, a = 1,            ",
+            "}"
+          ]
+        },
+        {
+          "name": "Request Defilades",
+          "id": "60f7a51a-2822-4b8f-8d6e-3dc36db34703",
+          "type": "scriptAction",
+          "script": [
+            "if loc.defiladeFuture == nil then",
+            "local simplePoints = {}",
+            "for i=1, #loc.pointsAroundPath do",
+            "    simplePoints[#simplePoints + 1] = loc.pointsAroundPath[i].position",
+            "end",
+            "local poly = Polygon(simplePoints);",
+            "loc.defiladeFuture = FindDefiladeOnGrid(self:GetPosition(), poly)",
+            "end"
+          ]
+        },
+        {
+          "name": "Await Defilade",
+          "id": "4fe92c37-c65e-4f5e-8ba9-4a676c616c85",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.defiladeFuture:IsReady() then",
+            "    loc.defilades = loc.defiladeFuture:Value()",
+            "",
+            "    local distStT = (loc.target - self:GetPosition()):Norm()",
+            "    --DebugLog(\"distStT: \"..tostring(distStT))",
+            "    DebugLog(\"Original: \"..tostring(#loc.defilades))",
+            "    for i=1, #loc.defilades do",
+            "        if loc.defilades[i] == nil then",
+            "            break -- the removes had happened",
+            "        else",
+            "            local distToTar = (loc.target - loc.defilades[i].position):Norm()",
+            "            ",
+            "            if distToTar>distStT then",
+            "                --DebugLog(\"Purging: distToTar: \"..tostring(distToTar)..\">\"..tostring(distStT))",
+            "                table.remove(loc.defilades,i)",
+            "            else",
+            "                loc.defiladesRayFutures[i] = Raycast(loc.defilades[i].position + Vec3(0, 0, 1), loc.target + Vec3(0, 0, 1))",
+            "            end ",
+            "        end",
+            "    end",
+            "    DebugLog(\"Updated original: \"..tostring(#loc.defilades))",
+            "    return true",
+            "end",
+            "return false"
+          ]
+        },
+        {
+          "name": "Await Rays",
+          "id": "6d8452c4-9eca-46da-bd69-db4eb44c5132",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.pathFuture == nil then",
+            "    for i,val in pairs(loc.defiladesRayFutures) do",
+            "        if not val:IsReady() then ",
+            "            return false",
+            "        else ",
+            "            --DebugLog(tostring(i))",
+            "            local uDist = val:Value()",
+            "           -- DebugLog(tostring(uDist)..\"/\"..tostring((loc.target-self:GetPosition()):Norm()-arg.orderData.area.radius))",
+            "            if uDist > (loc.target-loc.defilades[i].position):Norm()-arg.orderData.area.radius then ",
+            "                loc.pathFuture = FindPath(loc.Leader:GetPosition(),loc.defilades[i].position)",
+            "                return true",
+            "            end",
+            "        end",
+            "        if i==#loc.defiladesRayFutures then",
+            "            loc.panic = true",
+            "            --DebugLog(\"PANIC\")",
+            "        end",
+            "    end",
+            "    return true",
+            "elseif loc.pathFuture:IsReady() then",
+            "loc.path=loc.pathFuture:Value()",
+            "end",
+            "return false"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "9a3ddc4a-f9aa-414d-a08b-41983e970cd9",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        },
+        {
+          "id": "2e940880-bde8-4c0d-8ca1-be079c759499",
+          "type": "scriptCondition",
+          "name": "Recalculation needed?",
+          "script": [
+            "return loc.path ==nil and loc.target ~=nil --Add a check if the waypoint is changed maybe"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Can see Target?",
+      "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Move",
+          "id": "856255ba-e06c-405c-be0a-1d079a279458",
+          "type": "move",
+          "decorators": [
+            {
+              "id": "9748139b-d03c-4fb2-800f-3dc5179b6f90",
+              "type": "scriptCondition",
+              "name": "LOS check",
+              "script": [
+                "return not self:IsClearSightTo(loc.target);"
+              ]
+            },
+            {
+              "id": "a26a7043-0d11-4161-84dd-d1f7d3dad946",
+              "type": "waitUntil",
+              "name": "Is path ready?",
+              "condition": [
+                "return loc.path ~=nil"
+              ]
+            }
+          ],
+          "position": [
+            "return loc.path:Goal();"
+          ]
+        },
+        {
+          "name": "Can Shoot?",
+          "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Reload",
+              "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+              "type": "reloadWeapon",
+              "decorators": [
+                {
+                  "id": "f680b687-da5f-46a2-a07c-2bf8aac0f6db",
+                  "type": "scriptCondition",
+                  "name": "Need to reload?",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds <1;"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Aim&Shoot",
+              "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Aim",
+                  "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:ReqHeadingAimAtPos(arg.orderData.area.center, 1)",
+                    "self:SetFiringDispersion( 2 )",
+                    "--DebugLog(arg.orderData.area.center);"
+                  ]
+                },
+                {
+                  "name": "Shoot",
+                  "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+                  "type": "fire",
+                  "decorators": [
+                    {
+                      "id": "b6a31fb6-7d92-409a-9b95-c0e247f3f664",
+                      "type": "waitUntil",
+                      "name": "<unnamed>",
+                      "condition": [
+                        "return self:HasClearShot(loc.target:Distance(self:GetPosition()))"
+                      ]
+                    }
+                  ],
+                  "rounds": [
+                    "3"
+                  ],
+                  "forced": true
+                },
+                {
+                  "name": "Cooldown 2s",
+                  "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+                  "type": "wait",
+                  "time": [
+                    "2"
+                  ]
+                }
+              ]
+            }
+          ],
+          "active": true
+        }
+      ],
+      "active": true
+    },
+    {
+      "name": "Draw Defilades",
+      "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
+      "type": "scriptAction",
+      "script": [
+        "--DebugLog(tostring(loc.defilades == nil))",
+        "if loc.defilades ~=nil then",
+        "--DebugLog(tostring(#loc.defilades))",
+        "    for i=1, #loc.defilades do",
+        "        --DebugLog(tostring(i))",
+        "        --DebugLog(tostring(loc.defilades[i].position))",
+        "        --DebugLine(self:GetPosition()+Vec3(0,0,2),loc.defilades[i].position+Vec3(0,0,2),1,0,0,1)",
+        "        ai_core_public.draw.Circle(loc.defilades[i].position+Vec3(0,0,2),i/#loc.defilades,1,0,0,1)",
+        "",
+        "    end",
+        "end",
+        "if loc.path ~=nil then",
+        "    ai_core_public.draw.Circle(loc.path:Goal()+Vec3(0,0,2),1,1,1,0,1)",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "aac7685f-a6e1-48f2-9479-bb32b4d10ebb",
+        "position": "1604.5,1263"
+      },
+      {
+        "id": "84a07f42-78eb-460c-9ab9-dcffc737164a",
+        "position": "854.5,1388"
+      },
+      {
+        "id": "71c3f619-c407-48da-a306-695ed2bd4be3",
+        "position": "1129.5,1475.5"
+      },
+      {
+        "id": "642eaf35-0f04-4309-9c4b-a8f442c04094",
+        "position": "1304.5,1488",
+        "width": 145.0
+      },
+      {
+        "id": "628aeb2d-773b-4da4-a70f-42f5b6aa6cde",
+        "position": "1492,1538"
+      },
+      {
+        "id": "2a259f74-b0f0-4930-9ab3-15ab737a7043",
+        "position": "267,1750.5"
+      },
+      {
+        "id": "1b081cdb-8e89-4219-90d3-b3e85608eccb",
+        "position": "392,1813"
+      },
+      {
+        "id": "5f967604-d46a-4143-abc1-59240c6088c7",
+        "position": "529.5,1938"
+      },
+      {
+        "id": "17143387-9e26-40cd-a1d1-203555235515",
+        "position": "592,2000.5",
+        "width": 145.0
+      },
+      {
+        "id": "60f7a51a-2822-4b8f-8d6e-3dc36db34703",
+        "position": "679.5,2063"
+      },
+      {
+        "id": "4fe92c37-c65e-4f5e-8ba9-4a676c616c85",
+        "position": "842,2063",
+        "width": 145.0
+      },
+      {
+        "id": "6d8452c4-9eca-46da-bd69-db4eb44c5132",
+        "position": "1017,2063"
+      },
+      {
+        "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
+        "position": "1729.18253968254,1668.96428571428",
+        "width": 145.0
+      },
+      {
+        "id": "856255ba-e06c-405c-be0a-1d079a279458",
+        "position": "1729.5,1800.5",
+        "width": 145.0
+      },
+      {
+        "id": "ef236d5d-1aae-4241-989d-22b22d734658",
+        "position": "2242,1713"
+      },
+      {
+        "id": "13108575-1aef-4c3a-9e9b-86de21739609",
+        "position": "2242,1838"
+      },
+      {
+        "id": "42f750a2-a8fd-4573-8fa4-98679a61a46e",
+        "position": "2442,1750.5"
+      },
+      {
+        "id": "21b82bb9-f210-4492-ac45-4171535487c9",
+        "position": "2442,1838",
+        "width": 145.0
+      },
+      {
+        "id": "4892aa3b-7e0e-4d91-b8f8-0e2cb82accc6",
+        "position": "2629.5,1838",
+        "width": 145.0
+      },
+      {
+        "id": "96598f64-9e67-4091-9f15-8baea47bb11e",
+        "position": "2904.5,1838"
+      },
+      {
+        "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
+        "position": "1968.16666666667,1441.94696969697",
+        "width": 145.0
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3932,3963",
+    "gridPadding": "4.5,0.5"
+  },
+  "parameters": [],
+  "locals": {
+    "target": "nil",
+    "Leader": "nil",
+    "path": "nil",
+    "pathQuery": "nil",
+    "paths": "nil",
+    "pointsAroundPath": "nil",
+    "CheckWidth": "10",
+    "CheckDistance": "10",
+    "defilades": "nil",
+    "defiladeFuture": "nil",
+    "defiladesRayFutures": "return {}",
+    "panic": "return false",
+    "pathFuture": "nil"
+  }
+}
