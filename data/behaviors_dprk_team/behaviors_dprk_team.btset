@@ -1,5 +1,5 @@
 {
-  "name": "behaviours_dprk_team",
+  "name": "behaviors_dprk_team",
   "trees": [
     "soldierDismount.bt",
     "soldierFireAt.bt",
