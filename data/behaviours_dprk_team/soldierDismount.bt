@@ -1,0 +1,28 @@
+{
+  "name": "Seq",
+  "id": "655e8e72-b22a-4101-a30f-6199b42bfc37",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Exit Vehicle",
+      "id": "25468e00-c2bd-4ef5-959c-4049bd01b46e",
+      "type": "exitVehicle"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "655e8e72-b22a-4101-a30f-6199b42bfc37",
+        "position": "1862.5,125"
+      },
+      {
+        "id": "25468e00-c2bd-4ef5-959c-4049bd01b46e",
+        "position": "1862.5,262.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [],
+  "locals": {}
+}

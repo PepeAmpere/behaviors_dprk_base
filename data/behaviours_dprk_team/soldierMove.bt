@@ -1,0 +1,51 @@
+{
+  "name": "Follow",
+  "id": "0e643a2d-7f0c-448c-b17c-893a1c5361d1",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Reset",
+      "id": "e0635643-7bee-45a5-bee9-b922d23cbc2d",
+      "type": "reference",
+      "target": [
+        "behaviours_dprk_team",
+        "soldierReset"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Move",
+      "id": "f3dee67d-2d23-45dd-ab70-1d04298ef5b1",
+      "type": "move",
+      "position": [
+        "return arg.orderData.position"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "0e643a2d-7f0c-448c-b17c-893a1c5361d1",
+        "position": "1850,62.5"
+      },
+      {
+        "id": "e0635643-7bee-45a5-bee9-b922d23cbc2d",
+        "position": "1725,200"
+      },
+      {
+        "id": "f3dee67d-2d23-45dd-ab70-1d04298ef5b1",
+        "position": "1987.5,225"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {}
+}

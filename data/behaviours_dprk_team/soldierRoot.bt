@@ -1,0 +1,401 @@
+{
+  "name": "InitAndRun",
+  "id": "38443238-97ca-4a93-b0be-94169e1a4c4f",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "DefineOrders",
+      "id": "a9b4c481-009a-402b-a255-da22e9cbde85",
+      "type": "scriptAction",
+      "script": [
+        "bb.orders = {",
+        "    Mount = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierMount\"",
+        "    },",
+        "    Move = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierMove\"",
+        "    },",
+        "    Follow = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierFollow\"",
+        "    },",
+        "    Fire = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierFireAt\"",
+        "    },",
+        "    Wait = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierIdle\"",
+        "    },",
+        "    Dismount = {",
+        "        bbset = \"behaviours_dprk_team\",",
+        "        tree = \"soldierDismount\"",
+        "    }",
+        "}"
+      ]
+    },
+    {
+      "name": "run and listen",
+      "id": "c44d2f63-0a33-4623-b3fc-896db3ce85ec",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "DoOrderThenRestart",
+          "id": "cddf0b9f-3f7c-4706-a2b9-959702bf2d55",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "select action",
+              "id": "c00d72e3-1230-4a69-819a-255303abc199",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "restart",
+                  "id": "bcc8196c-6cc5-4386-a203-49c63819c4e7",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "restart done",
+                      "id": "5be86395-e696-4922-96d6-4f247843dc47",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.restart = false"
+                      ]
+                    },
+                    {
+                      "name": "wait 0.1",
+                      "id": "8be57683-32a5-4fdf-b3b7-ebccb7f37278",
+                      "type": "wait",
+                      "time": [
+                        "return 0.1"
+                      ]
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "cff11d32-9ce6-4bd6-a9dc-536adccd1522",
+                      "type": "scriptCondition",
+                      "name": "restarted",
+                      "script": [
+                        "return loc.restart"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "OrderTree",
+                  "id": "4c037d09-9115-40de-91d4-58242193a5cc",
+                  "type": "scriptedReference",
+                  "target": "local orderName = loc.orderData.orderName\r\nlocal treePath = bb.orders[orderName]\r\n\r\nreturn {treePath.bbset, treePath.tree}",
+                  "arguments": {
+                    "orderData": "loc.orderData"
+                  }
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "2d57c247-a19f-417a-a68f-d9ae5844b935",
+                  "type": "waitUntil",
+                  "name": "until order",
+                  "condition": [
+                    "return loc.orderData ~= nil"
+                  ]
+                }
+              ],
+              "active": true
+            },
+            {
+              "name": "Reset order to wait",
+              "id": "9b5bc8c3-2573-4ec4-8f01-d768706ef195",
+              "type": "scriptAction",
+              "script": [
+                "loc.orderData.orderName = \"Wait\""
+              ]
+            }
+          ]
+        },
+        {
+          "name": "NewOrder",
+          "id": "94e05e33-86e0-4379-9505-a0e1368eadf2",
+          "type": "messageHandler",
+          "handler": [
+            "local message = msg",
+            "",
+            "if message.value then",
+            "    for k, v in pairs(message.value) do",
+            "        DebugLog(k .. \": \" .. v)",
+            "    end",
+            "end",
+            "",
+            "if message.value.orderName == nil then return end",
+            "",
+            "loc.orderData = message.value",
+            "loc.restart = true"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "758a21ac-58b8-4db7-a57b-d59c6ef4938c",
+          "type": "loopForever",
+          "name": "run forever"
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Follow",
+      "id": "37487696-b1fb-4b29-bf96-7dc1e59b7a21",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "4a6bc789-34cf-4834-8f43-469943e13bcd",
+          "type": "scriptCondition",
+          "name": "CheckFollow",
+          "script": [
+            "return loc.orderData.orderName == \"Follow\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "37487696-b1fb-4b29-bf96-7dc1e59b7a21",
+            "position": "995.8,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "Follow"
+      ],
+      "arguments": {
+        "orderData": "loc.orderData"
+      }
+    },
+    {
+      "name": "Move",
+      "id": "8674f518-1571-45e2-849b-c57a3d380468",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "6e187601-4a3e-454c-a432-dd4971489f71",
+          "type": "scriptCondition",
+          "name": "CheckMove",
+          "script": [
+            "return loc.orderData.orderName == \"Move\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "8674f518-1571-45e2-849b-c57a3d380468",
+            "position": "1195.8,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "Move"
+      ],
+      "arguments": {
+        "orderData": "loc.orderData"
+      }
+    },
+    {
+      "name": "FireAt",
+      "id": "dba61393-152e-4bc1-93cb-1daa1eb8854e",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "ba683fc5-db7e-4590-adec-67a4e340f235",
+          "type": "scriptCondition",
+          "name": "CheckFire",
+          "script": [
+            "return loc.orderData.orderName == \"Fire\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "dba61393-152e-4bc1-93cb-1daa1eb8854e",
+            "position": "1383.3,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "FireAt"
+      ],
+      "arguments": {
+        "orderData": "loc.orderData"
+      }
+    },
+    {
+      "name": "Wait",
+      "id": "c0d66cbf-96e4-4f6e-9ad5-cae9b24bae55",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "607ec1c3-0048-4e6a-9c4a-0ee1ab32e5e9",
+          "type": "scriptCondition",
+          "name": "CheckWait",
+          "script": [
+            "return loc.orderData.orderName == \"Wait\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "c0d66cbf-96e4-4f6e-9ad5-cae9b24bae55",
+            "position": "1570.8,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "Wait"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Mount",
+      "id": "1476ea4d-96b2-49c5-8368-2765063cf755",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "af93b2c0-0907-41ae-b344-f2bed3b6dc02",
+          "type": "scriptCondition",
+          "name": "CheckMount",
+          "script": [
+            "return loc.orderData.orderName == \"Mount\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "1476ea4d-96b2-49c5-8368-2765063cf755",
+            "position": "1758.3,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "Mount"
+      ],
+      "arguments": {
+        "orderData": "loc.orderData"
+      }
+    },
+    {
+      "name": "Dismount",
+      "id": "3c5398f2-6327-4d72-8b28-a18c4c4ca633",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "10564a81-f90c-45f6-886c-298e6705e76d",
+          "type": "scriptCondition",
+          "name": "CheckDismount",
+          "script": [
+            "return loc.orderData.orderName == \"Dismount\""
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "3c5398f2-6327-4d72-8b28-a18c4c4ca633",
+            "position": "1945.8,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviorTreeProject1",
+        "Dismount"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Wait Forever",
+      "id": "2eceb67f-f768-4964-ad13-2871f8f3e7a5",
+      "type": "waitForever",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "2eceb67f-f768-4964-ad13-2871f8f3e7a5",
+            "position": "2133.3,1141.30477922078"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "38443238-97ca-4a93-b0be-94169e1a4c4f",
+        "position": "1370.8,216.304779220779"
+      },
+      {
+        "id": "a9b4c481-009a-402b-a255-da22e9cbde85",
+        "position": "1163.51515151515,299.60303030303"
+      },
+      {
+        "id": "c44d2f63-0a33-4623-b3fc-896db3ce85ec",
+        "position": "1370.8,353.804779220779"
+      },
+      {
+        "id": "cddf0b9f-3f7c-4706-a2b9-959702bf2d55",
+        "position": "1370.8,491.304779220779"
+      },
+      {
+        "id": "c00d72e3-1230-4a69-819a-255303abc199",
+        "position": "1370.8,566.304779220779"
+      },
+      {
+        "id": "bcc8196c-6cc5-4386-a203-49c63819c4e7",
+        "position": "895.8,728.804779220779"
+      },
+      {
+        "id": "5be86395-e696-4922-96d6-4f247843dc47",
+        "position": "808.3,878.804779220779"
+      },
+      {
+        "id": "8be57683-32a5-4fdf-b3b7-ebccb7f37278",
+        "position": "983.3,878.804779220779"
+      },
+      {
+        "id": "4c037d09-9115-40de-91d4-58242193a5cc",
+        "position": "1370.8,816.304779220779"
+      },
+      {
+        "id": "9b5bc8c3-2573-4ec4-8f01-d768706ef195",
+        "position": "1620.8,553.804779220779"
+      },
+      {
+        "id": "94e05e33-86e0-4379-9505-a0e1368eadf2",
+        "position": "1620.8,453.804779220779"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3860.8,2963.11335064935"
+  },
+  "parameters": [],
+  "locals": {
+    "orderData": "",
+    "restart": "false"
+  }
+}

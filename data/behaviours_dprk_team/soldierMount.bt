@@ -1,0 +1,84 @@
+{
+  "name": "EnterAndWait",
+  "id": "fc7ca8bd-1b9c-47bf-9229-a25ac142ef90",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Reset",
+      "id": "5ee4fc6c-b5f1-48e6-ad2b-799557a68fb1",
+      "type": "reference",
+      "target": [
+        "behaviours_dprk_team",
+        "soldierReset"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Enter",
+      "id": "8dfb0c74-7327-4ba7-a388-588acc5db87e",
+      "type": "enterVehicle",
+      "crewPosition": [
+        "local crewPositions = arg.orderData.vehicleToMount:GetCrewPositions()",
+        "for i, crewPos in ipairs(crewPositions) do",
+        "    if not crewPos:GetOccupant():Valid() then",
+        "        return crewPos",
+        "    end",
+        "end",
+        "",
+        "--not crewPos:GetReserver():Valid() and"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "CheckIfNotInVehicle",
+      "id": "ebe1f336-ef74-44ce-8d4a-82ab7b48cf14",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "ebe1f336-ef74-44ce-8d4a-82ab7b48cf14",
+            "position": "1600,338.9"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local crewPositions = arg.orderData.vehicleToMount:GetCrewPositions()",
+        "for i, crewPos in ipairs(crewPositions) do",
+        "    if loc.crewPos:GetOccupant() == self then",
+        "        return false",
+        "    end",
+        "end",
+        "return true"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "fc7ca8bd-1b9c-47bf-9229-a25ac142ef90",
+        "position": "1925,88.9"
+      },
+      {
+        "id": "5ee4fc6c-b5f1-48e6-ad2b-799557a68fb1",
+        "position": "1734.1,227.2"
+      },
+      {
+        "id": "8dfb0c74-7327-4ba7-a388-588acc5db87e",
+        "position": "1925,276.4"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2426.4",
+    "gridPadding": "0,1.40000000000003"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {}
+}

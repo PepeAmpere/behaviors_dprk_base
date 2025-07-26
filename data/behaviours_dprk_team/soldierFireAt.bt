@@ -1,0 +1,145 @@
+{
+  "name": "CheckEntity",
+  "id": "41980201-beaf-4bb5-92da-2efe30b7745d",
+  "type": "selector",
+  "subtrees": [
+    {
+      "name": "Reload",
+      "id": "cecbd40c-6d8d-475b-9825-877cd1911d2c",
+      "type": "reloadWeapon",
+      "decorators": [
+        {
+          "id": "a0e13fc8-17b1-46a5-80fb-a7cf3e988c01",
+          "type": "scriptCondition",
+          "name": "CheckMag",
+          "script": [
+            "return self:GetCurrentMagazine().rounds == 0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "FireAtEntity",
+      "id": "e3eec806-8666-4068-9a4f-f7b9ffe4da57",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "FireAtEnemy",
+          "id": "15ca9615-8924-4e01-864c-1a15aebdb0df",
+          "type": "fire",
+          "rounds": [
+            "self:ReqHeadingAimAtEntity(arg.orderData.entityToFireAt)",
+            "return 3"
+          ],
+          "forced": false
+        }
+      ],
+      "decorators": [
+        {
+          "id": "729c80d2-2157-445b-b8bc-7fa55d81ba2b",
+          "type": "scriptCondition",
+          "name": "isEntity",
+          "script": [
+            "return type(arg.orderData.entityToFireAt) == \"Entity\""
+          ]
+        },
+        {
+          "id": "5b56e7b4-28ae-4e14-9f52-935192479b74",
+          "type": "loopForever",
+          "name": "<unnamed>"
+        }
+      ]
+    },
+    {
+      "name": "FireAtPos",
+      "id": "85706c96-5fef-4ba6-b5c8-2deca9410075",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "FireAtPos",
+          "id": "a892d7a6-10ef-4676-8b54-59b6ce23f919",
+          "type": "fire",
+          "rounds": [
+            "self:ReqHeadingAimAtPos(arg.orderData.entityToFireAt, 10)",
+            "return 3"
+          ],
+          "forced": false
+        }
+      ],
+      "decorators": [
+        {
+          "id": "bd64e2d5-9b23-4a8b-9d00-a32124389416",
+          "type": "scriptCondition",
+          "name": "isPosition",
+          "script": [
+            "return type(arg.orderData.entityToFireAt) == \"Vec3\""
+          ]
+        },
+        {
+          "id": "cf1cc7fb-90f2-4a90-8934-f3b357dc373c",
+          "type": "loopForever",
+          "name": "Forever"
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "isAlive",
+      "id": "18b40d1a-d95e-44e0-83ef-b3e8f1287bf1",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "18b40d1a-d95e-44e0-83ef-b3e8f1287bf1",
+            "position": "1587.5,490.3"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "return arg.orderData.entityToFireAt:IsAlive()"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "41980201-beaf-4bb5-92da-2efe30b7745d",
+        "position": "1640.1,132.25"
+      },
+      {
+        "id": "cecbd40c-6d8d-475b-9825-877cd1911d2c",
+        "position": "1187.5,215.3"
+      },
+      {
+        "id": "e3eec806-8666-4068-9a4f-f7b9ffe4da57",
+        "position": "1425,265.3"
+      },
+      {
+        "id": "15ca9615-8924-4e01-864c-1a15aebdb0df",
+        "position": "1412.5,465.3"
+      },
+      {
+        "id": "85706c96-5fef-4ba6-b5c8-2deca9410075",
+        "position": "1802.6,294.75"
+      },
+      {
+        "id": "a892d7a6-10ef-4676-8b54-59b6ce23f919",
+        "position": "1800,465.3"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2602.8",
+    "gridPadding": "0,2.80000000000004"
+  },
+  "active": true,
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {}
+}

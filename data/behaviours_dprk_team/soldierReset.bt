@@ -1,0 +1,43 @@
+{
+  "name": "Reset",
+  "id": "62222db5-00d3-44e9-bcc1-1ca50b0e61f0",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Stand Up",
+      "id": "49b88e9e-5db4-4784-a696-eb15e1eaa1d4",
+      "type": "setStance",
+      "stance": [
+        "return Stance.Standing"
+      ]
+    },
+    {
+      "name": "Reset Aim",
+      "id": "d2f0a3af-8bec-46d1-8e41-55f4820b380b",
+      "type": "scriptAction",
+      "script": [
+        "self:ReqHeadingFormationIfStationary()"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "62222db5-00d3-44e9-bcc1-1ca50b0e61f0",
+        "position": "1925,125"
+      },
+      {
+        "id": "49b88e9e-5db4-4784-a696-eb15e1eaa1d4",
+        "position": "1837.5,250"
+      },
+      {
+        "id": "d2f0a3af-8bec-46d1-8e41-55f4820b380b",
+        "position": "2000,250"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [],
+  "locals": {}
+}
