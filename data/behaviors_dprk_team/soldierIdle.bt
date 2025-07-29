@@ -1,0 +1,50 @@
+{
+  "name": "WaitThenCrouch",
+  "id": "b1b3d204-8ad5-4b55-9658-ad1ec5779733",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Wait 3 sec",
+      "id": "2755c3ee-ebac-4b3a-ad23-25e6ecd69884",
+      "type": "wait",
+      "time": [
+        "return 3"
+      ]
+    },
+    {
+      "name": "SetCrouching",
+      "id": "440f4063-be4c-48e9-90a8-19da85d60b4d",
+      "type": "setStance",
+      "stance": [
+        "return Stance.Crouched"
+      ]
+    }
+  ],
+  "decorators": [
+    {
+      "id": "1afdf799-980c-40db-a7fe-9772dc79d69f",
+      "type": "loopForever",
+      "name": "Wait"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b1b3d204-8ad5-4b55-9658-ad1ec5779733",
+        "position": "1812.5,112.5"
+      },
+      {
+        "id": "2755c3ee-ebac-4b3a-ad23-25e6ecd69884",
+        "position": "1700,287.5"
+      },
+      {
+        "id": "440f4063-be4c-48e9-90a8-19da85d60b4d",
+        "position": "1925,287.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [],
+  "locals": {}
+}

@@ -1,0 +1,154 @@
+{
+  "name": "Reset and Follow",
+  "id": "b1f5e515-32b4-4980-84f9-b5065a2ba7d0",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Reset",
+      "id": "d19764f4-2a7a-463f-a100-269710f29314",
+      "type": "reference",
+      "target": [
+        "behaviours_dprk_team",
+        "soldierReset"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "CheckGroup",
+      "id": "b6468728-86c4-47bd-a89a-6dec8a84086b",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "FollowGroup",
+          "id": "739be9ef-6e64-4a9b-8561-455a34919755",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "GetUp",
+              "id": "c4dff46e-49b9-46ed-b8fd-19cf6c9519c4",
+              "type": "setStance",
+              "stance": [
+                "loc.followIndex = math.random(arg.orderData.entityToFollow:GetEntityCount())",
+                "return Stance.Standing"
+              ]
+            },
+            {
+              "name": "Follow Entity",
+              "id": "f88293b0-f39d-400d-84a9-dce6ba05dbf3",
+              "type": "followEntity",
+              "entity": [
+                "return arg.orderData.entityToFollow:GetEntity(loc.followIndex)"
+              ],
+              "distance": [
+                "return 3"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "bc924312-f406-4884-816d-45ecda3af58e",
+              "type": "scriptCondition",
+              "name": "isGroup",
+              "script": [
+                "return type(arg.orderData.entityToFollow) == \"Group\""
+              ]
+            },
+            {
+              "id": "709786ca-290c-4200-b695-822674b364ee",
+              "type": "loopForever",
+              "name": "Forever"
+            }
+          ]
+        },
+        {
+          "name": "CheckStanceAndFollow",
+          "id": "aae78e3e-9755-4ef8-9406-97410f9cc654",
+          "type": "parallel",
+          "subtrees": [
+            {
+              "name": "Follow Entity",
+              "id": "441a51d9-1380-4d6a-a141-57209d1aabfd",
+              "type": "followEntity",
+              "entity": [
+                "return arg.orderData.entityToFollow"
+              ],
+              "distance": [
+                "return 3"
+              ]
+            },
+            {
+              "name": "SetStanceToFollow",
+              "id": "1001f0d4-6362-410d-ba03-7476b12ec985",
+              "type": "setStance",
+              "stance": [
+                "return arg.orderData.entityToFollow:GetStance()"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "fe089ec1-56a0-4e47-90f4-cb41791a4fc9",
+              "type": "loopForever",
+              "name": "Forever"
+            }
+          ],
+          "waitForAll": false
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b1f5e515-32b4-4980-84f9-b5065a2ba7d0",
+        "position": "1475,35.6000000000001"
+      },
+      {
+        "id": "d19764f4-2a7a-463f-a100-269710f29314",
+        "position": "1287.5,148.1"
+      },
+      {
+        "id": "b6468728-86c4-47bd-a89a-6dec8a84086b",
+        "position": "1625,123.1"
+      },
+      {
+        "id": "739be9ef-6e64-4a9b-8561-455a34919755",
+        "position": "1412.5,248.1"
+      },
+      {
+        "id": "c4dff46e-49b9-46ed-b8fd-19cf6c9519c4",
+        "position": "1275,423.1"
+      },
+      {
+        "id": "f88293b0-f39d-400d-84a9-dce6ba05dbf3",
+        "position": "1519.5715007215,433.227128427128"
+      },
+      {
+        "id": "aae78e3e-9755-4ef8-9406-97410f9cc654",
+        "position": "1812.5,285.6"
+      },
+      {
+        "id": "441a51d9-1380-4d6a-a141-57209d1aabfd",
+        "position": "1725,435.6"
+      },
+      {
+        "id": "1001f0d4-6362-410d-ba03-7476b12ec985",
+        "position": "1912.5,435.6"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2685.6",
+    "gridPadding": "0,10.6000000000001"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "followIndex": "1"
+  }
+}
