@@ -46,7 +46,9 @@
           "script": [
             "loc.pathQuery = InternalTable()",
             "loc.pathQuery.startPosition = loc.Leader:GetPosition()",
-            "loc.pathQuery.endPosition = loc.target"
+            "loc.pathQuery.endPosition = loc.target",
+            "loc.panic = false",
+            "loc.defiladeFuture = nil "
           ]
         },
         {
@@ -74,107 +76,43 @@
           ]
         },
         {
-          "name": "define area",
-          "id": "17143387-9e26-40cd-a1d1-203555235515",
+          "name": "define area2",
+          "id": "c0ca23bc-574e-476f-9fcb-3f428c90739e",
           "type": "scriptAction",
           "script": [
             "loc.pointsAroundPath = {}",
             "",
+            "",
             "local paths = loc.paths",
             "local allPointsData = loc.pointsAroundPath",
             "",
-            "local spi, spl, lpi, lpl = FindPathsExtremes(paths)",
+            "local lineStart = paths[1]:PositionAlongPath(loc.pathoffset)",
+            "local lineEnd = paths[1]:PositionAlongPath(math.min(paths[1]:Length(),loc.pathoffset+loc.segmentLenght))",
+            "local directionVector = loc.target - lineStart",
             "",
-            "-- DebugLog(spi .. \" + \" .. spl .. \" + \" .. lpi .. \" + \" .. lpl)",
+            "local perp = (lineEnd-lineStart):RightPerpendicularXY():Normalized()",
             "",
-            "local lineStart = paths[lpi]:Start()",
-            "local lineEnd = loc.target",
-            "local directionVector = lineEnd - lineStart",
-            "local direction = MathExt.Vec3ToHeading(directionVector)",
-            "local unitVector = directionVector:Normalized()",
-            "local unitVectorRight = unitVector:RightPerpendicularXY()",
-            "local unitVectorLeft = -unitVectorRight",
             "",
-            "-- bottom right",
             "allPointsData[#allPointsData + 1] = {",
-            "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+            "    position = lineEnd -70*perp,",
             "    direction = MathExt.Vec3ToHeading(directionVector),",
             "    r = 1, g = 0, b = 1, a = 1,            ",
             "}",
             "",
-            "-- right",
-            "for i=0, spl, 20 do",
-            "    local mostRightIndex = 0",
-            "    local mostRightDistance = 0",
-            "    local mostRightPoint",
-            "    for p=1, #paths do",
-            "        local thisPathLenght = paths[p]:Length()",
-            "        local mostRightCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
-            "        local rightness = mostRightCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
-            "        local isRight = mostRightCandidate:IsLeftOfLine(lineEnd, direction + 180)",
-            "        if",
-            "            rightness > mostRightDistance and",
-            "            isRight",
-            "        then",
-            "            mostRightIndex = p",
-            "            mostRightDistance = rightness",
-            "            mostRightPoint = mostRightCandidate",
-            "        end",
-            "    end",
-            "    if mostRightPoint then",
-            "        allPointsData[#allPointsData + 1] = {",
-            "            position = mostRightPoint + loc.CheckWidth*unitVectorRight,",
-            "            direction = MathExt.Vec3ToHeading(directionVector),",
-            "            r = 0, g = 0, b = 1, a = 1,            ",
-            "        }",
-            "    end",
-            "end",
-            "",
-            "-- top right",
             "allPointsData[#allPointsData + 1] = {",
-            "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+            "    position = lineEnd +70*perp,",
             "    direction = MathExt.Vec3ToHeading(directionVector),",
             "    r = 1, g = 0, b = 1, a = 1,            ",
             "}",
             "",
-            "-- top left",
+            "",
             "allPointsData[#allPointsData + 1] = {",
-            "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+            "    position = lineStart +70*perp,",
             "    direction = MathExt.Vec3ToHeading(directionVector),",
             "    r = 1, g = 0, b = 1, a = 1,            ",
             "}",
-            "",
-            "-- left",
-            "for i=spl, 0, -20 do",
-            "    local mostLeftIndex = 0",
-            "    local mostLeftDistance = 0",
-            "    local mostLeftPoint",
-            "    for p=1, #paths do",
-            "        local thisPathLenght = paths[p]:Length()",
-            "        local mostLeftCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
-            "        local leftness = mostLeftCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
-            "        local isLeft = mostLeftCandidate:IsLeftOfLine(lineStart, direction)",
-            "        if",
-            "            leftness > mostLeftDistance and",
-            "            isLeft",
-            "        then",
-            "            mostLeftIndex = p",
-            "            mostLeftDistance = leftness",
-            "            mostLeftPoint = mostLeftCandidate",
-            "        end",
-            "    end",
-            "    if mostLeftPoint then",
-            "        allPointsData[#allPointsData + 1] = {",
-            "            position = mostLeftPoint + loc.CheckWidth*unitVectorLeft,",
-            "            direction = MathExt.Vec3ToHeading(directionVector),",
-            "            r = 0, g = 0, b = 1, a = 1,            ",
-            "        }",
-            "    end",
-            "end",
-            "",
-            "-- bottom left",
             "allPointsData[#allPointsData + 1] = {",
-            "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+            "    position = lineStart -70*perp,",
             "    direction = MathExt.Vec3ToHeading(directionVector),",
             "    r = 1, g = 0, b = 1, a = 1,            ",
             "}"
@@ -257,7 +195,8 @@
             "        end",
             "        if i==#loc.defiladesRayFutures then",
             "            loc.panic = true",
-            "            DebugLog(\"PANIC\")",
+            "            loc.pathoffset = loc.pathoffset+loc.segmentLenght",
+            "            loc.pathFuture = nil",
             "        end",
             "    end",
             "    return true",
@@ -287,54 +226,16 @@
           "type": "scriptCondition",
           "name": "Recalculation needed?",
           "script": [
-            "return loc.path ==nil and loc.target ~=nil --Add a check if the waypoint is changed maybe"
+            "return (loc.path ==nil and loc.target ~=nil) or loc.panic  --Add a check if the waypoint is changed maybe"
           ]
         }
       ]
     },
     {
-      "name": "Can see Target?",
+      "name": "Is on position?",
       "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
       "type": "selector",
       "subtrees": [
-        {
-          "name": "Move",
-          "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
-          "type": "scriptAction",
-          "decorators": [
-            {
-              "id": "9748139b-d03c-4fb2-800f-3dc5179b6f90",
-              "type": "scriptCondition",
-              "name": "LOS check",
-              "script": [
-                "return not loc.Leader:IsClearSightTo(loc.target);"
-              ]
-            },
-            {
-              "id": "a26a7043-0d11-4161-84dd-d1f7d3dad946",
-              "type": "waitUntil",
-              "name": "Is path ready?",
-              "condition": [
-                "return loc.path ~=nil and #loc.path>0"
-              ]
-            },
-            {
-              "id": "600aef44-60f0-40f9-8d1b-cfb5827ff411",
-              "type": "scriptCondition",
-              "name": "Close enough",
-              "script": [
-                "return loc.Leader:GetPosition():Distance(loc.path[1]:Goal())>4"
-              ]
-            }
-          ],
-          "script": [
-            "local i = 1",
-            "for member in self:GetEntities() do",
-            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Move\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
-            "    i = i+1",
-            "end"
-          ]
-        },
         {
           "name": "Aim&Shoot",
           "id": "6dd44a91-4111-47ba-ac10-3a2c7971ade8",
@@ -369,6 +270,38 @@
                 "end"
               ]
             }
+          ],
+          "decorators": [
+            {
+              "id": "600aef44-60f0-40f9-8d1b-cfb5827ff411",
+              "type": "scriptCondition",
+              "name": "Close enough",
+              "script": [
+                "return loc.Leader:GetPosition():Distance(loc.path[1]:Goal())<4"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Move",
+          "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
+          "type": "scriptAction",
+          "script": [
+            "local i = 1",
+            "for member in self:GetEntities() do",
+            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Move\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "    i = i+1",
+            "end"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "a26a7043-0d11-4161-84dd-d1f7d3dad946",
+          "type": "waitUntil",
+          "name": "Is path ready?",
+          "condition": [
+            "return loc.path ~=nil and #loc.path>0"
           ]
         }
       ],
@@ -399,22 +332,231 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Fire",
-      "id": "4f353c3d-56a0-4875-ae65-92b021ef3375",
-      "type": "fire",
+      "name": "define area",
+      "id": "17143387-9e26-40cd-a1d1-203555235515",
+      "type": "scriptAction",
       "meta": {
         "nodesInfo": [
           {
-            "id": "4f353c3d-56a0-4875-ae65-92b021ef3375",
-            "position": "2905.31809523809,2050.5"
+            "id": "17143387-9e26-40cd-a1d1-203555235515",
+            "position": "755.318095238096,2075.5",
+            "width": 145.0
           }
         ],
         "editorObjects": []
       },
-      "rounds": [
-        "3"
+      "script": [
+        "loc.pointsAroundPath = {}",
+        "",
+        "local paths = loc.paths",
+        "local allPointsData = loc.pointsAroundPath",
+        "",
+        "local spi, spl, lpi, lpl = FindPathsExtremes(paths)",
+        "",
+        "-- DebugLog(spi .. \" + \" .. spl .. \" + \" .. lpi .. \" + \" .. lpl)",
+        "",
+        "local lineStart = paths[lpi]:Start()",
+        "local lineEnd = loc.target",
+        "local directionVector = lineEnd - lineStart",
+        "local direction = MathExt.Vec3ToHeading(directionVector)",
+        "local unitVector = directionVector:Normalized()",
+        "local unitVectorRight = unitVector:RightPerpendicularXY()",
+        "local unitVectorLeft = -unitVectorRight",
+        "",
+        "-- bottom right",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- right",
+        "for i=0, spl, 20 do",
+        "    local mostRightIndex = 0",
+        "    local mostRightDistance = 0",
+        "    local mostRightPoint",
+        "    for p=1, #paths do",
+        "        local thisPathLenght = paths[p]:Length()",
+        "        local mostRightCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
+        "        local rightness = mostRightCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
+        "        local isRight = mostRightCandidate:IsLeftOfLine(lineEnd, direction + 180)",
+        "        if",
+        "            rightness > mostRightDistance and",
+        "            isRight",
+        "        then",
+        "            mostRightIndex = p",
+        "            mostRightDistance = rightness",
+        "            mostRightPoint = mostRightCandidate",
+        "        end",
+        "    end",
+        "    if mostRightPoint then",
+        "        allPointsData[#allPointsData + 1] = {",
+        "            position = mostRightPoint + loc.CheckWidth*unitVectorRight,",
+        "            direction = MathExt.Vec3ToHeading(directionVector),",
+        "            r = 0, g = 0, b = 1, a = 1,            ",
+        "        }",
+        "    end",
+        "end",
+        "",
+        "-- top right",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorRight,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- top left",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineEnd + 100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}",
+        "",
+        "-- left",
+        "for i=spl, 0, -20 do",
+        "    local mostLeftIndex = 0",
+        "    local mostLeftDistance = 0",
+        "    local mostLeftPoint",
+        "    for p=1, #paths do",
+        "        local thisPathLenght = paths[p]:Length()",
+        "        local mostLeftCandidate = paths[p]:PositionAlongPath(paths[p]:Length() - spl + i)",
+        "        local leftness = mostLeftCandidate:DistanceToLineSegmentXY(lineStart, lineEnd)",
+        "        local isLeft = mostLeftCandidate:IsLeftOfLine(lineStart, direction)",
+        "        if",
+        "            leftness > mostLeftDistance and",
+        "            isLeft",
+        "        then",
+        "            mostLeftIndex = p",
+        "            mostLeftDistance = leftness",
+        "            mostLeftPoint = mostLeftCandidate",
+        "        end",
+        "    end",
+        "    if mostLeftPoint then",
+        "        allPointsData[#allPointsData + 1] = {",
+        "            position = mostLeftPoint + loc.CheckWidth*unitVectorLeft,",
+        "            direction = MathExt.Vec3ToHeading(directionVector),",
+        "            r = 0, g = 0, b = 1, a = 1,            ",
+        "        }",
+        "    end",
+        "end",
+        "",
+        "-- bottom left",
+        "allPointsData[#allPointsData + 1] = {",
+        "    position = lineStart -100*unitVector + loc.CheckWidth*2*unitVectorLeft,",
+        "    direction = MathExt.Vec3ToHeading(directionVector),",
+        "    r = 1, g = 0, b = 1, a = 1,            ",
+        "}"
+      ]
+    },
+    {
+      "name": "Can see Target?",
+      "id": "6aab0209-9ede-4ed4-ab00-223b25796e43",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Aim&Shoot",
+          "id": "a32a0bb3-0d77-4d11-a922-8b272881c869",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Aim",
+              "id": "934bdedd-cb9c-4109-9ee2-253e895f89e0",
+              "type": "scriptAction",
+              "script": [
+                "for member in self:GetEntities() do",
+                "    if member:IsAlive() and member:GetType()==\"EntityBrain\" then",
+                "    member:ReqHeadingAimAtPos(loc.target)",
+                "end end"
+              ]
+            },
+            {
+              "name": "Attack",
+              "id": "7475ef06-622a-4bd1-821f-bd2528db6475",
+              "type": "scriptAction",
+              "script": [
+                "local i = 1",
+                "for member in self:GetEntities() do",
+                "if member:HasClearShot(loc.target:Distance(member:GetPosition())) then",
+                "    standard_behaviors.order.IssueOrderToSubordinate(member, arg.orderData)--{[\"orderName\"] = \"Suppress\",[\"area\"]=arg.orderData.area})--[\"area\"]=arg.orderData.area",
+                "else ",
+                "    local target = nil",
+                "    if(loc.path==nil) then target = loc.target else target = loc.path[i]:Goal() end",
+                "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Move\",[\"destination\"]=target})--,arg.orderData)--",
+                "end",
+                "i = i+1",
+                "end"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "c973de41-964b-4eea-8e04-3552ec6011c9",
+              "type": "scriptCondition",
+              "name": "LOS check",
+              "script": [
+                "return loc.Leader:IsClearSightTo(loc.target);"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Move",
+          "id": "b9cc344d-2ec8-4341-8612-06cb7ce86b66",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "e6721d6b-1e8a-49d7-85b7-221312b6c557",
+              "type": "waitUntil",
+              "name": "Is path ready?",
+              "condition": [
+                "return loc.path ~=nil and #loc.path>0"
+              ]
+            },
+            {
+              "id": "755de876-2902-4c14-acd4-fecc3dfa22dc",
+              "type": "scriptCondition",
+              "name": "Close enough",
+              "script": [
+                "return loc.Leader:GetPosition():Distance(loc.path[1]:Goal())>4"
+              ]
+            }
+          ],
+          "script": [
+            "local i = 1",
+            "for member in self:GetEntities() do",
+            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Move\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "    i = i+1",
+            "end"
+          ]
+        }
       ],
-      "forced": true
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "6aab0209-9ede-4ed4-ab00-223b25796e43",
+            "position": "2792.8180952381,2288",
+            "width": 145.0
+          },
+          {
+            "id": "a32a0bb3-0d77-4d11-a922-8b272881c869",
+            "position": "2645.9926984127,2440.65873015873"
+          },
+          {
+            "id": "934bdedd-cb9c-4109-9ee2-253e895f89e0",
+            "position": "2555.31809523811,2600.5"
+          },
+          {
+            "id": "7475ef06-622a-4bd1-821f-bd2528db6475",
+            "position": "2742.81809523811,2600.5"
+          },
+          {
+            "id": "b9cc344d-2ec8-4341-8612-06cb7ce86b66",
+            "position": "3030.31809523811,2500.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "active": true
     }
   ],
   "meta": {
@@ -453,9 +595,8 @@
         "position": "992.818095238096,1938"
       },
       {
-        "id": "17143387-9e26-40cd-a1d1-203555235515",
-        "position": "1055.3180952381,2000.5",
-        "width": 145.0
+        "id": "c0ca23bc-574e-476f-9fcb-3f428c90739e",
+        "position": "1080.3180952381,2000.5"
       },
       {
         "id": "60f7a51a-2822-4b8f-8d6e-3dc36db34703",
@@ -472,24 +613,24 @@
       },
       {
         "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
-        "position": "2367.81809523809,1713",
+        "position": "2367.8180952381,1663",
         "width": 145.0
       },
       {
-        "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
-        "position": "2230.31809523809,1913"
-      },
-      {
         "id": "6dd44a91-4111-47ba-ac10-3a2c7971ade8",
-        "position": "2545.99269841269,1878.15873015873"
+        "position": "2220.99269841269,1865.65873015873"
       },
       {
         "id": "c05cde2e-e59f-47b1-8b42-6885fa2a0f36",
-        "position": "2492.81809523809,1975.5"
+        "position": "2092.8180952381,2050.5"
       },
       {
         "id": "3331f722-891e-43f3-8ac0-1f0eb939a820",
-        "position": "2692.81809523809,1988"
+        "position": "2355.3180952381,2063"
+      },
+      {
+        "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
+        "position": "2617.8180952381,1850.5"
       },
       {
         "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
@@ -516,6 +657,8 @@
     "defiladesRayFutures": "return {}",
     "panic": "return false",
     "pathFuture": "nil",
-    "SubordinatesData": "nil"
+    "SubordinatesData": "nil",
+    "pathoffset": "0",
+    "segmentLenght": "40"
   }
 }
