@@ -5,10 +5,10 @@
   "subtrees": [
     {
       "name": "Reset",
-      "id": "d19764f4-2a7a-463f-a100-269710f29314",
+      "id": "1d7d0c18-0867-4ca0-a683-917b8a10f129",
       "type": "reference",
       "target": [
-        "behaviours_dprk_team",
+        "behaviors_dprk_team",
         "soldierReset"
       ],
       "arguments": {}
@@ -105,8 +105,8 @@
         "position": "1475,35.6000000000001"
       },
       {
-        "id": "d19764f4-2a7a-463f-a100-269710f29314",
-        "position": "1287.5,148.1"
+        "id": "1d7d0c18-0867-4ca0-a683-917b8a10f129",
+        "position": "1287.5,110.6"
       },
       {
         "id": "b6468728-86c4-47bd-a89a-6dec8a84086b",

@@ -13,15 +13,16 @@
     "nodesInfo": [
       {
         "id": "655e8e72-b22a-4101-a30f-6199b42bfc37",
-        "position": "1862.5,125"
+        "position": "1862.5,155.4"
       },
       {
         "id": "25468e00-c2bd-4ef5-959c-4049bd01b46e",
-        "position": "1862.5,262.5"
+        "position": "1862.5,292.9"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2432.8",
+    "gridPadding": "0,5.40000000000003"
   },
   "parameters": [],
   "locals": {}
