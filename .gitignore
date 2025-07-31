@@ -5,3 +5,5 @@
 *.btsets
 *.bt.sig
 *.sln
+
+*.VBSControlEditor_sln
