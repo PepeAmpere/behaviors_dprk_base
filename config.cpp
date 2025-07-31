@@ -332,6 +332,46 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
+	class behaviors_dprk_SuppressAutonomous
+	{		
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\sa.paa";
+		allowRotate = true;
+
+
+		displayname = "Suppress Autonomous";
+		description = "Suppress Autonomous";				
+
+		orderName = "SuppressAutonomous";
+		
+		class RootBehaviors
+		{
+		  group[] = {"standard_behaviors", "GroupRoot"};
+		  entity[] = {"standard_behaviors", "EntityRoot"};
+		  vehicle[] = {"standard_behaviors", "VehicleRoot"};
+		};
+		
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "false";
+				type = "boolean";
+			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
+		};
+	};
 	class behaviors_dprk_AnalysisTest
 	{
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\analysis.paa";

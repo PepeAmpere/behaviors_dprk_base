@@ -19,8 +19,8 @@ return {
         end,
 
         behaviors = {
-            Suppress = {
-                description = 'Suppress',
+            SuppressAutonomous = {
+                description = 'SuppressAutonomous',
                 tree = 'H_SuppressTeam_run_own_pathfind',
                 parameters = {},
             }

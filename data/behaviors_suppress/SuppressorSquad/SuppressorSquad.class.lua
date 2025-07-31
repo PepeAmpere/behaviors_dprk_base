@@ -22,6 +22,11 @@ return {
                 description = 'Suppress',
                 tree = 'H_SuppressSquad',
                 parameters = {},
+            },
+            Suppress2ElectricBoogaloo = {
+                description = 'Suppress',
+                tree = 'H_SuppressSquad',
+                parameters = {},
             }
         },
     },

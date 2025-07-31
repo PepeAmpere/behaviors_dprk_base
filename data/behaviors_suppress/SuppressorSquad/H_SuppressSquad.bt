@@ -239,6 +239,130 @@
       ]
     },
     {
+      "name": "<unnamed>",
+      "id": "529caff8-a18e-4e76-b10d-ff4e055dc516",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "send advance to all teams",
+          "id": "c3643058-63d2-4c55-82fc-3469d9a4d87c",
+          "type": "scriptAction",
+          "script": [
+            "loc.Subordinates = {}",
+            "loc.SubordinatesData = InternalTable()",
+            "",
+            "local i = 0",
+            "for member in self:GetChildGroups() do ",
+            "    i = i+1",
+            "    loc.Subordinates[#loc.Subordinates+1] = member",
+            "    loc.SubordinatesData[member] = {",
+            "        destination = loc.path[i]:Goal()",
+            "    }",
+            "    -- standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "end"
+          ]
+        },
+        {
+          "name": "Move subordinates",
+          "id": "956a55fb-f1b2-4150-97a7-0817cc42353b",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return {orderName = \"Advance\"}",
+            "subordinates": "return loc.Subordinates",
+            "subordinateData": "return loc.SubordinatesData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "send advance to all teams",
+          "id": "9ec6fec5-0438-4b2d-8ac3-2506635b2884",
+          "type": "scriptAction",
+          "script": [
+            "loc.Subordinates = {}",
+            "loc.SubordinatesData = InternalTable()",
+            "",
+            "local i = 0",
+            "for member in self:GetChildGroups() do ",
+            "    i = i+1",
+            "    loc.Subordinates[#loc.Subordinates+1] = member",
+            "    loc.SubordinatesData[member] = {",
+            "        destination = loc.target,",
+            "        area = arg.orderData.area",
+            "    }",
+            "    -- standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "end"
+          ]
+        },
+        {
+          "name": "Move subordinates",
+          "id": "84649a47-aa03-44c9-addb-31b717f92a90",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return {orderName = \"Suppress\"}",
+            "subordinates": "return loc.Subordinates",
+            "subordinateData": "return loc.SubordinatesData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Wait Forever",
+          "id": "2c34cc90-ca6d-49b9-b411-0a44a693f9de",
+          "type": "waitForever"
+        }
+      ],
+      "decorators": [
+        {
+          "id": "6c69a75e-e0d8-4763-9111-d4a9ee8ad616",
+          "type": "waitUntil",
+          "name": "Is path ready?",
+          "condition": [
+            "return loc.path ~=nil and #loc.path ~=0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Draw Defilades",
+      "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
+      "type": "scriptAction",
+      "script": [
+        "if arg.orderData.debugEnabled then",
+        "if loc.defilades ~=nil then",
+        "--DebugLog(tostring(#loc.defilades))",
+        "    for i=1, #loc.defilades do",
+        "        --DebugLog(tostring(i))",
+        "        --DebugLog(tostring(loc.defilades[i].position))",
+        "        --DebugLine(self:GetPosition()+Vec3(0,0,2),loc.defilades[i].position+Vec3(0,0,2),1,0,0,1)",
+        "        ai_core_public.draw.Circle(loc.defilades[i].position+Vec3(0,0,2),i/#loc.defilades,1,0,0,1)",
+        "",
+        "    end",
+        "end",
+        "if loc.path ~=nil and #loc.path>0 then",
+        "    --DebugLog(tostring(#loc.path))",
+        "    for i,path in pairs(loc.path) do ",
+        "        ai_core_public.draw.Circle(path:Goal()+Vec3(0,0,2),1,1,1,0,1)",
+        "    end",
+        "end",
+        "",
+        "if loc.pointsAroundPath ~=nil then",
+        "    for i,path in pairs(loc.pointsAroundPath) do",
+        "        ai_core_public.draw.Circle(path.position+Vec3(0,0,3),1,0,0,1,1)",
+        "    end",
+        "end",
+        "end"
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
       "name": "Can see Target?",
       "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
       "type": "selector",
@@ -274,7 +398,8 @@
             "--    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
             "--end",
             "--i=i+1",
-            "end"
+            "end",
+            "loc.sentAlready =false"
           ]
         },
         {
@@ -293,40 +418,145 @@
           ]
         }
       ],
+      "decorators": [
+        {
+          "id": "2c72c31f-b015-4686-8748-70fe9f710ac7",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        },
+        {
+          "id": "57688f7d-d2b5-45fa-9071-0e68b05e95f3",
+          "type": "scriptCondition",
+          "name": "<unnamed>",
+          "script": [
+            "return loc.sentAlready"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
+            "position": "1947.63333333334,2663",
+            "width": 145.0
+          },
+          {
+            "id": "3331f722-891e-43f3-8ac0-1f0eb939a820",
+            "position": "1797.63333333334,2875.5"
+          },
+          {
+            "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
+            "position": "2085.13333333334,2863"
+          }
+        ],
+        "editorObjects": []
+      },
       "active": true
     },
     {
-      "name": "Draw Defilades",
-      "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
-      "type": "scriptAction",
-      "script": [
-        "--DebugLog(tostring(loc.defilades == nil))",
-        "if loc.defilades ~=nil then",
-        "--DebugLog(tostring(#loc.defilades))",
-        "    for i=1, #loc.defilades do",
-        "        --DebugLog(tostring(i))",
-        "        --DebugLog(tostring(loc.defilades[i].position))",
-        "        --DebugLine(self:GetPosition()+Vec3(0,0,2),loc.defilades[i].position+Vec3(0,0,2),1,0,0,1)",
-        "        ai_core_public.draw.Circle(loc.defilades[i].position+Vec3(0,0,2),i/#loc.defilades,1,0,0,1)",
-        "",
-        "    end",
-        "end",
-        "if loc.path ~=nil and #loc.path>0 then",
-        "    --DebugLog(tostring(#loc.path))",
-        "    for i,path in pairs(loc.path) do ",
-        "        ai_core_public.draw.Circle(path:Goal()+Vec3(0,0,2),1,1,1,0,1)",
-        "    end",
-        "end",
-        "",
-        "if loc.pointsAroundPath ~=nil then",
-        "    for i,path in pairs(loc.pointsAroundPath) do",
-        "        ai_core_public.draw.Circle(path.position+Vec3(0,0,3),1,0,0,1,1)",
-        "    end",
-        "end"
-      ]
-    }
-  ],
-  "unlinked-trees": [
+      "name": "Can see Target?",
+      "id": "0be9bb66-a7ac-46d7-8458-af1868767bf9",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Attack",
+          "id": "8caff83e-a978-485b-b809-8b8fa5e8a232",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "cbc63639-dd5b-4e6b-a5e5-6fb2511833e8",
+              "type": "scriptCondition",
+              "name": "LOS check",
+              "script": [
+                "return loc.Leader:IsClearSightTo(loc.target);"
+              ]
+            }
+          ],
+          "script": [
+            "local i = 1",
+            "for member in self:GetChildGroups() do",
+            "--if member:HasClearShot(loc.target:Distance(member:GetPosition())) then",
+            "    standard_behaviors.order.IssueOrderToSubordinate(member, arg.orderData)--{[\"orderName\"] = \"Suppress\",[\"area\"]=arg.orderData.area})--[\"area\"]=arg.orderData.area",
+            "--else ",
+            "--    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "--end",
+            "--i=i+1",
+            "end"
+          ]
+        },
+        {
+          "name": "Move",
+          "id": "f2134226-69b6-4cf5-bf1c-3a14b98aea52",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "465a6ed3-cf4b-4d95-b204-fdf68cb4a231",
+              "type": "waitUntil",
+              "name": "Is path ready?",
+              "condition": [
+                "return loc.path ~=nil and #loc.path ~=0"
+              ]
+            },
+            {
+              "id": "7724c541-3381-4146-ab53-8221169e98c2",
+              "type": "scriptCondition",
+              "name": "Close enough",
+              "script": [
+                "return loc.Leader:GetPosition():Distance(loc.path[1]:Goal())>4"
+              ]
+            }
+          ],
+          "script": [
+            "local i =1",
+            "if loc.done then",
+            "for member in self:GetChildGroups() do ",
+            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
+            "    i=i+1",
+            "end",
+            "loc.done = false ",
+            "end"
+          ]
+        },
+        {
+          "name": "Backup Move",
+          "id": "5f7d9f2b-6e0f-4bd8-8e86-d2c23a542a4a",
+          "type": "scriptAction",
+          "script": [
+            "local i =1",
+            "if loc.done then",
+            "for member in self:GetChildGroups() do ",
+            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.taget})--,arg.orderData)--",
+            "    i=i+1",
+            "end",
+            "loc.done = false ",
+            "end"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "0be9bb66-a7ac-46d7-8458-af1868767bf9",
+            "position": "1235.13333333333,2738",
+            "width": 145.0
+          },
+          {
+            "id": "8caff83e-a978-485b-b809-8b8fa5e8a232",
+            "position": "1085.13333333333,2900.5"
+          },
+          {
+            "id": "f2134226-69b6-4cf5-bf1c-3a14b98aea52",
+            "position": "1347.63333333333,2900.5"
+          },
+          {
+            "id": "5f7d9f2b-6e0f-4bd8-8e86-d2c23a542a4a",
+            "position": "1560.13333333333,2888"
+          }
+        ],
+        "editorObjects": []
+      },
+      "active": true
+    },
     {
       "name": "define area",
       "id": "17143387-9e26-40cd-a1d1-203555235515",
@@ -452,7 +682,7 @@
         "nodesInfo": [
           {
             "id": "5f2890e7-3ed7-40d7-baad-2e89dbca1e76",
-            "position": "2010.13333333333,2200.5"
+            "position": "2110.13333333333,2538"
           }
         ],
         "editorObjects": []
@@ -501,7 +731,7 @@
         "nodesInfo": [
           {
             "id": "700e351e-c82a-41ad-a9d5-083ac280a172",
-            "position": "2210.13333333333,2200.5"
+            "position": "2310.13333333333,2538"
           }
         ],
         "editorObjects": []
@@ -516,110 +746,6 @@
         "subordinateData": "return loc.SubordinatesData",
         "update": "return false"
       }
-    },
-    {
-      "name": "Can see Target?",
-      "id": "0be9bb66-a7ac-46d7-8458-af1868767bf9",
-      "type": "selector",
-      "subtrees": [
-        {
-          "name": "Attack",
-          "id": "8caff83e-a978-485b-b809-8b8fa5e8a232",
-          "type": "scriptAction",
-          "decorators": [
-            {
-              "id": "cbc63639-dd5b-4e6b-a5e5-6fb2511833e8",
-              "type": "scriptCondition",
-              "name": "LOS check",
-              "script": [
-                "return loc.Leader:IsClearSightTo(loc.target);"
-              ]
-            }
-          ],
-          "script": [
-            "local i = 1",
-            "for member in self:GetChildGroups() do",
-            "--if member:HasClearShot(loc.target:Distance(member:GetPosition())) then",
-            "    standard_behaviors.order.IssueOrderToSubordinate(member, arg.orderData)--{[\"orderName\"] = \"Suppress\",[\"area\"]=arg.orderData.area})--[\"area\"]=arg.orderData.area",
-            "--else ",
-            "--    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
-            "--end",
-            "--i=i+1",
-            "end"
-          ]
-        },
-        {
-          "name": "Move",
-          "id": "f2134226-69b6-4cf5-bf1c-3a14b98aea52",
-          "type": "scriptAction",
-          "decorators": [
-            {
-              "id": "465a6ed3-cf4b-4d95-b204-fdf68cb4a231",
-              "type": "waitUntil",
-              "name": "Is path ready?",
-              "condition": [
-                "return loc.path ~=nil and #loc.path ~=0"
-              ]
-            },
-            {
-              "id": "7724c541-3381-4146-ab53-8221169e98c2",
-              "type": "scriptCondition",
-              "name": "Close enough",
-              "script": [
-                "return loc.Leader:GetPosition():Distance(loc.path[1]:Goal())>4"
-              ]
-            }
-          ],
-          "script": [
-            "local i =1",
-            "if loc.done then",
-            "for member in self:GetChildGroups() do ",
-            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.path[i]:Goal()})--,arg.orderData)--",
-            "    i=i+1",
-            "end",
-            "loc.done = false ",
-            "end"
-          ]
-        },
-        {
-          "name": "Backup Move",
-          "id": "5f7d9f2b-6e0f-4bd8-8e86-d2c23a542a4a",
-          "type": "scriptAction",
-          "script": [
-            "local i =1",
-            "if loc.done then",
-            "for member in self:GetChildGroups() do ",
-            "    standard_behaviors.order.IssueOrderToSubordinate(member, {[\"orderName\"] = \"Advance\",[\"destination\"]=loc.taget})--,arg.orderData)--",
-            "    i=i+1",
-            "end",
-            "loc.done = false ",
-            "end"
-          ]
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "0be9bb66-a7ac-46d7-8458-af1868767bf9",
-            "position": "2997.63333333333,1738",
-            "width": 145.0
-          },
-          {
-            "id": "8caff83e-a978-485b-b809-8b8fa5e8a232",
-            "position": "2847.63333333333,1900.5"
-          },
-          {
-            "id": "f2134226-69b6-4cf5-bf1c-3a14b98aea52",
-            "position": "3110.13333333333,1900.5"
-          },
-          {
-            "id": "5f7d9f2b-6e0f-4bd8-8e86-d2c23a542a4a",
-            "position": "3322.63333333333,1888"
-          }
-        ],
-        "editorObjects": []
-      },
-      "active": true
     }
   ],
   "meta": {
@@ -675,17 +801,28 @@
         "position": "1235.13333333333,2063"
       },
       {
-        "id": "767139df-2a75-4ede-9dc3-868373ff2ba5",
-        "position": "2122.63333333333,1713",
-        "width": 145.0
+        "id": "529caff8-a18e-4e76-b10d-ff4e055dc516",
+        "position": "2029.43095238095,1827.97510822511"
       },
       {
-        "id": "3331f722-891e-43f3-8ac0-1f0eb939a820",
-        "position": "1972.63333333333,1838"
+        "id": "c3643058-63d2-4c55-82fc-3469d9a4d87c",
+        "position": "1710.13333333333,1963"
       },
       {
-        "id": "2f7c12e9-1cc9-4f0a-bc89-6f99841f40e4",
-        "position": "2260.13333333333,1825.5"
+        "id": "956a55fb-f1b2-4150-97a7-0817cc42353b",
+        "position": "1922.63333333333,1963"
+      },
+      {
+        "id": "9ec6fec5-0438-4b2d-8ac3-2506635b2884",
+        "position": "2285.13333333333,1975.5"
+      },
+      {
+        "id": "84649a47-aa03-44c9-addb-31b717f92a90",
+        "position": "2522.63333333333,1975.5"
+      },
+      {
+        "id": "2c34cc90-ca6d-49b9-b411-0a44a693f9de",
+        "position": "2910.13333333333,2025.5"
       },
       {
         "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
@@ -713,8 +850,10 @@
     "panic": "return false",
     "pathFuture": "nil",
     "SubordinatesData": "nil",
+    "Subordinates": "return nil",
     "done": "true",
     "pathoffset": "0",
-    "segmentLenght": "40"
+    "segmentLenght": "40",
+    "sentAlready": "true"
   }
 }

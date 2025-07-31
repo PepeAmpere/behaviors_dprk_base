@@ -313,7 +313,7 @@
       "id": "55f944b8-55cb-4ca9-b32b-f6c308537798",
       "type": "scriptAction",
       "script": [
-        "--DebugLog(tostring(loc.defilades == nil))",
+        "if arg.orderData.debugEnabled then",
         "if loc.defilades ~=nil then",
         "--DebugLog(tostring(#loc.defilades))",
         "    for i=1, #loc.defilades do",
@@ -326,6 +326,7 @@
         "end",
         "if loc.path ~=nil then",
         "    ai_core_public.draw.Circle(loc.path:Goal()+Vec3(0,0,2),1,1,1,0,1)",
+        "end",
         "end"
       ]
     }
