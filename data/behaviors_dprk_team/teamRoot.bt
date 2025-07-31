@@ -1,0 +1,32 @@
+{
+  "name": "<unnamed>",
+  "id": "fadcfa2c-b61b-4677-9cc9-5f6a88dd639f",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "a4b6d698-61cd-4aad-9cc9-203bd837da3a",
+      "type": "scriptAction",
+      "script": [
+        "DebugLog(\"test\")"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "fadcfa2c-b61b-4677-9cc9-5f6a88dd639f",
+        "position": "1812.5,146.5"
+      },
+      {
+        "id": "a4b6d698-61cd-4aad-9cc9-203bd837da3a",
+        "position": "1730.5,298"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2459",
+    "gridPadding": "0,9"
+  },
+  "parameters": [],
+  "locals": {}
+}

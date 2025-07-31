@@ -1,14 +1,14 @@
 {
   "name": "behaviors_dprk_team",
   "trees": [
-    "soldierDismount.bt",
     "soldierFireAt.bt",
     "soldierFollow.bt",
     "soldierIdle.bt",
     "soldierMount.bt",
     "soldierMove.bt",
     "soldierReset.bt",
-    "soldierRoot.bt"
+    "soldierRoot.bt",
+    "teamRoot.bt"
   ],
   "initScripts": [],
   "parameters": {},
