@@ -6,8 +6,10 @@
     "soldierIdle.bt",
     "soldierMount.bt",
     "soldierMove.bt",
+    "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"
   ],
   "initScripts": [],

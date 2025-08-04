@@ -1,0 +1,64 @@
+{
+  "name": "Follow",
+  "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Reset",
+      "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "soldierReset"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Move",
+      "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
+      "type": "move",
+      "position": [
+        "return arg.orderData.position"
+      ]
+    },
+    {
+      "name": "Send Order Completed",
+      "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
+      "type": "scriptAction",
+      "script": [
+        "self:SendMessage(self:GetParentGroup(), \"OrderCompleted\", {self})"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
+        "position": "2298,235.5"
+      },
+      {
+        "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
+        "position": "2066.09573759574,309.611471861472"
+      },
+      {
+        "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
+        "position": "2291.09573759574,334.611471861472"
+      },
+      {
+        "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
+        "position": "2535.5,335.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "5013,2998",
+    "gridPadding": "10.5,10.5"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {}
+}

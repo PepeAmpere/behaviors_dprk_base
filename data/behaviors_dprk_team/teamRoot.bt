@@ -5,33 +5,13 @@
   "subtrees": [
     {
       "name": "DefineOrders",
-      "id": "7913ccb2-3e9e-4e41-94e7-c31cccc414f3",
+      "id": "655b04d1-2420-43dd-a687-7945e8ae7004",
       "type": "scriptAction",
       "script": [
         "bb.orders = {",
-        "    Mount = {",
+        "    Retreat = {",
         "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierMount\"",
-        "    },",
-        "    Move = {",
-        "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierMove\"",
-        "    },",
-        "    Follow = {",
-        "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierFollow\"",
-        "    },",
-        "    Fire = {",
-        "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierFireAt\"",
-        "    },",
-        "    Wait = {",
-        "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierIdle\"",
-        "    },",
-        "    Dismount = {",
-        "        bbset = \"behaviors_dprk_team\",",
-        "        tree = \"soldierDismount\"",
+        "        tree = \"teamRetreatMoveBoundingOverwatch\"",
         "    }",
         "}"
       ]
@@ -52,19 +32,13 @@
               "type": "selector",
               "subtrees": [
                 {
-                  "name": "Send message to every soldier",
-                  "id": "8d49cbb7-e41b-4919-b0df-28a65fffc779",
-                  "type": "scriptAction",
-                  "script": [
-                    "for member in self:GetEntities() do",
-                    "    local orderName = loc.orderData.orderName",
-                    "    local treePath = bb.orders[orderName]",
-                    "    DebugLog(\"Sending data to: \" .. tostring(member))",
-                    "    --local NewOrder = [\"Follow\", loc.orderData]",
-                    "    self:SendMessage(member, \"Follow\" , loc.orderData)",
-                    "end",
-                    "loc.orderData = nil"
-                  ]
+                  "name": "OrderTree",
+                  "id": "8f1ff38d-3279-4ca0-ac8d-ade668f8b04e",
+                  "type": "scriptedReference",
+                  "target": "local orderName = loc.orderData.orderName\r\nlocal treePath = bb.orders[orderName]\r\n\r\nreturn {treePath.bbset, treePath.tree}",
+                  "arguments": {
+                    "orderData": "loc.orderData"
+                  }
                 }
               ],
               "decorators": [
@@ -78,6 +52,14 @@
                 }
               ],
               "active": true
+            },
+            {
+              "name": "Set order to nil",
+              "id": "3e345d84-a5a2-40d4-ac77-795fe459a128",
+              "type": "scriptAction",
+              "script": [
+                "loc.orderData = nil"
+              ]
             }
           ]
         },
@@ -87,12 +69,14 @@
           "type": "messageHandler",
           "handler": [
             "local message = msg",
-            "",
+            "DebugLog(\"Group order\")",
             "if message.value then",
             "    for k, v in pairs(message.value) do",
             "        DebugLog(k .. \": \" .. v)",
             "    end",
             "end",
+            "",
+            "DebugLog(\"------------\")",
             "",
             "if message.value.orderName == nil then return end",
             "",
@@ -109,77 +93,44 @@
       ]
     }
   ],
-  "unlinked-trees": [
-    {
-      "name": "OrderTree",
-      "id": "f2a1b5aa-842f-4652-8a07-ab8d1aeaa4b6",
-      "type": "scriptedReference",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "f2a1b5aa-842f-4652-8a07-ab8d1aeaa4b6",
-            "position": "1268.5,727.166666666667"
-          }
-        ],
-        "editorObjects": []
-      },
-      "target": "local orderName = loc.orderData.orderName\r\nlocal treePath = bb.orders[orderName]\r\n\r\nreturn {treePath.bbset, treePath.tree}",
-      "arguments": {
-        "orderData": "loc.orderData"
-      }
-    },
-    {
-      "name": "Reset order to wait",
-      "id": "61d97e3b-cb33-4e2f-82d2-54e5eb141c3c",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "61d97e3b-cb33-4e2f-82d2-54e5eb141c3c",
-            "position": "1982.75,471.916666666667"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.orderData.orderName = \"Wait\""
-      ]
-    }
-  ],
   "meta": {
     "nodesInfo": [
       {
         "id": "77dde126-e41a-47d8-87f4-96df079619cf",
-        "position": "1732.75,134.416666666667"
+        "position": "1732.75,138.416666666667"
       },
       {
-        "id": "7913ccb2-3e9e-4e41-94e7-c31cccc414f3",
-        "position": "1525.46515151515,217.714917748918"
+        "id": "655b04d1-2420-43dd-a687-7945e8ae7004",
+        "position": "1454.25,240"
       },
       {
         "id": "99a3e34a-c0c1-436b-867a-e420853ef535",
-        "position": "1732.75,271.916666666667"
+        "position": "1732.75,275.916666666667"
       },
       {
         "id": "bb43290f-49ef-4f9c-8fac-81bd9bc353a9",
-        "position": "1732.75,409.416666666667"
+        "position": "1731,418.666666666667"
       },
       {
         "id": "57a677d1-c829-4eb2-b55b-4547a6d13515",
-        "position": "1731,514.666666666667"
+        "position": "1731,506.166666666667"
       },
       {
-        "id": "8d49cbb7-e41b-4919-b0df-28a65fffc779",
-        "position": "1693.5,702.166666666667"
+        "id": "8f1ff38d-3279-4ca0-ac8d-ade668f8b04e",
+        "position": "1731,681.166666666667"
+      },
+      {
+        "id": "3e345d84-a5a2-40d4-ac77-795fe459a128",
+        "position": "1993.5,518.666666666667"
       },
       {
         "id": "7124b9f9-db2b-4d95-aadb-b93bb4242400",
-        "position": "1982.75,371.916666666667"
+        "position": "1981,406.166666666667"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3896,2714.66666666667",
-    "gridPadding": "6,2.1666666666668"
+    "canvasSize": "3896,2718.66666666667",
+    "gridPadding": "6,6.1666666666668"
   },
   "parameters": [],
   "locals": {

@@ -32,6 +32,10 @@
         "    Dismount = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierDismount\"",
+        "    },",
+        "    Retreat = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierOccupy\"",
         "    }",
         "}"
       ]
@@ -123,11 +127,15 @@
           "handler": [
             "local message = msg",
             "",
+            "DebugLog(\"SOLDIER ORDER START\")",
+            "",
             "if message.value then",
             "    for k, v in pairs(message.value) do",
             "        DebugLog(k .. \": \" .. v)",
             "    end",
             "end",
+            "",
+            "DebugLog(\"------------\")",
             "",
             "if message.value.orderName == nil then return end",
             "",

@@ -1,0 +1,172 @@
+{
+  "name": "Sequence",
+  "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Setup updateData",
+      "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
+      "type": "scriptAction",
+      "script": [
+        "loc.updateData = {}",
+        "",
+        "local group = self  -- self is GroupBrain",
+        "local count = group:GetEntityCount()",
+        "DebugLog(\"Count: \" .. count)",
+        "",
+        "for i = 0, count - 1 do",
+        "    local soldier = group:GetEntity(i)",
+        "    --if soldier and soldier:Valid() then",
+        "    if true then",
+        "        table.insert(loc.updateData, {",
+        "            unit = soldier,         -- \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u0454\u043c\u043e \u043e\u0431'\u0454\u043a\u0442",
+        "            index = i,",
+        "            state = \"unknown\"      -- placeholder \u0434\u043b\u044f \u043c\u0430\u0439\u0431\u0443\u0442\u043d\u044c\u043e\u0433\u043e",
+        "        })",
+        "        DebugLog(\"Soldier: \" .. soldier)",
+        "    end",
+        "end",
+        "DebugLog(\"------------\")"
+      ]
+    },
+    {
+      "name": "Supervised Parallel",
+      "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Send order to soldier sequence",
+          "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Send message to every soldier",
+              "id": "771f542e-f62b-43da-9040-369b12d1dc46",
+              "type": "scriptAction",
+              "script": [
+                "local orderName = arg.orderData.orderName",
+                "",
+                "for i, data in ipairs(loc.updateData) do",
+                "    if data.state == \"unknown\" then",
+                "        self:SendMessage(data.unit, orderName, arg.orderData)",
+                "        data.state = \"gotOrder\"",
+                "        break",
+                "    end",
+                "end",
+                "",
+                "loc.orderReady = false"
+              ]
+            },
+            {
+              "name": "Some order update",
+              "id": "3088c855-bdfe-472c-9b35-9ea749861600",
+              "type": "waitUntil",
+              "condition": [
+                "loc.orderReady"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "NewOrder",
+          "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
+          "type": "messageHandler",
+          "handler": [
+            "local message = msg",
+            "DebugLog(\"Retreat order\")",
+            "DebugLog(message.subject)",
+            "if message.value then",
+            "    for k, v in pairs(message.value) do",
+            "        DebugLog(k .. \": \" .. tostring(v))",
+            "    end",
+            "end",
+            "",
+            "if message.subject == \"OrderCompleted\" then",
+            "    DebugLog(\"Order completed\")",
+            "    loc.orderReady = true",
+            "",
+            "end",
+            "",
+            "",
+            "DebugLog(\"------------\")",
+            ""
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "54530ce9-536d-48bc-9425-51c85f2ee9aa",
+          "type": "loopForever",
+          "name": "Loop Forever"
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "<unnamed>",
+      "id": "54559dfb-64a5-48c8-8681-bb3f229567bb",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "54559dfb-64a5-48c8-8681-bb3f229567bb",
+            "position": "1675,488"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "if loc.orderData ~= nil"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
+        "position": "2162.5,250.5"
+      },
+      {
+        "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
+        "position": "1962.5,388"
+      },
+      {
+        "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
+        "position": "2162.5,375.5"
+      },
+      {
+        "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
+        "position": "2125,613"
+      },
+      {
+        "id": "771f542e-f62b-43da-9040-369b12d1dc46",
+        "position": "2012.5,750.5"
+      },
+      {
+        "id": "3088c855-bdfe-472c-9b35-9ea749861600",
+        "position": "2337.5,750.5"
+      },
+      {
+        "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
+        "position": "2412.5,600.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2713",
+    "gridPadding": "0,0.5"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "updateData": "nil",
+    "currentSoldier": "nil",
+    "orderReady": "true"
+  }
+}
