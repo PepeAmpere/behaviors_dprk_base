@@ -127,7 +127,7 @@
           "handler": [
             "local message = msg",
             "",
-            "DebugLog(\"SOLDIER ORDER START\")",
+            "DebugLog(\"SOLDIER ORDER START: \" .. tostring(self))",
             "",
             "if message.value then",
             "    for k, v in pairs(message.value) do",

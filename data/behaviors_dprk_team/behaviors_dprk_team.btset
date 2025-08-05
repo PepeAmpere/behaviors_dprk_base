@@ -12,7 +12,9 @@
     "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"
   ],
-  "initScripts": [],
+  "initScripts": [
+    "Retreat\\helper.lua"
+  ],
   "parameters": {},
   "capabilities": {}
 }

@@ -26,7 +26,7 @@
       "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
       "type": "scriptAction",
       "script": [
-        "self:SendMessage(self:GetParentGroup(), \"OrderCompleted\", {self})"
+        "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})"
       ]
     }
   ],
@@ -57,6 +57,7 @@
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],

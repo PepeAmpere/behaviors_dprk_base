@@ -10,21 +10,41 @@
       "script": [
         "loc.updateData = {}",
         "",
-        "local group = self  -- self is GroupBrain",
+        "local group = self",
         "local count = group:GetEntityCount()",
         "DebugLog(\"Count: \" .. count)",
         "",
         "for i = 0, count - 1 do",
         "    local soldier = group:GetEntity(i)",
-        "    --if soldier and soldier:Valid() then",
-        "    if true then",
+        "    if soldier and soldier:Valid() then",
         "        table.insert(loc.updateData, {",
-        "            unit = soldier,         -- \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u0454\u043c\u043e \u043e\u0431'\u0454\u043a\u0442",
+        "            unit = soldier,",
         "            index = i,",
-        "            state = \"unknown\"      -- placeholder \u0434\u043b\u044f \u043c\u0430\u0439\u0431\u0443\u0442\u043d\u044c\u043e\u0433\u043e",
+        "            state = \"unknown\",",
+        "            hasDoneOrder = false",
         "        })",
         "        DebugLog(\"Soldier: \" .. soldier)",
         "    end",
+        "end",
+        "DebugLog(\"------------\")"
+      ]
+    },
+    {
+      "name": "Setup roles",
+      "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
+      "type": "scriptAction",
+      "script": [
+        "local data = loc.updateData",
+        "local total = #data",
+        "local half = math.floor(total / 2)",
+        "",
+        "for i, soldierData in ipairs(data) do",
+        "    if i <= half then",
+        "        soldierData.state = loc.move",
+        "    else",
+        "        soldierData.state = loc.idle",
+        "    end",
+        "    DebugLog(\"Unit \" .. i .. \" assigned state: \" .. soldierData.state)",
         "end",
         "DebugLog(\"------------\")"
       ]
@@ -47,10 +67,8 @@
                 "local orderName = arg.orderData.orderName",
                 "",
                 "for i, data in ipairs(loc.updateData) do",
-                "    if data.state == \"unknown\" then",
+                "    if data.state == loc.move and not data.hasDoneOrder then",
                 "        self:SendMessage(data.unit, orderName, arg.orderData)",
-                "        data.state = \"gotOrder\"",
-                "        break",
                 "    end",
                 "end",
                 "",
@@ -81,15 +99,14 @@
             "    end",
             "end",
             "",
-            "if message.subject == \"OrderCompleted\" then",
-            "    DebugLog(\"Order completed\")",
-            "    loc.orderReady = true",
-            "",
+            "if message.subject == loc.moveOrderCompleted then",
+            "    DebugLog(\"Move order completed\")",
+            "    local finishedEntity = message.value[1]",
+            "    loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.idle, loc.move)",
             "end",
+            "    ",
             "",
-            "",
-            "DebugLog(\"------------\")",
-            ""
+            "DebugLog(\"------------\")"
           ]
         }
       ],
@@ -102,25 +119,6 @@
       ]
     }
   ],
-  "unlinked-trees": [
-    {
-      "name": "<unnamed>",
-      "id": "54559dfb-64a5-48c8-8681-bb3f229567bb",
-      "type": "scriptCondition",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "54559dfb-64a5-48c8-8681-bb3f229567bb",
-            "position": "1675,488"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "if loc.orderData ~= nil"
-      ]
-    }
-  ],
   "meta": {
     "nodesInfo": [
       {
@@ -129,7 +127,11 @@
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "1962.5,388"
+        "position": "1787.5,400.5"
+      },
+      {
+        "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
+        "position": "1975,400.5"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
@@ -149,7 +151,7 @@
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "2412.5,600.5"
+        "position": "2500,588"
       }
     ],
     "editorObjects": [],
@@ -167,6 +169,10 @@
   "locals": {
     "updateData": "nil",
     "currentSoldier": "nil",
-    "orderReady": "true"
+    "orderReady": "true",
+    "move": "\"move\"",
+    "idle": "\"idle\"",
+    "moveOrderCompleted": "\"MoveOrderCompleted\"",
+    "done": "\"done\""
   }
 }
