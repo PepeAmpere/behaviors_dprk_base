@@ -14,12 +14,14 @@ fn_orderToFollow = {
 fn_orderToMove = {
     _receiver = _this select 0;
     _position = _this select 1;
+    _heading = _this select 2;
 
     _receiver receiveMessage[
         "NewOrder", 
         [
             "orderName",  "Move", 
-            "position", _position
+            "position", _position,
+            "heading", _heading
         ]
     ];
 };
@@ -39,11 +41,13 @@ fn_orderToFire = {
 
 fn_orderToWait = {
     _receiver = _this select 0;
+    _heading = _this select 1;
 
     _receiver receiveMessage[
         "NewOrder", 
         [
-            "orderName", "Wait"
+            "orderName", "Wait",
+            "heading", _heading
         ]
     ];
 };

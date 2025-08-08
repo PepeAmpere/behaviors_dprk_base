@@ -4,6 +4,16 @@
   "type": "sequence",
   "subtrees": [
     {
+      "name": "SetHeading",
+      "id": "95befc2e-bb4f-479a-881a-713b0dcdc7ff",
+      "type": "scriptAction",
+      "script": [
+        "if arg.orderData.heading ~= nil then",
+        "    self:ReqHeadingAimAtPos(arg.orderData.heading, 1)",
+        "end"
+      ]
+    },
+    {
       "name": "Wait 3 sec",
       "id": "2755c3ee-ebac-4b3a-ad23-25e6ecd69884",
       "type": "wait",
@@ -34,18 +44,27 @@
         "position": "1812.5,139.7"
       },
       {
+        "id": "95befc2e-bb4f-479a-881a-713b0dcdc7ff",
+        "position": "1612.5,314.7"
+      },
+      {
         "id": "2755c3ee-ebac-4b3a-ad23-25e6ecd69884",
-        "position": "1700,314.7"
+        "position": "1812.5,314.7"
       },
       {
         "id": "440f4063-be4c-48e9-90a8-19da85d60b4d",
-        "position": "1925,314.7"
+        "position": "2025,314.7"
       }
     ],
     "editorObjects": [],
     "canvasSize": "3840,2428",
     "gridPadding": "0,2.19999999999999"
   },
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
   "locals": {}
 }
