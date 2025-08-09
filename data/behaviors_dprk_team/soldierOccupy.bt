@@ -1,58 +1,150 @@
 {
-  "name": "Follow",
-  "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-  "type": "sequence",
+  "name": "Select action",
+  "id": "173ce504-c606-4e22-8e33-6b404b4b0042",
+  "type": "selector",
   "subtrees": [
     {
-      "name": "Reset",
-      "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-      "type": "reference",
-      "target": [
-        "behaviors_dprk_team",
-        "soldierReset"
+      "name": "Move sequence",
+      "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Reset",
+          "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_team",
+            "soldierReset"
+          ],
+          "arguments": {}
+        },
+        {
+          "name": "Move",
+          "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
+          "type": "move",
+          "position": [
+            "return arg.orderData.offsetPosition"
+          ]
+        },
+        {
+          "name": "Send Order Completed",
+          "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
+          "type": "scriptAction",
+          "script": [
+            "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})"
+          ]
+        }
       ],
-      "arguments": {}
-    },
-    {
-      "name": "Move",
-      "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-      "type": "move",
-      "position": [
-        "return arg.orderData.position"
+      "decorators": [
+        {
+          "id": "8717765f-748d-4ea1-b9b2-2983ec923138",
+          "type": "scriptCondition",
+          "name": "If state is Move",
+          "script": [
+            "return arg.orderData.state == loc.move"
+          ]
+        }
       ]
     },
     {
-      "name": "Send Order Completed",
-      "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-      "type": "scriptAction",
-      "script": [
-        "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})"
-      ]
+      "name": "Choose Idle or Shoot",
+      "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Fire at enemy",
+          "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "9b497163-766e-4b1e-8fff-815ca9c0a455",
+              "type": "scriptCondition",
+              "name": "If we see enemies",
+              "script": [
+                "local enemies = self:GetVisibleEnemies()",
+                "if #enemies > 0 then",
+                "    arg.orderData.entityToFireAt = enemies[1]",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ],
+          "target": [
+            "behaviors_dprk_team",
+            "soldierFireAt"
+          ],
+          "arguments": {
+            "orderData": "arg.orderData"
+          }
+        },
+        {
+          "name": "Check back",
+          "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
+          "type": "scriptAction",
+          "script": [
+            "self:ReqHeadingAtPos(arg.orderData.startPos)"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "b3828376-f4b8-4e78-bada-cb5b85a344af",
+          "type": "scriptCondition",
+          "name": "If state is Cover",
+          "script": [
+            "return arg.orderData.state == loc.cover"
+          ]
+        },
+        {
+          "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
+          "type": "loopForever",
+          "name": "Loop forever"
+        }
+      ],
+      "active": true
     }
   ],
   "meta": {
     "nodesInfo": [
       {
+        "id": "173ce504-c606-4e22-8e33-6b404b4b0042",
+        "position": "2598,222"
+      },
+      {
         "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-        "position": "2298,235.5"
+        "position": "2298,384.5"
       },
       {
         "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-        "position": "2066.09573759574,309.611471861472"
+        "position": "2066.09573759574,508.611471861472"
       },
       {
         "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-        "position": "2291.09573759574,334.611471861472"
+        "position": "2291.09573759574,533.611471861472"
       },
       {
         "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-        "position": "2535.5,335.5"
+        "position": "2535.5,534.5"
+      },
+      {
+        "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+        "position": "2923,372"
+      },
+      {
+        "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+        "position": "2723,734.5"
+      },
+      {
+        "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
+        "position": "3098,747"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5013,2998",
-    "gridPadding": "10.5,10.5"
+    "canvasSize": "5013,3198",
+    "gridPadding": "10.5,9.5"
   },
+  "active": true,
   "parameters": [
     {
       "name": "orderData",
@@ -61,5 +153,8 @@
       "evaluation": "passByReference"
     }
   ],
-  "locals": {}
+  "locals": {
+    "move": "\"move\"",
+    "cover": "\"cover\""
+  }
 }

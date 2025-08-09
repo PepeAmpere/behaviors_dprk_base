@@ -13,7 +13,7 @@
     "teamRoot.bt"
   ],
   "initScripts": [
-    "Retreat\\helper.lua"
+    "Helpers\\Retreat.lua"
   ],
   "parameters": {},
   "capabilities": {}

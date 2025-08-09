@@ -42,11 +42,21 @@
         "    if i <= half then",
         "        soldierData.state = loc.move",
         "    else",
-        "        soldierData.state = loc.idle",
+        "        soldierData.state = loc.cover",
         "    end",
         "    DebugLog(\"Unit \" .. i .. \" assigned state: \" .. soldierData.state)",
         "end",
         "DebugLog(\"------------\")"
+      ]
+    },
+    {
+      "name": "Set start pos",
+      "id": "c969f41d-f475-4a90-adbb-363180db33d1",
+      "type": "scriptAction",
+      "script": [
+        "local firstSoldier = loc.updateData[1].unit",
+        "",
+        "arg.orderData.startPos = firstSoldier:GetPosition()"
       ]
     },
     {
@@ -55,35 +65,120 @@
       "type": "supervisedParallel",
       "subtrees": [
         {
-          "name": "Send order to soldier sequence",
-          "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-          "type": "sequence",
+          "name": "Run actions",
+          "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
+          "type": "selector",
           "subtrees": [
             {
-              "name": "Send message to every soldier",
-              "id": "771f542e-f62b-43da-9040-369b12d1dc46",
+              "name": "Set order Wait ",
+              "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
               "type": "scriptAction",
+              "decorators": [
+                {
+                  "id": "b35396b1-ef52-4f0d-9e01-d3ae4b32902d",
+                  "type": "scriptCondition",
+                  "name": "Order update",
+                  "script": [
+                    "return loc.orderReady"
+                  ]
+                },
+                {
+                  "id": "782bb409-0790-4060-a6e6-0754242b88ce",
+                  "type": "scriptCondition",
+                  "name": "Is Team Close To Target Position",
+                  "script": [
+                    "return IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData)"
+                  ]
+                }
+              ],
               "script": [
-                "local orderName = arg.orderData.orderName",
+                "arg.orderData.orderName = loc.wait",
+                "local orderName = loc.wait",
+                "DebugLog(\"DONE DONE DONE DONE\")",
                 "",
                 "for i, data in ipairs(loc.updateData) do",
-                "    if data.state == loc.move and not data.hasDoneOrder then",
-                "        self:SendMessage(data.unit, orderName, arg.orderData)",
-                "    end",
-                "end",
-                "",
-                "loc.orderReady = false"
+                "    self:SendMessage(",
+                "            data.unit, ",
+                "            orderName,",
+                "            arg.orderData)",
+                "    DebugLog(\"Send message to: \" .. data.unit .. \" with orderName: \" .. orderName)",
+                "end"
               ]
             },
             {
-              "name": "Some order update",
-              "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-              "type": "waitUntil",
-              "condition": [
-                "loc.orderReady"
+              "name": "Send order to soldier sequence",
+              "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Send message to every soldier",
+                  "id": "771f542e-f62b-43da-9040-369b12d1dc46",
+                  "type": "scriptAction",
+                  "script": [
+                    "local orderName = arg.orderData.orderName",
+                    "",
+                    "local firstSoldier = GetFirstMoveSoldier(loc.updateData, loc.move)",
+                    "if firstSoldier == nil then end",
+                    "",
+                    "local pos = firstSoldier:GetPosition()",
+                    "local target = arg.orderData.position",
+                    "local dir = target - pos",
+                    "local dirNormalized = dir:Normalized()",
+                    "local perp = dirNormalized:RightPerpendicularXY()",
+                    "",
+                    "local spacing = 2.0",
+                    "local count = 2",
+                    "local mid = math.floor(count / 2)",
+                    "",
+                    "local stepDistance = 30",
+                    "",
+                    "for i, data in ipairs(loc.updateData) do",
+                    "    if data.state == loc.move then",
+                    "",
+                    "        local nextPos = pos + math.min(stepDistance, pos:Distance(target)) * dirNormalized",
+                    "",
+                    "        local offset = (i - mid) * spacing",
+                    "        local offsetPos = nextPos + offset * perp ",
+                    "",
+                    "        arg.orderData.offsetPosition = offsetPos",
+                    "        arg.orderData.state = loc.move",
+                    "        self:SendMessage(",
+                    "                data.unit, ",
+                    "                orderName,",
+                    "                arg.orderData)",
+                    "    end",
+                    "    if data.state == loc.cover then",
+                    "        arg.orderData.state = loc.cover",
+                    "        self:SendMessage(",
+                    "            data.unit, ",
+                    "            orderName,",
+                    "            arg.orderData)",
+                    "    end",
+                    "",
+                    "end",
+                    "",
+                    "loc.orderReady = false"
+                  ]
+                },
+                {
+                  "name": "Order response",
+                  "id": "3088c855-bdfe-472c-9b35-9ea749861600",
+                  "type": "waitUntil",
+                  "condition": [
+                    "loc.orderReady"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "54530ce9-536d-48bc-9425-51c85f2ee9aa",
+                  "type": "loopForever",
+                  "name": "Loop Forever"
+                }
               ]
             }
-          ]
+          ],
+          "active": true
         },
         {
           "name": "NewOrder",
@@ -102,20 +197,50 @@
             "if message.subject == loc.moveOrderCompleted then",
             "    DebugLog(\"Move order completed\")",
             "    local finishedEntity = message.value[1]",
-            "    loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.idle, loc.move)",
+            "    loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.cover, loc.move)",
+            "    if (loc.orderReady) then",
+            "        SwitchRoles(loc.updateData, loc.cover, loc.move)",
+            "    end",
+            "",
             "end",
             "    ",
             "",
             "DebugLog(\"------------\")"
           ]
         }
-      ],
-      "decorators": [
-        {
-          "id": "54530ce9-536d-48bc-9425-51c85f2ee9aa",
-          "type": "loopForever",
-          "name": "Loop Forever"
-        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Succeed",
+      "id": "156d780f-bb42-4ad2-9512-2f0313507a0c",
+      "type": "success",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "156d780f-bb42-4ad2-9512-2f0313507a0c",
+            "position": "1775,963"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Is Team Not Too Close To Target Position",
+      "id": "f0b459de-2197-400e-a500-3d932d7c16ec",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "f0b459de-2197-400e-a500-3d932d7c16ec",
+            "position": "2862.5,575.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "return not IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData)"
       ]
     }
   ],
@@ -123,35 +248,49 @@
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "2162.5,250.5"
+        "position": "1975,250.5"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "1787.5,400.5"
+        "position": "1650,400.5"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "1975,400.5"
+        "position": "1837.5,400.5"
+      },
+      {
+        "id": "c969f41d-f475-4a90-adbb-363180db33d1",
+        "position": "2025,400.5"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "2162.5,375.5"
+        "position": "2225,388"
+      },
+      {
+        "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
+        "position": "2025,513"
+      },
+      {
+        "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
+        "position": "1700,600.5"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "2125,613"
+        "position": "2200,625.5"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "2012.5,750.5"
+        "position": "2012.5,838"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "2337.5,750.5"
+        "position": "2352,838",
+        "width": 145.0,
+        "height": 50.0
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "2500,588"
+        "position": "2562.5,625.5"
       }
     ],
     "editorObjects": [],
@@ -171,8 +310,10 @@
     "currentSoldier": "nil",
     "orderReady": "true",
     "move": "\"move\"",
-    "idle": "\"idle\"",
+    "cover": "\"cover\"",
     "moveOrderCompleted": "\"MoveOrderCompleted\"",
-    "done": "\"done\""
+    "done": "\"done\"",
+    "wait": "\"Wait\"",
+    "reachThreshold": "10"
   }
 }
