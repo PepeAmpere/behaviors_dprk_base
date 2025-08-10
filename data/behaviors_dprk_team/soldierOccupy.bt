@@ -1,8 +1,38 @@
 {
-  "name": "Select action",
-  "id": "173ce504-c606-4e22-8e33-6b404b4b0042",
+  "name": "Select Action",
+  "id": "69b152a6-fb93-4230-9739-6a1e13505116",
   "type": "selector",
   "subtrees": [
+    {
+      "name": "Fire at enemy",
+      "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
+      "type": "reference",
+      "decorators": [
+        {
+          "id": "65a56ae0-5f04-49aa-a064-bae8353cb679",
+          "type": "scriptCondition",
+          "name": "If we can see enemy in reactRadius distance",
+          "script": [
+            "local enemy = GetEnemyNearby(self, loc.reactRadius)",
+            "",
+            "if(enemy == nil) then ",
+            "    return false",
+            "end",
+            "",
+            "arg.orderData.entityToFireAt = enemy",
+            "",
+            "return true"
+          ]
+        }
+      ],
+      "target": [
+        "behaviors_dprk_team",
+        "soldierFireAt"
+      ],
+      "arguments": {
+        "orderData": "arg.orderData"
+      }
+    },
     {
       "name": "Move sequence",
       "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
@@ -95,54 +125,60 @@
           "script": [
             "return arg.orderData.state == loc.cover"
           ]
-        },
-        {
-          "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
-          "type": "loopForever",
-          "name": "Loop forever"
         }
       ],
       "active": true
     }
   ],
+  "decorators": [
+    {
+      "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
+      "type": "loopForever",
+      "name": "Loop forever"
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "173ce504-c606-4e22-8e33-6b404b4b0042",
-        "position": "2598,222"
+        "id": "69b152a6-fb93-4230-9739-6a1e13505116",
+        "position": "2048,334.293333333333"
+      },
+      {
+        "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
+        "position": "1398,746.793333333333"
       },
       {
         "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-        "position": "2298,384.5"
+        "position": "2073,746.793333333333"
       },
       {
         "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-        "position": "2066.09573759574,508.611471861472"
+        "position": "1823,1021.79333333333"
       },
       {
         "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-        "position": "2291.09573759574,533.611471861472"
+        "position": "2066.09573759574,1020.90480519481"
       },
       {
         "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-        "position": "2535.5,534.5"
+        "position": "2310.5,1021.79333333333"
       },
       {
         "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
-        "position": "2923,372"
+        "position": "2748,721.793333333333"
       },
       {
         "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
-        "position": "2723,734.5"
+        "position": "2598,996.793333333333"
       },
       {
         "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
-        "position": "3098,747"
+        "position": "2973,996.793333333333"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5013,3198",
-    "gridPadding": "10.5,9.5"
+    "canvasSize": "6032,3547.79333333333",
+    "gridPadding": "10.5,9.29333333333335"
   },
   "active": true,
   "parameters": [
@@ -155,6 +191,7 @@
   ],
   "locals": {
     "move": "\"move\"",
-    "cover": "\"cover\""
+    "cover": "\"cover\"",
+    "reactRadius": "10"
   }
 }

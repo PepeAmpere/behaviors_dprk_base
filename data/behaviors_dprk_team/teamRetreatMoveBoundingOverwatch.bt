@@ -130,12 +130,20 @@
                     "local count = 2",
                     "local mid = math.floor(count / 2)",
                     "",
-                    "local stepDistance = 30",
+                    "local startStepDistance = 15",
+                    "local defaultStepDistance = 30",
+                    "",
+                    "local moveDistance = defaultStepDistance",
+                    "if (not loc.moveStarted) then",
+                    "    moveDistance = startStepDistance",
+                    "end",
                     "",
                     "for i, data in ipairs(loc.updateData) do",
+                    "",
+                    "",
                     "    if data.state == loc.move then",
                     "",
-                    "        local nextPos = pos + math.min(stepDistance, pos:Distance(target)) * dirNormalized",
+                    "        local nextPos = pos + math.min(moveDistance, pos:Distance(target)) * dirNormalized",
                     "",
                     "        local offset = (i - mid) * spacing",
                     "        local offsetPos = nextPos + offset * perp ",
@@ -157,6 +165,7 @@
                     "",
                     "end",
                     "",
+                    "loc.moveStarted = true",
                     "loc.orderReady = false"
                   ]
                 },
@@ -314,6 +323,7 @@
     "moveOrderCompleted": "\"MoveOrderCompleted\"",
     "done": "\"done\"",
     "wait": "\"Wait\"",
-    "reachThreshold": "10"
+    "reachThreshold": "10",
+    "moveStarted": "false"
   }
 }

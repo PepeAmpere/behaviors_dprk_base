@@ -66,6 +66,17 @@ return {
             end
         end
         return true
+    end,
+
+    GetEnemyNearby = function(unit, radius)
+        local pos = unit:GetPosition()
+
+        local enemies = unit:GetVisibleEnemies(radius)
+
+        if #enemies > 0 and enemies[1]:IsAlive() and enemies[1]:Valid() then
+            return enemies[1]
+        end
+        return nil
     end
 
 }
