@@ -1,0 +1,52 @@
+{
+  "name": "ROOT",
+  "id": "70b6822b-04ce-4824-bff1-d302f47521d4",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Send Messages",
+      "id": "c5e19861-3ab8-49ca-b518-a719530248a3",
+      "type": "scriptAction",
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"Fire\"",
+        "orderData.entityToFireAt = arg.orderData.position",
+        "",
+        "if arg.orderData.soldiers ~= nil then",
+        "    for index, soldier in pairs(arg.orderData.soldiers) do",
+        "        self:SendMessage(soldier, \"NewOrder\", orderData)",
+        "    end",
+        "",
+        "end",
+        "",
+        "if arg.orderData.soldierIndexes ~= nil then",
+        "    for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+        "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
+        "    end",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "70b6822b-04ce-4824-bff1-d302f47521d4",
+        "position": "1812.5,138.3"
+      },
+      {
+        "id": "c5e19861-3ab8-49ca-b518-a719530248a3",
+        "position": "1812.5,250.8"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400.8",
+    "gridPadding": "0,0.799999999999955"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {}
+}

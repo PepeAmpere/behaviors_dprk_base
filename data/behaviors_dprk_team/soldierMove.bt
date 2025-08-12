@@ -36,23 +36,24 @@
     "nodesInfo": [
       {
         "id": "0e643a2d-7f0c-448c-b17c-893a1c5361d1",
-        "position": "1850,62.5"
+        "position": "1850,113.2"
       },
       {
         "id": "05bd62e4-6a4f-4dd0-985b-544fb6bcbf2a",
-        "position": "1662.5,212.5"
+        "position": "1662.5,263.2"
       },
       {
         "id": "cf7d286f-b43d-48fd-b34e-66bd7e039e90",
-        "position": "1862.5,237.5"
+        "position": "1862.5,288.2"
       },
       {
         "id": "f3dee67d-2d23-45dd-ab70-1d04298ef5b1",
-        "position": "2062.5,225"
+        "position": "2062.5,275.7"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2451.5",
+    "gridPadding": "0,0.699999999999974"
   },
   "parameters": [
     {

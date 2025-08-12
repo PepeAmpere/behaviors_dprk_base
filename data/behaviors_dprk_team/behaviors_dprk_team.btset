@@ -9,6 +9,7 @@
     "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "subteamFireAt.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"
   ],
