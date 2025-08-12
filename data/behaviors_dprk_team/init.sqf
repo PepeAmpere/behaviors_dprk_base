@@ -102,3 +102,19 @@ fn_orderToSupress = {
         ]
     ];
 };
+
+fn_orderToSubteamFireAt = {
+    _receiver = _this select 0;
+    _position = _this select 1;
+    _soldiers = _this select 2;
+    
+
+    _receiver receiveMessage[
+        "NewOrder", 
+        [
+            "orderName",  "SubteamFireAt", 
+            "position", _position,
+            "soldierIndexes",  _soldiers        
+        ]
+    ];
+};
