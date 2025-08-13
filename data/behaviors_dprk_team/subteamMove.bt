@@ -1,27 +1,39 @@
 {
   "name": "ROOT",
-  "id": "70b6822b-04ce-4824-bff1-d302f47521d4",
+  "id": "eb20e383-35cf-4b45-b8f9-7d2dc2de0eb2",
   "type": "sequence",
   "subtrees": [
     {
       "name": "Send Messages",
-      "id": "c5e19861-3ab8-49ca-b518-a719530248a3",
+      "id": "a581348a-2541-41f1-81a7-ebc6bb758171",
       "type": "scriptAction",
       "script": [
         "local orderData = {}",
-        "orderData.orderName = \"Fire\"",
-        "orderData.entityToFireAt = arg.orderData.position",
+        "orderData.orderName = \"Move\"",
+        "orderData.position = arg.orderData.position",
         "",
+        "local offsets = {",
+        "    2 * Vec3(1, 0, 0),",
+        "    2 * Vec3(0, 1, 0),",
+        "    2 * Vec3(0, -1, 0),",
+        "    2 * Vec3(-1, 0, 0)",
+        "}",
+        "",
+        "local counter = 1",
         "if arg.orderData.soldiers ~= nil then",
         "    for index, soldier in pairs(arg.orderData.soldiers) do",
+        "        orderData.position = arg.orderData.position + offsets[counter]",
         "        self:SendMessage(soldier, \"NewOrder\", orderData)",
+        "        counter = counter + 1",
         "    end",
         "    return",
         "end",
         "",
         "if arg.orderData.soldierIndexes ~= nil then",
         "    for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+        "        orderData.position = arg.orderData.position + offsets[counter]",
         "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
+        "        counter = counter + 1",
         "    end",
         "    return",
         "end"
@@ -31,23 +43,21 @@
   "meta": {
     "nodesInfo": [
       {
-        "id": "70b6822b-04ce-4824-bff1-d302f47521d4",
-        "position": "1812.5,138.3"
+        "id": "eb20e383-35cf-4b45-b8f9-7d2dc2de0eb2",
+        "position": "1805.3,132.95"
       },
       {
-        "id": "c5e19861-3ab8-49ca-b518-a719530248a3",
-        "position": "1812.5,250.8"
+        "id": "a581348a-2541-41f1-81a7-ebc6bb758171",
+        "position": "1805.3,245.45"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400.8",
-    "gridPadding": "0,0.799999999999955"
+    "canvasSize": "3840,2400"
   },
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false,
-      "defaultValue": ""
+      "isOptional": false
     }
   ],
   "locals": {}

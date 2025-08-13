@@ -16,6 +16,10 @@
         "    SubteamFireAt = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"subteamFireAt\"",
+        "    },",
+        "    SubteamMove = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"subteamMove\"",
         "    }",
         "}"
       ]

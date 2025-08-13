@@ -118,3 +118,19 @@ fn_orderToSubteamFireAt = {
         ]
     ];
 };
+
+fn_orderToSubteamMove = {
+    _receiver = _this select 0;
+    _position = _this select 1;
+    _soldiers = _this select 2;
+    
+
+    _receiver receiveMessage[
+        "NewOrder", 
+        [
+            "orderName",  "SubteamMove", 
+            "position", _position,
+            "soldierIndexes",  _soldiers
+        ]
+    ];
+};
