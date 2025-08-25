@@ -11,6 +11,7 @@
     "soldierRoot.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
+    "subteamMoveToDefensivePosition.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"
   ],

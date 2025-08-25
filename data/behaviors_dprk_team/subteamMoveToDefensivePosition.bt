@@ -1,0 +1,115 @@
+{
+  "name": "Parallel",
+  "id": "7eecd028-bf5a-41b6-a8c8-0a439388668b",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "DoNothing",
+      "id": "6dfb76e4-d6d1-4fa9-90ce-2387fe425bc6",
+      "type": "waitForever"
+    },
+    {
+      "name": "Root",
+      "id": "f18bc06f-8a3e-4548-86da-655d3b0925ba",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "AssignCoverCenter",
+          "id": "b8add01e-da3c-449d-bd59-d3ea6820b09c",
+          "type": "scriptAction",
+          "script": [
+            "loc.coverPosition = arg.orderData.position"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Debug",
+      "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Wait until cover pos",
+          "id": "d39b1669-39d2-4116-a3a8-2794ad1c0da6",
+          "type": "waitUntil",
+          "condition": [
+            "return loc.coverPosition ~= nil"
+          ]
+        },
+        {
+          "name": "DrawCoverArea",
+          "id": "8a98abfb-046e-4107-9bc1-986fa1c8593e",
+          "type": "scriptAction",
+          "script": [
+            "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+            "    local pX = loc.coverPosition:X() + (loc.coverRadius * math.sin(i))",
+            "    local pY = loc.coverPosition:Y() + (loc.coverRadius * math.cos(i))",
+            "    local pZ = loc.coverPosition:Z() + 1",
+            "    local nextPX = loc.coverPosition:X() + (loc.coverRadius * math.sin(i + math.pi/12))",
+            "    local nextPY = loc.coverPosition:Y() + (loc.coverRadius * math.cos(i + math.pi/12))",
+            "    local nextPZ = loc.coverPosition:Z() + 1",
+            "",
+            "    local p = Vec3(pX, pY, pZ)",
+            "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+            "",
+            "    DebugLine(p, nextP, 1, 1, 1, 1)",
+            "end"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "2f7d014a-0c0e-4e55-b95e-2c58e8bf2add",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "7eecd028-bf5a-41b6-a8c8-0a439388668b",
+        "position": "1762.5,59.6"
+      },
+      {
+        "id": "6dfb76e4-d6d1-4fa9-90ce-2387fe425bc6",
+        "position": "1512.5,172.1"
+      },
+      {
+        "id": "f18bc06f-8a3e-4548-86da-655d3b0925ba",
+        "position": "1787.5,197.1"
+      },
+      {
+        "id": "b8add01e-da3c-449d-bd59-d3ea6820b09c",
+        "position": "1475,347.1"
+      },
+      {
+        "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",
+        "position": "2112.5,184.6"
+      },
+      {
+        "id": "d39b1669-39d2-4116-a3a8-2794ad1c0da6",
+        "position": "1925,334.6"
+      },
+      {
+        "id": "8a98abfb-046e-4107-9bc1-986fa1c8593e",
+        "position": "2112.5,347.1"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2409.6",
+    "gridPadding": "0,9.59999999999997"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "coverPosition": "nil",
+    "coverRadius": "10",
+    "futureCovers": "nil"
+  }
+}

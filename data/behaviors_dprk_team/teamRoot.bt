@@ -20,6 +20,10 @@
         "    SubteamMove = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"subteamMove\"",
+        "    },",
+        "    SubteamMoveToDefend = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"subteamMoveToDefensivePosition\"",
         "    }",
         "}"
       ]
