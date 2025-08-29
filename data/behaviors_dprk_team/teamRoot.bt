@@ -24,6 +24,10 @@
         "    SubteamMoveToDefend = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"subteamMoveToDefensivePosition\"",
+        "    },",
+        "    OccupyMoveInColumn = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"teamOccupyMoveInColumn\"",
         "    }",
         "}"
       ]
@@ -116,40 +120,40 @@
     "nodesInfo": [
       {
         "id": "77dde126-e41a-47d8-87f4-96df079619cf",
-        "position": "1732.75,138.416666666667"
+        "position": "1732.75,195.75"
       },
       {
         "id": "655b04d1-2420-43dd-a687-7945e8ae7004",
-        "position": "1454.25,240"
+        "position": "1454.25,297.333333333333"
       },
       {
         "id": "99a3e34a-c0c1-436b-867a-e420853ef535",
-        "position": "1732.75,275.916666666667"
+        "position": "1732.75,333.25"
       },
       {
         "id": "bb43290f-49ef-4f9c-8fac-81bd9bc353a9",
-        "position": "1731,418.666666666667"
+        "position": "1731,476"
       },
       {
         "id": "57a677d1-c829-4eb2-b55b-4547a6d13515",
-        "position": "1731,506.166666666667"
+        "position": "1731,563.5"
       },
       {
         "id": "8f1ff38d-3279-4ca0-ac8d-ade668f8b04e",
-        "position": "1731,681.166666666667"
+        "position": "1731,738.5"
       },
       {
         "id": "3e345d84-a5a2-40d4-ac77-795fe459a128",
-        "position": "1993.5,518.666666666667"
+        "position": "1993.5,576"
       },
       {
         "id": "7124b9f9-db2b-4d95-aadb-b93bb4242400",
-        "position": "1981,406.166666666667"
+        "position": "1981,463.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3896,2718.66666666667",
-    "gridPadding": "6,6.1666666666668"
+    "canvasSize": "3896,2778",
+    "gridPadding": "6,1.00000000000011"
   },
   "parameters": [],
   "locals": {

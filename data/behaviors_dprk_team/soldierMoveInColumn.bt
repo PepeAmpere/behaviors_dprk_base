@@ -1,0 +1,423 @@
+{
+  "name": "Root",
+  "id": "7d2f1420-85dd-442a-9e52-21b94b79e4df",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Reset",
+      "id": "233878f8-bf24-463f-aa07-d1d1b49b661f",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "soldierReset"
+      ],
+      "arguments": {}
+    },
+    {
+      "name": "Set avoidance",
+      "id": "ed790959-75d1-41a5-96f4-ad759fed3635",
+      "type": "scriptAction",
+      "script": [
+        "self:SetThreats({ { avoidance = 3 } } )"
+      ]
+    },
+    {
+      "name": "Receive messages and perform action",
+      "id": "da0e5b6c-286a-4a9c-8446-ac57d0c75ed6",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Leader or subordinate?",
+          "id": "7cbbc217-1e0d-4a3b-85ec-b17eaaea8fd5",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Choose action",
+              "id": "88fe9e0a-22b3-41e7-80d1-9ddebe85da4b",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "Start shooting",
+                  "id": "90b49e06-807f-406b-a026-a71686f2c4e9",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Shoot",
+                      "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_team",
+                        "soldierFireAt"
+                      ],
+                      "arguments": {
+                        "orderData": "loc.orderData"
+                      }
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "36bc1d89-c333-443b-a22b-b99600e478c2",
+                      "type": "scriptCondition",
+                      "name": "Sees enemy but not for too long",
+                      "script": [
+                        "local ENEMY_VISIBILITY_RADIUS = 30",
+                        "local MAX_SHOOTING_TIME_seconds = 5",
+                        "local SHOOTING_COOLDOWN_seconds = 10",
+                        "",
+                        "local SHOOTING_STATE_cooldown = 0",
+                        "local SHOOTING_STATE_shooting = 1",
+                        "",
+                        "",
+                        "if loc.shootingState == nil then loc.shootingState = SHOOTING_STATE_cooldown end",
+                        "if loc.shootingTimer == nil then loc.shootingTimer = TimedCounter() end",
+                        "",
+                        "",
+                        "local stop_shooting = function()",
+                        "\tloc.shootingState = SHOOTING_STATE_cooldown",
+                        "\tloc.shootingTimer = TimedCounter():Incremented(1, SHOOTING_COOLDOWN_seconds)",
+                        "end",
+                        "",
+                        "",
+                        "if loc.shootingState == SHOOTING_STATE_cooldown and loc.shootingTimer:CurrentValue() > 0 then",
+                        "\treturn false",
+                        "end",
+                        "if loc.shootingState == SHOOTING_STATE_shooting and loc.shootingTimer:CurrentValue() <= 0 then",
+                        "\tstop_shooting()",
+                        "\treturn false",
+                        "end",
+                        "",
+                        "",
+                        "-- go through visible enemies and select one to shoot at",
+                        "local visible_enemies = self:GetVisibleEnemies(ENEMY_VISIBILITY_RADIUS)",
+                        "local chosen_enemy = nil",
+                        "for i = 1, #visible_enemies  do",
+                        "\tchosen_enemy = visible_enemies[i]",
+                        "\tbreak",
+                        "end",
+                        "",
+                        "-- if there is no enemy, just stop shooting",
+                        "if chosen_enemy == nil then",
+                        "\tif loc.shootingState == SHOOTING_STATE_shooting then",
+                        "\t\t-- if we were shooting right until now, make sure cooldown timer is properly started",
+                        "\t\tstop_shooting()",
+                        "\tend",
+                        "\treturn false",
+                        "end",
+                        "",
+                        "-- an enemy was chosen -> start shooting cooldown",
+                        "if loc.shootingState == SHOOTING_STATE_cooldown then",
+                        "\tloc.shootingState = SHOOTING_STATE_shooting",
+                        "\tloc.shootingTimer = TimedCounter():Incremented(1, MAX_SHOOTING_TIME_seconds)",
+                        "end",
+                        "loc.orderData = {",
+                        "    entityToFireAt = chosen_enemy",
+                        "}",
+                        "return true"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Stop shooting",
+                  "id": "29eb4dbc-cd5a-491e-ac27-0fe3707886e4",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Move",
+                      "id": "9a08793e-3404-4376-9f61-618339fd8785",
+                      "type": "reference",
+                      "decorators": [
+                        {
+                          "id": "c214af66-adf1-4e64-9694-2bc62f79e5b9",
+                          "type": "scriptAction",
+                          "name": "Setup args",
+                          "script": [
+                            "loc.orderData = {",
+                            "    position = arg.orderData.target",
+                            "}"
+                          ]
+                        }
+                      ],
+                      "target": [
+                        "behaviors_dprk_team",
+                        "soldierMove"
+                      ],
+                      "arguments": {
+                        "orderData": "loc.orderData"
+                      }
+                    }
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "9e56dc39-5df5-43cb-8348-6caced7be1b9",
+                  "type": "scriptCondition",
+                  "name": "Is leader",
+                  "script": [
+                    "return (loc.toFollow == nil) or (loc.toFollow == self)"
+                  ]
+                }
+              ],
+              "active": true
+            },
+            {
+              "name": "Choose action",
+              "id": "e740f59b-6463-4e2f-9b6b-3f9a5e5e50de",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "Shoot",
+                  "id": "374a60cb-702f-4398-a9e0-4e4faf7f3ba4",
+                  "type": "reference",
+                  "decorators": [
+                    {
+                      "id": "e097d689-da54-4944-bdad-99c9783a6c0a",
+                      "type": "scriptCondition",
+                      "name": "Sees enemy but not for too long",
+                      "script": [
+                        "if not isAllowedToShoot then",
+                        "    return false",
+                        "end",
+                        "",
+                        "local ENEMY_VISIBILITY_RADIUS = 30",
+                        "",
+                        "",
+                        "-- go through visible enemies and select one to shoot at",
+                        "local visible_enemies = self:GetVisibleEnemies(ENEMY_VISIBILITY_RADIUS)",
+                        "local chosen_enemy = nil",
+                        "for i = 1, #visible_enemies  do",
+                        "\tchosen_enemy = visible_enemies[i]",
+                        "\tbreak",
+                        "end",
+                        "",
+                        "-- if there is no enemy, just stop shooting",
+                        "if chosen_enemy == nil then",
+                        "\treturn false",
+                        "end",
+                        "",
+                        "",
+                        "loc.orderData = {",
+                        "    entityToFireAt = chosen_enemy",
+                        "}",
+                        "return true"
+                      ]
+                    }
+                  ],
+                  "target": [
+                    "behaviors_dprk_team",
+                    "soldierFireAt"
+                  ],
+                  "arguments": {
+                    "orderData": "loc.orderData"
+                  }
+                },
+                {
+                  "name": "Follow",
+                  "id": "701a1460-0f2c-4103-938c-e31f725d6b86",
+                  "type": "reference",
+                  "decorators": [
+                    {
+                      "id": "c20d02c0-9daf-4aa6-8a37-4a70bd737d6c",
+                      "type": "scriptAction",
+                      "name": "Setup args",
+                      "script": [
+                        "loc.orderData = {",
+                        "    entityToFollow = loc.toFollow",
+                        "}"
+                      ]
+                    }
+                  ],
+                  "target": [
+                    "behaviors_dprk_team",
+                    "soldierFollow"
+                  ],
+                  "arguments": {
+                    "orderData": "loc.orderData"
+                  }
+                }
+              ],
+              "active": true
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Receive info",
+          "id": "6d7e3fa0-b62d-4b6f-8335-9172bf4c4a99",
+          "type": "messageHandler",
+          "subject": "OrderDetails",
+          "handler": [
+            "local message = msg",
+            "",
+            "if true or  message.value.messageType ~= \"shooting\" then",
+            "    DebugLog(\"Order info: \" .. tostring(self))",
+            "",
+            "    if message.value then",
+            "        for k, v in pairs(message.value) do",
+            "            DebugLog(tostring(k) .. \": \" .. tostring(v))",
+            "        end",
+            "    end",
+            "",
+            "    DebugLog(\"------------\")",
+            "end",
+            "",
+            "",
+            "if message.value.messageType == \"follow\" then",
+            "    if loc.toFollow ~= message.value.follow then",
+            "        loc.isAllowedToShoot = false",
+            "    end",
+            "    loc.toFollow = message.value.follow",
+            "",
+            "elseif message.value.messageType == \"shooting\" then",
+            "    loc.isAllowedToShoot = message.value.canShoot",
+            "end"
+          ]
+        }
+      ]
+    }
+  ],
+  "decorators": [
+    {
+      "id": "76c9fe6d-4af8-44b5-a0d2-ef70192ed630",
+      "type": "loopForever",
+      "name": "<unnamed>"
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Allow shooting",
+      "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
+            "position": "1487.5,792.833333333333"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for member in self:GetParentGroup():GetEntities() do",
+        "    if member ~= self then",
+        "\t    self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", canShoot = true})",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Disallow shooting",
+      "id": "9f47d995-5555-4fe0-8fe9-ae1626dae0d0",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "9f47d995-5555-4fe0-8fe9-ae1626dae0d0",
+            "position": "1937.5,792.833333333333"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for member in self:GetParentGroup():GetEntities() do",
+        "    if member ~= self then",
+        "\t    self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", canShoot = false})",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Receive messages and perform action",
+      "id": "56eb93b5-c5aa-4ef8-b931-12cf05b89e36",
+      "type": "parallel",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "56eb93b5-c5aa-4ef8-b931-12cf05b89e36",
+            "position": "3000,555.333333333333"
+          }
+        ],
+        "editorObjects": []
+      },
+      "waitForAll": false
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "7d2f1420-85dd-442a-9e52-21b94b79e4df",
+        "position": "2150,130.333333333333"
+      },
+      {
+        "id": "233878f8-bf24-463f-aa07-d1d1b49b661f",
+        "position": "1662.5,192.833333333333"
+      },
+      {
+        "id": "ed790959-75d1-41a5-96f4-ad759fed3635",
+        "position": "1900,217.833333333333"
+      },
+      {
+        "id": "da0e5b6c-286a-4a9c-8446-ac57d0c75ed6",
+        "position": "2112.5,292.833333333333"
+      },
+      {
+        "id": "7cbbc217-1e0d-4a3b-85ec-b17eaaea8fd5",
+        "position": "2225,430.333333333333"
+      },
+      {
+        "id": "88fe9e0a-22b3-41e7-80d1-9ddebe85da4b",
+        "position": "1900,492.833333333333"
+      },
+      {
+        "id": "90b49e06-807f-406b-a026-a71686f2c4e9",
+        "position": "1600,642.833333333333"
+      },
+      {
+        "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
+        "position": "1700,780.333333333333"
+      },
+      {
+        "id": "29eb4dbc-cd5a-491e-ac27-0fe3707886e4",
+        "position": "1987.5,655.333333333333"
+      },
+      {
+        "id": "9a08793e-3404-4376-9f61-618339fd8785",
+        "position": "2125,742.833333333333"
+      },
+      {
+        "id": "e740f59b-6463-4e2f-9b6b-3f9a5e5e50de",
+        "position": "2637.5,580.333333333333"
+      },
+      {
+        "id": "374a60cb-702f-4398-a9e0-4e4faf7f3ba4",
+        "position": "2375,692.833333333333"
+      },
+      {
+        "id": "701a1460-0f2c-4103-938c-e31f725d6b86",
+        "position": "2787.5,692.833333333333"
+      },
+      {
+        "id": "6d7e3fa0-b62d-4b6f-8335-9172bf4c4a99",
+        "position": "2512.5,367.833333333333"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2505.33333333333",
+    "gridPadding": "0,5.33333333333331"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "shootingTimer": "nil",
+    "shootingState": "nil",
+    "orderData": "nil",
+    "isAllowedToShoot": "false",
+    "toFollow": "nil"
+  }
+}

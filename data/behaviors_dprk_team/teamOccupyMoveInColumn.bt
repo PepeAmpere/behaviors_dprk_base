@@ -1,0 +1,114 @@
+{
+  "name": "Root",
+  "id": "c8de3081-cc84-434c-861f-44476e92416c",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Do Move in Column",
+      "id": "4dec6851-2bb0-404b-b51c-9540a2d7d71b",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "teamMoveInColumn"
+      ],
+      "arguments": {
+        "orderData": "arg.orderData"
+      }
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Do Idle",
+      "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
+      "type": "reference",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
+            "position": "1450,917.6"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviors_dprk_team",
+        "soldierOccupy"
+      ],
+      "arguments": {
+        "orderData": "loc.idleOrderData"
+      }
+    },
+    {
+      "name": "Set everyone to occupy",
+      "id": "5ed541e9-346d-4c79-a5cf-c043450c4699",
+      "type": "scriptAction",
+      "decorators": [
+        {
+          "id": "b2aebb61-17b4-4db7-bd6f-2cd788648ba7",
+          "type": "scriptCondition",
+          "name": "If is in target position",
+          "script": [
+            "if loc.idleOrderData == nil then",
+            "    loc.idleOrderData = {",
+            "        state = \"cover\"",
+            "    }",
+            "end",
+            "",
+            "",
+            "local MAX_SUCCESS_DISTANCE_FROM_TARGET = 10",
+            "",
+            "for member in self:GetEntities() do",
+            "    if memeber:IsAlive() then",
+            "\t    if member:GetPosition():Distance(arg.orderData.targetPosition) < MAX_SUCCESS_DISTANCE_FROM_TARGET then",
+            "\t\t    return true",
+            "\t    end",
+            "\t    return false",
+            "    end",
+            "end",
+            "",
+            "return false"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "5ed541e9-346d-4c79-a5cf-c043450c4699",
+            "position": "1737.5,592.6"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for member in self:GetEntities() do",
+        "\tself:SendMessage(member, \"NewOrder\", { orderName = \"Occupy\", state = \"cover\" })",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c8de3081-cc84-434c-861f-44476e92416c",
+        "position": "1975,405.1"
+      },
+      {
+        "id": "4dec6851-2bb0-404b-b51c-9540a2d7d71b",
+        "position": "2137.5,592.6"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2617.6",
+    "gridPadding": "0,5.10000000000002"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "idleOrderData": "nil"
+  }
+}

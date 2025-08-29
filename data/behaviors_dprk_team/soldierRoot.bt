@@ -36,6 +36,14 @@
         "    Retreat = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierOccupy\"",
+        "    },",
+        "    Occupy = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierOccupy\"",
+        "    },",
+        "    MoveInColumn = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierMoveInColumn\"",
         "    }",
         "}"
       ]
@@ -131,7 +139,7 @@
             "",
             "if message.value then",
             "    for k, v in pairs(message.value) do",
-            "        DebugLog(k .. \": \" .. v)",
+            "        DebugLog(tostring(k) .. \": \" .. tostring(v))",
             "    end",
             "end",
             "",
@@ -141,7 +149,8 @@
             "",
             "loc.orderData = message.value",
             "loc.restart = true"
-          ]
+          ],
+          "subject": "NewOrder"
         }
       ],
       "decorators": [
