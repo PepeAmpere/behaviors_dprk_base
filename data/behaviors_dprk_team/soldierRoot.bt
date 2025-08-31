@@ -149,8 +149,7 @@
             "",
             "loc.orderData = message.value",
             "loc.restart = true"
-          ],
-          "subject": "NewOrder"
+          ]
         }
       ],
       "decorators": [
