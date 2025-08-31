@@ -56,7 +56,8 @@
       "script": [
         "local firstSoldier = loc.updateData[1].unit",
         "",
-        "arg.orderData.startPos = firstSoldier:GetPosition()"
+        "arg.orderData.startPos = firstSoldier:GetPosition()",
+        "arg.orderData.check = 1"
       ]
     },
     {
@@ -162,7 +163,6 @@
                     "            orderName,",
                     "            arg.orderData)",
                     "    end",
-                    "",
                     "end",
                     "",
                     "loc.moveStarted = true",
@@ -222,34 +222,265 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Succeed",
-      "id": "156d780f-bb42-4ad2-9512-2f0313507a0c",
-      "type": "success",
+      "name": "<unnamed>",
+      "id": "a390967c-24b8-4c30-98df-94948a04328b",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Set defilade",
+          "id": "02732d7f-b54d-41a2-ac28-06baffce516e",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Calculate defilade",
+              "id": "c7edcfd7-2b50-469b-8a6a-9a569e60184a",
+              "type": "scriptAction",
+              "script": [
+                "local enemyPos = arg.orderData.position",
+                "local vertices = {",
+                "    enemyPos + Vec3 (-200, -200, 0),",
+                "    enemyPos + Vec3 (200, -200, 0),",
+                "    enemyPos + Vec3 (200, 200, 0),",
+                "    enemyPos + Vec3 (-200, 200, 0),",
+                "}",
+                "",
+                "local polygon = Polygon(vertices)",
+                "",
+                "loc.defiladeRequest = FindDefiladeOnGrid(",
+                "    enemyPos,",
+                "    polygon --[[,",
+                "    {",
+                "        cellSize = 2, --grid unit size,",
+                "        maxHeight = 3, ",
+                "    }  ]]  ",
+                ")"
+              ]
+            },
+            {
+              "name": "Wait until defilade request done",
+              "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
+              "type": "waitUntil",
+              "condition": [
+                "if loc.defiladeRequest:IsReady() then",
+                "    loc.defilade = loc.defiladeRequest:Value()",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Debug defillade",
+          "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "6551afc7-ac61-4568-ac2f-a67905087be8",
+              "type": "loopForever",
+              "name": "Loop forever"
+            }
+          ],
+          "script": [
+            "if loc.defilade ~= nil then",
+            "    for i=1, #loc.defilade do",
+            "        local pointData = loc.defilade[i]",
+            "        DebugLine(",
+            "            pointData.position,",
+            "            pointData.position + Vec3(0, 0, pointData.height),",
+            "            1,0,0,1",
+            "        )",
+            "    end",
+            "end",
+            "",
+            "",
+            "if loc.nearestPoints ~= nil and #loc.nearestPoints > 0 then",
+            "    for i=1, #loc.nearestPoints do",
+            "        local pointData = loc.nearestPoints[i]",
+            "        DebugLine(",
+            "            pointData.position,",
+            "            pointData.position + Vec3(0, 0, pointData.height),",
+            "            0,1,0,1",
+            "        )",
+            "    end",
+            "end"
+          ]
+        }
+      ],
       "meta": {
         "nodesInfo": [
           {
-            "id": "156d780f-bb42-4ad2-9512-2f0313507a0c",
-            "position": "1775,963"
+            "id": "a390967c-24b8-4c30-98df-94948a04328b",
+            "position": "2225,989"
+          },
+          {
+            "id": "02732d7f-b54d-41a2-ac28-06baffce516e",
+            "position": "2175,1139"
+          },
+          {
+            "id": "c7edcfd7-2b50-469b-8a6a-9a569e60184a",
+            "position": "2025,1251.5",
+            "height": 50.0
+          },
+          {
+            "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
+            "position": "2062.5,1326.5"
+          },
+          {
+            "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
+            "position": "2500,1126.5"
           }
         ],
         "editorObjects": []
       }
     },
     {
-      "name": "Is Team Not Too Close To Target Position",
-      "id": "f0b459de-2197-400e-a500-3d932d7c16ec",
-      "type": "scriptCondition",
+      "name": "Set nearest points in radius",
+      "id": "852a560c-823b-4052-9353-67465554c82f",
+      "type": "scriptAction",
       "meta": {
         "nodesInfo": [
           {
-            "id": "f0b459de-2197-400e-a500-3d932d7c16ec",
-            "position": "2862.5,575.5"
+            "id": "852a560c-823b-4052-9353-67465554c82f",
+            "position": "2162.5,1389"
           }
         ],
         "editorObjects": []
       },
       "script": [
-        "return not IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData)"
+        "loc.nearestPoints = {}",
+        "",
+        "if loc.defilade ~= nil then",
+        "    for i=1, #loc.defilade do",
+        "        local pointData = loc.defilade[i]",
+        "        if pointData.position:Distance(self:GetPosition()) < 25 then ",
+        "            loc.nearestPoints[#loc.nearestPoints + 1] = pointData",
+        "        end",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Send rays",
+      "id": "9a6eab8a-e21d-4543-a024-c3bf3f6e2174",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "9a6eab8a-e21d-4543-a024-c3bf3f6e2174",
+            "position": "2237.5,1451.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local correction = Vec3(0,0,1.8)",
+        "",
+        "loc.raycastRequests = {}",
+        "loc.raycasts = {}",
+        "",
+        "for i=1, #loc.nearestPoints do",
+        "    loc.raycastRequests[i] = Raycast(",
+        "        loc.nearestPoints[i].position + correction, ",
+        "        arg.orderData.position",
+        "    ) ",
+        "end"
+      ]
+    },
+    {
+      "name": "Wait until rays request done",
+      "id": "41a6e220-ce79-438b-87f2-1701cb918145",
+      "type": "waitUntil",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "41a6e220-ce79-438b-87f2-1701cb918145",
+            "position": "2300,1514"
+          }
+        ],
+        "editorObjects": []
+      },
+      "condition": [
+        "for i = 1, #loc.raycastRequests do",
+        "    if not loc.raycastRequests[i]:IsReady() then",
+        "        return false",
+        "    end",
+        "    loc.raycasts[i] = loc.raycastRequests[i]:Value()",
+        "end",
+        "return true"
+      ]
+    },
+    {
+      "name": "Check visibility",
+      "id": "0cb933d2-67b0-4f2a-a32f-fed23e28af5a",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "0cb933d2-67b0-4f2a-a32f-fed23e28af5a",
+            "position": "2412.5,1589"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local CORRECTION = Vec3(0,0,1.8)",
+        "local BIAS = 1",
+        "local goalPos = arg.orderData.position",
+        "",
+        "for i = 1, #loc.raycasts do",
+        "    local actualDistance = goalPos:Distance(loc.nearestPoints[i].position)",
+        "    local rayDistance = loc.raycasts[i]",
+        "    DebugLog(\"loc.nearestPoints[\" .. i .. \"]: \" .. tostring(loc.nearestPoints[i]))",
+        "    DebugLog(\"Actual distance: \" .. actualDistance)",
+        "    DebugLog(\"Ray distance: \" .. rayDistance)",
+        "    DebugLog(\"Bias: \" .. BIAS)",
+        "    if math.abs(actualDistance - rayDistance) < BIAS then",
+        "        loc.defiladePos = loc.nearestPoints[i]",
+        "        loc.raycastValue = loc.raycasts[i]",
+        "        DebugLog(\"TAKE \" .. tostring(i) .. \" NEAREST POINT.\")",
+        "        DebugLog(\"RAY IS \" .. tostring(loc.raycastValue) .. \"m long.\")",
+        "        break",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Find Path",
+      "id": "e075516f-bfd9-4e14-af26-658d8d00cacc",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "e075516f-bfd9-4e14-af26-658d8d00cacc",
+            "position": "1650,839"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "loc.pathRequest = FindPath(self:GetPosition(), arg.orderData.position)"
+      ]
+    },
+    {
+      "name": "Wait until path request done",
+      "id": "f009af1c-4dbf-48e1-b10a-9d308ec4cd1e",
+      "type": "waitUntil",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "f009af1c-4dbf-48e1-b10a-9d308ec4cd1e",
+            "position": "1687.5,901.5"
+          }
+        ],
+        "editorObjects": []
+      },
+      "condition": [
+        "if loc.pathRequest:IsReady() then",
+        "    loc.path = loc.pathRequest:Value()",
+        "    return true",
+        "end",
+        "return false"
       ]
     }
   ],
@@ -257,54 +488,53 @@
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "1975,250.5"
+        "position": "1975,251.5"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "1650,400.5"
+        "position": "1650,401.5"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "1837.5,400.5"
+        "position": "1837.5,401.5"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2025,400.5"
+        "position": "2025,401.5"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "2225,388"
+        "position": "2225,389"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "2025,513"
+        "position": "2025,514"
       },
       {
         "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "1700,600.5"
+        "position": "1700,601.5"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "2200,625.5"
+        "position": "2264.5,701.5"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "2012.5,838"
+        "position": "2112.5,864"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "2352,838",
-        "width": 145.0,
+        "position": "2452,864",
         "height": 50.0
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "2562.5,625.5"
+        "position": "2562.5,626.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2713",
-    "gridPadding": "0,0.5"
+    "canvasSize": "3848.3,2714",
+    "gridPadding": "0,1.5"
   },
   "parameters": [
     {
@@ -324,6 +554,13 @@
     "done": "\"done\"",
     "wait": "\"Wait\"",
     "reachThreshold": "10",
-    "moveStarted": "false"
+    "moveStarted": "false",
+    "defiladeRequest": "nil",
+    "defilade": "nil",
+    "raycasts": "nil",
+    "raycastRequests": "nil",
+    "nearestPoints": "nil",
+    "defiladePos": "nil",
+    "raycastValue": "nil"
   }
 }
