@@ -45,10 +45,10 @@ return {
         }
     end,
 
-    GetFirstMoveSoldier = function(updateData, move)
+    GetFirstSoldier = function(updateData, role)
         local firstSoldier = nil
         for i, data in ipairs(updateData) do
-            if data.state == move and not data.hasDoneOrder then
+            if data.state == role then
                 firstSoldier = data.unit
                 break
             end
@@ -56,15 +56,17 @@ return {
         return firstSoldier
     end,
 
-    IsTeamCloseToTargetPosition = function(reachThreshold, targetPos, updateData)
+    IsTeamCloseToTargetPosition = function(reachThreshold, targetPos, updateData, deadState)
         for i, data in ipairs(updateData) do
-    
-            local pos = data.unit:GetPosition()
-            local distance = pos:Distance(targetPos)
-            if distance > reachThreshold then
-                return false
+            if data.state ~= deadState then
+                local pos = data.unit:GetPosition()
+                local distance = pos:Distance(targetPos)
+                if distance > reachThreshold then
+                    return false
+                end
             end
         end
+        DebugLog("IsTeamCloseToTargetPosition returned true")
         return true
     end,
 

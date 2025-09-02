@@ -88,7 +88,7 @@
                   "type": "scriptCondition",
                   "name": "Is Team Close To Target Position",
                   "script": [
-                    "return IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData)"
+                    "return IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData, loc.deadState)"
                   ]
                 }
               ],
@@ -98,11 +98,13 @@
                 "DebugLog(\"DONE DONE DONE DONE\")",
                 "",
                 "for i, data in ipairs(loc.updateData) do",
-                "    self:SendMessage(",
-                "            data.unit, ",
-                "            orderName,",
-                "            arg.orderData)",
-                "    DebugLog(\"Send message to: \" .. data.unit .. \" with orderName: \" .. orderName)",
+                "    if data.state ~= loc.deadState then",
+                "        self:SendMessage(",
+                "                data.unit, ",
+                "                orderName,",
+                "                arg.orderData)",
+                "        DebugLog(\"Send message to: \" .. data.unit .. \" with orderName: \" .. orderName)",
+                "    end",
                 "end"
               ]
             },
@@ -112,13 +114,116 @@
               "type": "sequence",
               "subtrees": [
                 {
+                  "name": "Find covers",
+                  "id": "a390967c-24b8-4c30-98df-94948a04328b",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Calculate covers",
+                      "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
+                      "type": "scriptAction",
+                      "script": [
+                        "local threats = {",
+                        "    {area = Circle(arg.orderData.target, 5), avoidance = 1}",
+                        "}",
+                        "",
+                        "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
+                        "if firstSoldier == nil then end",
+                        "",
+                        "local soldierPos = firstSoldier:GetPosition()",
+                        "local half = 30",
+                        "",
+                        "local verts = {",
+                        "    soldierPos + Vec3(-half, 0, 2),",
+                        "    soldierPos + Vec3( half, 0, 2),",
+                        "    soldierPos + Vec3( half,  half, 2),",
+                        "    soldierPos + Vec3(-half,  half, 2),",
+                        "}",
+                        "",
+                        "loc.coverArea = {polygon = Polygon(verts), verts = verts }",
+                        "",
+                        "",
+                        "if loc.updateData and #loc.updateData > 0 then",
+                        "    local firstSoldier = loc.updateData[1].unit",
+                        "    if firstSoldier and firstSoldier:Valid() then",
+                        "        local positions = { ",
+                        "            loc.updateData[1].unit:GetPosition(), ",
+                        "            loc.updateData[2].unit:GetPosition(),",
+                        "            loc.updateData[3].unit:GetPosition(),",
+                        "            loc.updateData[4].unit:GetPosition()",
+                        "     }",
+                        "",
+                        "        loc.coversRequest = FindCovers(threats, loc.coverArea.polygon, positions,     ",
+                        "        {",
+                        "        weights = {",
+                        "            protection = 50,",
+                        "            distance = -1,",
+                        "            lineOfFire = 20,",
+                        "            }   ",
+                        "        })",
+                        "    end",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "Wait until covers request done",
+                      "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
+                      "type": "waitUntil",
+                      "condition": [
+                        "if loc.coversRequest:IsReady() then",
+                        "    loc.covers = loc.coversRequest:Value()",
+                        "    return true",
+                        "end",
+                        "return false"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Select cover spot",
+                  "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
+                  "type": "scriptAction",
+                  "script": [
+                    "local bias = 0",
+                    "local avoidanceRadius = 10",
+                    "",
+                    "loc.previousCoverSpot = loc.coverSpot",
+                    "loc.coverSpot = nil",
+                    "",
+                    "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
+                    "if firstSoldier == nil then end",
+                    "",
+                    "local pos = firstSoldier:GetPosition()",
+                    "local target = arg.orderData.position",
+                    "",
+                    "local distanceToTarget = pos:Distance(target) + bias",
+                    "",
+                    "if loc.covers ~= nil then",
+                    "    for i, cover in ipairs(loc.covers) do",
+                    "        if cover.edgeStart and cover.edgeEnd then",
+                    "            if loc.previousCoverSpot ~= nil and loc.previousCoverSpot:Distance(cover.position) < avoidanceRadius then",
+                    "                goto continue",
+                    "            end",
+                    "            ",
+                    "            local coverDistanceToTarget = cover.position:Distance(target)",
+                    "            if coverDistanceToTarget <= distanceToTarget then",
+                    "                loc.coverSpot = cover.position",
+                    "                distanceToTarget = coverDistanceToTarget",
+                    "            end",
+                    "        end",
+                    "        ::continue::",
+                    "    end",
+                    "end"
+                  ]
+                },
+                {
                   "name": "Send message to every soldier",
                   "id": "771f542e-f62b-43da-9040-369b12d1dc46",
                   "type": "scriptAction",
                   "script": [
                     "local orderName = arg.orderData.orderName",
                     "",
-                    "local firstSoldier = GetFirstMoveSoldier(loc.updateData, loc.move)",
+                    "local firstSoldier = GetFirstSoldier(loc.updateData, loc.move)",
                     "if firstSoldier == nil then end",
                     "",
                     "local pos = firstSoldier:GetPosition()",
@@ -144,7 +249,14 @@
                     "",
                     "    if data.state == loc.move then",
                     "",
-                    "        local nextPos = pos + math.min(moveDistance, pos:Distance(target)) * dirNormalized",
+                    "        local nextPos = nil",
+                    "        if loc.coverSpot ~= nil then",
+                    "            nextPos = loc.coverSpot",
+                    "            loc.moveStarted = false",
+                    "        else",
+                    "            nextPos = pos + math.min(moveDistance, pos:Distance(target)) * dirNormalized",
+                    "            loc.moveStarted = true",
+                    "        end",
                     "",
                     "        local offset = (i - mid) * spacing",
                     "        local offsetPos = nextPos + offset * perp ",
@@ -165,7 +277,6 @@
                     "    end",
                     "end",
                     "",
-                    "loc.moveStarted = true",
                     "loc.orderReady = false"
                   ]
                 },
@@ -188,6 +299,29 @@
             }
           ],
           "active": true
+        },
+        {
+          "name": "Check dead soldiers",
+          "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
+          "type": "scriptAction",
+          "script": [
+            "for i, data in ipairs(loc.updateData) do",
+            "    if data.unit and data.unit:Valid() and data.state ~= loc.deadState then",
+            "        local health = data.unit:GetHealth()",
+            "        if health <= 0 then",
+            "            data.state = loc.deadState",
+            "            DebugLog(\"SOLDIER DEAD: \" .. tostring(data.unit))",
+            "            DebugLog(\"------------\")",
+            "        end",
+            "    end",
+            "end",
+            "",
+            "",
+            "loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.cover, loc.move)",
+            "if (loc.orderReady) then",
+            "    SwitchRoles(loc.updateData, loc.cover, loc.move)",
+            "end"
+          ]
         },
         {
           "name": "NewOrder",
@@ -216,62 +350,9 @@
             "",
             "DebugLog(\"------------\")"
           ]
-        }
-      ]
-    }
-  ],
-  "unlinked-trees": [
-    {
-      "name": "<unnamed>",
-      "id": "a390967c-24b8-4c30-98df-94948a04328b",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Set defilade",
-          "id": "02732d7f-b54d-41a2-ac28-06baffce516e",
-          "type": "sequence",
-          "subtrees": [
-            {
-              "name": "Calculate defilade",
-              "id": "c7edcfd7-2b50-469b-8a6a-9a569e60184a",
-              "type": "scriptAction",
-              "script": [
-                "local enemyPos = arg.orderData.position",
-                "local vertices = {",
-                "    enemyPos + Vec3 (-200, -200, 0),",
-                "    enemyPos + Vec3 (200, -200, 0),",
-                "    enemyPos + Vec3 (200, 200, 0),",
-                "    enemyPos + Vec3 (-200, 200, 0),",
-                "}",
-                "",
-                "local polygon = Polygon(vertices)",
-                "",
-                "loc.defiladeRequest = FindDefiladeOnGrid(",
-                "    enemyPos,",
-                "    polygon --[[,",
-                "    {",
-                "        cellSize = 2, --grid unit size,",
-                "        maxHeight = 3, ",
-                "    }  ]]  ",
-                ")"
-              ]
-            },
-            {
-              "name": "Wait until defilade request done",
-              "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-              "type": "waitUntil",
-              "condition": [
-                "if loc.defiladeRequest:IsReady() then",
-                "    loc.defilade = loc.defiladeRequest:Value()",
-                "    return true",
-                "end",
-                "return false"
-              ]
-            }
-          ]
         },
         {
-          "name": "Debug defillade",
+          "name": "Debug covers",
           "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
           "type": "scriptAction",
           "decorators": [
@@ -282,205 +363,44 @@
             }
           ],
           "script": [
-            "if loc.defilade ~= nil then",
-            "    for i=1, #loc.defilade do",
-            "        local pointData = loc.defilade[i]",
-            "        DebugLine(",
-            "            pointData.position,",
-            "            pointData.position + Vec3(0, 0, pointData.height),",
-            "            1,0,0,1",
-            "        )",
+            "if loc.covers ~= nil then",
+            "    for i, cover in ipairs(loc.covers) do",
+            "        if cover.edgeStart and cover.edgeEnd then",
+            "            DebugLine(",
+            "                cover.position,",
+            "                cover.position + Vec3(0, 0, 5),",
+            "                0, 1, 0, 1 ",
+            "            )",
+            "",
+            "            if cover.edgeStart and cover.edgeEnd then",
+            "                DebugLine(cover.edgeStart, cover.edgeEnd, 0, 0, 1, 1)",
+            "            end",
+            "",
+            "            if cover.firingPosition then",
+            "                DebugLine(cover.position, cover.firingPosition, 1, 0, 0, 1)",
+            "            end",
+            "        end",
             "    end",
             "end",
             "",
             "",
-            "if loc.nearestPoints ~= nil and #loc.nearestPoints > 0 then",
-            "    for i=1, #loc.nearestPoints do",
-            "        local pointData = loc.nearestPoints[i]",
-            "        DebugLine(",
-            "            pointData.position,",
-            "            pointData.position + Vec3(0, 0, pointData.height),",
-            "            0,1,0,1",
-            "        )",
+            "if loc.coverArea ~= nil then",
+            "    -- DEBUG POLYGON",
+            "    for i = 1, #loc.coverArea.verts do",
+            "        local a = loc.coverArea.verts[i]",
+            "        local b = loc.coverArea.verts[(i % #loc.coverArea.verts) + 1]",
+            "        DebugLine(a, b, 1, 1, 1, 1)",
             "    end",
+            "",
+            "    for i = 1, #loc.coverArea.verts do",
+            "        local a = loc.coverArea.verts[i]",
+            "        DebugLine(a, a + Vec3(0, 0, 5), 1, 1, 1, 1)",
+            "    end",
+            "",
+            "    -- DEBUG POLYGON END",
             "end"
           ]
         }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "a390967c-24b8-4c30-98df-94948a04328b",
-            "position": "2225,989"
-          },
-          {
-            "id": "02732d7f-b54d-41a2-ac28-06baffce516e",
-            "position": "2175,1139"
-          },
-          {
-            "id": "c7edcfd7-2b50-469b-8a6a-9a569e60184a",
-            "position": "2025,1251.5",
-            "height": 50.0
-          },
-          {
-            "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-            "position": "2062.5,1326.5"
-          },
-          {
-            "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-            "position": "2500,1126.5"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
-      "name": "Set nearest points in radius",
-      "id": "852a560c-823b-4052-9353-67465554c82f",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "852a560c-823b-4052-9353-67465554c82f",
-            "position": "2162.5,1389"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.nearestPoints = {}",
-        "",
-        "if loc.defilade ~= nil then",
-        "    for i=1, #loc.defilade do",
-        "        local pointData = loc.defilade[i]",
-        "        if pointData.position:Distance(self:GetPosition()) < 25 then ",
-        "            loc.nearestPoints[#loc.nearestPoints + 1] = pointData",
-        "        end",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Send rays",
-      "id": "9a6eab8a-e21d-4543-a024-c3bf3f6e2174",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "9a6eab8a-e21d-4543-a024-c3bf3f6e2174",
-            "position": "2237.5,1451.5"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local correction = Vec3(0,0,1.8)",
-        "",
-        "loc.raycastRequests = {}",
-        "loc.raycasts = {}",
-        "",
-        "for i=1, #loc.nearestPoints do",
-        "    loc.raycastRequests[i] = Raycast(",
-        "        loc.nearestPoints[i].position + correction, ",
-        "        arg.orderData.position",
-        "    ) ",
-        "end"
-      ]
-    },
-    {
-      "name": "Wait until rays request done",
-      "id": "41a6e220-ce79-438b-87f2-1701cb918145",
-      "type": "waitUntil",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "41a6e220-ce79-438b-87f2-1701cb918145",
-            "position": "2300,1514"
-          }
-        ],
-        "editorObjects": []
-      },
-      "condition": [
-        "for i = 1, #loc.raycastRequests do",
-        "    if not loc.raycastRequests[i]:IsReady() then",
-        "        return false",
-        "    end",
-        "    loc.raycasts[i] = loc.raycastRequests[i]:Value()",
-        "end",
-        "return true"
-      ]
-    },
-    {
-      "name": "Check visibility",
-      "id": "0cb933d2-67b0-4f2a-a32f-fed23e28af5a",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "0cb933d2-67b0-4f2a-a32f-fed23e28af5a",
-            "position": "2412.5,1589"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local CORRECTION = Vec3(0,0,1.8)",
-        "local BIAS = 1",
-        "local goalPos = arg.orderData.position",
-        "",
-        "for i = 1, #loc.raycasts do",
-        "    local actualDistance = goalPos:Distance(loc.nearestPoints[i].position)",
-        "    local rayDistance = loc.raycasts[i]",
-        "    DebugLog(\"loc.nearestPoints[\" .. i .. \"]: \" .. tostring(loc.nearestPoints[i]))",
-        "    DebugLog(\"Actual distance: \" .. actualDistance)",
-        "    DebugLog(\"Ray distance: \" .. rayDistance)",
-        "    DebugLog(\"Bias: \" .. BIAS)",
-        "    if math.abs(actualDistance - rayDistance) < BIAS then",
-        "        loc.defiladePos = loc.nearestPoints[i]",
-        "        loc.raycastValue = loc.raycasts[i]",
-        "        DebugLog(\"TAKE \" .. tostring(i) .. \" NEAREST POINT.\")",
-        "        DebugLog(\"RAY IS \" .. tostring(loc.raycastValue) .. \"m long.\")",
-        "        break",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Find Path",
-      "id": "e075516f-bfd9-4e14-af26-658d8d00cacc",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "e075516f-bfd9-4e14-af26-658d8d00cacc",
-            "position": "1650,839"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.pathRequest = FindPath(self:GetPosition(), arg.orderData.position)"
-      ]
-    },
-    {
-      "name": "Wait until path request done",
-      "id": "f009af1c-4dbf-48e1-b10a-9d308ec4cd1e",
-      "type": "waitUntil",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "f009af1c-4dbf-48e1-b10a-9d308ec4cd1e",
-            "position": "1687.5,901.5"
-          }
-        ],
-        "editorObjects": []
-      },
-      "condition": [
-        "if loc.pathRequest:IsReady() then",
-        "    loc.path = loc.pathRequest:Value()",
-        "    return true",
-        "end",
-        "return false"
       ]
     }
   ],
@@ -488,53 +408,77 @@
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "1975,251.5"
+        "position": "1975,367"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "1650,401.5"
+        "position": "1650,517"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "1837.5,401.5"
+        "position": "1837.5,517"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2025,401.5"
+        "position": "2025,517"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "2225,389"
+        "position": "2675,554.5"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "2025,514"
+        "position": "1673,829.5"
       },
       {
         "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "1700,601.5"
+        "position": "1135.5,1079.5"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "2264.5,701.5"
+        "position": "2075,954.5"
+      },
+      {
+        "id": "a390967c-24b8-4c30-98df-94948a04328b",
+        "position": "1675,1129.5"
+      },
+      {
+        "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
+        "position": "1525,1279.5"
+      },
+      {
+        "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
+        "position": "1787.5,1279.5"
+      },
+      {
+        "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
+        "position": "2000,1142"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "2112.5,864"
+        "position": "2250,1142"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "2452,864",
+        "position": "2587.5,1142",
         "height": 50.0
       },
       {
+        "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
+        "position": "2675,804.5"
+      },
+      {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "2562.5,626.5"
+        "position": "2987.5,792"
+      },
+      {
+        "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
+        "position": "3275,742"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3848.3,2714",
-    "gridPadding": "0,1.5"
+    "canvasSize": "4213.38690909091,2829.5",
+    "gridPadding": "0,4.49999999999989"
   },
   "parameters": [
     {
@@ -555,12 +499,12 @@
     "wait": "\"Wait\"",
     "reachThreshold": "10",
     "moveStarted": "false",
-    "defiladeRequest": "nil",
-    "defilade": "nil",
-    "raycasts": "nil",
-    "raycastRequests": "nil",
     "nearestPoints": "nil",
-    "defiladePos": "nil",
-    "raycastValue": "nil"
+    "deadState": "\"dead\"",
+    "covers": "nil",
+    "coversRequest": "nil",
+    "coverArea": "nil",
+    "coverSpot": "nil",
+    "previousCoverSpot": "nil"
   }
 }
