@@ -1,0 +1,17 @@
+{
+  "name": "Succeed",
+  "id": "8980eece-ace4-4f46-8703-6bb74f520581",
+  "type": "success",
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "8980eece-ace4-4f46-8703-6bb74f520581",
+        "position": "1808.4,194.4"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [],
+  "locals": {}
+}

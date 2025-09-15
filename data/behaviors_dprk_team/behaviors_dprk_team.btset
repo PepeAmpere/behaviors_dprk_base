@@ -13,6 +13,7 @@
     "subteamFireAt.bt",
     "subteamMove.bt",
     "subteamMoveToDefensivePosition.bt",
+    "teamIdle.bt",
     "teamMoveInColumn.bt",
     "teamOccupyMoveInColumn.bt",
     "teamRetreatMoveBoundingOverwatch.bt",

@@ -28,6 +28,10 @@
         "    OccupyMoveInColumn = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"teamOccupyMoveInColumn\"",
+        "    },",
+        "    TeamIdle = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"teamIdle\"    ",
         "    }",
         "}"
       ]
