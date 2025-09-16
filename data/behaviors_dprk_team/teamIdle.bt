@@ -244,6 +244,65 @@
           ]
         },
         {
+          "name": "Manage Subteam 1",
+          "id": "79a558cf-959f-4fbb-8b90-03f53b30b249",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Wait Forever",
+              "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
+              "type": "waitForever",
+              "decorators": [
+                {
+                  "id": "aaeccf34-b9de-4a4f-ba50-7854379e5c21",
+                  "type": "scriptCondition",
+                  "name": "No poly",
+                  "script": [
+                    "return loc.firstPoly == nil"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "GetToDefensivePositionAndFire",
+              "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Fill OrderData1",
+                  "id": "7075586b-26cb-4bbd-a67d-66a146ceb291",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.orderDataSub1 = {}",
+                    "",
+                    "loc.orderDataSub1.target = (loc.firstPoly:Vertex(2) + loc.firstPoly:Vertex(3)) / 2",
+                    "loc.orderDataSub1.position = arg.orderData.position + (loc.orderDataSub1.target - arg.orderData.position) / 4",
+                    "",
+                    "loc.orderDataSub1.soldierIndexes = {}",
+                    "",
+                    "for i = 0, self:GetEntityCount() / 2 - 1 do",
+                    "    loc.orderDataSub1.soldierIndexes[#loc.orderDataSub1.soldierIndexes] = i",
+                    "end "
+                  ]
+                },
+                {
+                  "name": "SubTeam1MoveToDefPos",
+                  "id": "fec25d4f-5ade-4e3b-92e3-475828bf37db",
+                  "type": "reference",
+                  "target": [
+                    "behaviors_dprk_team",
+                    "subteamMoveToDefensivePosition"
+                  ],
+                  "arguments": {
+                    "orderData": "loc.orderDataSub1"
+                  }
+                }
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
           "name": "Debug Draw",
           "id": "61534d3d-d838-48a3-8226-e9676450f630",
           "type": "sequence",
@@ -337,6 +396,13 @@
             }
           ]
         }
+      ],
+      "decorators": [
+        {
+          "id": "763ae792-094d-4940-96c4-cf1b83dfd93c",
+          "type": "loopForever",
+          "name": "Loop"
+        }
       ]
     }
   ],
@@ -344,100 +410,120 @@
     "nodesInfo": [
       {
         "id": "ab891452-fe04-441b-8168-327c9ffba298",
-        "position": "1492.2,76"
+        "position": "1550,228.064444444444"
       },
       {
         "id": "b15cf8fb-58d4-4674-9493-c69780825219",
-        "position": "1276.2,230"
+        "position": "1400,303.064444444444"
       },
       {
         "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
-        "position": "1825,272.12"
+        "position": "1675,328.064444444444"
       },
       {
         "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
-        "position": "1600,359.62"
+        "position": "737.5,428.064444444444"
       },
       {
         "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
-        "position": "1812.5,584.62"
+        "position": "1050,440.564444444444"
       },
       {
         "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
-        "position": "1237.5,722.12"
+        "position": "475,578.064444444444"
       },
       {
         "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
-        "position": "1512.5,734.62"
+        "position": "750,590.564444444444"
       },
       {
         "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
-        "position": "1775,734.62"
+        "position": "1012.5,590.564444444444"
       },
       {
         "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
-        "position": "2204.13015873016,707.434920634921"
+        "position": "1441.63015873016,563.379365079365"
       },
       {
         "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
-        "position": "2112.5,797.12"
+        "position": "1350,653.064444444444"
       },
       {
         "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
-        "position": "1950,934.62"
+        "position": "1187.5,790.564444444444"
       },
       {
         "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
-        "position": "1950,1072.12"
+        "position": "1187.5,928.064444444444"
       },
       {
         "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
-        "position": "2137.5,934.62"
+        "position": "1375,790.564444444444"
       },
       {
         "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
-        "position": "2137.5,1072.12"
+        "position": "1375,928.064444444444"
       },
       {
         "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
-        "position": "2325,934.62"
+        "position": "1562.5,790.564444444444"
       },
       {
         "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
-        "position": "2325,1072.12"
+        "position": "1562.5,928.064444444444"
       },
       {
         "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-        "position": "2562.5,959.62"
+        "position": "1800,815.564444444444"
       },
       {
         "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
-        "position": "2387.5,809.62"
+        "position": "1625,665.564444444444"
+      },
+      {
+        "id": "79a558cf-959f-4fbb-8b90-03f53b30b249",
+        "position": "2062.5,503.064444444444"
+      },
+      {
+        "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
+        "position": "1925,615.564444444444"
+      },
+      {
+        "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
+        "position": "2137.5,653.064444444444"
+      },
+      {
+        "id": "7075586b-26cb-4bbd-a67d-66a146ceb291",
+        "position": "1987.5,765.564444444444"
+      },
+      {
+        "id": "fec25d4f-5ade-4e3b-92e3-475828bf37db",
+        "position": "2175,765.564444444444"
       },
       {
         "id": "61534d3d-d838-48a3-8226-e9676450f630",
-        "position": "2287.5,359.62"
+        "position": "3162.5,365.564444444444"
       },
       {
         "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
-        "position": "2145.7,523.02"
+        "position": "3020.7,528.964444444444"
       },
       {
         "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
-        "position": "2337.5,522.12"
+        "position": "3212.5,528.064444444444"
       },
       {
         "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
-        "position": "2550,522.12"
+        "position": "3425,528.064444444444"
       },
       {
         "id": "11967b85-c341-49f3-93ff-297aaf52c779",
-        "position": "2717.71428571428,519.586666666667"
+        "position": "3592.71428571428,525.531111111111"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2597.12",
-    "gridPadding": "0,9.61999999999989"
+    "canvasSize": "3840,2765.56444444444",
+    "gridPadding": "0,3.06444444444429"
   },
   "parameters": [
     {
@@ -453,6 +539,10 @@
     "firstPoly": "nil",
     "secondPoly": "nil",
     "enemiesInFirstPoly": "nil",
-    "enemiesInSecondPoly": "nil"
+    "enemiesInSecondPoly": "nil",
+    "orderDataSub1": "nil",
+    "orderDataSub2": "nil",
+    "firstPolyChanged": "false",
+    "secondPolyChanged": "false"
   }
 }
