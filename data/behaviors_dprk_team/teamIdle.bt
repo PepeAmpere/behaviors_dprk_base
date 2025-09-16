@@ -1,17 +1,102 @@
 {
-  "name": "Succeed",
-  "id": "8980eece-ace4-4f46-8703-6bb74f520581",
-  "type": "success",
+  "name": "Parallel",
+  "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
+      "type": "waitForever"
+    },
+    {
+      "name": "Debug Draw",
+      "id": "61534d3d-d838-48a3-8226-e9676450f630",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "DrawInnerArea",
+          "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
+          "type": "scriptAction",
+          "script": [
+            "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+            "    local pX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i))",
+            "    local pY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i))",
+            "    local pZ = arg.orderData.position:Z() + 1",
+            "    local nextPX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i + math.pi/12))",
+            "    local nextPY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i + math.pi/12))",
+            "    local nextPZ = arg.orderData.position:Z() + 1",
+            "",
+            "    local p = Vec3(pX, pY, pZ)",
+            "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+            "",
+            "    DebugLine(p, nextP, 1, 1, 1, 1)",
+            "end"
+          ]
+        },
+        {
+          "name": "DrawOuterArea",
+          "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+          "type": "scriptAction",
+          "script": [
+            "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+            "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
+            "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
+            "    local pZ = arg.orderData.position:Z() + 1",
+            "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
+            "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
+            "    local nextPZ = arg.orderData.position:Z() + 1",
+            "",
+            "    local p = Vec3(pX, pY, pZ)",
+            "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+            "",
+            "    DebugLine(p, nextP, 1, 0, 0, 1)",
+            "end"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "2a48dc44-4c8b-46a1-90d0-b55517e9744c",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "8980eece-ace4-4f46-8703-6bb74f520581",
-        "position": "1808.4,194.4"
+        "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
+        "position": "1825,75"
+      },
+      {
+        "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
+        "position": "1650,175"
+      },
+      {
+        "id": "61534d3d-d838-48a3-8226-e9676450f630",
+        "position": "2287.5,162.5"
+      },
+      {
+        "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
+        "position": "2145.7,325.9"
+      },
+      {
+        "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+        "position": "2337.5,325"
       }
     ],
     "editorObjects": [],
     "canvasSize": "3840,2400"
   },
-  "parameters": [],
-  "locals": {}
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "outerRadius": "100",
+    "innerRadius": "25"
+  }
 }
