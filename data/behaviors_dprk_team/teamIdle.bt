@@ -1,296 +1,341 @@
 {
-  "name": "Parallel",
-  "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
-  "type": "supervisedParallel",
+  "name": "ROOT",
+  "id": "ab891452-fe04-441b-8168-327c9ffba298",
+  "type": "sequence",
   "subtrees": [
     {
-      "name": "Wait Forever",
-      "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
-      "type": "waitForever"
+      "name": "Init Values",
+      "id": "b15cf8fb-58d4-4674-9493-c69780825219",
+      "type": "scriptAction",
+      "script": [
+        "loc.enemiesInFirstPoly = {}",
+        "loc.enemiesInSecondPoly = {}",
+        "loc.enemies = {} -- should not break, but did anyway"
+      ]
     },
     {
-      "name": "Main Body",
-      "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
-      "type": "sequence",
+      "name": "Parallel",
+      "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
+      "type": "supervisedParallel",
       "subtrees": [
         {
-          "name": "CheckEnemiesInOuterRadius",
-          "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
-          "type": "scriptAction",
-          "script": [
-            "local fren = self:GetEntity(0)",
-            "",
-            "loc.enemies = GetEntitiesInArea(Circle(arg.orderData.position, loc.outerRadius), { enemyOf = fren , excludeMapObjects = true} )"
-          ]
+          "name": "Wait Forever",
+          "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
+          "type": "waitForever"
         },
         {
-          "name": "Do SubSqad Routines",
-          "id": "ddab882e-b2b0-4d1d-be35-07f3993727cd",
-          "type": "selector",
+          "name": "Main Body",
+          "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
+          "type": "sequence",
           "subtrees": [
             {
-              "name": "Choose subsquad",
-              "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
+              "name": "CheckEnemiesInOuterRadius",
+              "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
+              "type": "scriptAction",
+              "script": [
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemies = GetEntitiesInArea(Circle(arg.orderData.position, loc.outerRadius), { enemyOf = fren , excludeMapObjects = true} )"
+              ]
+            },
+            {
+              "name": "CheckEnemiesInFirstPoly",
+              "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
+              "type": "scriptAction",
+              "script": [
+                "if loc.firstPoly == nil then return end",
+                "",
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemiesInFirstPoly = GetEntitiesInArea(loc.firstPoly, { enemyOf = fren , excludeMapObjects = true} )",
+                "",
+                "if #loc.enemiesInFirstPoly == 0 then loc.firstPoly = nil end"
+              ]
+            },
+            {
+              "name": "CheckEnemiesInSecondPoly",
+              "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
+              "type": "scriptAction",
+              "script": [
+                "if loc.secondPoly == nil then return end",
+                "",
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemiesInSecondPoly = GetEntitiesInArea(loc.secondPoly, { enemyOf = fren , excludeMapObjects = true} )",
+                "",
+                "if #loc.enemiesInSecondPoly == 0 then loc.secondPoly = nil end"
+              ]
+            },
+            {
+              "name": "Create Polygons",
+              "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
               "type": "selector",
               "subtrees": [
                 {
-                  "name": "Create First Poly",
-                  "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
-                  "type": "sequence",
+                  "name": "Choose subsquad",
+                  "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
+                  "type": "selector",
                   "subtrees": [
                     {
                       "name": "Create First Poly",
-                      "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
-                      "type": "scriptAction",
-                      "script": [
-                        "local enemy = loc.enemies[1]",
-                        "",
-                        "local dir = enemy:GetPosition() - arg.orderData.position",
-                        "",
-                        "local normDir = dir:NormalizedXY()",
-                        "",
-                        "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
-                        "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
-                        "",
-                        "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                      "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create First Poly",
+                          "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
+                          "type": "scriptAction",
+                          "script": [
+                            "local enemy = loc.enemies[1]",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "5c17d5eb-5cfd-4563-a581-c2220113b15a",
+                          "type": "scriptCondition",
+                          "name": "No defenses?",
+                          "script": [
+                            "return loc.firstPoly == nil and loc.secondPoly == nil"
+                          ]
+                        }
                       ]
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "5c17d5eb-5cfd-4563-a581-c2220113b15a",
-                      "type": "scriptCondition",
-                      "name": "No defenses?",
-                      "script": [
-                        "return loc.firstPoly == nil and loc.secondPoly == nil"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "Create First Poly",
-                  "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
-                  "type": "sequence",
-                  "subtrees": [
+                    },
                     {
                       "name": "Create First Poly",
-                      "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
-                      "type": "scriptAction",
-                      "script": [
-                        "local target = nil",
-                        "",
-                        "for i, enemy in ipairs(loc.enemies) do",
-                        "    if loc.secondPoly:Contains(enemy:GetPosition()) then",
-                        "        ",
-                        "    else",
-                        "        target = enemy",
-                        "        break",
-                        "    end",
-                        "end",
-                        "",
-                        "if target == nil then return end",
-                        "",
-                        "local enemy = target",
-                        "",
-                        "local dir = enemy:GetPosition() - arg.orderData.position",
-                        "",
-                        "local normDir = dir:NormalizedXY()",
-                        "",
-                        "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
-                        "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
-                        "",
-                        "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                      "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create First Poly",
+                          "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
+                          "type": "scriptAction",
+                          "script": [
+                            "local target = nil",
+                            "",
+                            "for i, enemy in ipairs(loc.enemies) do",
+                            "    if loc.secondPoly:Contains(enemy:GetPosition()) then",
+                            "        ",
+                            "    else",
+                            "        target = enemy",
+                            "        break",
+                            "    end",
+                            "end",
+                            "",
+                            "if target == nil then return end",
+                            "",
+                            "local enemy = target",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "d297b217-f880-4515-bac8-bf8fab1eee61",
+                          "type": "scriptCondition",
+                          "name": "No First Poly",
+                          "script": [
+                            "return loc.firstPoly == nil"
+                          ]
+                        }
                       ]
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "d297b217-f880-4515-bac8-bf8fab1eee61",
-                      "type": "scriptCondition",
-                      "name": "No First Poly",
-                      "script": [
-                        "return loc.firstPoly == nil"
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "name": "Create Second Poly",
-                  "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
-                  "type": "sequence",
-                  "subtrees": [
+                    },
                     {
                       "name": "Create Second Poly",
-                      "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
-                      "type": "scriptAction",
-                      "script": [
-                        "local target = nil",
-                        "",
-                        "for i, enemy in ipairs(loc.enemies) do",
-                        "    if loc.firstPoly:Contains(enemy:GetPosition()) then",
-                        "        ",
-                        "    else",
-                        "        target = enemy",
-                        "        break",
-                        "    end",
-                        "end",
-                        "",
-                        "if target == nil then return end",
-                        "",
-                        "local enemy = target",
-                        "",
-                        "local dir = enemy:GetPosition() - arg.orderData.position",
-                        "",
-                        "local normDir = dir:NormalizedXY()",
-                        "",
-                        "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
-                        "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
-                        "",
-                        "loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                      "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create Second Poly",
+                          "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
+                          "type": "scriptAction",
+                          "script": [
+                            "local target = nil",
+                            "",
+                            "for i, enemy in ipairs(loc.enemies) do",
+                            "    if loc.firstPoly:Contains(enemy:GetPosition()) then",
+                            "        ",
+                            "    else",
+                            "        target = enemy",
+                            "        break",
+                            "    end",
+                            "end",
+                            "",
+                            "if target == nil then return end",
+                            "",
+                            "local enemy = target",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "d52e94a4-9095-4a32-83b4-389d661489ef",
+                          "type": "scriptCondition",
+                          "name": "No Second Poly",
+                          "script": [
+                            "return loc.secondPoly == nil"
+                          ]
+                        }
                       ]
+                    },
+                    {
+                      "name": "Succeed",
+                      "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
+                      "type": "success"
                     }
                   ],
                   "decorators": [
                     {
-                      "id": "d52e94a4-9095-4a32-83b4-389d661489ef",
+                      "id": "9eee539b-ce4f-4244-89b1-439d4cc9f8ef",
                       "type": "scriptCondition",
-                      "name": "No Second Poly",
+                      "name": "AreEnemies?",
                       "script": [
-                        "return loc.secondPoly == nil"
+                        "return #loc.enemies ~= 0"
                       ]
                     }
-                  ]
+                  ],
+                  "active": true
                 },
                 {
-                  "name": "Succeed",
-                  "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-                  "type": "success"
-                }
-              ],
-              "decorators": [
-                {
-                  "id": "9eee539b-ce4f-4244-89b1-439d4cc9f8ef",
-                  "type": "scriptCondition",
-                  "name": "AreEnemies?",
+                  "name": "Delete Polygons",
+                  "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
+                  "type": "scriptAction",
                   "script": [
-                    "return #loc.enemies ~= 0"
+                    "loc.firstPoly = nil",
+                    "loc.secondPoly = nil"
                   ]
                 }
               ],
               "active": true
-            },
+            }
+          ],
+          "decorators": [
             {
-              "name": "Delete Polygons",
-              "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
+              "id": "560a5d6d-ba7f-40e6-97b2-f1c7d8c25bd8",
+              "type": "loopForever",
+              "name": "Loop"
+            }
+          ]
+        },
+        {
+          "name": "Debug Draw",
+          "id": "61534d3d-d838-48a3-8226-e9676450f630",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "DrawInnerArea",
+              "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
               "type": "scriptAction",
               "script": [
-                "loc.firstPoly = nil",
-                "loc.secondPoly = nil"
+                "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+                "    local pX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i))",
+                "    local pY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i))",
+                "    local pZ = arg.orderData.position:Z() + 1",
+                "    local nextPX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i + math.pi/12))",
+                "    local nextPY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i + math.pi/12))",
+                "    local nextPZ = arg.orderData.position:Z() + 1",
+                "",
+                "    local p = Vec3(pX, pY, pZ)",
+                "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+                "",
+                "    DebugLine(p, nextP, 1, 1, 1, 1)",
+                "end"
+              ]
+            },
+            {
+              "name": "DrawOuterArea",
+              "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+              "type": "scriptAction",
+              "script": [
+                "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+                "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
+                "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
+                "    local pZ = arg.orderData.position:Z() + 1",
+                "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
+                "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
+                "    local nextPZ = arg.orderData.position:Z() + 1",
+                "",
+                "    local p = Vec3(pX, pY, pZ)",
+                "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+                "",
+                "    DebugLine(p, nextP, 1, 0, 0, 1)",
+                "end"
+              ]
+            },
+            {
+              "name": "DrawFirstPoly",
+              "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
+              "type": "scriptAction",
+              "script": [
+                "if loc.firstPoly == nil then return end",
+                "",
+                "local count = loc.firstPoly:Count()",
+                "",
+                "for i = 1, count - 1 do",
+                "    local vertex1 = Vec3(loc.firstPoly:Vertex(i):X(), loc.firstPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
+                "    local vertex2 = Vec3(loc.firstPoly:Vertex(i + 1):X(), loc.firstPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
+                "    DebugLine(vertex1, vertex2, 0, 1, 0, 1)",
+                "end",
+                "",
+                "local vertex1 = Vec3(loc.firstPoly:Vertex(count):X(), loc.firstPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
+                "local vertex2 = Vec3(loc.firstPoly:Vertex(1):X(), loc.firstPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
+                "DebugLine(vertex1, vertex2, 0, 1, 0, 1)"
+              ]
+            },
+            {
+              "name": "DrawSecondPoly",
+              "id": "11967b85-c341-49f3-93ff-297aaf52c779",
+              "type": "scriptAction",
+              "script": [
+                "if loc.secondPoly == nil then return end",
+                "",
+                "local count = loc.secondPoly:Count()",
+                "",
+                "for i = 1, count - 1 do",
+                "    local vertex1 = Vec3(loc.secondPoly:Vertex(i):X(), loc.secondPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
+                "    local vertex2 = Vec3(loc.secondPoly:Vertex(i + 1):X(), loc.secondPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
+                "    DebugLine(vertex1, vertex2, 0, 0, 1, 1)",
+                "end",
+                "",
+                "local vertex1 = Vec3(loc.secondPoly:Vertex(count):X(), loc.secondPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
+                "local vertex2 = Vec3(loc.secondPoly:Vertex(1):X(), loc.secondPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
+                "DebugLine(vertex1, vertex2, 0, 0, 1, 1)"
               ]
             }
           ],
-          "active": true
-        }
-      ],
-      "decorators": [
-        {
-          "id": "560a5d6d-ba7f-40e6-97b2-f1c7d8c25bd8",
-          "type": "loopForever",
-          "name": "Loop"
-        }
-      ]
-    },
-    {
-      "name": "Debug Draw",
-      "id": "61534d3d-d838-48a3-8226-e9676450f630",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "DrawInnerArea",
-          "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
-          "type": "scriptAction",
-          "script": [
-            "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
-            "    local pX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i))",
-            "    local pY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i))",
-            "    local pZ = arg.orderData.position:Z() + 1",
-            "    local nextPX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i + math.pi/12))",
-            "    local nextPY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i + math.pi/12))",
-            "    local nextPZ = arg.orderData.position:Z() + 1",
-            "",
-            "    local p = Vec3(pX, pY, pZ)",
-            "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
-            "",
-            "    DebugLine(p, nextP, 1, 1, 1, 1)",
-            "end"
+          "decorators": [
+            {
+              "id": "2a48dc44-4c8b-46a1-90d0-b55517e9744c",
+              "type": "loopForever",
+              "name": "Loop"
+            }
           ]
-        },
-        {
-          "name": "DrawOuterArea",
-          "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
-          "type": "scriptAction",
-          "script": [
-            "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
-            "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
-            "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
-            "    local pZ = arg.orderData.position:Z() + 1",
-            "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
-            "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
-            "    local nextPZ = arg.orderData.position:Z() + 1",
-            "",
-            "    local p = Vec3(pX, pY, pZ)",
-            "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
-            "",
-            "    DebugLine(p, nextP, 1, 0, 0, 1)",
-            "end"
-          ]
-        },
-        {
-          "name": "DrawFirstPoly",
-          "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
-          "type": "scriptAction",
-          "script": [
-            "if loc.firstPoly == nil then return end",
-            "",
-            "local count = loc.firstPoly:Count()",
-            "",
-            "for i = 1, count - 1 do",
-            "    local vertex1 = Vec3(loc.firstPoly:Vertex(i):X(), loc.firstPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
-            "    local vertex2 = Vec3(loc.firstPoly:Vertex(i + 1):X(), loc.firstPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
-            "    DebugLine(vertex1, vertex2, 0, 1, 0, 1)",
-            "end",
-            "",
-            "local vertex1 = Vec3(loc.firstPoly:Vertex(count):X(), loc.firstPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
-            "local vertex2 = Vec3(loc.firstPoly:Vertex(1):X(), loc.firstPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
-            "DebugLine(vertex1, vertex2, 0, 1, 0, 1)"
-          ]
-        },
-        {
-          "name": "DrawSecondPoly",
-          "id": "11967b85-c341-49f3-93ff-297aaf52c779",
-          "type": "scriptAction",
-          "script": [
-            "if loc.secondPoly == nil then return end",
-            "",
-            "local count = loc.secondPoly:Count()",
-            "",
-            "for i = 1, count - 1 do",
-            "    local vertex1 = Vec3(loc.secondPoly:Vertex(i):X(), loc.secondPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
-            "    local vertex2 = Vec3(loc.secondPoly:Vertex(i + 1):X(), loc.secondPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
-            "    DebugLine(vertex1, vertex2, 0, 0, 1, 1)",
-            "end",
-            "",
-            "local vertex1 = Vec3(loc.secondPoly:Vertex(count):X(), loc.secondPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
-            "local vertex2 = Vec3(loc.secondPoly:Vertex(1):X(), loc.secondPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
-            "DebugLine(vertex1, vertex2, 0, 0, 1, 1)"
-          ]
-        }
-      ],
-      "decorators": [
-        {
-          "id": "2a48dc44-4c8b-46a1-90d0-b55517e9744c",
-          "type": "loopForever",
-          "name": "Loop"
         }
       ]
     }
@@ -298,84 +343,101 @@
   "meta": {
     "nodesInfo": [
       {
+        "id": "ab891452-fe04-441b-8168-327c9ffba298",
+        "position": "1492.2,76"
+      },
+      {
+        "id": "b15cf8fb-58d4-4674-9493-c69780825219",
+        "position": "1276.2,230"
+      },
+      {
         "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
-        "position": "1825,75"
+        "position": "1825,272.12"
       },
       {
         "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
-        "position": "1600,162.5"
+        "position": "1600,359.62"
       },
       {
         "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
-        "position": "1825,225"
+        "position": "1812.5,584.62"
       },
       {
         "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
-        "position": "1562.5,387.5"
+        "position": "1237.5,722.12"
       },
       {
-        "id": "ddab882e-b2b0-4d1d-be35-07f3993727cd",
-        "position": "1925,362.5"
+        "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
+        "position": "1512.5,734.62"
+      },
+      {
+        "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
+        "position": "1775,734.62"
+      },
+      {
+        "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
+        "position": "2204.13015873016,707.434920634921"
       },
       {
         "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
-        "position": "1825,437.5"
+        "position": "2112.5,797.12"
       },
       {
         "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
-        "position": "1587.5,562.5"
+        "position": "1950,934.62"
       },
       {
         "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
-        "position": "1587.5,700"
+        "position": "1950,1072.12"
       },
       {
         "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
-        "position": "1775,562.5"
+        "position": "2137.5,934.62"
       },
       {
         "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
-        "position": "1775,700"
+        "position": "2137.5,1072.12"
       },
       {
         "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
-        "position": "1962.5,562.5"
+        "position": "2325,934.62"
       },
       {
         "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
-        "position": "1962.5,700"
+        "position": "2325,1072.12"
       },
       {
         "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-        "position": "2200,587.5"
+        "position": "2562.5,959.62"
       },
       {
         "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
-        "position": "2037.5,462.5"
+        "position": "2387.5,809.62"
       },
       {
         "id": "61534d3d-d838-48a3-8226-e9676450f630",
-        "position": "2287.5,162.5"
+        "position": "2287.5,359.62"
       },
       {
         "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
-        "position": "2145.7,325.9"
+        "position": "2145.7,523.02"
       },
       {
         "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
-        "position": "2337.5,325"
+        "position": "2337.5,522.12"
       },
       {
         "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
-        "position": "2550,325"
+        "position": "2550,522.12"
       },
       {
         "id": "11967b85-c341-49f3-93ff-297aaf52c779",
-        "position": "2717.71428571428,322.466666666667"
+        "position": "2717.71428571428,519.586666666667"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2597.12",
+    "gridPadding": "0,9.61999999999989"
   },
   "parameters": [
     {
@@ -391,6 +453,6 @@
     "firstPoly": "nil",
     "secondPoly": "nil",
     "enemiesInFirstPoly": "nil",
-    "emeniesInSecondPoly": "nil"
+    "enemiesInSecondPoly": "nil"
   }
 }
