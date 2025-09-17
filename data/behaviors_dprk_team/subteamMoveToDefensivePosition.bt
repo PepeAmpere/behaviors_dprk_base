@@ -67,9 +67,26 @@
           ]
         },
         {
-          "name": "Wait Forever",
-          "id": "981a00c8-f195-4647-a7c7-11dd7a0be0e0",
-          "type": "waitForever"
+          "name": "Soldiers All in place?",
+          "id": "61b093f5-a004-48c0-9873-5eddde134561",
+          "type": "waitUntil",
+          "condition": [
+            "local counter = 1",
+            "",
+            "for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+            "    if loc.Covers[counter].position:DistanceXY(self:GetEntity(soldierIndex):GetPosition()) > 1 then",
+            "        return false",
+            "    end",
+            "    counter = counter + 1",
+            "end",
+            "",
+            "return true"
+          ]
+        },
+        {
+          "name": "Succeed",
+          "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
+          "type": "success"
         }
       ]
     },
@@ -165,8 +182,12 @@
         "position": "1537.5,532.1"
       },
       {
-        "id": "981a00c8-f195-4647-a7c7-11dd7a0be0e0",
-        "position": "1725,532.1"
+        "id": "61b093f5-a004-48c0-9873-5eddde134561",
+        "position": "1712.5,532.1"
+      },
+      {
+        "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
+        "position": "1887.5,532.1"
       },
       {
         "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",
