@@ -32,7 +32,7 @@
           "type": "selector",
           "subtrees": [
             {
-              "name": "Choose action",
+              "name": "Choose action (Leader)",
               "id": "88fe9e0a-22b3-41e7-80d1-9ddebe85da4b",
               "type": "selector",
               "subtrees": [
@@ -41,6 +41,23 @@
                   "id": "90b49e06-807f-406b-a026-a71686f2c4e9",
                   "type": "sequence",
                   "subtrees": [
+                    {
+                      "name": "Allow shooting",
+                      "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
+                      "type": "scriptAction",
+                      "script": [
+                        "local SHOOTING_COOLDOWN_seconds = 10",
+                        "",
+                        "if loc.shootingOrderPending then",
+                        "    for member in self:GetParentGroup():GetEntities() do",
+                        "        if member ~= self then",
+                        "\t        self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", enemies = loc.enemiesInSight, timeout=SHOOTING_COOLDOWN_seconds, tag=self})",
+                        "        end",
+                        "    end",
+                        "end",
+                        "loc.shootingOrderPending = false"
+                      ]
+                    },
                     {
                       "name": "Shoot",
                       "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
@@ -60,13 +77,15 @@
                       "type": "scriptCondition",
                       "name": "Sees enemy but not for too long",
                       "script": [
-                        "local ENEMY_VISIBILITY_RADIUS = 30",
                         "local MAX_SHOOTING_TIME_seconds = 5",
                         "local SHOOTING_COOLDOWN_seconds = 10",
                         "",
                         "local SHOOTING_STATE_cooldown = 0",
                         "local SHOOTING_STATE_shooting = 1",
                         "",
+                        "if loc.enemiesInSight == nil then",
+                        "    loc.enemiesInSight = {}",
+                        "end",
                         "",
                         "if loc.shootingState == nil then loc.shootingState = SHOOTING_STATE_cooldown end",
                         "if loc.shootingTimer == nil then loc.shootingTimer = TimedCounter() end",
@@ -88,12 +107,23 @@
                         "",
                         "",
                         "-- go through visible enemies and select one to shoot at",
-                        "local visible_enemies = self:GetVisibleEnemies(ENEMY_VISIBILITY_RADIUS)",
-                        "local chosen_enemy = nil",
-                        "for i = 1, #visible_enemies  do",
-                        "\tchosen_enemy = visible_enemies[i]",
-                        "\tbreak",
+                        "",
+                        "DebugLog(\"enemies in sight... \")",
+                        "for i, enemy in ipairs(loc.enemiesInSight) do",
+                        "    DebugLog(\"in sight: \" .. tostring(enemy))",
                         "end",
+                        "",
+                        "local chosen_enemy = nil",
+                        "for i, enemy in ipairs(loc.enemiesInSight) do",
+                        "\tif self:IsVisible(enemy) then",
+                        "        DebugLog(\"visible: \" .. tostring(enemy))",
+                        "\t\tchosen_enemy = enemy",
+                        "\t\tbreak",
+                        "\tend",
+                        "    DebugLog(\"not visible: \" .. tostring(enemy))",
+                        "end",
+                        "",
+                        "DebugLog(\"chosen enemy: \" .. tostring(chosen_enemy))",
                         "",
                         "-- if there is no enemy, just stop shooting",
                         "if chosen_enemy == nil then",
@@ -108,6 +138,7 @@
                         "if loc.shootingState == SHOOTING_STATE_cooldown then",
                         "\tloc.shootingState = SHOOTING_STATE_shooting",
                         "\tloc.shootingTimer = TimedCounter():Incremented(1, MAX_SHOOTING_TIME_seconds)",
+                        "    loc.shootingOrderPending = true",
                         "end",
                         "loc.orderData = {",
                         "    entityToFireAt = chosen_enemy",
@@ -155,14 +186,14 @@
                   "type": "scriptCondition",
                   "name": "Is leader",
                   "script": [
-                    "return (loc.toFollow == nil) or (loc.toFollow == self)"
+                    "return (arg.orderData.toFollow == nil) or (arg.orderData.toFollow == self)"
                   ]
                 }
               ],
               "active": true
             },
             {
-              "name": "Choose action",
+              "name": "Choose action (Pawn)",
               "id": "e740f59b-6463-4e2f-9b6b-3f9a5e5e50de",
               "type": "selector",
               "subtrees": [
@@ -176,19 +207,27 @@
                       "type": "scriptCondition",
                       "name": "Sees enemy but not for too long",
                       "script": [
-                        "if not isAllowedToShoot then",
+                        "if (loc.shootingTag ~= self:GetParentGroup():GetLeader()) or (loc.shootingTimer == nil)  then",
+                        "    return false",
+                        "end",
+                        "if loc.shootingTimer:CurrentValue() <= 0 then",
                         "    return false",
                         "end",
                         "",
-                        "local ENEMY_VISIBILITY_RADIUS = 30",
+                        "local ENEMY_VISIBILITY_RADIUS = 300",
                         "",
+                        "",
+                        "if loc.enemiesInSight == nil then",
+                        "    loc.enemiesInSight = {}",
+                        "end",
                         "",
                         "-- go through visible enemies and select one to shoot at",
-                        "local visible_enemies = self:GetVisibleEnemies(ENEMY_VISIBILITY_RADIUS)",
                         "local chosen_enemy = nil",
-                        "for i = 1, #visible_enemies  do",
-                        "\tchosen_enemy = visible_enemies[i]",
-                        "\tbreak",
+                        "for i, enemy in ipairs(loc.enemiesInSight) do",
+                        "    if self:IsVisible(enemy) then",
+                        "\t    chosen_enemy = enemy",
+                        "\t    break",
+                        "    end",
                         "end",
                         "",
                         "-- if there is no enemy, just stop shooting",
@@ -223,7 +262,7 @@
                       "name": "Setup args",
                       "script": [
                         "loc.orderData = {",
-                        "    entityToFollow = loc.toFollow",
+                        "    entityToFollow = arg.orderData.toFollow",
                         "}"
                       ]
                     }
@@ -250,7 +289,7 @@
           "handler": [
             "local message = msg",
             "",
-            "if true or  message.value.messageType ~= \"shooting\" then",
+            "if true then",
             "    DebugLog(\"Order info: \" .. tostring(self))",
             "",
             "    if message.value then",
@@ -263,14 +302,15 @@
             "end",
             "",
             "",
-            "if message.value.messageType == \"follow\" then",
-            "    if loc.toFollow ~= message.value.follow then",
-            "        loc.isAllowedToShoot = false",
-            "    end",
-            "    loc.toFollow = message.value.follow",
+            "if message.value.messageType == \"enemies_sighted\" then",
+            "    loc.enemiesInSight = message.value.enemies",
             "",
             "elseif message.value.messageType == \"shooting\" then",
-            "    loc.isAllowedToShoot = message.value.canShoot",
+            "    loc.shootingTimer = TimedCounter():Incremented(1, message.value.timeout)",
+            "    loc.shootingTag = message.value.tag",
+            "    loc.enemiesInSight = message.value.enemies",
+            "else",
+            "    DebugLog(\"unknown order-info message: '\" .. message.value.messageType .. \"'!\")",
             "end"
           ]
         }
@@ -286,27 +326,6 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Allow shooting",
-      "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
-            "position": "1487.5,792.833333333333"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "for member in self:GetParentGroup():GetEntities() do",
-        "    if member ~= self then",
-        "\t    self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", canShoot = true})",
-        "    end",
-        "end"
-      ]
-    },
-    {
       "name": "Disallow shooting",
       "id": "9f47d995-5555-4fe0-8fe9-ae1626dae0d0",
       "type": "scriptAction",
@@ -314,17 +333,21 @@
         "nodesInfo": [
           {
             "id": "9f47d995-5555-4fe0-8fe9-ae1626dae0d0",
-            "position": "1937.5,792.833333333333"
+            "position": "1887.5,883.928571428571"
           }
         ],
         "editorObjects": []
       },
       "script": [
-        "for member in self:GetParentGroup():GetEntities() do",
-        "    if member ~= self then",
-        "\t    self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", canShoot = false})",
+        "if loc.shootingOrderPending and false then",
+        "    for member in self:GetParentGroup():GetEntities() do",
+        "        if member ~= self then",
+        "\t        self:SendMessage(member, \"OrderDetails\", {messageType = \"shooting\", enemies={}, timeout=0, tag=nil})",
+        "        end",
         "    end",
-        "end"
+        "end",
+        "",
+        "loc.shootingOrderPending = false"
       ]
     },
     {
@@ -335,7 +358,7 @@
         "nodesInfo": [
           {
             "id": "56eb93b5-c5aa-4ef8-b931-12cf05b89e36",
-            "position": "3000,555.333333333333"
+            "position": "3000,621.428571428571"
           }
         ],
         "editorObjects": []
@@ -347,64 +370,68 @@
     "nodesInfo": [
       {
         "id": "7d2f1420-85dd-442a-9e52-21b94b79e4df",
-        "position": "2150,130.333333333333"
+        "position": "2150,196.428571428571"
       },
       {
         "id": "233878f8-bf24-463f-aa07-d1d1b49b661f",
-        "position": "1662.5,192.833333333333"
+        "position": "1662.5,258.928571428571"
       },
       {
         "id": "ed790959-75d1-41a5-96f4-ad759fed3635",
-        "position": "1900,217.833333333333"
+        "position": "1900,283.928571428571"
       },
       {
         "id": "da0e5b6c-286a-4a9c-8446-ac57d0c75ed6",
-        "position": "2112.5,292.833333333333"
+        "position": "2112.5,358.928571428571"
       },
       {
         "id": "7cbbc217-1e0d-4a3b-85ec-b17eaaea8fd5",
-        "position": "2225,430.333333333333"
+        "position": "2225,496.428571428571"
       },
       {
         "id": "88fe9e0a-22b3-41e7-80d1-9ddebe85da4b",
-        "position": "1900,492.833333333333"
+        "position": "1900,558.928571428571"
       },
       {
         "id": "90b49e06-807f-406b-a026-a71686f2c4e9",
-        "position": "1600,642.833333333333"
+        "position": "1600,708.928571428571"
+      },
+      {
+        "id": "2565ddc7-9ff6-438a-abc0-e68b782f40be",
+        "position": "1487.5,858.928571428571"
       },
       {
         "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
-        "position": "1700,780.333333333333"
+        "position": "1700,846.428571428571"
       },
       {
         "id": "29eb4dbc-cd5a-491e-ac27-0fe3707886e4",
-        "position": "1987.5,655.333333333333"
+        "position": "1987.5,721.428571428571"
       },
       {
         "id": "9a08793e-3404-4376-9f61-618339fd8785",
-        "position": "2125,742.833333333333"
+        "position": "2125,808.928571428571"
       },
       {
         "id": "e740f59b-6463-4e2f-9b6b-3f9a5e5e50de",
-        "position": "2637.5,580.333333333333"
+        "position": "2637.5,646.428571428571"
       },
       {
         "id": "374a60cb-702f-4398-a9e0-4e4faf7f3ba4",
-        "position": "2375,692.833333333333"
+        "position": "2375,758.928571428571"
       },
       {
         "id": "701a1460-0f2c-4103-938c-e31f725d6b86",
-        "position": "2787.5,692.833333333333"
+        "position": "2787.5,758.928571428571"
       },
       {
         "id": "6d7e3fa0-b62d-4b6f-8335-9172bf4c4a99",
-        "position": "2512.5,367.833333333333"
+        "position": "2512.5,433.928571428571"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2505.33333333333",
-    "gridPadding": "0,5.33333333333331"
+    "canvasSize": "3840,2571.42857142857",
+    "gridPadding": "0,8.9285714285715"
   },
   "parameters": [
     {
@@ -418,6 +445,8 @@
     "shootingState": "nil",
     "orderData": "nil",
     "isAllowedToShoot": "false",
-    "toFollow": "nil"
+    "enemiesInSight": "nil",
+    "shootingTag": "nil",
+    "shootingOrderPending": "false"
   }
 }
