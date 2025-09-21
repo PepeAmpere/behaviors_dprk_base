@@ -67,7 +67,10 @@
                 "    end",
                 "end",
                 "",
-                "if #loc.enemiesInFirstPoly == 0 then loc.firstPoly = nil end"
+                "if #loc.enemiesInFirstPoly == 0 then ",
+                "    loc.firstPoly = nil ",
+                "    loc.firstPolyChanged = false",
+                "end"
               ]
             },
             {
@@ -90,7 +93,10 @@
                 "    end",
                 "end",
                 "",
-                "if #loc.enemiesInSecondPoly == 0 then loc.secondPoly = nil end"
+                "if #loc.enemiesInSecondPoly == 0 then ",
+                "    loc.secondPoly = nil ",
+                "    loc.secondPolyChanged = false",
+                "end"
               ]
             },
             {
@@ -122,7 +128,8 @@
                             "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
                             "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
                             "",
-                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "loc.firstPolyChanged = true"
                           ]
                         }
                       ],
@@ -169,7 +176,8 @@
                             "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
                             "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
                             "",
-                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "loc.firstPolyChanged = true"
                           ]
                         }
                       ],
@@ -216,7 +224,8 @@
                             "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
                             "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
                             "",
-                            "loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})"
+                            "loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "loc.secondPolyChanged = true"
                           ]
                         }
                       ],
@@ -255,7 +264,10 @@
                   "type": "scriptAction",
                   "script": [
                     "loc.firstPoly = nil",
-                    "loc.secondPoly = nil"
+                    "loc.secondPoly = nil",
+                    "",
+                    "loc.firstPolyChanged = false",
+                    "loc.secondPolyChanged = false"
                   ]
                 }
               ],
@@ -290,7 +302,9 @@
                     "",
                     "for i = 0, self:GetEntityCount() / 2 - 1 do",
                     "    self:SendMessage(self:GetEntity(i), \"NewOrder\", orderData)",
-                    "end "
+                    "end ",
+                    "",
+                    "loc.firstPolyChanged = false"
                   ]
                 },
                 {
@@ -329,7 +343,9 @@
                     "",
                     "for i = 0, self:GetEntityCount() / 2 - 1 do",
                     "    loc.orderDataSub1.soldierIndexes[#loc.orderDataSub1.soldierIndexes] = i",
-                    "end "
+                    "end ",
+                    "",
+                    "loc.firstPolyChanged = false"
                   ]
                 },
                 {
@@ -396,6 +412,16 @@
               ]
             }
           ],
+          "decorators": [
+            {
+              "id": "b9b0d23a-d77a-487f-a847-06df11b7c27f",
+              "type": "restartIf",
+              "name": "If change",
+              "script": [
+                "return loc.firstPolyChanged"
+              ]
+            }
+          ],
           "active": true
         },
         {
@@ -418,7 +444,9 @@
                     "",
                     "for i = self:GetEntityCount() / 2, self:GetEntityCount() -1  do",
                     "    self:SendMessage(self:GetEntity(i), \"NewOrder\", orderData)",
-                    "end "
+                    "end ",
+                    "",
+                    "loc.secondPolyChanged = false"
                   ]
                 },
                 {
@@ -457,7 +485,9 @@
                     "",
                     "for i = self:GetEntityCount() / 2, self:GetEntityCount()-1  do",
                     "    loc.orderDataSub2.soldierIndexes[#loc.orderDataSub2.soldierIndexes] = i",
-                    "end "
+                    "end ",
+                    "",
+                    "loc.secondPolyChanged = false"
                   ]
                 },
                 {
@@ -521,6 +551,16 @@
                     }
                   ]
                 }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "b715299c-08bc-4a30-a495-7db9134e66f4",
+              "type": "restartIf",
+              "name": "If changed",
+              "script": [
+                "return loc.secondPolyChanged"
               ]
             }
           ],
