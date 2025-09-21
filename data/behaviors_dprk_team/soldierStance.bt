@@ -10,6 +10,11 @@
       "stance": [
         "return arg.orderData.stance"
       ]
+    },
+    {
+      "name": "Wait Forever",
+      "id": "60d7377f-3d91-4b93-ba7d-5eef7110206f",
+      "type": "waitForever"
     }
   ],
   "meta": {
@@ -20,7 +25,11 @@
       },
       {
         "id": "619098b8-2174-47c1-a061-5d12a45d068e",
-        "position": "1837.5,387.3"
+        "position": "1775,387.3"
+      },
+      {
+        "id": "60d7377f-3d91-4b93-ba7d-5eef7110206f",
+        "position": "1975,387.3"
       }
     ],
     "editorObjects": [],
