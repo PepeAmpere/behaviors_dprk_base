@@ -128,11 +128,11 @@
           "subtrees": [
             {
               "name": "MoveCloser",
-              "id": "12bf8235-4a20-498b-b3b7-2f66ddfc2303",
+              "id": "098051d4-9139-4568-8707-5c61c778ebbc",
               "type": "reference",
               "target": [
-                "behaviorTreeProject1",
-                "Move"
+                "behaviors_dprk_team",
+                "soldierOccupy"
               ],
               "arguments": {
                 "orderData": "loc.orderData"
@@ -140,11 +140,11 @@
             },
             {
               "name": "FireAtPos",
-              "id": "f8f08cd4-5039-4131-8ae5-94a1d3867129",
+              "id": "f213700f-bff9-4412-8961-dadb50511e12",
               "type": "reference",
               "target": [
-                "behaviorTreeProject1",
-                "FireAt"
+                "behaviors_dprk_team",
+                "soldierFireAt"
               ],
               "arguments": {
                 "orderData": "arg.orderData"
@@ -204,65 +204,72 @@
     "nodesInfo": [
       {
         "id": "b938fc9d-d0ff-4193-98d5-5c4222a789cb",
-        "position": "1765.61111111111,128"
+        "position": "1765.61111111111,129.6"
       },
       {
         "id": "6d94cb96-a79a-4365-97a7-1c6a2d63ad01",
-        "position": "1553.11111111111,290.5"
+        "position": "1553.11111111111,292.1"
       },
       {
         "id": "3af6b99e-a428-4d8f-8b29-d63ff50ce5a1",
-        "position": "1058.08888888889,478.850793650794"
+        "position": "1058.08888888889,480.450793650794"
       },
       {
         "id": "555ee69e-108d-430c-901d-dcbc52186f55",
-        "position": "1240.61111111111,478"
+        "position": "1240.61111111111,479.6"
       },
       {
         "id": "26617ead-a0d9-4e3d-91ca-7b6d790cf1e2",
-        "position": "1415.61111111111,478"
+        "position": "1415.61111111111,479.6"
       },
       {
         "id": "e501c0ba-e349-448b-9331-6c0eb796570e",
-        "position": "1578.11111111111,478"
+        "position": "1578.11111111111,479.6"
       },
       {
         "id": "7ca1abe8-21ea-48b5-80fb-ba21a71c726d",
-        "position": "1765.61111111111,478"
+        "position": "1765.61111111111,479.6"
       },
       {
         "id": "33c04384-51dc-408b-8c32-2a9019e852d3",
-        "position": "1940.61111111111,478"
+        "position": "1940.61111111111,479.6"
       },
       {
         "id": "2232c5df-fb86-44d9-b633-dec4f8a74907",
-        "position": "2190.61111111111,440.5"
+        "position": "2190.61111111111,442.1"
       },
       {
-        "id": "12bf8235-4a20-498b-b3b7-2f66ddfc2303",
-        "position": "2103.11111111111,578"
+        "id": "098051d4-9139-4568-8707-5c61c778ebbc",
+        "position": "2162.5,575.5"
       },
       {
-        "id": "f8f08cd4-5039-4131-8ae5-94a1d3867129",
-        "position": "2353.11111111111,578"
+        "id": "f213700f-bff9-4412-8961-dadb50511e12",
+        "position": "2400,575.5"
       },
       {
         "id": "39cd9f68-80b3-432d-a558-e9ca581a939d",
-        "position": "1778.11111111111,278"
+        "position": "1778.11111111111,279.6"
       },
       {
         "id": "6a273d03-b830-45ca-80ab-74d284303ff2",
-        "position": "1965.61111111111,278"
+        "position": "1965.61111111111,279.6"
       },
       {
         "id": "2dd6a67a-9c36-4165-aa2f-c2211088c576",
-        "position": "2190.61111111111,278"
+        "position": "2190.61111111111,279.6"
       }
     ],
     "editorObjects": [],
     "canvasSize": "3840,2588",
-    "gridPadding": "0,11.4"
+    "gridPadding": "0,0.500000000000057"
   },
   "parameters": [],
-  "locals": {}
+  "locals": {
+    "defilade": "nil",
+    "defiladeReq": "nil",
+    "pathReq": "nil",
+    "path": "nil",
+    "orderData": "nil",
+    "raycastReqs": "nil"
+  }
 }
