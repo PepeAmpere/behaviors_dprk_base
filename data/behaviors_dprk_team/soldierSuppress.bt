@@ -1,0 +1,268 @@
+{
+  "name": "<unnamed>",
+  "id": "b938fc9d-d0ff-4193-98d5-5c4222a789cb",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "6d94cb96-a79a-4365-97a7-1c6a2d63ad01",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "GetPath",
+          "id": "3af6b99e-a428-4d8f-8b29-d63ff50ce5a1",
+          "type": "scriptAction",
+          "script": [
+            "loc.pathReq = FindPath(",
+            "self:GetPosition(),",
+            "arg.orderData.position",
+            ")"
+          ]
+        },
+        {
+          "name": "IsPathReady",
+          "id": "555ee69e-108d-430c-901d-dcbc52186f55",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.pathReq:IsReady() then",
+            "    loc.path = loc.pathReq:Value()",
+            "    return true",
+            "end",
+            "return false",
+            "    "
+          ]
+        },
+        {
+          "name": "GetDefilade",
+          "id": "26617ead-a0d9-4e3d-91ca-7b6d790cf1e2",
+          "type": "scriptAction",
+          "script": [
+            "local verts = {}",
+            "",
+            "for i = 0, loc.path:GetSegmentCount() - 1 do",
+            "    local startPos = loc.path:GetSegmentStart(i)",
+            "    local dir = loc.path:GetSegmentEnd(i) - loc.path:GetSegmentStart(i)",
+            "    local nextPoint =  startPos - 10 * dir:RightPerpendicularXY():Normalized()",
+            "    table.insert(verts, nextPoint)",
+            "end",
+            "",
+            "for i = loc.path:GetSegmentCount() - 1, 0, -1 do",
+            "    local endPos = loc.path:GetSegmentEnd(i)",
+            "    local dir = loc.path:GetSegmentStart(i) - loc.path:GetSegmentEnd(i)",
+            "    local nextPoint =  endPos - 10 * dir:RightPerpendicularXY():Normalized()",
+            "    table.insert(verts, nextPoint)",
+            "end",
+            "",
+            "",
+            "local polygon = Polygon(verts)",
+            "",
+            "loc.defiladeReq = FindDefiladeOnGrid(",
+            "    arg.orderData.position,",
+            "    polygon,",
+            "    {",
+            "        cellSize = 2,",
+            "        maxHeight = 1.5,",
+            "        minHeight = 0.5",
+            "    }",
+            ")"
+          ]
+        },
+        {
+          "name": "IsDefiladeReady",
+          "id": "e501c0ba-e349-448b-9331-6c0eb796570e",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.defiladeReq:IsReady() then",
+            "    loc.defilade = loc.defiladeReq:Value()",
+            "    return true",
+            "end",
+            "return false",
+            "    "
+          ]
+        },
+        {
+          "name": "DoRaycasts",
+          "id": "7ca1abe8-21ea-48b5-80fb-ba21a71c726d",
+          "type": "scriptAction",
+          "script": [
+            "loc.raycastReqs = {}",
+            "",
+            "for i = 1, #loc.defilade do",
+            "    table.insert(loc.raycastReqs, ",
+            "    Raycast(loc.defilade[i].position + Vec3(0, 0, 1.8),",
+            "    arg.orderData.entityToFireAt + Vec3(0, 0, 1.8)",
+            "    ))",
+            "end"
+          ]
+        },
+        {
+          "name": "GetBestPos",
+          "id": "33c04384-51dc-408b-8c32-2a9019e852d3",
+          "type": "waitUntil",
+          "condition": [
+            "for i = 1, #loc.raycastReqs do",
+            "    if not loc.raycastReqs[i]:IsReady() then return false end",
+            "end",
+            "",
+            "local bestDist = 0",
+            "local bestIndex = 0",
+            "",
+            "for i = 1, #loc.raycastReqs do",
+            "    local dist = loc.raycastReqs[i]:Value()",
+            "    if dist > bestDist then",
+            "        bestDist = dist",
+            "        bestIndex = i",
+            "    end",
+            "end",
+            "",
+            "loc.orderData = {}",
+            "loc.orderData.position = loc.defilade[bestIndex].position",
+            "",
+            "return true"
+          ]
+        },
+        {
+          "name": "MoveAndFire",
+          "id": "2232c5df-fb86-44d9-b633-dec4f8a74907",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "MoveCloser",
+              "id": "12bf8235-4a20-498b-b3b7-2f66ddfc2303",
+              "type": "reference",
+              "target": [
+                "behaviorTreeProject1",
+                "Move"
+              ],
+              "arguments": {
+                "orderData": "loc.orderData"
+              }
+            },
+            {
+              "name": "FireAtPos",
+              "id": "f8f08cd4-5039-4131-8ae5-94a1d3867129",
+              "type": "reference",
+              "target": [
+                "behaviorTreeProject1",
+                "FireAt"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "LineToTarget",
+      "id": "39cd9f68-80b3-432d-a558-e9ca581a939d",
+      "type": "scriptAction",
+      "script": [
+        "DebugLine(",
+        "self:GetPosition() + Vec3(0, 0, 1.5),",
+        "arg.orderData.entityToFireAt,",
+        "0, 1, 0, 1",
+        ")"
+      ]
+    },
+    {
+      "name": "PathDraw",
+      "id": "6a273d03-b830-45ca-80ab-74d284303ff2",
+      "type": "scriptAction",
+      "script": [
+        "if loc.path == nil then return true end",
+        "",
+        "for i = 0, loc.path:GetSegmentCount() - 1 do",
+        "    DebugLine(",
+        "    loc.path:GetSegmentStart(i) + Vec3(0, 0, 1), ",
+        "    loc.path:GetSegmentEnd(i) + Vec3(0, 0, 1), ",
+        "    1, 0, 1, 1",
+        "    )",
+        "end"
+      ]
+    },
+    {
+      "name": "DefiladeDraw",
+      "id": "2dd6a67a-9c36-4165-aa2f-c2211088c576",
+      "type": "scriptAction",
+      "script": [
+        "if loc.defilade == nil then return true end",
+        "",
+        "for i = 1, #loc.defilade do",
+        "    local cur = loc.defilade[i]",
+        "    DebugLine(",
+        "    cur.position, ",
+        "    cur.position + Vec3(0, 0, cur.height), ",
+        "    1, 1, 1, 1",
+        "    )",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b938fc9d-d0ff-4193-98d5-5c4222a789cb",
+        "position": "1765.61111111111,128"
+      },
+      {
+        "id": "6d94cb96-a79a-4365-97a7-1c6a2d63ad01",
+        "position": "1553.11111111111,290.5"
+      },
+      {
+        "id": "3af6b99e-a428-4d8f-8b29-d63ff50ce5a1",
+        "position": "1058.08888888889,478.850793650794"
+      },
+      {
+        "id": "555ee69e-108d-430c-901d-dcbc52186f55",
+        "position": "1240.61111111111,478"
+      },
+      {
+        "id": "26617ead-a0d9-4e3d-91ca-7b6d790cf1e2",
+        "position": "1415.61111111111,478"
+      },
+      {
+        "id": "e501c0ba-e349-448b-9331-6c0eb796570e",
+        "position": "1578.11111111111,478"
+      },
+      {
+        "id": "7ca1abe8-21ea-48b5-80fb-ba21a71c726d",
+        "position": "1765.61111111111,478"
+      },
+      {
+        "id": "33c04384-51dc-408b-8c32-2a9019e852d3",
+        "position": "1940.61111111111,478"
+      },
+      {
+        "id": "2232c5df-fb86-44d9-b633-dec4f8a74907",
+        "position": "2190.61111111111,440.5"
+      },
+      {
+        "id": "12bf8235-4a20-498b-b3b7-2f66ddfc2303",
+        "position": "2103.11111111111,578"
+      },
+      {
+        "id": "f8f08cd4-5039-4131-8ae5-94a1d3867129",
+        "position": "2353.11111111111,578"
+      },
+      {
+        "id": "39cd9f68-80b3-432d-a558-e9ca581a939d",
+        "position": "1778.11111111111,278"
+      },
+      {
+        "id": "6a273d03-b830-45ca-80ab-74d284303ff2",
+        "position": "1965.61111111111,278"
+      },
+      {
+        "id": "2dd6a67a-9c36-4165-aa2f-c2211088c576",
+        "position": "2190.61111111111,278"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2588",
+    "gridPadding": "0,11.4"
+  },
+  "parameters": [],
+  "locals": {}
+}
