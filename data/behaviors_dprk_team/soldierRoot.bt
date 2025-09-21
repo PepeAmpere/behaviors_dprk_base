@@ -44,6 +44,10 @@
         "    MoveInColumn = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierMoveInColumn\"",
+        "    },",
+        "    Stance = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierStance\"",
         "    }",
         "}"
       ]

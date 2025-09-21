@@ -10,6 +10,7 @@
     "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "soldierStance.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
     "subteamMoveToDefensivePosition.bt",

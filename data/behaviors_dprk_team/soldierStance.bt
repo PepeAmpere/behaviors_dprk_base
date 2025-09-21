@@ -1,0 +1,37 @@
+{
+  "name": "Root",
+  "id": "0d4df560-9895-4121-b9b9-8570b6084904",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Set Stance",
+      "id": "619098b8-2174-47c1-a061-5d12a45d068e",
+      "type": "setStance",
+      "stance": [
+        "return arg.orderData.stance"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "0d4df560-9895-4121-b9b9-8570b6084904",
+        "position": "1828.4,239.2"
+      },
+      {
+        "id": "619098b8-2174-47c1-a061-5d12a45d068e",
+        "position": "1837.5,387.3"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2524.8",
+    "gridPadding": "0,12.3"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {}
+}
