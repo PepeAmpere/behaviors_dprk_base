@@ -211,7 +211,7 @@
             },
             {
               "name": "Move",
-              "id": "fec5e2fb-cc80-44bd-ad9a-02046350feaa",
+              "id": "de869ae7-f8ac-46eb-a035-d13b15e0d35e",
               "type": "reference",
               "decorators": [
                 {
@@ -224,8 +224,8 @@
                 }
               ],
               "target": [
-                "behaviorTreeProject1",
-                "Move"
+                "behaviors_dprk_team",
+                "soldierMove"
               ],
               "arguments": {
                 "orderData": "loc.orderData"
@@ -233,11 +233,11 @@
             },
             {
               "name": "Reset",
-              "id": "96260395-28e5-4944-ab5c-cec428ae5be0",
+              "id": "0dcd8556-3410-4adf-9c7f-a72221338252",
               "type": "reference",
               "target": [
-                "behaviorTreeProject1",
-                "Reset"
+                "behaviors_dprk_team",
+                "soldierReset"
               ],
               "arguments": {}
             }
@@ -313,18 +313,26 @@
         "position": "1397.7,992.961111111112"
       },
       {
-        "id": "fec5e2fb-cc80-44bd-ad9a-02046350feaa",
-        "position": "1335.2,692.961111111111"
+        "id": "de869ae7-f8ac-46eb-a035-d13b15e0d35e",
+        "position": "1353.1,703.6"
       },
       {
-        "id": "96260395-28e5-4944-ab5c-cec428ae5be0",
-        "position": "1597.7,692.961111111111"
+        "id": "0dcd8556-3410-4adf-9c7f-a72221338252",
+        "position": "1640.6,703.6"
       }
     ],
     "editorObjects": [],
     "canvasSize": "4705.6,3061.6",
     "gridPadding": "3.09999999999991,3.60000000000002"
   },
-  "parameters": [],
-  "locals": {}
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "orderData": "nil",
+    "path": "nil"
+  }
 }

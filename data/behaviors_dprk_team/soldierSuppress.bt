@@ -263,7 +263,12 @@
     "canvasSize": "3840,2588",
     "gridPadding": "0,0.500000000000057"
   },
-  "parameters": [],
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
   "locals": {
     "defilade": "nil",
     "defiladeReq": "nil",
