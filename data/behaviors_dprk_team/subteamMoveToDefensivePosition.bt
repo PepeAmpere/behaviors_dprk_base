@@ -101,6 +101,7 @@
             "if arg.orderData.soldierIndexes ~= nil then",
             "    for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
             "        if loc.Covers[counter].cover == nil then",
+            "            loc.stances[counter] = Stance.Prone",
             "        elseif loc.Covers[counter].cover < 0.9 then",
             "            loc.stances[counter] = Stance.Crouched",
             "        else",
