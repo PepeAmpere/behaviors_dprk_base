@@ -1,7 +1,6 @@
 {
   "name": "behaviors_dprk_team",
   "trees": [
-    "soldierDestroy.bt",
     "soldierFireAt.bt",
     "soldierFollow.bt",
     "soldierIdle.bt",
@@ -11,13 +10,12 @@
     "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
-    "soldierStance.bt",
-    "soldierSuppress.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
     "subteamMoveToDefensivePosition.bt",
     "teamIdle.bt",
     "teamMoveInColumn.bt",
+    "teamOccupyBoundingOverwatch.bt",
     "teamOccupyMoveInColumn.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"
