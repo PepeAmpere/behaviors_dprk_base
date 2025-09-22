@@ -103,6 +103,24 @@
                 "    end",
                 "end"
               ]
+            },
+            {
+              "name": "Move to weak",
+              "id": "bce65f3b-f205-44a9-b99f-a7a27f8a4b0f",
+              "type": "scriptAction",
+              "script": [
+                "if #loc.firstTeam - #loc.secondTeam >= 2 then",
+                "    loc.secondTeam[#loc.secondTeam] = loc.firstTeam[#loc.firstTeam - 1]",
+                "    loc.firstTeam[#loc.firstTeam - 1] = nil",
+                "    return",
+                "end",
+                "",
+                "if #loc.secondTeam - #loc.firstTeam >= 2 then",
+                "    loc.firstTeam[#loc.firstTeam] = loc.secondTeam[#loc.secondTeam - 1]",
+                "    loc.secondTeam[#loc.secondTeam - 1] = nil",
+                "    return",
+                "end"
+              ]
             }
           ]
         },
@@ -787,11 +805,15 @@
       },
       {
         "id": "4fe2d57b-d640-4d53-9420-11929357c18e",
-        "position": "645.8,823.097777777778"
+        "position": "558.3,823.097777777778"
       },
       {
         "id": "24bfd93f-03aa-4e65-8bfe-67148ece64e3",
-        "position": "858.3,823.097777777778"
+        "position": "733.3,823.097777777778"
+      },
+      {
+        "id": "bce65f3b-f205-44a9-b99f-a7a27f8a4b0f",
+        "position": "908.3,823.097777777778"
       },
       {
         "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
