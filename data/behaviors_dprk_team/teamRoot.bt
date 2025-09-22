@@ -32,6 +32,10 @@
         "    TeamIdle = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"teamIdle\"    ",
+        "    },",
+        "    OccupyBoundingOverwatch= {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"teamOccupyBoundingOverwatch\"",
         "    }",
         "}"
       ]
