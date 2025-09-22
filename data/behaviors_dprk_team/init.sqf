@@ -134,3 +134,16 @@ fn_orderToSubteamMove = {
         ]
     ];
 };
+
+fn_orderToTeamIdle = {
+    _receiver = _this select 0;
+    _position = _this select 1;
+
+    _receiver receiveMessage[
+        "NewOrder", 
+        [
+            "orderName",  "TeamIdle", 
+            "position", _position
+        ]
+    ];
+}
