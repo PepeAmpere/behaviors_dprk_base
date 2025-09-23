@@ -1,0 +1,186 @@
+return {
+    util = {
+        compare_did_change = function(old_array, new_array)
+	        if (old_array == nil) ~= (new_array == nil) then
+		        return true
+	        end
+	        if (#old_array) ~= (#new_array) then 
+		        return true 
+	        end
+	        for i, old_member in ipairs(old_array) do
+		        if old_member ~= new_array[i] then
+			        return true
+		        end
+	        end
+	        return false
+        end,  
+        get_tail = function(arr, start_idx) 
+	        local ret = {}
+	        if #arr >= start_idx then
+		        for i=start_idx, (#arr) do
+			        ret[(#ret) + 1] = arr[i]
+		        end
+	        end
+	        return ret
+        end,
+        get_without = function(arr, to_omit)
+	        local ret= {}
+	        for i, soldier in ipairs(arr) do
+		        if soldier ~= to_omit then
+			        ret[(#ret) + 1] = soldier
+		        end
+	        end
+            return ret
+        end,
+		append_all = function(target, to_append)
+			for i, elem in ipairs(to_append) do
+				target[(#target) + 1] = elem
+			end
+			return target
+		end,
+		find_idx = function(arr, to_find)
+			for i, elem in ipairs(arr) do
+				if elem == to_find then
+					return i
+				end
+			end
+			return -1
+		end,
+		get_neighbor_elem = function(arr, this_elem, offset)
+			local idx = util.find_idx(arr, this_elem) + offset
+			if idx >= 1 and idx <= (#arr) then return arr[idx] end
+			return nil
+		end, 
+		get_neighbor_object = function(arr, this_elem, dir)
+			local idx = util.find_idx(arr, this_elem) + dir
+			while idx >= 1 and idx <= (#arr) do
+				if util.is_valid_soldier(arr[idx]) then return arr[idx] end
+				idx = idx + dir
+			end
+			return nil
+		end,
+		get_preceding_object = function(arr, this_elem) return util.get_neighbor_object(arr, this_elem, -1) end,
+		get_successor_object = function(arr, this_elem) return util.get_neighbor_object(arr, this_elem, 1) end,
+		concat_arrays = function(a, b)
+			local ret = {}
+			util.append_all(ret, a)
+			util.append_all(ret, b)
+			return ret
+		end,
+		is_valid_soldier = function(soldier)
+			return soldier ~= nil and soldier:Valid() and soldier:IsAlive()
+		end,
+		get_alive_soldiers = function(this)
+			--if type(this) ~= "Group" then
+			--	this = this:GetParentGroup()
+			--end
+			local ret = {}
+			for soldier in this:GetEntities() do
+				if util.is_valid_soldier(soldier) then
+					ret[(#ret) + 1] = soldier
+				end
+			end
+			return ret
+		end,
+		is_subset_of = function(a , b)
+			for value, flag in pairs(b) do
+				if not a[value] then
+					return false
+				end
+			end
+			
+			return true
+		end,
+		set_equals = function(a, b)
+			return util.is_subset_of(a, b) and util.is_subset_of(b, a)
+		end
+    },
+	messaging = {
+		ORDER_DETAILS_MESSAGE_TYPE	= "OrderDetails", 
+		NEW_ORDER_MESSAGE_TYPE		= "NewOrder",
+		send_order_details = function(this, target_entity, messageData)
+			DebugLog("Sending details " .. tostring(messageData.messageType) .. " to " .. tostring(target_entity))
+			this:SendMessage(target_entity, messaging.ORDER_DETAILS_MESSAGE_TYPE, messageData)
+		end
+	},
+	--- Move In Collumn
+	mic = {
+		PATH_SEGMENT_LENGTH = 30,
+		PATH_SEGMENT_WIDTH = 50,
+		PATH_SEGMENT_LENGTH_OVERSHOOT = 2.5,
+		PREPARED_SEGMENTS_COUNT = 3,
+		MAX_ALLOWED_SOLDIER_DISTANCE = 15,
+	
+
+		init_member = function(group_brain, member, soldiers_in_order)
+			DebugLog("Initializing: '" .. tostring(member) .. "'")
+			group_brain:SendMessage(member, messaging.NEW_ORDER_MESSAGE_TYPE, {
+				orderName = "MoveInColumn",
+				target = arg.orderData.target,
+				groupBrain = group_brain,
+				soldiersInOrder = soldiers_in_order
+			})
+		end,
+
+		get_enemy_to_shoot = function(soldier, arg, loc)
+			local SOLDIER_MOVING_SPEED_THRESHOLD = 1
+            local SHOOTING_TIMEOUT = 10
+			local ENEMY_FORGET_TIMEOUT = 200
+			local previous_soldier = util.get_preceding_object(arg.orderData.soldiersInOrder, soldier)
+			local next_soldier = util.get_successor_object(arg.orderData.soldiersInOrder, soldier)
+			
+			--if (previous_soldier	~= nil and ((previous_soldier:GetSpeed() < SOLDIER_MOVING_SPEED_THRESHOLD) or (previous_soldier:GetPosition():Distance(soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE)    )) or
+			--   (next_soldier		~= nil and ((next_soldier:GetSpeed()		< SOLDIER_MOVING_SPEED_THRESHOLD) or ((next_soldier:GetPosition():Distance(soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE)	 )) )
+			--then
+			--	loc.shootingTimer = nil
+			--	return nil
+			--end
+
+			if loc.shootingTimer == nil then
+				loc.shootingTimer = {}
+			end
+
+			if loc.enemiesInSight == nil then
+				loc.enemiesInSight = {}
+				return nil
+			end
+
+			local ret = nil
+			for i, enemy in ipairs(loc.enemiesInSight) do
+				local enemy_timer = loc.shootingTimer[tostring(enemy)]
+				if soldier:IsVisible(enemy) and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
+					ret = enemy
+					break
+				end
+			end
+
+			local chosen_tag = tostring(ret)
+			local chosen_timer = loc.shootingTimer[chosen_tag]
+			if (chosen_timer == nil or chosen_timer:CurrentValue() == 0) then
+				DebugLog(tostring(soldier) .. ".. Incrementing shoot counter for " .. chosen_tag .."!")
+				loc.shootingTimer[chosen_tag] = TimedCounter():Incremented(2, SHOOTING_TIMEOUT):Incremented(-1, ENEMY_FORGET_TIMEOUT)
+			end
+
+			return ret
+		end,
+		are_soldiers_too_far_from_each_other = function(soldiers)
+			if #soldiers < 0 then return false end
+			local lastSoldier = soldiers[1]
+			for i, soldier in ipairs(soldiers) do
+				if soldier:Valid() then
+					if lastSoldier:Valid() then
+						if lastSoldier:GetPosition():Distance(soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE then
+							return true
+						end
+					end
+					lastSoldier = soldier
+				end
+			end
+			return false
+		end,
+		is_group_leader = function(soldier)
+			return soldier == (soldier:GetParentGroup():GetLeader())
+		end
+	}
+
+}
