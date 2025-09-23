@@ -122,19 +122,22 @@ return {
 			})
 		end,
 
+		cannot_shoot_because_other_soldier = function(this_soldier, other_soldier)
+			if other_soldier == nil then return false end
+
+			if this_soldier:GetPosition():Distance(other_soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE then return true end
+			--if other_soldier:GetStance() == Stance.Crouched then return true end
+			return false
+		end,
 		get_enemy_to_shoot = function(soldier, arg, loc)
-			local SOLDIER_MOVING_SPEED_THRESHOLD = 1
             local SHOOTING_TIMEOUT = 10
 			local ENEMY_FORGET_TIMEOUT = 200
 			local previous_soldier = util.get_preceding_object(arg.orderData.soldiersInOrder, soldier)
 			local next_soldier = util.get_successor_object(arg.orderData.soldiersInOrder, soldier)
 			
-			--if (previous_soldier	~= nil and ((previous_soldier:GetSpeed() < SOLDIER_MOVING_SPEED_THRESHOLD) or (previous_soldier:GetPosition():Distance(soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE)    )) or
-			--   (next_soldier		~= nil and ((next_soldier:GetSpeed()		< SOLDIER_MOVING_SPEED_THRESHOLD) or ((next_soldier:GetPosition():Distance(soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE)	 )) )
-			--then
-			--	loc.shootingTimer = nil
-			--	return nil
-			--end
+			if mic.cannot_shoot_because_other_soldier(self, previous_soldier) or mic.cannot_shoot_because_other_soldier(self, next_soldier) then
+				return nil
+			end
 
 			if loc.shootingTimer == nil then
 				loc.shootingTimer = {}
