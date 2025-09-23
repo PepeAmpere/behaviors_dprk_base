@@ -1,0 +1,412 @@
+{
+  "name": "Start",
+  "id": "22e36424-ea64-47dd-b1b9-aa5a18c317ef",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Setup: Create route to objective",
+          "id": "9d34a6bc-1e0f-4481-b615-280bbd2277b3",
+          "type": "scriptAction",
+          "script": [
+            "local lead=self:GetLeader()",
+            "loc.route= FindPath(lead:GetPosition(), arg.orderData.position)"
+          ]
+        },
+        {
+          "name": "Route is calculated",
+          "id": "5d5e4a57-bf34-481b-9a33-0351f51ebc59",
+          "type": "waitUntil",
+          "condition": [
+            "if loc.route~=nil then",
+            "    return loc.route:IsReady()",
+            "else",
+            "    return false",
+            "end"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Run and debug",
+      "id": "e5b65e19-4627-464d-9a93-376718f84b6b",
+      "type": "parallel",
+      "subtrees": [
+        {
+          "name": "Special situations selector",
+          "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Set Occupy and leave it",
+              "id": "c48b1293-7008-4ced-8703-aa8a3ada6d19",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Send Autonomous Defend order (Swap for TeamIdle)",
+                  "id": "eaeb8187-92f0-4885-9928-ac7eb5f394cf",
+                  "type": "scriptAction"
+                },
+                {
+                  "name": "Wait Forever",
+                  "id": "84bdd10d-4bb1-44bd-9903-476da17d5d20",
+                  "type": "waitForever"
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "91c62cbb-289d-4e55-a72f-186f1b4a5f07",
+                  "type": "scriptCondition",
+                  "name": "Everyone is close enough to goal",
+                  "script": [
+                    "return false"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Throw survivor at objective",
+                  "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
+                  "type": "scriptAction"
+                },
+                {
+                  "name": "Pray",
+                  "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
+                  "type": "waitForever"
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "a99b7451-be0a-4cad-bc50-d451e2597e81",
+                  "type": "scriptCondition",
+                  "name": "'<=1 troop' failsafe",
+                  "script": [
+                    "return false"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Run and listen",
+              "id": "23ea458b-248a-4924-8415-265a98c5683b",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "Team orders complete?",
+                  "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
+                  "type": "selector",
+                  "subtrees": [
+                    {
+                      "name": "<unnamed>",
+                      "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "<unnamed>",
+                          "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
+                          "type": "scriptAction"
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "f99aceae-8202-49b6-a5ae-4a0e8721e481",
+                          "type": "scriptCondition",
+                          "name": "Have orders been completed for alive soldiers?",
+                          "script": [
+                            "return false"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "<unnamed>",
+                      "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Team Rebalancer",
+                          "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
+                          "type": "scriptAction",
+                          "script": [
+                            "--currently throws everyone in the moving team and tells them to move to location.",
+                            "",
+                            "local entityCount=self:GetEntityCount()",
+                            "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
+                            "    --create teams from scratch",
+                            "    loc.subteamMoving={}",
+                            "    loc.subteamStatic={}",
+                            "    ",
+                            "    for i = 1, entityCount do",
+                            "        loc.SubteamMoving[i]=self:GetEntity(i-1)",
+                            "    end",
+                            "else",
+                            "    --count alive soldiers ",
+                            "end"
+                          ]
+                        },
+                        {
+                          "name": "Send orders to teams (TODO EXPAND)",
+                          "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
+                          "type": "scriptAction",
+                          "script": [
+                            "for i = 1, entityCount do",
+                            "    self:SendMessage(",
+                            "        self:GetEntity(i-1),",
+                            "        \"NewOrder\",",
+                            "        {",
+                            "            \"orderName\",  \"AutonomousMove\", ",
+                            "            \"position\", _position",
+                            "        }",
+                            "    )",
+                            "end",
+                            "    "
+                          ]
+                        },
+                        {
+                          "name": "Wait Forever",
+                          "id": "4f332874-7884-4b63-bc6f-aaaf7d92650b",
+                          "type": "waitForever"
+                        }
+                      ]
+                    }
+                  ],
+                  "active": true
+                },
+                {
+                  "name": "Message Handler",
+                  "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
+                  "type": "messageHandler"
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "d31c6a44-675c-4436-b343-f1bbe23ad6c2",
+              "type": "loopForever",
+              "name": "Loop-Movement"
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Draw route the group will run along",
+          "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
+          "type": "scriptAction",
+          "script": [
+            "local lineVec=Vec3(0,0,2)",
+            "local future = loc.route",
+            "if future:IsReady() then",
+            "  local path = future:Value()",
+            "  if path ~= nil then",
+            "    for i=0, path:GetSegmentCount()-1 do",
+            "    -- entity is following a path, draw it",
+            "        DebugLine(",
+            "                path:GetSegmentStart(i)+lineVec,",
+            "                path:GetSegmentEnd(i)+lineVec,",
+            "                1,0,1,1",
+            "            )",
+            "    end",
+            "  end",
+            "end"
+          ]
+        }
+      ],
+      "waitForAll": false
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "22e36424-ea64-47dd-b1b9-aa5a18c317ef",
+        "position": "1612.5,380.2"
+      },
+      {
+        "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
+        "position": "1050,767.7"
+      },
+      {
+        "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
+        "position": "662.5,767.7"
+      },
+      {
+        "id": "9ce63acf-20dc-41e7-9786-19a1ab5f96bc",
+        "position": "1250,480.2"
+      },
+      {
+        "id": "1fcdd836-5c99-4c89-ab27-abab04e0abb2",
+        "position": "1875,592.7"
+      },
+      {
+        "id": "78eeaf9e-c217-4239-abbb-ff81b3335500",
+        "position": "1587.5,1042.7"
+      },
+      {
+        "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
+        "position": "1337.5,480.2"
+      },
+      {
+        "id": "9d34a6bc-1e0f-4481-b615-280bbd2277b3",
+        "position": "1125,592.7"
+      },
+      {
+        "id": "5d5e4a57-bf34-481b-9a33-0351f51ebc59",
+        "position": "1362.5,592.7"
+      },
+      {
+        "id": "e5b65e19-4627-464d-9a93-376718f84b6b",
+        "position": "1750,492.7"
+      },
+      {
+        "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
+        "position": "1600,592.7"
+      },
+      {
+        "id": "c48b1293-7008-4ced-8703-aa8a3ada6d19",
+        "position": "775,767.7"
+      },
+      {
+        "id": "eaeb8187-92f0-4885-9928-ac7eb5f394cf",
+        "position": "575,980.2"
+      },
+      {
+        "id": "84bdd10d-4bb1-44bd-9903-476da17d5d20",
+        "position": "962.5,980.2"
+      },
+      {
+        "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
+        "position": "1162.5,767.7"
+      },
+      {
+        "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
+        "position": "1037.5,905.2"
+      },
+      {
+        "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
+        "position": "1250,905.2"
+      },
+      {
+        "id": "23ea458b-248a-4924-8415-265a98c5683b",
+        "position": "1925,755.2"
+      },
+      {
+        "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
+        "position": "1912.5,917.7"
+      },
+      {
+        "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
+        "position": "1687.5,1030.2"
+      },
+      {
+        "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
+        "position": "1633.75,1217.5"
+      },
+      {
+        "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
+        "position": "2100,1030.2"
+      },
+      {
+        "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
+        "position": "1987.5,1155.2",
+        "height": 52.0
+      },
+      {
+        "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
+        "position": "2137.5,1155.2"
+      },
+      {
+        "id": "4f332874-7884-4b63-bc6f-aaaf7d92650b",
+        "position": "2425,1155.2"
+      },
+      {
+        "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
+        "position": "2125,830.2"
+      },
+      {
+        "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
+        "position": "1962.5,592.7"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
+        "type": "comment",
+        "header": "",
+        "body": "Currently disabled",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
+        "type": "comment",
+        "header": "",
+        "body": "Currently disabled",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "9ce63acf-20dc-41e7-9786-19a1ab5f96bc",
+        "type": "comment",
+        "header": "",
+        "body": "This is untested",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "1fcdd836-5c99-4c89-ab27-abab04e0abb2",
+        "type": "comment",
+        "header": "",
+        "body": "This is untested",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "78eeaf9e-c217-4239-abbb-ff81b3335500",
+        "type": "comment",
+        "header": "",
+        "body": "TODO+Disabled",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,2855.2",
+    "gridPadding": "0,5.19999999999999"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "route": "return nil",
+    "distAlongRoute": "return 0",
+    "subteamMoving": "return nil",
+    "subteamStatic": "return nil"
+  }
+}

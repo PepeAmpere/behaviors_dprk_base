@@ -10,11 +10,13 @@
     "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "soldierStance.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
     "subteamMoveToDefensivePosition.bt",
     "teamIdle.bt",
     "teamMoveInColumn.bt",
+    "teamOccupyBoundingOverwatch.bt",
     "teamOccupyMoveInColumn.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
     "teamRoot.bt"

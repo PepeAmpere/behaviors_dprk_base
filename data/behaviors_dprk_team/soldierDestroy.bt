@@ -1,0 +1,338 @@
+{
+  "name": "GetPathAndRun",
+  "id": "b9d348c5-221d-46b8-aac5-ad1b837c24a3",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "GetPath",
+      "id": "b91d1a97-4f78-4be7-9fc0-f5856c2b7388",
+      "type": "scriptAction",
+      "script": [
+        "loc.orderData = {}",
+        "loc.orderData.position = arg.orderData.entityToFireAt:GetPosition()",
+        "",
+        "loc.path = FindPath(",
+        "self:GetPosition(),",
+        "arg.orderData.entityToFireAt:GetPosition()",
+        ")"
+      ]
+    },
+    {
+      "name": "WaitUntilPathReady",
+      "id": "358d7ef0-661e-4d79-850f-97de6982de00",
+      "type": "waitUntil",
+      "condition": [
+        "return loc.path:IsReady()"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "34779f8f-397e-4b86-b7fe-c8b108dca783",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "DebugLine",
+          "id": "60dae1af-b617-4541-9d39-4c749f59d362",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "0c8c4299-84a1-4ae5-8a3e-b982042af76b",
+              "type": "loopForever",
+              "name": "<unnamed>"
+            }
+          ],
+          "script": [
+            "local path = loc.path:Value()",
+            "",
+            "for j = 0, path:GetSegmentCount() - 1 do",
+            "        local startSeg = path:GetSegmentStart(j)",
+            "        local endSeg = path:GetSegmentEnd(j)",
+            "        DebugLine(startSeg, endSeg, 0, 1, 1, 1)",
+            "end"
+          ]
+        },
+        {
+          "name": "Fire or move",
+          "id": "86595ad9-5bfe-49ab-a4dd-ffd1871ce980",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Reload",
+              "id": "571bdfe4-89a4-4c73-bc21-ad630cfb26bf",
+              "type": "reloadWeapon",
+              "decorators": [
+                {
+                  "id": "593a8025-96aa-4fdf-ac8a-e4c93999ad27",
+                  "type": "scriptCondition",
+                  "name": "CheckMag",
+                  "script": [
+                    "return self:GetCurrentMagazine().rounds < 7"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "FireAtEntity",
+              "id": "0c03bd3e-3848-4ebd-a256-3f0bfb102d78",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "GetEnemy",
+                  "id": "0762afdd-a42b-4bed-b260-6e4332b59956",
+                  "type": "scriptAction",
+                  "script": [
+                    "local enemies = self:GetVisibleEnemies()",
+                    "if #enemies == 0 then return false end",
+                    "",
+                    "local path = loc.path:Value()",
+                    "",
+                    "for i = 1, #enemies do",
+                    "    local position = enemies[i]:GetPosition()",
+                    "    for j = 0, path:GetSegmentCount() - 1 do",
+                    "        local startSeg = path:GetSegmentStart(j)",
+                    "        local endSeg = path:GetSegmentEnd(j)",
+                    "        if position:DistanceToLineSegment(startSeg, endSeg) < 20 then",
+                    "            if enemies[i]:IsAlive() then",
+                    "                loc.orderData.entityToFireAt = enemies[i]",
+                    "            end",
+                    "            return true",
+                    "        end",
+                    "    end",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "<unnamed>",
+                  "id": "69a1f9a3-edce-4a73-a8d1-fef888c45de1",
+                  "type": "supervisedParallel",
+                  "subtrees": [
+                    {
+                      "name": "<unnamed>",
+                      "id": "2f5f2f0e-cdfd-48cd-8170-5c9985947e15",
+                      "type": "selector",
+                      "subtrees": [
+                        {
+                          "name": "FireAtEnemy",
+                          "id": "c19f2584-fe61-49c6-a664-429510329254",
+                          "type": "fire",
+                          "decorators": [
+                            {
+                              "id": "57342a19-2348-4501-92d1-fde1fb140c09",
+                              "type": "scriptCondition",
+                              "name": "target Visible?",
+                              "script": [
+                                "return self:IsVisible(arg.orderData.entityToFireAt)"
+                              ]
+                            },
+                            {
+                              "id": "4a7be59c-2d99-488e-b36f-378bea421cca",
+                              "type": "loopForever",
+                              "name": "<unnamed>"
+                            }
+                          ],
+                          "rounds": [
+                            "self:ReqHeadingAimAtEntity(arg.orderData.entityToFireAt)",
+                            "return 3"
+                          ],
+                          "forced": false
+                        },
+                        {
+                          "name": "FireAtEnemy",
+                          "id": "9455ea57-27df-49e6-8fc0-79476a1c8360",
+                          "type": "fire",
+                          "rounds": [
+                            "self:ReqHeadingAimAtEntity(loc.orderData.entityToFireAt)",
+                            "return 3"
+                          ],
+                          "forced": false
+                        }
+                      ],
+                      "active": true
+                    },
+                    {
+                      "name": "DebugLine",
+                      "id": "fb6ddba4-6333-4914-90a1-06e1bb304c01",
+                      "type": "scriptAction",
+                      "decorators": [
+                        {
+                          "id": "00f3bccb-90be-4ba5-9dad-724aa9cbdb14",
+                          "type": "loopForever",
+                          "name": "<unnamed>"
+                        }
+                      ],
+                      "script": [
+                        "DebugLine(self:GetPosition(), loc.orderData.entityToFireAt:GetPosition(), 1, 0, 0, 1)"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "b603fec4-2f4d-496b-89a5-88f1e86dd9b9",
+                  "type": "scriptCondition",
+                  "name": "CheckVisibleEnemies",
+                  "script": [
+                    "local enemies = self:GetVisibleEnemies()",
+                    "return #enemies > 0"
+                  ]
+                },
+                {
+                  "id": "a1ff3f60-a232-46e7-8f5c-6e558a7d2f11",
+                  "type": "scriptCondition",
+                  "name": "CheckLegalEnemies",
+                  "script": [
+                    "local enemies = self:GetVisibleEnemies()",
+                    "if #enemies == 0 then return false end",
+                    "",
+                    "local path = loc.path:Value()",
+                    "",
+                    "for i = 1, #enemies do",
+                    "--[[",
+                    "    if enemies[i]:IsVisible(self) then",
+                    "        loc.orderData.entityToFireAt = enemies[i]",
+                    "        return true",
+                    "    end",
+                    "--]]",
+                    "    local position = enemies[i]:GetPosition()",
+                    "    for j = 0, path:GetSegmentCount() - 1 do",
+                    "        local startSeg = path:GetSegmentStart(j)",
+                    "        local endSeg = path:GetSegmentEnd(j)",
+                    "        if position:DistanceToLineSegment(startSeg, endSeg) < 20 then",
+                    "            return true",
+                    "        end",
+                    "    end",
+                    "end",
+                    "",
+                    "return false"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Move",
+              "id": "de869ae7-f8ac-46eb-a035-d13b15e0d35e",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "b7c21762-5ca8-45fd-aee2-931dda80e632",
+                  "type": "scriptCondition",
+                  "name": "IsAliveTarget",
+                  "script": [
+                    "return arg.orderData.entityToFireAt:IsAlive()"
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_dprk_team",
+                "soldierMove"
+              ],
+              "arguments": {
+                "orderData": "loc.orderData"
+              }
+            },
+            {
+              "name": "Reset",
+              "id": "0dcd8556-3410-4adf-9c7f-a72221338252",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_team",
+                "soldierReset"
+              ],
+              "arguments": {}
+            }
+          ],
+          "active": true
+        }
+      ],
+      "decorators": [
+        {
+          "id": "ccde98e9-c0a9-473a-b8a6-e86c7d13e937",
+          "type": "loopForever",
+          "name": "LoopForever"
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b9d348c5-221d-46b8-aac5-ad1b837c24a3",
+        "position": "797.7,355.461111111111"
+      },
+      {
+        "id": "b91d1a97-4f78-4be7-9fc0-f5856c2b7388",
+        "position": "472.7,467.961111111111"
+      },
+      {
+        "id": "358d7ef0-661e-4d79-850f-97de6982de00",
+        "position": "635.2,480.461111111111"
+      },
+      {
+        "id": "34779f8f-397e-4b86-b7fe-c8b108dca783",
+        "position": "872.7,430.461111111111"
+      },
+      {
+        "id": "60dae1af-b617-4541-9d39-4c749f59d362",
+        "position": "647.7,617.961111111111"
+      },
+      {
+        "id": "86595ad9-5bfe-49ab-a4dd-ffd1871ce980",
+        "position": "1045.05,558.011111111111"
+      },
+      {
+        "id": "571bdfe4-89a4-4c73-bc21-ad630cfb26bf",
+        "position": "832.55,720.511111111111"
+      },
+      {
+        "id": "0c03bd3e-3848-4ebd-a256-3f0bfb102d78",
+        "position": "1045.05,670.511111111111"
+      },
+      {
+        "id": "0762afdd-a42b-4bed-b260-6e4332b59956",
+        "position": "870.05,883.011111111111"
+      },
+      {
+        "id": "69a1f9a3-edce-4a73-a8d1-fef888c45de1",
+        "position": "1082.55,845.511111111111"
+      },
+      {
+        "id": "2f5f2f0e-cdfd-48cd-8170-5c9985947e15",
+        "position": "985.2,980.461111111111"
+      },
+      {
+        "id": "c19f2584-fe61-49c6-a664-429510329254",
+        "position": "877.83174603175,1138.93888888889"
+      },
+      {
+        "id": "9455ea57-27df-49e6-8fc0-79476a1c8360",
+        "position": "1090.33174603175,1113.93888888889"
+      },
+      {
+        "id": "fb6ddba4-6333-4914-90a1-06e1bb304c01",
+        "position": "1397.7,992.961111111112"
+      },
+      {
+        "id": "de869ae7-f8ac-46eb-a035-d13b15e0d35e",
+        "position": "1353.1,703.6"
+      },
+      {
+        "id": "0dcd8556-3410-4adf-9c7f-a72221338252",
+        "position": "1640.6,703.6"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "4705.6,3061.6",
+    "gridPadding": "3.09999999999991,3.60000000000002"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "orderData": "nil",
+    "path": "nil"
+  }
+}

@@ -44,6 +44,18 @@
         "    MoveInColumn = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierMoveInColumn\"",
+        "    },",
+        "    Stance = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierStance\"",
+        "    },",
+        "    Suppress = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierSuppress\"",
+        "    },",
+        "    Destroy = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierDestroy\"",
         "    }",
         "}"
       ]
