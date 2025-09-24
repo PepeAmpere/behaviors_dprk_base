@@ -407,6 +407,7 @@
     "route": "return nil",
     "distAlongRoute": "return 0",
     "subteamMoving": "return nil",
-    "subteamStatic": "return nil"
+    "subteamStatic": "return nil",
+    "teamHopDist": "return 10"
   }
 }
