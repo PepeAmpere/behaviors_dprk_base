@@ -18,7 +18,10 @@
       "id": "ed790959-75d1-41a5-96f4-ad759fed3635",
       "type": "scriptAction",
       "script": [
-        "self:SetThreats({ { avoidance = 3 } } )"
+        "self:SetThreats({ { avoidance = 3 } } )",
+        "if arg.orderData.enemiesInSight then",
+        "    loc.enemiesInSight = arg.orderData.enemiesInSight",
+        "end"
       ]
     },
     {
@@ -468,7 +471,7 @@
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2571.42857142857",
+    "canvasSize": "3917.6,2571.42857142857",
     "gridPadding": "0,8.9285714285715"
   },
   "parameters": [

@@ -112,13 +112,14 @@ return {
 		MAX_ALLOWED_SOLDIER_DISTANCE = 15,
 		SECONDS_BETWEEN_PATH_RECOMPUTES = 2.3177,
 
-		init_member = function(group_brain, member, soldiers_in_order)
+		init_member = function(group_brain, member, soldiers_in_order, sighted_enemies)
 			DebugLog("Initializing: '" .. tostring(member) .. "'")
 			group_brain:SendMessage(member, messaging.NEW_ORDER_MESSAGE_TYPE, {
 				orderName = "MoveInColumn",
 				target = arg.orderData.target,
 				groupBrain = group_brain,
-				soldiersInOrder = soldiers_in_order
+				soldiersInOrder = soldiers_in_order,
+				enemiesInSight = sighted_enemies
 			})
 		end,
 
@@ -136,6 +137,7 @@ return {
 			local next_soldier = util.get_successor_object(arg.orderData.soldiersInOrder, soldier)
 			
 			if mic.cannot_shoot_because_other_soldier(self, previous_soldier) or mic.cannot_shoot_because_other_soldier(self, next_soldier) then
+				DebugLog(tostring(soldier) .. " failed shooting because other soldiers!")
 				return nil
 			end
 
@@ -153,9 +155,14 @@ return {
 				local enemy_timer = loc.shootingTimer[tostring(enemy)]
 				if soldier:IsVisible(enemy) and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
 					ret = enemy
+					DebugLog(tostring(soldier) .. " chosen enemy: " .. tostring(enemy))
 					break
 				end
+				local timer_value = nil
+				if enemy_timer then timer_value = enemy_timer:CurrentValue() end
+				DebugLog(tostring(soldier) .. " cannot see " .. tostring(enemy) .. ", timer: " .. tostring(timer_value))
 			end
+			
 
 			local chosen_tag = tostring(ret)
 			local chosen_timer = loc.shootingTimer[chosen_tag]
@@ -184,10 +191,22 @@ return {
 		is_group_leader = function(soldier)
 			return soldier == (soldier:GetParentGroup():GetLeader())
 		end,
+		create_path_segment = function(beginPos, endPos)
+			local segmentDirection = (endPos - beginPos):Normalized()
+			local segmentOrtho = (mic.PATH_SEGMENT_WIDTH*0.5) * segmentDirection:RightPerpendicularXY()
+			beginPos = beginPos - (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
+			endPos = endPos + (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
+			return {beginPos - segmentOrtho, beginPos + segmentOrtho, endPos + segmentOrtho, endPos - segmentOrtho }
+		end,
 		get_path_segments = function(path)
 			local precomputedSegments = {}
 
 			local totalPathLength = path:Length()
+			
+			local pathStartPos = path:PositionAlongPath(0)
+			local firstSegmentPos = path:PositionAlongPath(math.min(mic.PATH_SEGMENT_LENGTH, totalPathLength))
+			precomputedSegments[(#precomputedSegments) + 1] = mic.create_path_segment(pathStartPos, pathStartPos - (firstSegmentPos - pathStartPos))
+
 			for i=1,mic.PREPARED_SEGMENTS_COUNT do
 				local beginDistance = (i - 1) * mic.PATH_SEGMENT_LENGTH
 				local endDistance =  math.min((i* mic.PATH_SEGMENT_LENGTH), totalPathLength)
@@ -196,13 +215,9 @@ return {
 				end
 				local beginPos = path:PositionAlongPath(beginDistance)
 				local endPos = path:PositionAlongPath(endDistance)
-				local segmentDirection = (endPos - beginPos):Normalized()
-				local segmentOrtho = (mic.PATH_SEGMENT_WIDTH*0.5) * segmentDirection:RightPerpendicularXY()
-				beginPos = beginPos - (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
-				endPos = endPos + (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
-				local segment = {beginPos - segmentOrtho, beginPos + segmentOrtho, endPos + segmentOrtho, endPos - segmentOrtho }
-				precomputedSegments[(#precomputedSegments) + 1] = segment
+				precomputedSegments[(#precomputedSegments) + 1] = mic.create_path_segment(beginPos, endPos)
 			end
+
 			return precomputedSegments
 		end
 	}
