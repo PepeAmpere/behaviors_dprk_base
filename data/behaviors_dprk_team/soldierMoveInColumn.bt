@@ -91,11 +91,9 @@
                       "type": "reference",
                       "target": [
                         "behaviors_dprk_team",
-                        "soldierFireAt"
+                        "soldierReset"
                       ],
-                      "arguments": {
-                        "orderData": "loc.orderData"
-                      }
+                      "arguments": {}
                     },
                     {
                       "name": "Wait Forever",

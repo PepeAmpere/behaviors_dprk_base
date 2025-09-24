@@ -107,10 +107,10 @@ return {
 	mic = {
 		PATH_SEGMENT_LENGTH = 30,
 		PATH_SEGMENT_WIDTH = 50,
-		PATH_SEGMENT_LENGTH_OVERSHOOT = 2.5,
+		PATH_SEGMENT_LENGTH_OVERSHOOT = 10,
 		PREPARED_SEGMENTS_COUNT = 3,
 		MAX_ALLOWED_SOLDIER_DISTANCE = 15,
-	
+		SECONDS_BETWEEN_PATH_RECOMPUTES = 2.3177,
 
 		init_member = function(group_brain, member, soldiers_in_order)
 			DebugLog("Initializing: '" .. tostring(member) .. "'")
@@ -183,6 +183,27 @@ return {
 		end,
 		is_group_leader = function(soldier)
 			return soldier == (soldier:GetParentGroup():GetLeader())
+		end,
+		get_path_segments = function(path)
+			local precomputedSegments = {}
+
+			local totalPathLength = path:Length()
+			for i=1,mic.PREPARED_SEGMENTS_COUNT do
+				local beginDistance = (i - 1) * mic.PATH_SEGMENT_LENGTH
+				local endDistance =  math.min((i* mic.PATH_SEGMENT_LENGTH), totalPathLength)
+				if beginDistance >= totalPathLength then
+					break
+				end
+				local beginPos = path:PositionAlongPath(beginDistance)
+				local endPos = path:PositionAlongPath(endDistance)
+				local segmentDirection = (endPos - beginPos):Normalized()
+				local segmentOrtho = (mic.PATH_SEGMENT_WIDTH*0.5) * segmentDirection:RightPerpendicularXY()
+				beginPos = beginPos - (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
+				endPos = endPos + (mic.PATH_SEGMENT_LENGTH_OVERSHOOT * segmentDirection)
+				local segment = {beginPos - segmentOrtho, beginPos + segmentOrtho, endPos + segmentOrtho, endPos - segmentOrtho }
+				precomputedSegments[(#precomputedSegments) + 1] = segment
+			end
+			return precomputedSegments
 		end
 	}
 
