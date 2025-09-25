@@ -1,0 +1,307 @@
+{
+  "name": "Root",
+  "id": "642d54ac-5264-4899-bc7b-659fbff9b208",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Start Finding Path",
+      "id": "556ac526-f5f3-48b2-aaec-f17ee1450a9e",
+      "type": "scriptAction",
+      "script": [
+        "if type(arg.orderData.entityToFireAt) == \"Entity\" then",
+        "    loc.targetPosition = arg.orderData.entityToFireAt:GetPosition()",
+        "else",
+        "    loc.targetPosition = arg.orderData.entityToFireAt",
+        "end",
+        "",
+        "loc.pathRequest = FindPath(self:GetPosition(), loc.targetPosition)"
+      ]
+    },
+    {
+      "name": "Shoot or pursue",
+      "id": "00751dd7-e0ee-42d8-b9ba-e45a708bcb4b",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Fire",
+          "id": "fae35639-4483-447c-83ec-49a08a932e24",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "aa179bef-8857-4277-ab8e-ee7414bdfa8b",
+              "type": "scriptCondition",
+              "name": "Should just fire",
+              "script": [
+                "if loc.pathRequest ~= nil and loc.pathRequest:IsReady() then",
+                "    loc.path = loc.pathRequest:Value()",
+                "    loc.pathRequest = nil",
+                "end",
+                "",
+                "local current_muzzle_point = self:GetMuzzlePoint()",
+                "local current_aim_point = arg.orderData.entityToFireAt:GetAimPoint()",
+                "",
+                "local MUZZLE_DELTA_TO_INVALIDATE = 3",
+                "local RAYCAST_LENGTH_DIFFERENCE_TO_SKIP = 1",
+                "if loc.raycast == nil or (loc.raycast.startPos:Distance(self:GetMuzzlePoint()) > MUZZLE_DELTA_TO_INVALIDATE) then",
+                "    local delta = -1",
+                "    if loc.raycast then delta = loc.raycast.delta end",
+                "    loc.raycast = {",
+                "        delta = delta,",
+                "        value = nil,",
+                "        startPos = current_muzzle_point,",
+                "        future = Raycast(current_muzzle_point, current_aim_point),",
+                "        usedMuzzlePoint = current_muzzle_point,",
+                "        usedAimPoint = current_aim_point",
+                "    }",
+                "end",
+                "if loc.raycast.future ~= nil and loc.raycast.future:IsReady() then ",
+                "    loc.raycast.value = loc.raycast.future:Value()",
+                "    loc.raycast.delta = math.abs(loc.raycast.value - loc.raycast.usedMuzzlePoint:Distance(loc.raycast.usedAimPoint))",
+                "    loc.raycast.future = nil",
+                "end",
+                "",
+                "if loc.raycast.delta >= 0 and loc.raycast.delta > RAYCAST_LENGTH_DIFFERENCE_TO_SKIP then",
+                "    DebugLog(tostring(self) .. \" enemy is obstructed!\")",
+                "    return false",
+                "end",
+                "",
+                "",
+                "if loc.path == nil then",
+                "    DebugLog(tostring(self) .. \" no path to enemy!\")",
+                "    return true",
+                "end",
+                "",
+                "",
+                "local path_length = loc.path:Length()",
+                "loc.pathLength = path_length",
+                "",
+                "if not ((mic.MIN_PATH_LENGTH_TO_PURSUE_ENEMY < path_length) and (path_length < mic.MAX_PATH_LENGTH_TO_PURSUE_ENEMY)) then",
+                "    DebugLog(tostring(self) .. \" enemy too far! (\" .. tostring(path_length) .. \")\")",
+                "    return true",
+                "end",
+                "",
+                "if loc.timer == nil then loc.timer = TimedCounter() end",
+                "if loc.timer:CurrentValue() == 0 then",
+                "    loc.timer = loc.timer:Incremented(2, mic.ELIMINATE_SHOOTING_DURATION):Incremented(-1, mic.ELIMINATE_SHOOTING_DURATION + mic.ELIMINATE_PURSUE_DURATION)",
+                "end",
+                "",
+                "",
+                "DebugLog(tostring(self) .. \" enemy counter: \" .. tostring(loc.timer:CurrentValue()))",
+                "return (loc.timer:CurrentValue() >= 0)"
+              ]
+            },
+            {
+              "id": "c5196ef2-05be-4c42-a0a2-c64c33858c17",
+              "type": "succeeder",
+              "name": "Always Succeed"
+            }
+          ],
+          "target": [
+            "behaviors_dprk_team",
+            "soldierFireAt"
+          ],
+          "arguments": {
+            "orderData": "arg.orderData"
+          }
+        },
+        {
+          "name": "Pursue",
+          "id": "6550fc48-e308-497f-981a-b82d90c4c72f",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "93b15408-4142-4257-a79a-4029ef61e542",
+              "type": "scriptAction",
+              "name": "Prepare args",
+              "script": [
+                "loc.orderDataTemp = {",
+                "    entityToFollow = arg.orderData.entityToFireAt",
+                "}"
+              ]
+            }
+          ],
+          "target": [
+            "behaviors_dprk_team",
+            "soldierFollow"
+          ],
+          "arguments": {
+            "orderData": "loc.orderDataTemp"
+          }
+        }
+      ],
+      "decorators": [
+        {
+          "id": "93471f7a-3517-40e2-8805-b04fe979711b",
+          "type": "loopForever",
+          "name": "Main Loop"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "CheckEntity",
+      "id": "28edde18-3214-4b07-b6d6-e8db0cdc27f1",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "1c5cf6b3-ad2d-4a9d-bb88-21d4ab312df0",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "334947f0-da3d-4090-8899-561e2d517686",
+              "type": "scriptCondition",
+              "name": "CheckMag",
+              "script": [
+                "return self:GetCurrentMagazine().rounds == 0"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "FireAtEntity",
+          "id": "8734acc6-daea-487b-84ae-44cbac1d2412",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "FireAtEnemy",
+              "id": "8b853bd3-7037-453f-9097-db8ae73bd63c",
+              "type": "fire",
+              "rounds": [
+                "self:ReqHeadingAimAtEntity(arg.orderData.entityToFireAt)",
+                "return 3"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "ee7328e5-526d-4ec4-84c0-eb439fd6b7bd",
+              "type": "scriptCondition",
+              "name": "isEntity",
+              "script": [
+                "return type(arg.orderData.entityToFireAt) == \"Entity\""
+              ]
+            },
+            {
+              "id": "e216cd88-3218-4128-a0dc-c1894bd6724f",
+              "type": "scriptCondition",
+              "name": "isAlive",
+              "script": [
+                "return arg.orderData.entityToFireAt:IsAlive()"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "FireAtPos",
+          "id": "628c4b76-0933-4ef1-86a1-5b6845773929",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "FireAtPos",
+              "id": "f42ff94a-8dd2-484f-b8b6-e89ac7861d94",
+              "type": "fire",
+              "rounds": [
+                "self:ReqHeadingAimAtPos(arg.orderData.entityToFireAt, 10)",
+                "return 3"
+              ],
+              "forced": false
+            }
+          ],
+          "decorators": [
+            {
+              "id": "81620fbf-17ac-43cd-8b1f-07e8953712fb",
+              "type": "scriptCondition",
+              "name": "isPosition",
+              "script": [
+                "return type(arg.orderData.entityToFireAt) == \"Vec3\""
+              ]
+            },
+            {
+              "id": "16b6ecfa-9ee2-44f2-af71-0458a393d5e5",
+              "type": "loopForever",
+              "name": "Forever"
+            }
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "28edde18-3214-4b07-b6d6-e8db0cdc27f1",
+            "position": "1762.5,748.166666666667"
+          },
+          {
+            "id": "1c5cf6b3-ad2d-4a9d-bb88-21d4ab312df0",
+            "position": "1309.9,831.216666666667"
+          },
+          {
+            "id": "8734acc6-daea-487b-84ae-44cbac1d2412",
+            "position": "1547.4,881.216666666667"
+          },
+          {
+            "id": "8b853bd3-7037-453f-9097-db8ae73bd63c",
+            "position": "1547.4,1143.71666666667"
+          },
+          {
+            "id": "628c4b76-0933-4ef1-86a1-5b6845773929",
+            "position": "1925,910.666666666667"
+          },
+          {
+            "id": "f42ff94a-8dd2-484f-b8b6-e89ac7861d94",
+            "position": "1922.4,1081.21666666667"
+          }
+        ],
+        "editorObjects": []
+      },
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "642d54ac-5264-4899-bc7b-659fbff9b208",
+        "position": "2075,198.166666666667"
+      },
+      {
+        "id": "556ac526-f5f3-48b2-aaec-f17ee1450a9e",
+        "position": "1900,310.666666666667"
+      },
+      {
+        "id": "00751dd7-e0ee-42d8-b9ba-e45a708bcb4b",
+        "position": "2187.5,323.166666666667"
+      },
+      {
+        "id": "fae35639-4483-447c-83ec-49a08a932e24",
+        "position": "2050,523.166666666667"
+      },
+      {
+        "id": "6550fc48-e308-497f-981a-b82d90c4c72f",
+        "position": "2325,535.666666666667"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3905.33333333333,3060.66666666667",
+    "gridPadding": "0,10.6666666666667"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passEveryFrame"
+    }
+  ],
+  "locals": {
+    "pathRequest": "nil",
+    "path": "nil",
+    "targetPosition": "nil",
+    "timer": "nil",
+    "orderDataTemp": "nil",
+    "pathLength": "nil",
+    "raycast": "nil"
+  }
+}

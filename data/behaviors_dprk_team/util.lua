@@ -109,8 +109,17 @@ return {
 		PATH_SEGMENT_WIDTH = 50,
 		PATH_SEGMENT_LENGTH_OVERSHOOT = 10,
 		PREPARED_SEGMENTS_COUNT = 3,
-		MAX_ALLOWED_SOLDIER_DISTANCE = 15,
+
+		MAX_ALLOWED_SOLDIER_DISTANCE = 20,
+		MAX_ALLOWED_SOLDIER_DISTANCE_FOR_SHOOTING = 12,
 		SECONDS_BETWEEN_PATH_RECOMPUTES = 2.3177,
+
+		MAX_PATH_LENGTH_TO_PURSUE_ENEMY = 450,
+		MIN_PATH_LENGTH_TO_PURSUE_ENEMY = 3,
+		ELIMINATE_SHOOTING_DURATION = 3,
+		ELIMINATE_PURSUE_DURATION = 2,
+        SHOOTING_TIMEOUT = 25,
+
 
 		init_member = function(group_brain, member, soldiers_in_order, sighted_enemies)
 			DebugLog("Initializing: '" .. tostring(member) .. "'")
@@ -126,12 +135,11 @@ return {
 		cannot_shoot_because_other_soldier = function(this_soldier, other_soldier)
 			if other_soldier == nil then return false end
 
-			if this_soldier:GetPosition():Distance(other_soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE then return true end
+			if this_soldier:GetPosition():Distance(other_soldier:GetPosition()) > mic.MAX_ALLOWED_SOLDIER_DISTANCE_FOR_SHOOTING then return true end
 			--if other_soldier:GetStance() == Stance.Crouched then return true end
 			return false
 		end,
 		get_enemy_to_shoot = function(soldier, arg, loc)
-            local SHOOTING_TIMEOUT = 10
 			local ENEMY_FORGET_TIMEOUT = 200
 			local previous_soldier = util.get_preceding_object(arg.orderData.soldiersInOrder, soldier)
 			local next_soldier = util.get_successor_object(arg.orderData.soldiersInOrder, soldier)
@@ -153,14 +161,14 @@ return {
 			local ret = nil
 			for i, enemy in ipairs(loc.enemiesInSight) do
 				local enemy_timer = loc.shootingTimer[tostring(enemy)]
-				if soldier:IsVisible(enemy) and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
+				if soldier:IsVisible(enemy) and enemy:IsAlive() and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
 					ret = enemy
-					DebugLog(tostring(soldier) .. " chosen enemy: " .. tostring(enemy))
+					--DebugLog(tostring(soldier) .. " chosen enemy: " .. tostring(enemy))
 					break
 				end
 				local timer_value = nil
 				if enemy_timer then timer_value = enemy_timer:CurrentValue() end
-				DebugLog(tostring(soldier) .. " cannot see " .. tostring(enemy) .. ", timer: " .. tostring(timer_value))
+				--DebugLog(tostring(soldier) .. " cannot see " .. tostring(enemy) .. ", timer: " .. tostring(timer_value))
 			end
 			
 
@@ -168,7 +176,7 @@ return {
 			local chosen_timer = loc.shootingTimer[chosen_tag]
 			if (chosen_timer == nil or chosen_timer:CurrentValue() == 0) then
 				DebugLog(tostring(soldier) .. ".. Incrementing shoot counter for " .. chosen_tag .."!")
-				loc.shootingTimer[chosen_tag] = TimedCounter():Incremented(2, SHOOTING_TIMEOUT):Incremented(-1, ENEMY_FORGET_TIMEOUT)
+				loc.shootingTimer[chosen_tag] = TimedCounter():Incremented(2, mic.SHOOTING_TIMEOUT):Incremented(-1, ENEMY_FORGET_TIMEOUT)
 			end
 
 			return ret

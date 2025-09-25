@@ -20,7 +20,7 @@
       "script": [
         "self:SetThreats({ { avoidance = 3 } } )",
         "if arg.orderData.enemiesInSight then",
-        "    loc.enemiesInSight = arg.orderData.enemiesInSight",
+        "    bb.enemiesInSight = arg.orderData.enemiesInSight",
         "end"
       ]
     },
@@ -45,12 +45,22 @@
                   "type": "sequence",
                   "subtrees": [
                     {
+                      "name": "Reset",
+                      "id": "d83704bc-fab8-4f13-ab49-2fc40afc61e3",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_team",
+                        "soldierReset"
+                      ],
+                      "arguments": {}
+                    },
+                    {
                       "name": "Shoot",
                       "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
                       "type": "reference",
                       "target": [
                         "behaviors_dprk_team",
-                        "soldierFireAt"
+                        "soldierEliminate"
                       ],
                       "arguments": {
                         "orderData": "loc.orderData"
@@ -68,7 +78,7 @@
                         "--    DebugLog(\"in sight: \" .. tostring(enemy))",
                         "--end",
                         "",
-                        "local chosen_enemy = mic.get_enemy_to_shoot(self, arg, loc)",
+                        "local chosen_enemy = mic.get_enemy_to_shoot(self, arg, bb)",
                         "",
                         "--DebugLog(\"chosen enemy: \" .. tostring(chosen_enemy))",
                         "if chosen_enemy == nil then",
@@ -170,12 +180,22 @@
                   "type": "sequence",
                   "subtrees": [
                     {
+                      "name": "Reset",
+                      "id": "ba6702d0-75e0-4d42-8bc3-b58244ba5fc1",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_team",
+                        "soldierReset"
+                      ],
+                      "arguments": {}
+                    },
+                    {
                       "name": "Shoot",
                       "id": "374a60cb-702f-4398-a9e0-4e4faf7f3ba4",
                       "type": "reference",
                       "target": [
                         "behaviors_dprk_team",
-                        "soldierFireAt"
+                        "soldierEliminate"
                       ],
                       "arguments": {
                         "orderData": "loc.orderData"
@@ -188,7 +208,7 @@
                       "type": "scriptCondition",
                       "name": "Sees enemy and can shoot",
                       "script": [
-                        "local chosen_enemy = mic.get_enemy_to_shoot(self, arg, loc)",
+                        "local chosen_enemy = mic.get_enemy_to_shoot(self, arg, bb)",
                         "",
                         "-- if there is no enemy, just stop shooting",
                         "if chosen_enemy == nil then",
@@ -264,12 +284,7 @@
             "",
             "",
             "if message.value.messageType == \"enemies_sighted\" then",
-            "    loc.enemiesInSight = message.value.enemies",
-            "",
-            "elseif message.value.messageType == \"shooting\" then",
-            "    loc.shootingTimer = TimedCounter():Incremented(1, message.value.timeout)",
-            "    loc.shootingTag = message.value.tag",
-            "    loc.enemiesInSight = message.value.enemies",
+            "    bb.enemiesInSight = message.value.enemies",
             "else",
             "    DebugLog(\"unknown order-info message: '\" .. message.value.messageType .. \"'!\")",
             "end"
@@ -359,40 +374,6 @@
         "    entityToFollow = to_follow",
         "}"
       ]
-    },
-    {
-      "name": "Do Crouch",
-      "id": "ffe3ad85-792e-4f8d-a8b1-fc30abb231c8",
-      "type": "setStance",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "ffe3ad85-792e-4f8d-a8b1-fc30abb231c8",
-            "position": "1200,846.428571428571"
-          }
-        ],
-        "editorObjects": []
-      },
-      "stance": [
-        "return Stance.Crouched"
-      ]
-    },
-    {
-      "name": "Do Crouch",
-      "id": "6b834095-01e7-48f7-9ade-24eaba12ba86",
-      "type": "setStance",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "6b834095-01e7-48f7-9ade-24eaba12ba86",
-            "position": "2337.5,846.428571428571"
-          }
-        ],
-        "editorObjects": []
-      },
-      "stance": [
-        "return Stance.Crouched"
-      ]
     }
   ],
   "meta": {
@@ -426,6 +407,10 @@
         "position": "1437.5,683.928571428571"
       },
       {
+        "id": "d83704bc-fab8-4f13-ab49-2fc40afc61e3",
+        "position": "1175,808.928571428571"
+      },
+      {
         "id": "87bf1c23-530f-47dd-97fe-513ccc9211af",
         "position": "1400,821.428571428571"
       },
@@ -456,6 +441,10 @@
       {
         "id": "37e61a0a-1eab-498c-8c07-b80dc89a561b",
         "position": "2387.5,721.428571428571"
+      },
+      {
+        "id": "ba6702d0-75e0-4d42-8bc3-b58244ba5fc1",
+        "position": "2289,859.166666666666"
       },
       {
         "id": "374a60cb-702f-4398-a9e0-4e4faf7f3ba4",
