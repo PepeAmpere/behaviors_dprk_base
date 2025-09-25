@@ -4,7 +4,7 @@
   "type": "sequence",
   "subtrees": [
     {
-      "name": "<unnamed>",
+      "name": "Initial route setting",
       "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
       "type": "sequence",
       "subtrees": [
@@ -91,118 +91,162 @@
           ]
         },
         {
-          "name": "Run and listen",
+          "name": "Run and draw debugs",
           "id": "23ea458b-248a-4924-8415-265a98c5683b",
           "type": "supervisedParallel",
           "subtrees": [
             {
-              "name": "Team orders complete?",
-              "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
-              "type": "selector",
+              "name": "Movement sequence: One step",
+              "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
+              "type": "sequence",
               "subtrees": [
                 {
-                  "name": "<unnamed>",
-                  "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
+                  "name": "Team Rebalancer",
+                  "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
+                  "type": "scriptAction",
+                  "script": [
+                    "local entityCount=self:GetEntityCount()",
+                    "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
+                    "    --create teams from scratch",
+                    "    loc.subteamMoving={}",
+                    "    loc.subteamStatic={}",
+                    "    local x=1",
+                    "    local y=1",
+                    "    for i = 1, entityCount do",
+                    "        if i<=entityCount/2 then",
+                    "            loc.subteamStatic[x]=self:GetEntity(i-1)",
+                    "            x=x+1",
+                    "        else",
+                    "            loc.subteamMoving[y]=self:GetEntity(i-1)",
+                    "            y=y+1",
+                    "        end",
+                    "    end",
+                    "else",
+                    "    --count alive soldiers and redistribute",
+                    "    --TODO: Redistribution (Later)",
+                    "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                    "    local temp=loc.subteamMoving",
+                    "    loc.subteamMoving=loc.subteamStatic",
+                    "    loc.subteamStatic=temp",
+                    "end",
+                    "--TODO: We need to actually reduce the travel dist if soldiers die on the way"
+                  ]
+                },
+                {
+                  "name": "Find covers",
+                  "id": "dabf980a-197e-42aa-809b-f53e1e5dd991",
                   "type": "sequence",
                   "subtrees": [
                     {
-                      "name": "<unnamed>",
-                      "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
-                      "type": "scriptAction"
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "f99aceae-8202-49b6-a5ae-4a0e8721e481",
-                      "type": "scriptCondition",
-                      "name": "Have orders been completed for alive soldiers?",
+                      "name": "Calculate covers",
+                      "id": "29e7e202-bb4c-447f-8766-078781d232b2",
+                      "type": "scriptAction",
                       "script": [
-                        "return false"
+                        "local threats = {",
+                        "    {area = Circle(loc.route:Value():EndPoint(), 3), avoidance = 1}",
+                        "}",
+                        "",
+                        "local goal=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                        "local offset = loc.teamCoverSearchDist",
+                        "",
+                        "local area= Circle(goal, offset)",
+                        "",
+                        "local entityCount=self:GetEntityCount()",
+                        "local positions = {}",
+                        "for i=1, entityCount do",
+                        "    --we assign the center if there are no good positions. Not much I can do before the consult",
+                        "    positions[i]=goal",
+                        "end",
+                        "",
+                        "loc.covers = FindCovers(threats, area, positions,     ",
+                        "{",
+                        "    weights = {",
+                        "        protection = 50,",
+                        "        distance = -1,",
+                        "        lineOfFire = 0,",
+                        "        }   ",
+                        "    }",
+                        ")"
+                      ]
+                    },
+                    {
+                      "name": "Wait until covers request done",
+                      "id": "01e58503-8a54-4244-8c08-418249113bbc",
+                      "type": "waitUntil",
+                      "condition": [
+                        "return loc.covers:IsReady() "
                       ]
                     }
                   ]
                 },
                 {
-                  "name": "<unnamed>",
-                  "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
-                  "type": "sequence",
-                  "subtrees": [
-                    {
-                      "name": "Team Rebalancer",
-                      "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
-                      "type": "scriptAction",
-                      "script": [
-                        "local entityCount=self:GetEntityCount()",
-                        "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
-                        "    --create teams from scratch",
-                        "    loc.subteamMoving={}",
-                        "    loc.subteamStatic={}",
-                        "    local x=1",
-                        "    local y=1",
-                        "    for i = 1, entityCount do",
-                        "        if i<=entityCount/2 then",
-                        "            loc.subteamStatic[x]=self:GetEntity(i-1)",
-                        "            x=x+1",
-                        "        else",
-                        "            loc.subteamMoving[y]=self:GetEntity(i-1)",
-                        "            y=y+1",
-                        "        end",
-                        "    end",
-                        "else",
-                        "    --count alive soldiers and redistribute",
-                        "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
-                        "    local temp=loc.subteamMoving",
-                        "    loc.subteamMoving=loc.subteamStatic",
-                        "    loc.subteamStatic=temp",
-                        "end",
-                        "--This below will need to have an exception created",
-                        "loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist"
-                      ]
-                    },
-                    {
-                      "name": "Send orders to teams (TODO EXPAND)",
-                      "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
-                      "type": "scriptAction",
-                      "script": [
-                        "for i = 1, #loc.subteamMoving do",
-                        "    local oData={}",
-                        "    oData.orderName=\"Move\"",
-                        "    oData.position=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
-                        "    self:SendMessage(",
-                        "        loc.subteamMoving[i],",
-                        "        \"NewOrder\",",
-                        "        oData",
-                        "    )",
-                        "end",
-                        "    "
-                      ]
-                    },
-                    {
-                      "name": "All alive move team members at given pos",
-                      "id": "75ef436f-f3f1-4116-aeed-23f010bd2be1",
-                      "type": "waitUntil",
-                      "condition": [
-                        "local allFulfilled=true",
-                        "local pos=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
-                        "for i = 1, #loc.subteamMoving do",
-                        "    local soldier=loc.subteamMoving[i]",
-                        "    local soldierPos=soldier:GetPosition()   ",
-                        "    if soldier:IsAlive() and soldierPos:Distance(pos)>1 then",
-                        "        allFulfilled=false",
-                        "    end",
-                        "end",
-                        "return allFulfilled"
-                      ]
-                    }
+                  "name": "Send orders to teams (TODO EXPAND)",
+                  "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
+                  "type": "scriptAction",
+                  "script": [
+                    "local covers=loc.covers:Value()",
+                    "loc.coverTroopsAlloc={}",
+                    "for i = 1, #loc.subteamMoving do",
+                    "    local oData={}",
+                    "    oData.orderName=\"Move\"",
+                    "    oData.position=covers[i].position",
+                    "    loc.coverTroopsAlloc[loc.subteamMoving[i]]=covers[i]",
+                    "    ",
+                    "    self:SendMessage(",
+                    "        loc.subteamMoving[i],",
+                    "        \"NewOrder\",",
+                    "        oData",
+                    "    )",
+                    "end",
+                    "--[=====[",
+                    "--soooo, this ain't working for now.",
+                    "for i=1, #loc.subteamStatic do",
+                    "    local oData={}",
+                    "    oData.orderName=\"Suppress\"",
+                    "    oData.entityToFireAt=loc.route:Value():EndPoint()",
+                    "    oData.position=loc.route:Value():EndPoint()",
+                    "    --Could use with some minor offsets perhaps",
+                    "    self:SendMessage(",
+                    "        loc.subteamStatic[i],",
+                    "        \"NewOrder\",",
+                    "        oData",
+                    "    )",
+                    "end",
+                    "--]=====]",
+                    "    "
+                  ]
+                },
+                {
+                  "name": "All alive move team members at given pos",
+                  "id": "75ef436f-f3f1-4116-aeed-23f010bd2be1",
+                  "type": "waitUntil",
+                  "condition": [
+                    "local allFulfilled=true",
+                    "--local pos=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                    "for i = 1, #loc.subteamMoving do",
+                    "    local soldier=loc.subteamMoving[i]",
+                    "    local soldierPos=soldier:GetPosition()",
+                    "    local pos=loc.coverTroopsAlloc[soldier].position  ",
+                    "    if soldier:IsAlive() and soldierPos:Distance(pos)>1 then",
+                    "        allFulfilled=false",
+                    "    end",
+                    "end",
+                    "if allFulfilled then",
+                    "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                    "    --putting it here is messy, but guaranteed to work",
+                    "end",
+                    "return allFulfilled"
+                  ]
+                },
+                {
+                  "name": "Wait 5s so soldiers end moves for sure",
+                  "id": "eba69077-a194-4bde-abe7-7616bc47374b",
+                  "type": "wait",
+                  "time": [
+                    "return 5"
                   ]
                 }
-              ],
-              "active": true
-            },
-            {
-              "name": "Message Handler",
-              "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
-              "type": "messageHandler"
+              ]
             },
             {
               "name": "Draw route the group will run along",
@@ -243,43 +287,31 @@
     "nodesInfo": [
       {
         "id": "22e36424-ea64-47dd-b1b9-aa5a18c317ef",
-        "position": "1625,392.7"
+        "position": "1462.5,330.2"
       },
       {
         "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
-        "position": "1050,767.7"
+        "position": "1150,767.7"
       },
       {
         "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
-        "position": "662.5,767.7"
-      },
-      {
-        "id": "9ce63acf-20dc-41e7-9786-19a1ab5f96bc",
-        "position": "1250,480.2"
-      },
-      {
-        "id": "1fcdd836-5c99-4c89-ab27-abab04e0abb2",
-        "position": "1875,592.7"
-      },
-      {
-        "id": "78eeaf9e-c217-4239-abbb-ff81b3335500",
-        "position": "1587.5,1042.7"
+        "position": "550,792.7"
       },
       {
         "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
-        "position": "1975,1180.2"
+        "position": "1225,1167.7"
       },
       {
         "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
-        "position": "1337.5,480.2"
+        "position": "1137.5,492.7"
       },
       {
         "id": "9d34a6bc-1e0f-4481-b615-280bbd2277b3",
-        "position": "1125,592.7"
+        "position": "975,605.2"
       },
       {
         "id": "5d5e4a57-bf34-481b-9a33-0351f51ebc59",
-        "position": "1362.5,592.7"
+        "position": "1212.5,605.2"
       },
       {
         "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
@@ -299,56 +331,56 @@
       },
       {
         "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
-        "position": "1162.5,767.7"
+        "position": "1262.5,767.7"
       },
       {
         "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
-        "position": "1037.5,905.2"
+        "position": "1137.5,905.2"
       },
       {
         "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
-        "position": "1250,905.2"
+        "position": "1350,905.2"
       },
       {
         "id": "23ea458b-248a-4924-8415-265a98c5683b",
-        "position": "1925,755.2"
-      },
-      {
-        "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
-        "position": "1912.5,917.7"
-      },
-      {
-        "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
-        "position": "1687.5,1030.2"
-      },
-      {
-        "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
-        "position": "1633.75,1217.5"
+        "position": "1837.5,730.2"
       },
       {
         "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
-        "position": "2100,1030.2"
+        "position": "1600,867.7"
       },
       {
         "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
-        "position": "1987.5,1155.2",
+        "position": "1312.5,1130.2",
         "height": 52.0
       },
       {
+        "id": "dabf980a-197e-42aa-809b-f53e1e5dd991",
+        "position": "1612.5,1130.2"
+      },
+      {
+        "id": "29e7e202-bb4c-447f-8766-078781d232b2",
+        "position": "1525,1230.2"
+      },
+      {
+        "id": "01e58503-8a54-4244-8c08-418249113bbc",
+        "position": "1675,1230.2"
+      },
+      {
         "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
-        "position": "2137.5,1155.2"
+        "position": "1775,1130.2"
       },
       {
         "id": "75ef436f-f3f1-4116-aeed-23f010bd2be1",
-        "position": "2425,1155.2"
+        "position": "2062.5,1130.2"
       },
       {
-        "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
-        "position": "2125,830.2"
+        "id": "eba69077-a194-4bde-abe7-7616bc47374b",
+        "position": "2375,1130.2"
       },
       {
         "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
-        "position": "2325,830.2"
+        "position": "1837.5,867.7"
       }
     ],
     "editorObjects": [
@@ -367,40 +399,7 @@
         "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
         "type": "comment",
         "header": "",
-        "body": "Currently disabled",
-        "bodyAlignment": "Left",
-        "headerBackground": "#FF00FF00",
-        "headerForeground": "#FF000000",
-        "boxBackground": "#FF90EE90",
-        "boxForeground": "#FF000000"
-      },
-      {
-        "id": "9ce63acf-20dc-41e7-9786-19a1ab5f96bc",
-        "type": "comment",
-        "header": "",
-        "body": "This is untested",
-        "bodyAlignment": "Left",
-        "headerBackground": "#FF00FF00",
-        "headerForeground": "#FF000000",
-        "boxBackground": "#FF90EE90",
-        "boxForeground": "#FF000000"
-      },
-      {
-        "id": "1fcdd836-5c99-4c89-ab27-abab04e0abb2",
-        "type": "comment",
-        "header": "",
-        "body": "This is untested",
-        "bodyAlignment": "Left",
-        "headerBackground": "#FF00FF00",
-        "headerForeground": "#FF000000",
-        "boxBackground": "#FF90EE90",
-        "boxForeground": "#FF000000"
-      },
-      {
-        "id": "78eeaf9e-c217-4239-abbb-ff81b3335500",
-        "type": "comment",
-        "header": "",
-        "body": "TODO+Disabled",
+        "body": "Currently disabled\r\nShould always happen after initial trigger",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -431,10 +430,12 @@
   ],
   "locals": {
     "route": "return nil",
-    "distAlongRoute": "return 0",
+    "distAlongRoute": "return 20",
     "subteamMoving": "return nil",
     "subteamStatic": "return nil",
     "teamHopDist": "return 20",
-    "teamCoverSearchDist": "return 5"
+    "teamCoverSearchDist": "return 8",
+    "covers": "return nil",
+    "coverTroopsAlloc": "return nil"
   }
 }

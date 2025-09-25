@@ -119,6 +119,28 @@
                   "type": "sequence",
                   "subtrees": [
                     {
+                      "name": "Path Request",
+                      "id": "ccb8a974-dcc4-4b0f-a6e6-2c08f14caa09",
+                      "type": "scriptAction",
+                      "script": [
+                        "local firstSoldier = GetFirstSoldier(loc.updateData, loc.move)",
+                        "",
+                        "loc.pathRequest = FindPath(firstSoldier:GetPosition(), arg.orderData.position)"
+                      ]
+                    },
+                    {
+                      "name": "Path ready",
+                      "id": "29793eeb-a9f9-4766-bb5f-714695bb56a1",
+                      "type": "waitUntil",
+                      "condition": [
+                        "if loc.pathRequest:IsReady() then",
+                        "    loc.path = loc.pathRequest:Value()",
+                        "    return true",
+                        "end",
+                        "return false"
+                      ]
+                    },
+                    {
                       "name": "Calculate covers",
                       "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
                       "type": "scriptAction",
@@ -127,17 +149,26 @@
                         "    {area = Circle(arg.orderData.target, 5), avoidance = 1}",
                         "}",
                         "",
-                        "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
-                        "if firstSoldier == nil then end",
+                        "local startStepDistance = 15",
+                        "local defaultStepDistance = 30",
                         "",
-                        "local soldierPos = firstSoldier:GetPosition()",
-                        "local half = 30",
+                        "local moveDistance = startStepDistance",
+                        "",
+                        "if (loc.switch) then",
+                        "    moveDistance = defaultStepDistance",
+                        "end",
+                        "",
+                        "loc.switch = not loc.switch",
+                        "",
+                        "local posAlongPath = loc.path:PositionAlongPath(moveDistance)",
+                        "",
+                        "local half = 15",
                         "",
                         "local verts = {",
-                        "    soldierPos + Vec3(-half, 0, 2),",
-                        "    soldierPos + Vec3( half, 0, 2),",
-                        "    soldierPos + Vec3( half,  half, 2),",
-                        "    soldierPos + Vec3(-half,  half, 2),",
+                        "    posAlongPath + Vec3(-half, 0, 2),",
+                        "    posAlongPath + Vec3( half, 0, 2),",
+                        "    posAlongPath + Vec3( half,  half, 2),",
+                        "    posAlongPath + Vec3(-half,  half, 2),",
                         "}",
                         "",
                         "loc.coverArea = {polygon = Polygon(verts), verts = verts }",
@@ -180,17 +211,46 @@
                   ]
                 },
                 {
+                  "name": "Set enemy area polygon",
+                  "id": "9ee21c46-225d-4801-8a47-9870391a5124",
+                  "type": "scriptAction",
+                  "script": [
+                    "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
+                    "",
+                    "local myPosition = firstSoldier:GetPosition()",
+                    "",
+                    "local half = 25",
+                    "",
+                    "local verts = {",
+                    "    myPosition + Vec3(-half, -half, 2),",
+                    "    myPosition + Vec3( half, -half, 2),",
+                    "    myPosition + Vec3( half,  half, 2),",
+                    "    myPosition + Vec3(-half,  half, 2),",
+                    "}",
+                    "",
+                    "if loc.enemiesAreaPoints == nil then",
+                    "    loc.enemiesAreaPoints = {}",
+                    "end",
+                    "",
+                    "for i, v in ipairs(verts) do",
+                    "    table.insert(loc.enemiesAreaPoints, v)",
+                    "end",
+                    "",
+                    "arg.orderData.enemyPolygon = Polygon(loc.enemiesAreaPoints)"
+                  ]
+                },
+                {
                   "name": "Select cover spot",
                   "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
                   "type": "scriptAction",
                   "script": [
-                    "local bias = 0",
+                    "local bias = -10",
                     "local avoidanceRadius = 10",
                     "",
                     "loc.previousCoverSpot = loc.coverSpot",
                     "loc.coverSpot = nil",
                     "",
-                    "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
+                    "local firstSoldier = GetFirstSoldier(loc.updateData, loc.move)",
                     "if firstSoldier == nil then end",
                     "",
                     "local pos = firstSoldier:GetPosition()",
@@ -207,7 +267,7 @@
                     "            ",
                     "            local coverDistanceToTarget = cover.position:Distance(target)",
                     "            if coverDistanceToTarget <= distanceToTarget then",
-                    "                loc.coverSpot = cover.position",
+                    "                loc.coverSpot = cover",
                     "                distanceToTarget = coverDistanceToTarget",
                     "            end",
                     "        end",
@@ -232,10 +292,6 @@
                     "local dirNormalized = dir:Normalized()",
                     "local perp = dirNormalized:RightPerpendicularXY()",
                     "",
-                    "local spacing = 2.0",
-                    "local count = 2",
-                    "local mid = math.floor(count / 2)",
-                    "",
                     "local startStepDistance = 15",
                     "local defaultStepDistance = 30",
                     "",
@@ -249,19 +305,26 @@
                     "",
                     "    if data.state == loc.move then",
                     "",
+                    "        -- prepare data for multiple points",
+                    "        local offset = i - 1",
+                    "        local offsetPositions = {}",
+                    "",
                     "        local nextPos = nil",
                     "        if loc.coverSpot ~= nil then",
-                    "            nextPos = loc.coverSpot",
+                    "            nextPos = loc.coverSpot.position",
                     "            loc.moveStarted = false",
                     "        else",
-                    "            nextPos = pos + math.min(moveDistance, pos:Distance(target)) * dirNormalized",
+                    "            dirNormalized = (target - pos):Normalized()",
+                    "            perp = dirNormalized:RightPerpendicularXY()",
+                    "            nextPos = loc.path:PositionAlongPath(math.min(moveDistance, pos:Distance(target)))",
                     "            loc.moveStarted = true",
                     "        end",
                     "",
-                    "        local offset = (i - mid) * spacing",
                     "        local offsetPos = nextPos + offset * perp ",
+                    "        table.insert(offsetPositions, offsetPos)",
+                    "        -- end",
                     "",
-                    "        arg.orderData.offsetPosition = offsetPos",
+                    "        arg.orderData.offsetPositions = offsetPositions",
                     "        arg.orderData.state = loc.move",
                     "        self:SendMessage(",
                     "                data.unit, ",
@@ -269,6 +332,13 @@
                     "                arg.orderData)",
                     "    end",
                     "    if data.state == loc.cover then",
+                    "        ",
+                    "        arg.orderData.stance = 0",
+                    "        if loc.previousCoverSpot ~= nil then",
+                    "            arg.orderData.stance = loc.previousCoverSpot.stance + 1",
+                    "        end",
+                    "",
+                    "",
                     "        arg.orderData.state = loc.cover",
                     "        self:SendMessage(",
                     "            data.unit, ",
@@ -342,6 +412,7 @@
             "    local finishedEntity = message.value[1]",
             "    loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.cover, loc.move)",
             "    if (loc.orderReady) then",
+            "        DebugLog(\"ORDER READY FULLY, SWITCH ROLES\")",
             "        SwitchRoles(loc.updateData, loc.cover, loc.move)",
             "    end",
             "",
@@ -352,53 +423,107 @@
           ]
         },
         {
-          "name": "Debug covers",
-          "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-          "type": "scriptAction",
+          "name": "Debug sequence",
+          "id": "e94d9362-1bff-4477-9ca5-b13cf71ac734",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Debug covers",
+              "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
+              "type": "scriptAction",
+              "script": [
+                "if loc.covers ~= nil then",
+                "    for i, cover in ipairs(loc.covers) do",
+                "        if cover.edgeStart and cover.edgeEnd then",
+                "            DebugLine(",
+                "                cover.position,",
+                "                cover.position + Vec3(0, 0, 5),",
+                "                0, 1, 0, 1 ",
+                "            )",
+                "",
+                "            if cover.edgeStart and cover.edgeEnd then",
+                "                DebugLine(cover.edgeStart, cover.edgeEnd, 0, 0, 1, 1)",
+                "            end",
+                "",
+                "            if cover.firingPosition then",
+                "                DebugLine(cover.position, cover.firingPosition, 1, 0, 0, 1)",
+                "            end",
+                "        end",
+                "    end",
+                "end",
+                "",
+                "",
+                "if loc.coverArea ~= nil then",
+                "    -- DEBUG POLYGON",
+                "    for i = 1, #loc.coverArea.verts do",
+                "        local a = loc.coverArea.verts[i]",
+                "        local b = loc.coverArea.verts[(i % #loc.coverArea.verts) + 1]",
+                "        DebugLine(a, b, 1, 1, 1, 1)",
+                "    end",
+                "",
+                "    for i = 1, #loc.coverArea.verts do",
+                "        local a = loc.coverArea.verts[i]",
+                "        DebugLine(a, a + Vec3(0, 0, 5), 1, 1, 1, 1)",
+                "    end",
+                "",
+                "    -- DEBUG POLYGON END",
+                "end"
+              ]
+            },
+            {
+              "name": "Debug path",
+              "id": "8319e276-61b8-47db-83fe-04856806bdce",
+              "type": "scriptAction",
+              "script": [
+                "local firstSoldier = GetFirstSoldier(loc.updateData, loc.cover)",
+                "",
+                "local myPosition = firstSoldier:GetPosition()",
+                "local targetPosition = arg.orderData.position",
+                "local CORRECTION = Vec3(0,0,1.5)",
+                "",
+                "if loc.path ~= nil then",
+                "    local pathLength = loc.path:Length()",
+                "    for i=1, math.floor(pathLength) do",
+                "        local posOnPath = loc.path:PositionAlongPath(i-1)",
+                "        local posOnPath2 = loc.path:PositionAlongPath(i)",
+                "        DebugLine(posOnPath + CORRECTION, posOnPath2 + CORRECTION, 0, 1, 1, 1)",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Debug cover area",
+              "id": "7382235e-0cb3-4c1c-b099-dd5fd40cc7d5",
+              "type": "scriptAction",
+              "script": [
+                "if loc.enemiesAreaPoints ~= nil then",
+                "    local area = {polygon = Polygon(loc.enemiesAreaPoints), verts = loc.enemiesAreaPoints }",
+                "",
+                "    if area ~= nil then",
+                "        -- DEBUG POLYGON",
+                "        for i = 1, #area.verts do",
+                "            local a = area.verts[i]",
+                "            local b = area.verts[(i % #area.verts) + 1]",
+                "            DebugLine(a, b, 1, 1, 0, 1)",
+                "        end",
+                "",
+                "        for i = 1, #area.verts do",
+                "            local a = area.verts[i]",
+                "            DebugLine(a, a + Vec3(0, 0, 5), 1, 1, 0, 1)",
+                "        end",
+                "",
+                "        -- DEBUG POLYGON END",
+                "    end",
+                "end"
+              ]
+            }
+          ],
           "decorators": [
             {
               "id": "6551afc7-ac61-4568-ac2f-a67905087be8",
               "type": "loopForever",
               "name": "Loop forever"
             }
-          ],
-          "script": [
-            "if loc.covers ~= nil then",
-            "    for i, cover in ipairs(loc.covers) do",
-            "        if cover.edgeStart and cover.edgeEnd then",
-            "            DebugLine(",
-            "                cover.position,",
-            "                cover.position + Vec3(0, 0, 5),",
-            "                0, 1, 0, 1 ",
-            "            )",
-            "",
-            "            if cover.edgeStart and cover.edgeEnd then",
-            "                DebugLine(cover.edgeStart, cover.edgeEnd, 0, 0, 1, 1)",
-            "            end",
-            "",
-            "            if cover.firingPosition then",
-            "                DebugLine(cover.position, cover.firingPosition, 1, 0, 0, 1)",
-            "            end",
-            "        end",
-            "    end",
-            "end",
-            "",
-            "",
-            "if loc.coverArea ~= nil then",
-            "    -- DEBUG POLYGON",
-            "    for i = 1, #loc.coverArea.verts do",
-            "        local a = loc.coverArea.verts[i]",
-            "        local b = loc.coverArea.verts[(i % #loc.coverArea.verts) + 1]",
-            "        DebugLine(a, b, 1, 1, 1, 1)",
-            "    end",
-            "",
-            "    for i = 1, #loc.coverArea.verts do",
-            "        local a = loc.coverArea.verts[i]",
-            "        DebugLine(a, a + Vec3(0, 0, 5), 1, 1, 1, 1)",
-            "    end",
-            "",
-            "    -- DEBUG POLYGON END",
-            "end"
           ]
         }
       ]
@@ -408,77 +533,101 @@
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "1975,367"
+        "position": "2660,766.953571428571"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "1650,517"
+        "position": "2335,916.953571428571"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "1837.5,517"
+        "position": "2522.5,916.953571428571"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2025,517"
+        "position": "2710,916.953571428571"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "2675,554.5"
+        "position": "3360,954.453571428571"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "1673,829.5"
+        "position": "2358,1229.45357142857"
       },
       {
         "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "1135.5,1079.5"
+        "position": "1360,1566.95357142857"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "2075,954.5"
+        "position": "3222.5,1354.45357142857"
       },
       {
         "id": "a390967c-24b8-4c30-98df-94948a04328b",
-        "position": "1675,1129.5"
+        "position": "2235,1516.95357142857"
+      },
+      {
+        "id": "ccb8a974-dcc4-4b0f-a6e6-2c08f14caa09",
+        "position": "1760,1679.45357142857"
+      },
+      {
+        "id": "29793eeb-a9f9-4766-bb5f-714695bb56a1",
+        "position": "1985,1679.45357142857"
       },
       {
         "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
-        "position": "1525,1279.5"
+        "position": "2235,1679.45357142857"
       },
       {
         "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-        "position": "1787.5,1279.5"
+        "position": "2460,1679.45357142857"
+      },
+      {
+        "id": "9ee21c46-225d-4801-8a47-9870391a5124",
+        "position": "2960,1529.45357142857"
       },
       {
         "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
-        "position": "2000,1142"
+        "position": "3210,1529.45357142857"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "2250,1142"
+        "position": "3435,1529.45357142857"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "2587.5,1142",
+        "position": "3722.5,1529.45357142857",
         "height": 50.0
       },
       {
         "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
-        "position": "2675,804.5"
+        "position": "3360,1204.45357142857"
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "2987.5,792"
+        "position": "3672.5,1191.95357142857"
+      },
+      {
+        "id": "e94d9362-1bff-4477-9ca5-b13cf71ac734",
+        "position": "4185,1029.45357142857"
       },
       {
         "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-        "position": "3275,742"
+        "position": "3947.5,1191.95357142857"
+      },
+      {
+        "id": "8319e276-61b8-47db-83fe-04856806bdce",
+        "position": "4185,1191.95357142857"
+      },
+      {
+        "id": "7382235e-0cb3-4c1c-b099-dd5fd40cc7d5",
+        "position": "4422.5,1191.95357142857"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "4213.38690909091,2829.5",
-    "gridPadding": "0,4.49999999999989"
+    "canvasSize": "5054.5,3229.45357142857",
+    "gridPadding": "10,4.45357142857114"
   },
   "parameters": [
     {
@@ -497,7 +646,7 @@
     "moveOrderCompleted": "\"MoveOrderCompleted\"",
     "done": "\"done\"",
     "wait": "\"Wait\"",
-    "reachThreshold": "10",
+    "reachThreshold": "15",
     "moveStarted": "false",
     "nearestPoints": "nil",
     "deadState": "\"dead\"",
@@ -505,6 +654,10 @@
     "coversRequest": "nil",
     "coverArea": "nil",
     "coverSpot": "nil",
-    "previousCoverSpot": "nil"
+    "previousCoverSpot": "nil",
+    "pathRequest": "nil",
+    "path": "nil",
+    "switch": "false",
+    "enemiesAreaPoints": "nil"
   }
 }
