@@ -184,16 +184,22 @@
                   "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
                   "type": "scriptAction",
                   "script": [
+                    "local covers=loc.covers:Value()",
+                    "loc.coverTroopsAlloc={}",
                     "for i = 1, #loc.subteamMoving do",
                     "    local oData={}",
                     "    oData.orderName=\"Move\"",
-                    "    oData.position=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                    "    oData.position=covers[i].position",
+                    "    loc.coverTroopsAlloc[loc.subteamMoving[i]]=covers[i]",
+                    "    ",
                     "    self:SendMessage(",
                     "        loc.subteamMoving[i],",
                     "        \"NewOrder\",",
                     "        oData",
                     "    )",
                     "end",
+                    "--[=====[",
+                    "--soooo, this ain't working for now.",
                     "for i=1, #loc.subteamStatic do",
                     "    local oData={}",
                     "    oData.orderName=\"Suppress\"",
@@ -206,6 +212,7 @@
                     "        oData",
                     "    )",
                     "end",
+                    "--]=====]",
                     "    "
                   ]
                 },
@@ -215,10 +222,11 @@
                   "type": "waitUntil",
                   "condition": [
                     "local allFulfilled=true",
-                    "local pos=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                    "--local pos=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
                     "for i = 1, #loc.subteamMoving do",
                     "    local soldier=loc.subteamMoving[i]",
-                    "    local soldierPos=soldier:GetPosition()   ",
+                    "    local soldierPos=soldier:GetPosition()",
+                    "    local pos=loc.coverTroopsAlloc[soldier].position  ",
                     "    if soldier:IsAlive() and soldierPos:Distance(pos)>1 then",
                     "        allFulfilled=false",
                     "    end",
@@ -283,11 +291,11 @@
       },
       {
         "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
-        "position": "1050,767.7"
+        "position": "1150,767.7"
       },
       {
         "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
-        "position": "662.5,767.7"
+        "position": "550,792.7"
       },
       {
         "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
@@ -323,15 +331,15 @@
       },
       {
         "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
-        "position": "1162.5,767.7"
+        "position": "1262.5,767.7"
       },
       {
         "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
-        "position": "1037.5,905.2"
+        "position": "1137.5,905.2"
       },
       {
         "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
-        "position": "1250,905.2"
+        "position": "1350,905.2"
       },
       {
         "id": "23ea458b-248a-4924-8415-265a98c5683b",
@@ -391,7 +399,7 @@
         "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
         "type": "comment",
         "header": "",
-        "body": "Currently disabled",
+        "body": "Currently disabled\r\nShould always happen after initial trigger",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -427,6 +435,7 @@
     "subteamStatic": "return nil",
     "teamHopDist": "return 20",
     "teamCoverSearchDist": "return 8",
-    "covers": "return nil"
+    "covers": "return nil",
+    "coverTroopsAlloc": "return nil"
   }
 }
