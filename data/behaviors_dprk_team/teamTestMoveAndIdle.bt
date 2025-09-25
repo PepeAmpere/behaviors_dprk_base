@@ -1,0 +1,110 @@
+{
+  "name": "Root",
+  "id": "0543eaec-48e7-4eed-8387-6d75eacd5748",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "setup vars",
+      "id": "0688a65a-d85b-4ef9-b56e-dd1115d13f28",
+      "type": "scriptAction",
+      "script": [
+        "loc.positions = {}"
+      ]
+    },
+    {
+      "name": "Send Messages",
+      "id": "07950acf-2e5a-40fb-90ce-44c995e57d48",
+      "type": "scriptAction",
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"Move\"",
+        "orderData.position = arg.orderData.position",
+        "",
+        "local offsets = {",
+        "    2 * Vec3(1, 0, 0),",
+        "    2 * Vec3(0, 1, 0),",
+        "    2 * Vec3(0, -1, 0),",
+        "    2 * Vec3(-1, 0, 0),",
+        "    2 * Vec3(1, -1, 0),",
+        "    2 * Vec3(-1, 1, 0)",
+        "}",
+        "",
+        "local soldierCount = self:GetEntityCount()",
+        "",
+        "local counter = 0",
+        "for sodlierIndex = 0, soldierCount - 1 do",
+        "    orderData.position = arg.orderData.position + offsets[counter + 1]",
+        "    loc.positions[counter] = orderData.position",
+        "    self:SendMessage(self:GetEntity(counter), \"NewOrder\", orderData)",
+        "    counter = counter + 1",
+        "end"
+      ]
+    },
+    {
+      "name": "Wait until in position",
+      "id": "c463b2c9-a909-4bda-9d1d-709585cc9224",
+      "type": "waitUntil",
+      "condition": [
+        "local soldierCount = self:GetEntityCount()",
+        "",
+        "local counter = 0",
+        "for sodlierIndex = 0, soldierCount - 1 do",
+        "    if loc.positions[counter]:DistanceXY(self:GetEntity(counter):GetPosition()) > 2 then",
+        "        return false",
+        "    end",
+        "    counter = counter + 1",
+        "end",
+        "",
+        "return true"
+      ]
+    },
+    {
+      "name": "Idle",
+      "id": "a7e9b3c4-0368-4409-b6d3-8e093bc0664e",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "teamIdle"
+      ],
+      "arguments": {
+        "orderData": "arg.orderData"
+      }
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "0543eaec-48e7-4eed-8387-6d75eacd5748",
+        "position": "1799.6,104"
+      },
+      {
+        "id": "0688a65a-d85b-4ef9-b56e-dd1115d13f28",
+        "position": "1337.5,303.2"
+      },
+      {
+        "id": "07950acf-2e5a-40fb-90ce-44c995e57d48",
+        "position": "1538.1,303.6"
+      },
+      {
+        "id": "c463b2c9-a909-4bda-9d1d-709585cc9224",
+        "position": "1794,307.2"
+      },
+      {
+        "id": "a7e9b3c4-0368-4409-b6d3-8e093bc0664e",
+        "position": "2091.6,258.4"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2403.2",
+    "gridPadding": "0,3.20000000000005"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {
+    "positions": "nil"
+  }
+}
