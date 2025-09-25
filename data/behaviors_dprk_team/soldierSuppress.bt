@@ -117,6 +117,7 @@
             "",
             "loc.orderData = {}",
             "loc.orderData.position = loc.defilade[bestIndex].position",
+            "loc.orderData.state = \"move\"",
             "",
             "return true"
           ]
@@ -128,11 +129,11 @@
           "subtrees": [
             {
               "name": "MoveCloser",
-              "id": "098051d4-9139-4568-8707-5c61c778ebbc",
+              "id": "258499ba-9b7c-4858-8088-cc1b85eba5ab",
               "type": "reference",
               "target": [
                 "behaviors_dprk_team",
-                "soldierOccupy"
+                "soldierMove"
               ],
               "arguments": {
                 "orderData": "loc.orderData"
@@ -200,6 +201,29 @@
       ]
     }
   ],
+  "unlinked-trees": [
+    {
+      "name": "MoveCloser",
+      "id": "098051d4-9139-4568-8707-5c61c778ebbc",
+      "type": "reference",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "098051d4-9139-4568-8707-5c61c778ebbc",
+            "position": "1950,588"
+          }
+        ],
+        "editorObjects": []
+      },
+      "target": [
+        "behaviors_dprk_team",
+        "soldierOccupy"
+      ],
+      "arguments": {
+        "orderData": "loc.orderData"
+      }
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
@@ -239,8 +263,8 @@
         "position": "2190.61111111111,442.1"
       },
       {
-        "id": "098051d4-9139-4568-8707-5c61c778ebbc",
-        "position": "2162.5,575.5"
+        "id": "258499ba-9b7c-4858-8088-cc1b85eba5ab",
+        "position": "2175,575.5"
       },
       {
         "id": "f213700f-bff9-4412-8961-dadb50511e12",
@@ -266,7 +290,8 @@
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {
