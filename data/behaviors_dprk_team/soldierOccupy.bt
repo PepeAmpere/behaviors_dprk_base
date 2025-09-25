@@ -1,102 +1,63 @@
 {
-  "name": "Select Action",
-  "id": "69b152a6-fb93-4230-9739-6a1e13505116",
-  "type": "selector",
+  "name": "Setup",
+  "id": "8c16dc86-ff9a-4b75-aa3e-79406f4b9663",
+  "type": "sequence",
   "subtrees": [
     {
-      "name": "Fire at enemy",
-      "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
-      "type": "reference",
-      "decorators": [
-        {
-          "id": "65a56ae0-5f04-49aa-a064-bae8353cb679",
-          "type": "scriptCondition",
-          "name": "If we can see enemy in reactRadius distance",
-          "script": [
-            "local enemy = GetEnemyNearby(self, loc.reactRadius)",
-            "",
-            "if(enemy == nil) then ",
-            "    return false",
-            "end",
-            "",
-            "arg.orderData.entityToFireAt = enemy",
-            "",
-            "return true"
-          ]
-        }
-      ],
-      "target": [
-        "behaviors_dprk_team",
-        "soldierFireAt"
-      ],
-      "arguments": {
-        "orderData": "arg.orderData"
-      }
-    },
-    {
-      "name": "Move sequence",
-      "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-      "type": "sequence",
+      "name": "Chose start action",
+      "id": "a80dde81-a0d3-44cd-886e-f20eaedc5a88",
+      "type": "selector",
       "subtrees": [
         {
-          "name": "Reset",
-          "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-          "type": "reference",
-          "target": [
-            "behaviors_dprk_team",
-            "soldierReset"
+          "name": "Set stance",
+          "id": "1f6e51f8-a9fe-4da3-b136-cbe9b524c68c",
+          "type": "setStance",
+          "decorators": [
+            {
+              "id": "2085c563-934c-4d83-82c4-d3c987eb4dc2",
+              "type": "scriptCondition",
+              "name": "If state is Cover",
+              "script": [
+                "return arg.orderData.state == loc.cover"
+              ]
+            }
           ],
-          "arguments": {}
-        },
-        {
-          "name": "Move",
-          "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-          "type": "move",
-          "position": [
-            "return arg.orderData.offsetPosition"
+          "stance": [
+            "arg.orderData.stance"
           ]
         },
         {
-          "name": "Send Order Completed",
-          "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-          "type": "scriptAction",
-          "script": [
-            "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})"
-          ]
+          "name": "Succeed",
+          "id": "da31f041-cf3e-455a-a0b4-aab8d14be0f2",
+          "type": "success"
         }
       ],
-      "decorators": [
-        {
-          "id": "8717765f-748d-4ea1-b9b2-2983ec923138",
-          "type": "scriptCondition",
-          "name": "If state is Move",
-          "script": [
-            "return arg.orderData.state == loc.move"
-          ]
-        }
-      ]
+      "active": true
     },
     {
-      "name": "Choose Idle or Shoot",
-      "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+      "name": "Select Action",
+      "id": "69b152a6-fb93-4230-9739-6a1e13505116",
       "type": "selector",
       "subtrees": [
         {
           "name": "Fire at enemy",
-          "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+          "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
           "type": "reference",
           "decorators": [
             {
-              "id": "9b497163-766e-4b1e-8fff-815ca9c0a455",
+              "id": "65a56ae0-5f04-49aa-a064-bae8353cb679",
               "type": "scriptCondition",
-              "name": "If we see enemies",
+              "name": "If we can see enemy in reactRadius distance",
               "script": [
-                "local enemies = self:GetVisibleEnemies()",
-                "if #enemies > 0 then",
-                "    arg.orderData.entityToFireAt = enemies[1]",
-                "    return true",
+                "local enemy = GetEnemyNearby(self, loc.reactRadius)",
+                "",
+                "if(enemy == nil) then ",
+                "    return false",
                 "end",
-                "return false"
+                "",
+                "arg.orderData.entityToFireAt = enemy",
+                "",
+                "return true"
               ]
             }
           ],
@@ -109,78 +70,217 @@
           }
         },
         {
-          "name": "Check back",
-          "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
-          "type": "scriptAction",
-          "script": [
-            "self:ReqHeadingAtPos(arg.orderData.startPos)"
+          "name": "Supervised Parallel",
+          "id": "28c1ecba-f932-4f97-a9d3-26e59d785004",
+          "type": "supervisedParallel",
+          "subtrees": [
+            {
+              "name": "Move sequence",
+              "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Reset",
+                  "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
+                  "type": "reference",
+                  "target": [
+                    "behaviors_dprk_team",
+                    "soldierReset"
+                  ],
+                  "arguments": {}
+                },
+                {
+                  "name": "Move",
+                  "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
+                  "type": "move",
+                  "decorators": [
+                    {
+                      "id": "8b017212-775e-41b9-aeb6-5fbbd87c9779",
+                      "type": "countedLoop",
+                      "name": "Move to all points",
+                      "count": [
+                        "return #arg.orderData.offsetPositions"
+                      ],
+                      "variableName": "movePoint"
+                    }
+                  ],
+                  "position": [
+                    "return arg.orderData.offsetPositions[loc.movePoint]"
+                  ]
+                },
+                {
+                  "name": "Send Order Completed",
+                  "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})",
+                    "loc.moveOrderComplete = true"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Debug Move Points",
+              "id": "bf2a76ff-4094-4578-b945-3ac286872d6c",
+              "type": "scriptAction",
+              "script": [
+                "if arg.orderData.offsetPositions ~= nil then",
+                "    for i = 1, #arg.orderData.offsetPositions do",
+                "        local point = arg.orderData.offsetPositions[i]",
+                "",
+                "        DebugLine(",
+                "            point,",
+                "            point + Vec3(0, 0, 5),",
+                "            1, 0, 0, 1",
+                "        )",
+                "    end",
+                "end"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "8717765f-748d-4ea1-b9b2-2983ec923138",
+              "type": "scriptCondition",
+              "name": "If state is Move",
+              "script": [
+                "return arg.orderData.state == loc.move and not loc.moveOrderComplete"
+              ]
+            }
           ]
+        },
+        {
+          "name": "Choose Idle or Shoot",
+          "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Fire at enemy",
+              "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+              "type": "reference",
+              "decorators": [
+                {
+                  "id": "9b497163-766e-4b1e-8fff-815ca9c0a455",
+                  "type": "scriptCondition",
+                  "name": "If we see enemies",
+                  "script": [
+                    "local enemies = GetEntitiesInArea(arg.orderData.enemyPolygon, { enemyOf = self } )",
+                    "",
+                    "if #enemies > 0 then",
+                    "    arg.orderData.entityToFireAt = enemies[1]",
+                    "    return true",
+                    "end",
+                    "return false"
+                  ]
+                }
+              ],
+              "target": [
+                "behaviors_dprk_team",
+                "soldierFireAt"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            },
+            {
+              "name": "Check back",
+              "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
+              "type": "scriptAction",
+              "script": [
+                "self:ReqHeadingAtPos(arg.orderData.startPos)"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "b3828376-f4b8-4e78-bada-cb5b85a344af",
+              "type": "scriptCondition",
+              "name": "If state is Cover",
+              "script": [
+                "return arg.orderData.state == loc.cover"
+              ]
+            }
+          ],
+          "active": true
         }
       ],
       "decorators": [
         {
-          "id": "b3828376-f4b8-4e78-bada-cb5b85a344af",
-          "type": "scriptCondition",
-          "name": "If state is Cover",
-          "script": [
-            "return arg.orderData.state == loc.cover"
-          ]
+          "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
+          "type": "loopForever",
+          "name": "Loop forever"
         }
       ],
       "active": true
     }
   ],
-  "decorators": [
-    {
-      "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
-      "type": "loopForever",
-      "name": "Loop forever"
-    }
-  ],
   "meta": {
     "nodesInfo": [
       {
+        "id": "8c16dc86-ff9a-4b75-aa3e-79406f4b9663",
+        "position": "1873,200.8576"
+      },
+      {
+        "id": "a80dde81-a0d3-44cd-886e-f20eaedc5a88",
+        "position": "1544.85714285714,426.7152"
+      },
+      {
+        "id": "1f6e51f8-a9fe-4da3-b136-cbe9b524c68c",
+        "position": "1369.85714285714,539.2152"
+      },
+      {
+        "id": "da31f041-cf3e-455a-a0b4-aab8d14be0f2",
+        "position": "1760.5,550.8576"
+      },
+      {
         "id": "69b152a6-fb93-4230-9739-6a1e13505116",
-        "position": "2048,334.293333333333"
+        "position": "2110.5,513.3576"
       },
       {
         "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
-        "position": "1398,746.793333333333"
+        "position": "1385.5,863.3576"
+      },
+      {
+        "id": "28c1ecba-f932-4f97-a9d3-26e59d785004",
+        "position": "2110.5,838.3576"
       },
       {
         "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-        "position": "2073,746.793333333333"
+        "position": "2110.5,1038.3576"
       },
       {
         "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-        "position": "1823,1021.79333333333"
+        "position": "1798,1225.8576"
       },
       {
         "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-        "position": "2066.09573759574,1020.90480519481"
+        "position": "2110.5,1200.8576"
       },
       {
         "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-        "position": "2310.5,1021.79333333333"
+        "position": "2360.5,1238.3576"
+      },
+      {
+        "id": "bf2a76ff-4094-4578-b945-3ac286872d6c",
+        "position": "2535.5,1038.3576"
       },
       {
         "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
-        "position": "2748,721.793333333333"
+        "position": "3285.5,800.8576"
       },
       {
         "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
-        "position": "2598,996.793333333333"
+        "position": "2985.5,1188.3576"
       },
       {
         "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
-        "position": "2973,996.793333333333"
+        "position": "3485.5,1175.8576"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "6032,3547.79333333333",
-    "gridPadding": "10.5,9.29333333333335"
+    "canvasSize": "6032,3689.3576",
+    "gridPadding": "10.5,0.857600000000048"
   },
-  "active": true,
   "parameters": [
     {
       "name": "orderData",
@@ -192,6 +292,7 @@
   "locals": {
     "move": "\"move\"",
     "cover": "\"cover\"",
-    "reactRadius": "10"
+    "reactRadius": "10",
+    "moveOrderComplete": "false"
   }
 }
