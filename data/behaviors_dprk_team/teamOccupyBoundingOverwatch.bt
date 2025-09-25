@@ -32,203 +32,218 @@
       ]
     },
     {
-      "name": "Run and debug",
-      "id": "e5b65e19-4627-464d-9a93-376718f84b6b",
-      "type": "parallel",
+      "name": "Special situations selector",
+      "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
+      "type": "selector",
       "subtrees": [
         {
-          "name": "Special situations selector",
-          "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
-          "type": "selector",
+          "name": "Set Occupy and leave it",
+          "id": "c48b1293-7008-4ced-8703-aa8a3ada6d19",
+          "type": "sequence",
           "subtrees": [
             {
-              "name": "Set Occupy and leave it",
-              "id": "c48b1293-7008-4ced-8703-aa8a3ada6d19",
-              "type": "sequence",
-              "subtrees": [
-                {
-                  "name": "Send Autonomous Defend order (Swap for TeamIdle)",
-                  "id": "eaeb8187-92f0-4885-9928-ac7eb5f394cf",
-                  "type": "scriptAction"
-                },
-                {
-                  "name": "Wait Forever",
-                  "id": "84bdd10d-4bb1-44bd-9903-476da17d5d20",
-                  "type": "waitForever"
-                }
-              ],
-              "decorators": [
-                {
-                  "id": "91c62cbb-289d-4e55-a72f-186f1b4a5f07",
-                  "type": "scriptCondition",
-                  "name": "Everyone is close enough to goal",
-                  "script": [
-                    "return false"
-                  ]
-                }
-              ]
+              "name": "Send Autonomous Defend order (Swap for TeamIdle)",
+              "id": "eaeb8187-92f0-4885-9928-ac7eb5f394cf",
+              "type": "scriptAction"
             },
             {
-              "name": "<unnamed>",
-              "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
-              "type": "sequence",
-              "subtrees": [
-                {
-                  "name": "Throw survivor at objective",
-                  "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
-                  "type": "scriptAction"
-                },
-                {
-                  "name": "Pray",
-                  "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
-                  "type": "waitForever"
-                }
-              ],
-              "decorators": [
-                {
-                  "id": "a99b7451-be0a-4cad-bc50-d451e2597e81",
-                  "type": "scriptCondition",
-                  "name": "'<=1 troop' failsafe",
-                  "script": [
-                    "return false"
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "Run and listen",
-              "id": "23ea458b-248a-4924-8415-265a98c5683b",
-              "type": "supervisedParallel",
-              "subtrees": [
-                {
-                  "name": "Team orders complete?",
-                  "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
-                  "type": "selector",
-                  "subtrees": [
-                    {
-                      "name": "<unnamed>",
-                      "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
-                      "type": "sequence",
-                      "subtrees": [
-                        {
-                          "name": "<unnamed>",
-                          "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
-                          "type": "scriptAction"
-                        }
-                      ],
-                      "decorators": [
-                        {
-                          "id": "f99aceae-8202-49b6-a5ae-4a0e8721e481",
-                          "type": "scriptCondition",
-                          "name": "Have orders been completed for alive soldiers?",
-                          "script": [
-                            "return false"
-                          ]
-                        }
-                      ]
-                    },
-                    {
-                      "name": "<unnamed>",
-                      "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
-                      "type": "sequence",
-                      "subtrees": [
-                        {
-                          "name": "Team Rebalancer",
-                          "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
-                          "type": "scriptAction",
-                          "script": [
-                            "--currently throws everyone in the moving team and tells them to move to location.",
-                            "",
-                            "local entityCount=self:GetEntityCount()",
-                            "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
-                            "    --create teams from scratch",
-                            "    loc.subteamMoving={}",
-                            "    loc.subteamStatic={}",
-                            "    ",
-                            "    for i = 1, entityCount do",
-                            "        loc.SubteamMoving[i]=self:GetEntity(i-1)",
-                            "    end",
-                            "else",
-                            "    --count alive soldiers ",
-                            "end"
-                          ]
-                        },
-                        {
-                          "name": "Send orders to teams (TODO EXPAND)",
-                          "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
-                          "type": "scriptAction",
-                          "script": [
-                            "for i = 1, entityCount do",
-                            "    self:SendMessage(",
-                            "        self:GetEntity(i-1),",
-                            "        \"NewOrder\",",
-                            "        {",
-                            "            \"orderName\",  \"AutonomousMove\", ",
-                            "            \"position\", _position",
-                            "        }",
-                            "    )",
-                            "end",
-                            "    "
-                          ]
-                        },
-                        {
-                          "name": "Wait Forever",
-                          "id": "4f332874-7884-4b63-bc6f-aaaf7d92650b",
-                          "type": "waitForever"
-                        }
-                      ]
-                    }
-                  ],
-                  "active": true
-                },
-                {
-                  "name": "Message Handler",
-                  "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
-                  "type": "messageHandler"
-                }
-              ]
+              "name": "Wait Forever",
+              "id": "84bdd10d-4bb1-44bd-9903-476da17d5d20",
+              "type": "waitForever"
             }
           ],
           "decorators": [
             {
-              "id": "d31c6a44-675c-4436-b343-f1bbe23ad6c2",
-              "type": "loopForever",
-              "name": "Loop-Movement"
+              "id": "91c62cbb-289d-4e55-a72f-186f1b4a5f07",
+              "type": "scriptCondition",
+              "name": "Everyone is close enough to goal",
+              "script": [
+                "return false"
+              ]
             }
-          ],
-          "active": true
+          ]
         },
         {
-          "name": "Draw route the group will run along",
-          "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
-          "type": "scriptAction",
-          "script": [
-            "local lineVec=Vec3(0,0,2)",
-            "local future = loc.route",
-            "if future:IsReady() then",
-            "  local path = future:Value()",
-            "  if path ~= nil then",
-            "    for i=0, path:GetSegmentCount()-1 do",
-            "    -- entity is following a path, draw it",
-            "        DebugLine(",
-            "                path:GetSegmentStart(i)+lineVec,",
-            "                path:GetSegmentEnd(i)+lineVec,",
-            "                1,0,1,1",
-            "            )",
-            "    end",
-            "  end",
-            "end"
+          "name": "<unnamed>",
+          "id": "90488be4-7c90-4780-9375-9b726e01e0ed",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Throw survivor at objective",
+              "id": "94bab3cc-3701-4c1b-a631-ceabebbe6d22",
+              "type": "scriptAction"
+            },
+            {
+              "name": "Pray",
+              "id": "c5a072f3-9631-4fc7-ace6-a0db5bcfb037",
+              "type": "waitForever"
+            }
+          ],
+          "decorators": [
+            {
+              "id": "a99b7451-be0a-4cad-bc50-d451e2597e81",
+              "type": "scriptCondition",
+              "name": "'<=1 troop' failsafe",
+              "script": [
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Run and listen",
+          "id": "23ea458b-248a-4924-8415-265a98c5683b",
+          "type": "supervisedParallel",
+          "subtrees": [
+            {
+              "name": "Team orders complete?",
+              "id": "42fff46b-cc59-4656-8fbd-db9675c83974",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "<unnamed>",
+                  "id": "0726d3d6-5865-42b3-9b3b-041f5a137863",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "<unnamed>",
+                      "id": "cb477ee4-983e-4fcc-b61f-a8a1718f4051",
+                      "type": "scriptAction"
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "f99aceae-8202-49b6-a5ae-4a0e8721e481",
+                      "type": "scriptCondition",
+                      "name": "Have orders been completed for alive soldiers?",
+                      "script": [
+                        "return false"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "<unnamed>",
+                  "id": "a42e27ab-91ea-4556-b4cf-a5e1e19efa24",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Team Rebalancer",
+                      "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
+                      "type": "scriptAction",
+                      "script": [
+                        "local entityCount=self:GetEntityCount()",
+                        "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
+                        "    --create teams from scratch",
+                        "    loc.subteamMoving={}",
+                        "    loc.subteamStatic={}",
+                        "    local x=1",
+                        "    local y=1",
+                        "    for i = 1, entityCount do",
+                        "        if i<=entityCount/2 then",
+                        "            loc.subteamStatic[x]=self:GetEntity(i-1)",
+                        "            x=x+1",
+                        "        else",
+                        "            loc.subteamMoving[y]=self:GetEntity(i-1)",
+                        "            y=y+1",
+                        "        end",
+                        "    end",
+                        "else",
+                        "    --count alive soldiers and redistribute",
+                        "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                        "    local temp=loc.subteamMoving",
+                        "    loc.subteamMoving=loc.subteamStatic",
+                        "    loc.subteamStatic=temp",
+                        "end",
+                        "--This below will need to have an exception created",
+                        "loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist"
+                      ]
+                    },
+                    {
+                      "name": "Send orders to teams (TODO EXPAND)",
+                      "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
+                      "type": "scriptAction",
+                      "script": [
+                        "for i = 1, #loc.subteamMoving do",
+                        "    local oData={}",
+                        "    oData.orderName=\"Move\"",
+                        "    oData.position=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                        "    self:SendMessage(",
+                        "        loc.subteamMoving[i],",
+                        "        \"NewOrder\",",
+                        "        oData",
+                        "    )",
+                        "end",
+                        "    "
+                      ]
+                    },
+                    {
+                      "name": "All alive move team members at given pos",
+                      "id": "75ef436f-f3f1-4116-aeed-23f010bd2be1",
+                      "type": "waitUntil",
+                      "condition": [
+                        "local allFulfilled=true",
+                        "local pos=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
+                        "for i = 1, #loc.subteamMoving do",
+                        "    local soldier=loc.subteamMoving[i]",
+                        "    local soldierPos=soldier:GetPosition()   ",
+                        "    if soldier:IsAlive() and soldierPos:Distance(pos)>1 then",
+                        "        allFulfilled=false",
+                        "    end",
+                        "end",
+                        "return allFulfilled"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "active": true
+            },
+            {
+              "name": "Message Handler",
+              "id": "b659c7f5-d246-46f5-bffa-9e32b532768b",
+              "type": "messageHandler"
+            },
+            {
+              "name": "Draw route the group will run along",
+              "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
+              "type": "scriptAction",
+              "script": [
+                "local lineVec=Vec3(0,0,2)",
+                "local future = loc.route",
+                "if future:IsReady() then",
+                "  local path = future:Value()",
+                "  if path ~= nil then",
+                "    for i=0, path:GetSegmentCount()-1 do",
+                "    -- entity is following a path, draw it",
+                "        DebugLine(",
+                "                path:GetSegmentStart(i)+lineVec,",
+                "                path:GetSegmentEnd(i)+lineVec,",
+                "                1,0,1,1",
+                "            )",
+                "    end",
+                "  end",
+                "end"
+              ]
+            }
           ]
         }
       ],
-      "waitForAll": false
+      "decorators": [
+        {
+          "id": "d31c6a44-675c-4436-b343-f1bbe23ad6c2",
+          "type": "loopForever",
+          "name": "Loop-Movement"
+        }
+      ],
+      "active": true
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "22e36424-ea64-47dd-b1b9-aa5a18c317ef",
-        "position": "1612.5,380.2"
+        "position": "1625,392.7"
       },
       {
         "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
@@ -251,6 +266,10 @@
         "position": "1587.5,1042.7"
       },
       {
+        "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
+        "position": "1975,1180.2"
+      },
+      {
         "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
         "position": "1337.5,480.2"
       },
@@ -261,10 +280,6 @@
       {
         "id": "5d5e4a57-bf34-481b-9a33-0351f51ebc59",
         "position": "1362.5,592.7"
-      },
-      {
-        "id": "e5b65e19-4627-464d-9a93-376718f84b6b",
-        "position": "1750,492.7"
       },
       {
         "id": "cb292c6c-7f1d-4c6f-88d2-e97cfec206f1",
@@ -324,7 +339,7 @@
         "position": "2137.5,1155.2"
       },
       {
-        "id": "4f332874-7884-4b63-bc6f-aaaf7d92650b",
+        "id": "75ef436f-f3f1-4116-aeed-23f010bd2be1",
         "position": "2425,1155.2"
       },
       {
@@ -333,7 +348,7 @@
       },
       {
         "id": "96f8add5-4c34-4034-98c6-cd22c613b3e4",
-        "position": "1962.5,592.7"
+        "position": "2325,830.2"
       }
     ],
     "editorObjects": [
@@ -391,6 +406,17 @@
         "headerForeground": "#FF000000",
         "boxBackground": "#FF90EE90",
         "boxForeground": "#FF000000"
+      },
+      {
+        "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
+        "type": "comment",
+        "header": "",
+        "body": "Missing the rebalance part",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
       }
     ],
     "canvasSize": "3840,2855.2",
@@ -408,6 +434,7 @@
     "distAlongRoute": "return 0",
     "subteamMoving": "return nil",
     "subteamStatic": "return nil",
-    "teamHopDist": "return 10"
+    "teamHopDist": "return 20",
+    "teamCoverSearchDist": "return 5"
   }
 }
