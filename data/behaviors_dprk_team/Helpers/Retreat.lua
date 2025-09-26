@@ -79,6 +79,20 @@ return {
             return enemies[1]
         end
         return nil
-    end
+    end,
 
+    IsRoleDead = function(updateData, role)
+        if updateData == nil then
+            return false
+        end
+
+        local isDead = true
+        for _, soldierData in ipairs(updateData) do
+            if soldierData.state == role then
+                isDead = false
+                break
+            end
+        end
+        return isDead
+    end,
 }

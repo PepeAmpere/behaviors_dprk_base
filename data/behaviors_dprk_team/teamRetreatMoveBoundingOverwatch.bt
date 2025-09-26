@@ -16,7 +16,7 @@
         "",
         "for i = 0, count - 1 do",
         "    local soldier = group:GetEntity(i)",
-        "    if soldier and soldier:Valid() then",
+        "    if soldier and soldier:Valid() and soldier:GetHealth() > 0 then",
         "        table.insert(loc.updateData, {",
         "            unit = soldier,",
         "            index = i,",
@@ -179,9 +179,6 @@
                         "    if firstSoldier and firstSoldier:Valid() then",
                         "        local positions = { ",
                         "            loc.updateData[1].unit:GetPosition(), ",
-                        "            loc.updateData[2].unit:GetPosition(),",
-                        "            loc.updateData[3].unit:GetPosition(),",
-                        "            loc.updateData[4].unit:GetPosition()",
                         "     }",
                         "",
                         "        loc.coversRequest = FindCovers(threats, loc.coverArea.polygon, positions,     ",
@@ -386,12 +383,6 @@
             "            DebugLog(\"------------\")",
             "        end",
             "    end",
-            "end",
-            "",
-            "",
-            "loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.cover, loc.move)",
-            "if (loc.orderReady) then",
-            "    SwitchRoles(loc.updateData, loc.cover, loc.move)",
             "end"
           ]
         },
@@ -532,105 +523,119 @@
       ]
     }
   ],
+  "decorators": [
+    {
+      "id": "fe0b1038-cf78-4b4b-80d2-c8fc7d0c2b0b",
+      "type": "restartIf",
+      "name": "All squad role died",
+      "script": [
+        "if IsRoleDead(loc.updateData, loc.cover) then",
+        "    DebugLog(\"RESTART RESTART RESTART\")",
+        "    return true",
+        "end",
+        "return false"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "2660,766.953571428571"
+        "position": "2647.5,763.453571428571"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "2335,916.953571428571"
+        "position": "2335,950.953571428571"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "2522.5,916.953571428571"
+        "position": "2522.5,950.953571428571"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2710,916.953571428571"
+        "position": "2710,950.953571428571"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "3360,954.453571428571"
+        "position": "3360,988.453571428571"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "2358,1229.45357142857"
+        "position": "2358,1263.45357142857"
       },
       {
         "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "1372.5,1416.95357142857"
+        "position": "1372.5,1450.95357142857"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "3222.5,1354.45357142857"
+        "position": "3222.5,1388.45357142857"
       },
       {
         "id": "a390967c-24b8-4c30-98df-94948a04328b",
-        "position": "2235,1516.95357142857"
+        "position": "2235,1550.95357142857"
       },
       {
         "id": "ccb8a974-dcc4-4b0f-a6e6-2c08f14caa09",
-        "position": "1760,1679.45357142857"
+        "position": "1760,1713.45357142857"
       },
       {
         "id": "29793eeb-a9f9-4766-bb5f-714695bb56a1",
-        "position": "1985,1679.45357142857"
+        "position": "1985,1713.45357142857"
       },
       {
         "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
-        "position": "2235,1679.45357142857"
+        "position": "2235,1713.45357142857"
       },
       {
         "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-        "position": "2460,1679.45357142857"
+        "position": "2460,1713.45357142857"
       },
       {
         "id": "9ee21c46-225d-4801-8a47-9870391a5124",
-        "position": "2960,1529.45357142857"
+        "position": "2960,1563.45357142857"
       },
       {
         "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
-        "position": "3210,1529.45357142857"
+        "position": "3210,1563.45357142857"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "3435,1529.45357142857"
+        "position": "3435,1563.45357142857"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "3722.5,1529.45357142857",
+        "position": "3722.5,1563.45357142857",
         "height": 50.0
       },
       {
         "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
-        "position": "3360,1204.45357142857"
+        "position": "3360,1238.45357142857"
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "3672.5,1191.95357142857"
+        "position": "3672.5,1225.95357142857"
       },
       {
         "id": "e94d9362-1bff-4477-9ca5-b13cf71ac734",
-        "position": "4185,1029.45357142857"
+        "position": "4185,1063.45357142857"
       },
       {
         "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-        "position": "3947.5,1191.95357142857"
+        "position": "3947.5,1225.95357142857"
       },
       {
         "id": "8319e276-61b8-47db-83fe-04856806bdce",
-        "position": "4185,1191.95357142857"
+        "position": "4185,1225.95357142857"
       },
       {
         "id": "7382235e-0cb3-4c1c-b099-dd5fd40cc7d5",
-        "position": "4422.5,1191.95357142857"
+        "position": "4422.5,1225.95357142857"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5054.5,3229.45357142857",
-    "gridPadding": "10,4.45357142857114"
+    "canvasSize": "5054.5,3263.45357142857",
+    "gridPadding": "10,0.953571428571138"
   },
   "parameters": [
     {
