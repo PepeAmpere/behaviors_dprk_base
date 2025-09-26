@@ -76,7 +76,7 @@
               "type": "scriptAction",
               "decorators": [
                 {
-                  "id": "b35396b1-ef52-4f0d-9e01-d3ae4b32902d",
+                  "id": "8f2056f0-5a81-41f1-abf8-a329365a12d8",
                   "type": "scriptCondition",
                   "name": "Order update",
                   "script": [
@@ -84,7 +84,7 @@
                   ]
                 },
                 {
-                  "id": "782bb409-0790-4060-a6e6-0754242b88ce",
+                  "id": "c91f046b-eadb-4d33-8496-1ece20177da9",
                   "type": "scriptCondition",
                   "name": "Is Team Close To Target Position",
                   "script": [
@@ -124,6 +124,7 @@
                       "type": "scriptAction",
                       "script": [
                         "local firstSoldier = GetFirstSoldier(loc.updateData, loc.move)",
+                        "if firstSoldier == nil then return end",
                         "",
                         "loc.pathRequest = FindPath(firstSoldier:GetPosition(), arg.orderData.position)"
                       ]
@@ -292,12 +293,16 @@
                     "local startStepDistance = 15",
                     "local defaultStepDistance = 30",
                     "",
+                    "local spacing = 2.5",
+                    "local count = 2",
+                    "local mid = math.floor(count / 2)",
+                    "local moveSoldierCount = 0",
+                    "",
                     "local moveDistance = defaultStepDistance",
                     "if (not loc.moveStarted) then",
                     "    moveDistance = startStepDistance",
                     "end",
                     "",
-                    "local moveSoldierCount = 0",
                     "",
                     "for i, data in ipairs(loc.updateData) do",
                     "",
@@ -305,7 +310,10 @@
                     "    if data.state == loc.move then",
                     "        moveSoldierCount = moveSoldierCount + 1",
                     "        -- prepare data for multiple points",
-                    "        local offset = moveSoldierCount - 1",
+                    "        local offset = (i - mid) * spacing",
+                    "        if moveSoldierCount == 1 then",
+                    "            offset = 0",
+                    "        end",
                     "        local offsetPositions = {}",
                     "",
                     "        local nextPos = nil",
@@ -529,113 +537,178 @@
       "type": "restartIf",
       "name": "All squad role died",
       "script": [
-        "if IsRoleDead(loc.updateData, loc.cover) then",
+        "if IsRoleDead(loc.updateData, loc.cover) or IsRoleDead(loc.updateData, loc.move) then",
         "    DebugLog(\"RESTART RESTART RESTART\")",
         "    return true",
         "end",
+        "",
+        "if IsAnyoneDeleted(loc.updateData) then",
+        "    DebugLog(\"Someone got deleted, restart\")",
+        "    return true",
+        "end",
+        "",
         "return false"
       ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Succeed",
+      "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
+      "type": "success",
+      "decorators": [
+        {
+          "id": "b35396b1-ef52-4f0d-9e01-d3ae4b32902d",
+          "type": "scriptCondition",
+          "name": "Order update",
+          "script": [
+            "return loc.orderReady"
+          ]
+        },
+        {
+          "id": "782bb409-0790-4060-a6e6-0754242b88ce",
+          "type": "scriptCondition",
+          "name": "Is Team Close To Target Position",
+          "script": [
+            "return IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData, loc.deadState)"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
+            "position": "1345.90952380952,1669.98351731602"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "<unnamed>",
+      "id": "b7e8d36c-fa98-430b-85fd-428f67b2a90a",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Wait Forever",
+          "id": "21fd6621-d020-4190-949c-4e8a8aefc95a",
+          "type": "waitForever"
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "b7e8d36c-fa98-430b-85fd-428f67b2a90a",
+            "position": "3220.90952380952,907.483517316017"
+          },
+          {
+            "id": "21fd6621-d020-4190-949c-4e8a8aefc95a",
+            "position": "3045.90952380952,957.483517316017"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "2647.5,763.453571428571"
+        "position": "2658.40952380952,782.483517316017"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "2335,950.953571428571"
+        "position": "2345.90952380952,969.983517316017"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "2522.5,950.953571428571"
+        "position": "2533.40952380952,969.983517316017"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2710,950.953571428571"
+        "position": "2720.90952380952,969.983517316017"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "3360,988.453571428571"
+        "position": "3370.90952380952,1007.48351731602"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "2358,1263.45357142857"
+        "position": "2368.90952380952,1282.48351731602"
       },
       {
         "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "1372.5,1450.95357142857"
+        "position": "970.909523809523,1607.48351731602"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "3222.5,1388.45357142857"
+        "position": "3233.40952380952,1407.48351731602"
       },
       {
         "id": "a390967c-24b8-4c30-98df-94948a04328b",
-        "position": "2235,1550.95357142857"
+        "position": "2245.90952380952,1569.98351731602"
       },
       {
         "id": "ccb8a974-dcc4-4b0f-a6e6-2c08f14caa09",
-        "position": "1760,1713.45357142857"
+        "position": "1770.90952380952,1732.48351731602"
       },
       {
         "id": "29793eeb-a9f9-4766-bb5f-714695bb56a1",
-        "position": "1985,1713.45357142857"
+        "position": "1995.90952380952,1732.48351731602"
       },
       {
         "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
-        "position": "2235,1713.45357142857"
+        "position": "2245.90952380952,1732.48351731602"
       },
       {
         "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-        "position": "2460,1713.45357142857"
+        "position": "2470.90952380952,1732.48351731602"
       },
       {
         "id": "9ee21c46-225d-4801-8a47-9870391a5124",
-        "position": "2960,1563.45357142857"
+        "position": "2970.90952380952,1582.48351731602"
       },
       {
         "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
-        "position": "3210,1563.45357142857"
+        "position": "3220.90952380952,1582.48351731602"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "3435,1563.45357142857"
+        "position": "3445.90952380952,1582.48351731602"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "3722.5,1563.45357142857",
+        "position": "3733.40952380952,1582.48351731602",
         "height": 50.0
       },
       {
         "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
-        "position": "3360,1238.45357142857"
+        "position": "3370.90952380952,1257.48351731602"
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "3672.5,1225.95357142857"
+        "position": "3683.40952380952,1244.98351731602"
       },
       {
         "id": "e94d9362-1bff-4477-9ca5-b13cf71ac734",
-        "position": "4185,1063.45357142857"
+        "position": "4195.90952380952,1082.48351731602"
       },
       {
         "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-        "position": "3947.5,1225.95357142857"
+        "position": "3958.40952380952,1244.98351731602"
       },
       {
         "id": "8319e276-61b8-47db-83fe-04856806bdce",
-        "position": "4185,1225.95357142857"
+        "position": "4195.90952380952,1244.98351731602"
       },
       {
         "id": "7382235e-0cb3-4c1c-b099-dd5fd40cc7d5",
-        "position": "4422.5,1225.95357142857"
+        "position": "4433.40952380952,1244.98351731602"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5054.5,3263.45357142857",
-    "gridPadding": "10,0.953571428571138"
+    "canvasSize": "5065.40952380952,3282.48351731602",
+    "gridPadding": "8.40952380952297,7.48351731601684"
   },
   "parameters": [
     {
