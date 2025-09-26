@@ -25,7 +25,8 @@
     "teamTestMoveAndIdle.bt"
   ],
   "initScripts": [
-    "Helpers\\Retreat.lua"
+    "Helpers\\Retreat.lua",
+    "util.lua"
   ],
   "parameters": {},
   "capabilities": {}
