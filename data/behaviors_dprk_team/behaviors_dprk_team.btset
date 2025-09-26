@@ -21,7 +21,8 @@
     "teamOccupyMoveInColumn.bt",
     "teamRetreat.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
-    "teamRoot.bt"
+    "teamRoot.bt",
+    "teamTestMoveAndIdle.bt"
   ],
   "initScripts": [
     "Helpers\\Retreat.lua"
