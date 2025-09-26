@@ -71,12 +71,12 @@
           "type": "selector",
           "subtrees": [
             {
-              "name": "Set order Wait ",
-              "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-              "type": "scriptAction",
+              "name": "Succeed",
+              "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
+              "type": "success",
               "decorators": [
                 {
-                  "id": "8f2056f0-5a81-41f1-abf8-a329365a12d8",
+                  "id": "b35396b1-ef52-4f0d-9e01-d3ae4b32902d",
                   "type": "scriptCondition",
                   "name": "Order update",
                   "script": [
@@ -84,28 +84,13 @@
                   ]
                 },
                 {
-                  "id": "c91f046b-eadb-4d33-8496-1ece20177da9",
+                  "id": "782bb409-0790-4060-a6e6-0754242b88ce",
                   "type": "scriptCondition",
                   "name": "Is Team Close To Target Position",
                   "script": [
                     "return IsTeamCloseToTargetPosition(loc.reachThreshold, arg.orderData.position, loc.updateData, loc.deadState)"
                   ]
                 }
-              ],
-              "script": [
-                "arg.orderData.orderName = loc.wait",
-                "local orderName = loc.wait",
-                "DebugLog(\"DONE DONE DONE DONE\")",
-                "",
-                "for i, data in ipairs(loc.updateData) do",
-                "    if data.state ~= loc.deadState then",
-                "        self:SendMessage(",
-                "                data.unit, ",
-                "                orderName,",
-                "                arg.orderData)",
-                "        DebugLog(\"Send message to: \" .. data.unit .. \" with orderName: \" .. orderName)",
-                "    end",
-                "end"
               ]
             },
             {
@@ -293,6 +278,9 @@
                     "local startStepDistance = 15",
                     "local defaultStepDistance = 30",
                     "",
+                    "",
+                    "",
+                    "",
                     "local spacing = 2.5",
                     "local count = 2",
                     "local mid = math.floor(count / 2)",
@@ -342,7 +330,7 @@
                     "        ",
                     "        arg.orderData.stance = 0",
                     "        if loc.previousCoverSpot ~= nil then",
-                    "            arg.orderData.stance = loc.previousCoverSpot.stance + 1",
+                    "            arg.orderData.stance = loc.previousCoverSpot.stance",
                     "        end",
                     "",
                     "",
@@ -553,12 +541,12 @@
   ],
   "unlinked-trees": [
     {
-      "name": "Succeed",
-      "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
-      "type": "success",
+      "name": "Set order Wait ",
+      "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
+      "type": "scriptAction",
       "decorators": [
         {
-          "id": "b35396b1-ef52-4f0d-9e01-d3ae4b32902d",
+          "id": "8f2056f0-5a81-41f1-abf8-a329365a12d8",
           "type": "scriptCondition",
           "name": "Order update",
           "script": [
@@ -566,7 +554,7 @@
           ]
         },
         {
-          "id": "782bb409-0790-4060-a6e6-0754242b88ce",
+          "id": "c91f046b-eadb-4d33-8496-1ece20177da9",
           "type": "scriptCondition",
           "name": "Is Team Close To Target Position",
           "script": [
@@ -577,37 +565,27 @@
       "meta": {
         "nodesInfo": [
           {
-            "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
-            "position": "1345.90952380952,1669.98351731602"
+            "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
+            "position": "970.909523809523,1607.48351731602"
           }
         ],
         "editorObjects": []
-      }
-    },
-    {
-      "name": "<unnamed>",
-      "id": "b7e8d36c-fa98-430b-85fd-428f67b2a90a",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Wait Forever",
-          "id": "21fd6621-d020-4190-949c-4e8a8aefc95a",
-          "type": "waitForever"
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b7e8d36c-fa98-430b-85fd-428f67b2a90a",
-            "position": "3220.90952380952,907.483517316017"
-          },
-          {
-            "id": "21fd6621-d020-4190-949c-4e8a8aefc95a",
-            "position": "3045.90952380952,957.483517316017"
-          }
-        ],
-        "editorObjects": []
-      }
+      },
+      "script": [
+        "arg.orderData.orderName = loc.wait",
+        "local orderName = loc.wait",
+        "DebugLog(\"DONE DONE DONE DONE\")",
+        "",
+        "for i, data in ipairs(loc.updateData) do",
+        "    if data.state ~= loc.deadState then",
+        "        self:SendMessage(",
+        "                data.unit, ",
+        "                orderName,",
+        "                arg.orderData)",
+        "        DebugLog(\"Send message to: \" .. data.unit .. \" with orderName: \" .. orderName)",
+        "    end",
+        "end"
+      ]
     }
   ],
   "meta": {
@@ -637,8 +615,8 @@
         "position": "2368.90952380952,1282.48351731602"
       },
       {
-        "id": "9d4a9a1e-7a63-4501-b433-e5b21c39eccf",
-        "position": "970.909523809523,1607.48351731602"
+        "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
+        "position": "1333.40952380952,1482.48351731602"
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",

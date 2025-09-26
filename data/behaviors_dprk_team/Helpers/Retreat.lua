@@ -105,12 +105,25 @@ return {
         for i = #updateData, 1, -1 do
             local soldierData = updateData[i]
             if soldierData.unit == nil or not soldierData.unit:Valid() then
-                DebugLog("HAD TO REMOVE DUDE")
                 table.remove(updateData, i)
                 deleted = true
             end
         end
         return deleted
+    end,
+
+    GetCountOfRoleSoldiers = function(updateData, role)
+        if updateData == nil then
+            return 0
+        end
+        local count = 0
+        for _, soldierData in ipairs(updateData) do
+            if soldierData.state == role then
+                count = count + 1
+            end
+        end
+        return count
     end
+
 
 }

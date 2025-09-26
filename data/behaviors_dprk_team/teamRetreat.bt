@@ -1,0 +1,58 @@
+{
+  "name": "sequence",
+  "id": "305a5c0b-b158-4879-bd80-4139f2974f1b",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Retreat",
+      "id": "54e784b6-3a07-49f6-a068-47e03760e32a",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "teamRetreatMoveBoundingOverwatch"
+      ],
+      "arguments": {
+        "orderData": "arg.orderData"
+      }
+    },
+    {
+      "name": "Michal",
+      "id": "c25d48e6-bfb3-44f2-884e-cfa1f8117dc0",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "teamIdle"
+      ],
+      "arguments": {
+        "orderData": "arg.orderData"
+      }
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "305a5c0b-b158-4879-bd80-4139f2974f1b",
+        "position": "2112.5,133.5"
+      },
+      {
+        "id": "54e784b6-3a07-49f6-a068-47e03760e32a",
+        "position": "1689,310"
+      },
+      {
+        "id": "c25d48e6-bfb3-44f2-884e-cfa1f8117dc0",
+        "position": "2350,308.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2446",
+    "gridPadding": "0,8.5"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {}
+}
