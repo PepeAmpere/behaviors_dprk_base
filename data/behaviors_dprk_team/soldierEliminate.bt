@@ -61,13 +61,13 @@
                 "end",
                 "",
                 "if loc.raycast.delta >= 0 and loc.raycast.delta > RAYCAST_LENGTH_DIFFERENCE_TO_SKIP then",
-                "    DebugLog(tostring(self) .. \" enemy is obstructed!\")",
+                "    --DebugLog(tostring(self) .. \" enemy is obstructed!\")",
                 "    return false",
                 "end",
                 "",
                 "",
                 "if loc.path == nil then",
-                "    DebugLog(tostring(self) .. \" no path to enemy!\")",
+                "    --DebugLog(tostring(self) .. \" no path to enemy!\")",
                 "    return true",
                 "end",
                 "",
@@ -76,7 +76,7 @@
                 "loc.pathLength = path_length",
                 "",
                 "if not ((mic.MIN_PATH_LENGTH_TO_PURSUE_ENEMY < path_length) and (path_length < mic.MAX_PATH_LENGTH_TO_PURSUE_ENEMY)) then",
-                "    DebugLog(tostring(self) .. \" enemy too far! (\" .. tostring(path_length) .. \")\")",
+                "    --DebugLog(tostring(self) .. \" enemy too far! (\" .. tostring(path_length) .. \")\")",
                 "    return true",
                 "end",
                 "",
@@ -86,7 +86,7 @@
                 "end",
                 "",
                 "",
-                "DebugLog(tostring(self) .. \" enemy counter: \" .. tostring(loc.timer:CurrentValue()))",
+                "--DebugLog(tostring(self) .. \" enemy counter: \" .. tostring(loc.timer:CurrentValue()))",
                 "return (loc.timer:CurrentValue() >= 0)"
               ]
             },
@@ -136,127 +136,6 @@
           "name": "Main Loop"
         }
       ],
-      "active": true
-    }
-  ],
-  "unlinked-trees": [
-    {
-      "name": "CheckEntity",
-      "id": "28edde18-3214-4b07-b6d6-e8db0cdc27f1",
-      "type": "selector",
-      "subtrees": [
-        {
-          "name": "Reload",
-          "id": "1c5cf6b3-ad2d-4a9d-bb88-21d4ab312df0",
-          "type": "reloadWeapon",
-          "decorators": [
-            {
-              "id": "334947f0-da3d-4090-8899-561e2d517686",
-              "type": "scriptCondition",
-              "name": "CheckMag",
-              "script": [
-                "return self:GetCurrentMagazine().rounds == 0"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "FireAtEntity",
-          "id": "8734acc6-daea-487b-84ae-44cbac1d2412",
-          "type": "sequence",
-          "subtrees": [
-            {
-              "name": "FireAtEnemy",
-              "id": "8b853bd3-7037-453f-9097-db8ae73bd63c",
-              "type": "fire",
-              "rounds": [
-                "self:ReqHeadingAimAtEntity(arg.orderData.entityToFireAt)",
-                "return 3"
-              ],
-              "forced": false
-            }
-          ],
-          "decorators": [
-            {
-              "id": "ee7328e5-526d-4ec4-84c0-eb439fd6b7bd",
-              "type": "scriptCondition",
-              "name": "isEntity",
-              "script": [
-                "return type(arg.orderData.entityToFireAt) == \"Entity\""
-              ]
-            },
-            {
-              "id": "e216cd88-3218-4128-a0dc-c1894bd6724f",
-              "type": "scriptCondition",
-              "name": "isAlive",
-              "script": [
-                "return arg.orderData.entityToFireAt:IsAlive()"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "FireAtPos",
-          "id": "628c4b76-0933-4ef1-86a1-5b6845773929",
-          "type": "sequence",
-          "subtrees": [
-            {
-              "name": "FireAtPos",
-              "id": "f42ff94a-8dd2-484f-b8b6-e89ac7861d94",
-              "type": "fire",
-              "rounds": [
-                "self:ReqHeadingAimAtPos(arg.orderData.entityToFireAt, 10)",
-                "return 3"
-              ],
-              "forced": false
-            }
-          ],
-          "decorators": [
-            {
-              "id": "81620fbf-17ac-43cd-8b1f-07e8953712fb",
-              "type": "scriptCondition",
-              "name": "isPosition",
-              "script": [
-                "return type(arg.orderData.entityToFireAt) == \"Vec3\""
-              ]
-            },
-            {
-              "id": "16b6ecfa-9ee2-44f2-af71-0458a393d5e5",
-              "type": "loopForever",
-              "name": "Forever"
-            }
-          ]
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "28edde18-3214-4b07-b6d6-e8db0cdc27f1",
-            "position": "1762.5,748.166666666667"
-          },
-          {
-            "id": "1c5cf6b3-ad2d-4a9d-bb88-21d4ab312df0",
-            "position": "1309.9,831.216666666667"
-          },
-          {
-            "id": "8734acc6-daea-487b-84ae-44cbac1d2412",
-            "position": "1547.4,881.216666666667"
-          },
-          {
-            "id": "8b853bd3-7037-453f-9097-db8ae73bd63c",
-            "position": "1547.4,1143.71666666667"
-          },
-          {
-            "id": "628c4b76-0933-4ef1-86a1-5b6845773929",
-            "position": "1925,910.666666666667"
-          },
-          {
-            "id": "f42ff94a-8dd2-484f-b8b6-e89ac7861d94",
-            "position": "1922.4,1081.21666666667"
-          }
-        ],
-        "editorObjects": []
-      },
       "active": true
     }
   ],
