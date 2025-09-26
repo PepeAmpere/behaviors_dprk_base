@@ -62,7 +62,7 @@
             "    {",
             "        cellSize = 2,",
             "        maxHeight = 1.5,",
-            "        minHeight = 0.5",
+            "        minHeight = 0",
             "    }",
             ")"
           ]
