@@ -11,6 +11,7 @@
     "soldierOccupy.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "soldierStance.bt",
     "soldierSuppress.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
@@ -20,7 +21,8 @@
     "teamOccupyBoundingOverwatch.bt",
     "teamOccupyMoveInColumn.bt",
     "teamRetreatMoveBoundingOverwatch.bt",
-    "teamRoot.bt"
+    "teamRoot.bt",
+    "teamTestMoveAndIdle.bt"
   ],
   "initScripts": [
     "Helpers\\Retreat.lua"
