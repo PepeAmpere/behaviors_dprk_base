@@ -161,7 +161,12 @@ return {
 			local ret = nil
 			for i, enemy in ipairs(loc.enemiesInSight) do
 				local enemy_timer = loc.shootingTimer[tostring(enemy)]
-				if soldier:IsVisible(enemy) and enemy:IsAlive() and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
+				if
+                    enemy:Valid() and
+                    soldier:IsVisible(enemy) and
+                    enemy:IsAlive() and 
+                    (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) 
+                then
 					ret = enemy
 					--DebugLog(tostring(soldier) .. " chosen enemy: " .. tostring(enemy))
 					break
