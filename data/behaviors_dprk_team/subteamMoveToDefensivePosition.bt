@@ -30,11 +30,11 @@
             "    groupPos[index + 1] = self:GetEntity(soldierIndex):GetPosition()",
             "end",
             "",
-            "-- local params = { weights = { distance = -1, protection = 1, lineOfFire = 0.9, preferenceTowardThreats = 0.3 }, constraints = {coneOfFire = 15} }",
+            "local params = { weights = { distance = -1, protection = 20, lineOfFire = 20, preferenceTowardThreats = 0.3 }, constraints = {coneOfFire = 75} }",
             "",
             "loc.futureCovers = FindCovers(threats, ",
             "    Circle(arg.orderData.position, loc.coverRadius),",
-            "    groupPos)"
+            "    groupPos, params)"
           ]
         },
         {
@@ -108,6 +108,7 @@
             "            loc.stances[index + 1] = Stance.Standing",
             "        end",
             "        orderData.stance = loc.stances[index + 1]",
+            "        DebugLog(\"SEND STANCE\" .. tostring(soldierIndex))",
             "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
             "        counter = counter + 1",
             "    end",
