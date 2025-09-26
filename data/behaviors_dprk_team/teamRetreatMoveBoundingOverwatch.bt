@@ -148,7 +148,7 @@
                         "",
                         "local posAlongPath = loc.path:PositionAlongPath(moveDistance)",
                         "",
-                        "local half = 15",
+                        "local half = 30",
                         "",
                         "local verts = {",
                         "    posAlongPath + Vec3(-half, 0, 2),",
