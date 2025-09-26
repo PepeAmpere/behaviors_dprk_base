@@ -55,7 +55,7 @@
                   ]
                 },
                 {
-                  "name": "<unnamed>",
+                  "name": "Unrepeatable wait complete",
                   "id": "6412b80e-796f-485f-b80b-672f0eeb863b",
                   "type": "scriptAction",
                   "script": [
@@ -101,7 +101,7 @@
                 "for i = 1, entityCount do",
                 "    local soldier=self:GetEntity(i-1)",
                 "    local soldierPos=soldier:GetPosition()",
-                "    if soldierPos:DistanceXY(loc.route:Value():EndPoint())>loc.teamCoverSearchDist then        ",
+                "    if soldierPos:DistanceXY(loc.route:Value():EndPoint())>loc.teamCoverSearchDist and soldier:IsAlive() then        ",
                 "        allCloseBy=false",
                 "    end",
                 "end",
@@ -170,9 +170,9 @@
                   "id": "746fd8e8-9e59-419d-9c78-5c5496c29e56",
                   "type": "scriptAction",
                   "script": [
-                    "local entityCount=self:GetEntityCount()",
-                    "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
-                    "    --create teams from scratch",
+                    "local function CreateTeamsFromScratch()",
+                    "    --creates teams from scratch",
+                    "    local entityCount=self:GetEntityCount()",
                     "    loc.subteamMoving={}",
                     "    loc.subteamStatic={}",
                     "    local x=1",
@@ -186,15 +186,90 @@
                     "            y=y+1",
                     "        end",
                     "    end",
-                    "else",
-                    "    --count alive soldiers and redistribute",
-                    "    --TODO: Redistribution (Later)",
-                    "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                    "    return",
+                    "end",
+                    "",
+                    "local function CullDeadFromTeams()",
+                    "    --Utility function that removes dead soldiers from both teams",
+                    "    --Not sure if necessary, but better to be sure.",
+                    "    local newTeamMoving={}",
+                    "    local newTeamStatic={}",
+                    "    local x=1",
+                    "    local y=1",
+                    "    for i = 1, #loc.subteamMoving do",
+                    "        local soldier=loc.subteamMoving[i]",
+                    "        local alive = soldier:IsAlive()",
+                    "        if alive then",
+                    "            newTeamMoving[x]=soldier",
+                    "            x=x+1",
+                    "        end",
+                    "    end",
+                    "    for i=1, #loc.subteamStatic do",
+                    "        local soldier=loc.subteamStatic[i]",
+                    "        local alive = soldier:IsAlive()",
+                    "        if alive then",
+                    "            newTeamStatic[y]=soldier",
+                    "            y=y+1",
+                    "        end",
+                    "    end",
+                    "    loc.subteamMoving=newTeamMoving",
+                    "    loc.subteamStatic=newTeamStatic",
+                    "    return",
+                    "end",
+                    "",
+                    "local function SwapTeams()",
                     "    local temp=loc.subteamMoving",
                     "    loc.subteamMoving=loc.subteamStatic",
                     "    loc.subteamStatic=temp",
+                    "    return",
                     "end",
-                    "--TODO: We need to actually reduce the travel dist if soldiers die on the way"
+                    "",
+                    "local function BalanceTeams()",
+                    "    --creates a team where at least half (minus one) troops are on the moving side",
+                    "    local difference=#loc.subteamStatic-#loc.subteamMoving",
+                    "    if difference<=1 then",
+                    "        return",
+                    "    else",
+                    "        DebugLog(\"Moving diff too much, rebalancing\")",
+                    "        local x=1",
+                    "        local newStatic={}",
+                    "        for i=1, #loc.subteamStatic do",
+                    "            if i<=difference/2 then",
+                    "                loc.subteamMoving[#loc.subteamMoving+1]=loc.subteamStatic[i]",
+                    "            else",
+                    "                newStatic[x]=loc.subteamStatic[i]",
+                    "                x=x+1",
+                    "            end",
+                    "        end",
+                    "        loc.subteamStatic=newStatic",
+                    "    end    ",
+                    "end",
+                    "",
+                    "local entityCount=self:GetEntityCount()",
+                    "if loc.subteamMoving==nil or loc.subteamStatic==nil then",
+                    "    --These shouldn't be nil at any time, so we can assume this is the first loop only",
+                    "    CreateTeamsFromScratch()",
+                    "    loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                    "else",
+                    "    CullDeadFromTeams()   ",
+                    "    SwapTeams()    ",
+                    "    if #loc.subteamStatic==0 then",
+                    "        createTeamsFromScratch()",
+                    "        DebugLog(\"Static team all dead\")",
+                    "    else",
+                    "        --This is after the teams have been swapped.",
+                    "        --So if static was 0, it means the forward team died",
+                    "        --we can't move the team hop more",
+                    "        loc.distAlongRoute=loc.distAlongRoute+loc.teamHopDist",
+                    "",
+                    "        if #loc.subteamMoving==0 then",
+                    "            CreateTeamsFromScratch()",
+                    "            DebugLog(\"Moving team all dead\")",
+                    "        end",
+                    "    end",
+                    "    --Finally, at this point we at least have the correct teams, sooooooo....",
+                    "    BalanceTeams()",
+                    "end"
                   ]
                 },
                 {
@@ -304,11 +379,11 @@
                   ]
                 },
                 {
-                  "name": "Wait 5s so soldiers end moves for sure",
+                  "name": "Wait 3s so soldiers end moves for sure",
                   "id": "eba69077-a194-4bde-abe7-7616bc47374b",
                   "type": "wait",
                   "time": [
-                    "return 5"
+                    "return 3"
                   ]
                 }
               ]
@@ -365,6 +440,10 @@
       {
         "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
         "position": "1310.5,1167.7"
+      },
+      {
+        "id": "5f21ec00-084d-4e0f-9ae2-1ce9a9fae791",
+        "position": "1985.5,1167.7"
       },
       {
         "id": "dd6c62ff-e772-4ab8-b2e1-76aaaf19418e",
@@ -429,15 +508,15 @@
       },
       {
         "id": "dabf980a-197e-42aa-809b-f53e1e5dd991",
-        "position": "1698,1130.2"
+        "position": "1560.5,1130.2"
       },
       {
         "id": "29e7e202-bb4c-447f-8766-078781d232b2",
-        "position": "1610.5,1230.2"
+        "position": "1473,1230.2"
       },
       {
         "id": "01e58503-8a54-4244-8c08-418249113bbc",
-        "position": "1760.5,1230.2"
+        "position": "1623,1230.2"
       },
       {
         "id": "714c9d27-462d-4af1-bb11-b05420e3c4e3",
@@ -489,6 +568,17 @@
         "headerForeground": "#FF000000",
         "boxBackground": "#FF90EE90",
         "boxForeground": "#FF000000"
+      },
+      {
+        "id": "5f21ec00-084d-4e0f-9ae2-1ce9a9fae791",
+        "type": "comment",
+        "header": "",
+        "body": "Suppress is currently disabled since\r\nit is in a state that fails on flat terrain",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
       }
     ],
     "canvasSize": "3925.5,2855.2",
@@ -498,12 +588,13 @@
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],
   "locals": {
     "route": "return nil",
-    "distAlongRoute": "return 20",
+    "distAlongRoute": "return 0",
     "subteamMoving": "return nil",
     "subteamStatic": "return nil",
     "teamHopDist": "return 20",

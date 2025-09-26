@@ -99,7 +99,7 @@ return {
 		ORDER_DETAILS_MESSAGE_TYPE	= "OrderDetails", 
 		NEW_ORDER_MESSAGE_TYPE		= "NewOrder",
 		send_order_details = function(this, target_entity, messageData)
-			DebugLog("Sending details " .. tostring(messageData.messageType) .. " to " .. tostring(target_entity))
+			--DebugLog("Sending details " .. tostring(messageData.messageType) .. " to " .. tostring(target_entity))
 			this:SendMessage(target_entity, messaging.ORDER_DETAILS_MESSAGE_TYPE, messageData)
 		end
 	},
@@ -122,7 +122,7 @@ return {
 
 
 		init_member = function(group_brain, member, soldiers_in_order, sighted_enemies)
-			DebugLog("Initializing: '" .. tostring(member) .. "'")
+			--DebugLog("Initializing: '" .. tostring(member) .. "'")
 			group_brain:SendMessage(member, messaging.NEW_ORDER_MESSAGE_TYPE, {
 				orderName = "MoveInColumn",
 				target = arg.orderData.target,
@@ -145,7 +145,7 @@ return {
 			local next_soldier = util.get_successor_object(arg.orderData.soldiersInOrder, soldier)
 			
 			if mic.cannot_shoot_because_other_soldier(self, previous_soldier) or mic.cannot_shoot_because_other_soldier(self, next_soldier) then
-				DebugLog(tostring(soldier) .. " failed shooting because other soldiers!")
+				--DebugLog(tostring(soldier) .. " failed shooting because other soldiers!")
 				return nil
 			end
 
@@ -161,7 +161,12 @@ return {
 			local ret = nil
 			for i, enemy in ipairs(loc.enemiesInSight) do
 				local enemy_timer = loc.shootingTimer[tostring(enemy)]
-				if soldier:IsVisible(enemy) and enemy:IsAlive() and (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) then
+				if
+                    enemy:Valid() and
+                    soldier:IsVisible(enemy) and
+                    enemy:IsAlive() and 
+                    (enemy_timer == nil or enemy_timer:CurrentValue() >= 0) 
+                then
 					ret = enemy
 					--DebugLog(tostring(soldier) .. " chosen enemy: " .. tostring(enemy))
 					break
@@ -175,7 +180,7 @@ return {
 			local chosen_tag = tostring(ret)
 			local chosen_timer = loc.shootingTimer[chosen_tag]
 			if (chosen_timer == nil or chosen_timer:CurrentValue() == 0) then
-				DebugLog(tostring(soldier) .. ".. Incrementing shoot counter for " .. chosen_tag .."!")
+				--DebugLog(tostring(soldier) .. ".. Incrementing shoot counter for " .. chosen_tag .."!")
 				loc.shootingTimer[chosen_tag] = TimedCounter():Incremented(2, mic.SHOOTING_TIMEOUT):Incremented(-1, ENEMY_FORGET_TIMEOUT)
 			end
 
