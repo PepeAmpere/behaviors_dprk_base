@@ -6,7 +6,28 @@
     {
       "name": "Set up watched for areas",
       "id": "4e64338a-77bd-41a5-9b2c-9e40f03422b2",
-      "type": "scriptAction"
+      "type": "scriptAction",
+      "script": [
+        "if loc.areasToWatchIn==nil then",
+        "    local routeDistCur=arg.orderData.routeDistStart",
+        "    local routeDistEnd=arg.orderData.routeDistEnd",
+        "    local route=arg.orderData.route:Value()",
+        "    local areasToWatchIn={}",
+        "    areasToWatchIn[1]=Circle(self:GetPosition(), loc.distAroundPath)",
+        "    while routeDistCur<routeDistEnd do",
+        "        areasToWatchIn[#areasToWatchIn+1]=Circle(route:PositionAlongPath(routeDistCur), loc.distAroundPath)",
+        "        routeDistCur=routeDistCur+loc.distBetweenCircles",
+        "    end",
+        "    areasToWatchIn[#areasToWatchIn+1]=Circle(route:PositionAlongPath(routeDistEnd), loc.distAroundPath)",
+        "    loc.areasToWatchIn=areasToWatchIn",
+        "    for i=0, #areasToWatchIn-1 do",
+        "        DebugLine(",
+        "            areasToWatchIn[i]:Center(), areasToWatchIn[i+1]:Center(),",
+        "            0,1,0,1",
+        "        )",
+        "    end",
+        "end"
+      ]
     },
     {
       "name": "Set stance to Standing",
@@ -27,11 +48,6 @@
           "type": "sequence",
           "subtrees": [
             {
-              "name": "Add soldier to oData",
-              "id": "5a5e8f62-a680-4ae2-8d3c-9ec9d1c90694",
-              "type": "scriptAction"
-            },
-            {
               "name": "<unnamed>",
               "id": "cc9bb117-ab5f-49ef-ac02-b4c9d6280f94",
               "type": "reference",
@@ -50,10 +66,20 @@
               "type": "scriptCondition",
               "name": "If see enemy in effective range and overwatched area",
               "script": [
-                "local enemies = self:GetVisibleEnemies()",
-                "",
+                "local enemies = self:GetVisibleEnemies(loc.maxDistToFireAt)",
+                "loc.oData={}",
                 "if #enemies > 0 then",
-                "    return true",
+                "    --Cycle through visible enemies ",
+                "    --and for each visible enemy cycle through all overwatched areas",
+                "    for enemy in enemies do",
+                "        for area in loc.areasToWatchIn do",
+                "            if area:Contains(enemy:GetPosition()) then",
+                "                --TODO: Check if enemy is in one of the areas",
+                "                loc.oData.entityToFireAt=enemy --assign an enemy which fulfills both to oData",
+                "                return true",
+                "            end",
+                "        end",
+                "    end",
                 "end",
                 "return false"
               ]
@@ -88,7 +114,7 @@
       },
       {
         "id": "1556d263-474d-4712-a36b-6adec57e19dc",
-        "position": "1850,575"
+        "position": "1875,425"
       },
       {
         "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
@@ -111,12 +137,8 @@
         "position": "1862.5,450"
       },
       {
-        "id": "5a5e8f62-a680-4ae2-8d3c-9ec9d1c90694",
-        "position": "1875,600"
-      },
-      {
         "id": "cc9bb117-ab5f-49ef-ac02-b4c9d6280f94",
-        "position": "2087.5,600"
+        "position": "1975,600"
       },
       {
         "id": "3c765a21-b4e3-428b-bc67-970aca52030a",
@@ -138,7 +160,7 @@
       {
         "id": "1556d263-474d-4712-a36b-6adec57e19dc",
         "type": "comment",
-        "header": "TODO",
+        "header": "Test it",
         "body": "",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
@@ -149,7 +171,7 @@
       {
         "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
         "type": "comment",
-        "header": "TODO",
+        "header": "Test it",
         "body": "",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
@@ -172,6 +194,7 @@
     "areasToWatchIn": null,
     "enemyToFireAt": null,
     "maxDistToFireAt": "return 300",
-    "oData": null
+    "oData": null,
+    "distBetweenCircles": "return 50"
   }
 }
