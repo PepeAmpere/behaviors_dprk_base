@@ -127,9 +127,8 @@
                 "    local entityCount=self:GetEntityCount()    ",
                 "    for i = 1, entityCount do",
                 "        local oData={}",
-                "        oData.orderName=\"Occupy\"",
-                "        oData.offsetPositions={loc.route:Value():EndPoint()}",
-                "        oData.state=\"move\"",
+                "        oData.orderName=\"OccupyMaty\"",
+                "        oData.position={loc.route:Value():EndPoint()}",
                 "        self:SendMessage(",
                 "            self:GetEntity(i-1),",
                 "            \"NewOrder\",",
@@ -446,15 +445,11 @@
       },
       {
         "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
-        "position": "1223,767.7"
+        "position": "1123,817.7"
       },
       {
         "id": "5e1b1618-0225-472a-8d90-dd8d3b2899ff",
         "position": "635.5,705.2"
-      },
-      {
-        "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
-        "position": "1310.5,1167.7"
       },
       {
         "id": "5f21ec00-084d-4e0f-9ae2-1ce9a9fae791",
@@ -555,7 +550,7 @@
         "id": "26bffa7f-cb4f-4e85-9f87-ca698aa31ff1",
         "type": "comment",
         "header": "",
-        "body": "Tested incl removal\r\nof rest during runtime",
+        "body": "Needs fixing to only handle alive friendlies",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -567,17 +562,6 @@
         "type": "comment",
         "header": "",
         "body": "Should always happen after initial trigger",
-        "bodyAlignment": "Left",
-        "headerBackground": "#FF00FF00",
-        "headerForeground": "#FF000000",
-        "boxBackground": "#FF90EE90",
-        "boxForeground": "#FF000000"
-      },
-      {
-        "id": "d391bc60-706a-4fa4-8782-118bebd85da0",
-        "type": "comment",
-        "header": "",
-        "body": "Missing the rebalance part",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
