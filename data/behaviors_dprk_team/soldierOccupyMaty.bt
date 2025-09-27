@@ -1,0 +1,119 @@
+{
+  "name": "Reloading can be done during move",
+  "id": "68e1e06c-3895-4b81-ad80-f98b056d7a1c",
+  "type": "parallel",
+  "subtrees": [
+    {
+      "name": "Shoot if threatened",
+      "id": "dcbedfdb-be91-4801-a849-d4fe7b2543e5",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "420028d5-225d-4626-939c-c46410f265f8",
+              "type": "scriptCondition",
+              "name": "No ammo in mag/No Mag",
+              "script": [
+                "",
+                "local mag=self:GetCurrentMagazine()",
+                "if mag~=nil then",
+                "    if self:GetCurrentMagazine().rounds==0 then",
+                "        return true",
+                "    end",
+                "else return true --Reload should fail anyways and this ensures we stay reloading if the thing is more complicated than I guess",
+                "end",
+                "",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Aim and fire",
+          "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
+          "type": "fire",
+          "decorators": [
+            {
+              "id": "f164ba00-098e-4d05-9e97-e8b280145520",
+              "type": "scriptCondition",
+              "name": "If see enemy at <50m",
+              "script": [
+                "local enemies = self:GetVisibleEnemies(50)",
+                "if #enemies > 0 then",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ],
+          "rounds": [
+            "local enemies = self:GetVisibleEnemies(50)",
+            "self:ReqHeadingAimAtEntity(enemies[1])",
+            "return 1"
+          ],
+          "forced": false
+        },
+        {
+          "name": "<unnamed>",
+          "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_team",
+            "soldierMove"
+          ],
+          "arguments": {
+            "orderData": "arg.orderData"
+          }
+        }
+      ],
+      "active": true
+    }
+  ],
+  "decorators": [
+    {
+      "id": "626b3adc-789f-4617-bafc-16c31fe2ebbd",
+      "type": "loopForever",
+      "name": "Repeat"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "68e1e06c-3895-4b81-ad80-f98b056d7a1c",
+        "position": "1662.5,87.5"
+      },
+      {
+        "id": "dcbedfdb-be91-4801-a849-d4fe7b2543e5",
+        "position": "1725,275"
+      },
+      {
+        "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
+        "position": "1437.5,525"
+      },
+      {
+        "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
+        "position": "1712.5,525"
+      },
+      {
+        "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
+        "position": "2012.5,556"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "waitForAll": true,
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {}
+}
