@@ -198,7 +198,7 @@
     }
   ],
   "locals": {
-    "distAroundPath": "return 75",
+    "distAroundPath": "return 100",
     "areasToWatchIn": "return nil",
     "enemyToFireAt": "return nil",
     "maxDistToFireAt": "return 350",
