@@ -1,0 +1,219 @@
+{
+  "name": "Root",
+  "id": "885a3cad-2821-4e89-b4dc-6013ba651792",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "init val",
+      "id": "6679a70d-3b78-4b23-a2eb-6ef48a11fe59",
+      "type": "scriptAction",
+      "script": [
+        "loc.orderData = {}"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "df27b5ce-1f5d-4cb5-8dc3-b68ee362b04d",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Occupy",
+          "id": "b45b5bbb-d7de-4753-b6ea-98330b89d92c",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "8d485949-8455-41e3-84f6-28252bf2fbb7",
+              "type": "scriptCondition",
+              "name": "IS not in place",
+              "script": [
+                "return self:GetPosition():Distance(arg.orderData.position) > 1"
+              ]
+            }
+          ],
+          "target": [
+            "behaviors_dprk_team",
+            "soldierOccupy"
+          ],
+          "arguments": {
+            "orderData": "loc.orderData"
+          }
+        },
+        {
+          "name": "Stance",
+          "id": "96e29944-d70c-4064-9320-001d3d99365d",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "e39dd4d1-d495-49c0-a84f-393c6e996723",
+              "type": "scriptCondition",
+              "name": "Is Stance",
+              "script": [
+                "return self:GetStance() ~= arg.orderData.stance"
+              ]
+            }
+          ],
+          "target": [
+            "behaviors_dprk_team",
+            "soldierStance"
+          ],
+          "arguments": {
+            "orderData": "arg.orderData"
+          }
+        },
+        {
+          "name": "<unnamed>",
+          "id": "2cfec7ff-eec3-4fb3-b7ce-567b76516a73",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "<unnamed>",
+              "id": "53912745-598c-4f9d-a5d1-a9095a78a871",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "GetEnemies",
+                  "id": "c1f9ad73-bfb8-4f64-be98-c91178e3a053",
+                  "type": "scriptAction",
+                  "script": [
+                    "if arg.orderData.poly == nil then return end",
+                    "",
+                    "local enemiesInFirstPoly = GetEntitiesInArea(arg.orderData.poly, { enemyOf = self , excludeMapObjects = true} )",
+                    "",
+                    "local count = 1",
+                    "for i = 1, #enemiesInFirstPoly do",
+                    "    if enemiesInFirstPoly[count]:IsAlive() then",
+                    "        count = count + 1",
+                    "    else",
+                    "        table.remove(enemiesInFirstPoly, count)       ",
+                    "    end",
+                    "end",
+                    "",
+                    "if #enemiesInFirstPoly > 0 then",
+                    "    loc.orderData.entityToFireAt = enemiesInFirstPoly[1]",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "FireAtEnemy",
+                  "id": "3372056f-4149-4394-8c59-b84fede5b262",
+                  "type": "reference",
+                  "target": [
+                    "behaviors_dprk_team",
+                    "soldierFireAt"
+                  ],
+                  "arguments": {
+                    "orderData": "loc.orderData"
+                  }
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "9c6ac361-96f8-4a23-ade4-362dd97c5e8d",
+                  "type": "scriptCondition",
+                  "name": "IfEnemies",
+                  "script": [
+                    "if arg.orderData.poly == nil then return false end",
+                    "",
+                    "local enemiesInFirstPoly = GetEntitiesInArea(arg.orderData.poly, { enemyOf = self , excludeMapObjects = true} )",
+                    "",
+                    "local count = 1",
+                    "for i = 1, #enemiesInFirstPoly do",
+                    "    if enemiesInFirstPoly[count]:IsAlive() then",
+                    "        count = count + 1",
+                    "    else",
+                    "        table.remove(enemiesInFirstPoly, count)       ",
+                    "    end",
+                    "end",
+                    "",
+                    "if #enemiesInFirstPoly == 0 then",
+                    "    return false",
+                    "end",
+                    "",
+                    "return true"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "defendClose",
+              "id": "3cf9d025-0474-4159-8c7c-3b52e9289639",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_team",
+                "soldierOccupy"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
+            }
+          ],
+          "decorators": [
+            {
+              "id": "931a31dd-6809-481c-8f20-9f149fa3c6c6",
+              "type": "loopForever",
+              "name": "Defend"
+            }
+          ],
+          "active": true
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "885a3cad-2821-4e89-b4dc-6013ba651792",
+        "position": "1775,75"
+      },
+      {
+        "id": "6679a70d-3b78-4b23-a2eb-6ef48a11fe59",
+        "position": "1537.5,137.5"
+      },
+      {
+        "id": "df27b5ce-1f5d-4cb5-8dc3-b68ee362b04d",
+        "position": "1637.5,200"
+      },
+      {
+        "id": "b45b5bbb-d7de-4753-b6ea-98330b89d92c",
+        "position": "1475,275"
+      },
+      {
+        "id": "96e29944-d70c-4064-9320-001d3d99365d",
+        "position": "1712.5,300"
+      },
+      {
+        "id": "2cfec7ff-eec3-4fb3-b7ce-567b76516a73",
+        "position": "2137.5,200"
+      },
+      {
+        "id": "53912745-598c-4f9d-a5d1-a9095a78a871",
+        "position": "2037.5,337.5"
+      },
+      {
+        "id": "c1f9ad73-bfb8-4f64-be98-c91178e3a053",
+        "position": "1950,475"
+      },
+      {
+        "id": "3372056f-4149-4394-8c59-b84fede5b262",
+        "position": "2125,487.5"
+      },
+      {
+        "id": "3cf9d025-0474-4159-8c7c-3b52e9289639",
+        "position": "2287.5,337.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "orderData": "nil"
+  }
+}

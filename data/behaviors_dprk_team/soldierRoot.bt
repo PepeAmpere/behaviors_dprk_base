@@ -56,8 +56,12 @@
         "    Destroy = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierDestroy\"",
+        "    },",
+        "    DefendAngle = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierDefendAngle\"",
         "    }",
-        "}"
+        "}   "
       ]
     },
     {

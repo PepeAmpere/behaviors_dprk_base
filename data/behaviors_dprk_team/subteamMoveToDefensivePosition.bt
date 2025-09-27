@@ -51,11 +51,13 @@
           "type": "scriptAction",
           "script": [
             "loc.Covers = loc.futureCovers:Value()",
+            "loc.stances = {}",
             "",
             "local orderData = {}",
-            "orderData.orderName = \"Occupy\"",
+            "orderData.orderName = \"DefendAngle\"",
             "orderData.position = arg.orderData.position",
             "orderData.state = \"move\"",
+            "orderData.poly = arg.orderData.poly",
             "",
             "",
             "local counter = 1",
@@ -66,45 +68,6 @@
             "        local offsetPositions = {}",
             "        table.insert(offsetPositions, orderData.position)",
             "        orderData.offsetPositions = offsetPositions",
-            "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
-            "        counter = counter + 1",
-            "    end",
-            "    return",
-            "end"
-          ]
-        },
-        {
-          "name": "Soldiers All in place?",
-          "id": "61b093f5-a004-48c0-9873-5eddde134561",
-          "type": "waitUntil",
-          "condition": [
-            "local counter = 1",
-            "",
-            "for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
-            "    if loc.Covers[index + 1].position:DistanceXY(self:GetEntity(soldierIndex):GetPosition()) > 1 then",
-            "        return false",
-            "    end",
-            "    counter = counter + 1",
-            "end",
-            "",
-            "return true"
-          ]
-        },
-        {
-          "name": "Send Messages",
-          "id": "7b9b46a8-3049-459b-9319-6381a79dc847",
-          "type": "scriptAction",
-          "script": [
-            "local orderData = {}",
-            "orderData.orderName = \"Stance\"",
-            "orderData.stance = 0",
-            "",
-            "loc.stances = {}",
-            "",
-            "local counter = 1",
-            "",
-            "if arg.orderData.soldierIndexes ~= nil then",
-            "    for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
             "        if loc.Covers[index + 1].cover == nil then",
             "            loc.stances[index + 1] = Stance.Prone",
             "        elseif loc.Covers[index + 1].cover < 0.9 then",
@@ -113,7 +76,6 @@
             "            loc.stances[index + 1] = Stance.Standing",
             "        end",
             "        orderData.stance = loc.stances[index + 1]",
-            "        DebugLog(\"SEND STANCE\" .. tostring(soldierIndex))",
             "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
             "        counter = counter + 1",
             "    end",
@@ -122,26 +84,9 @@
           ]
         },
         {
-          "name": "Soldiers in stance?",
-          "id": "bba7569d-1963-4cbc-be24-95183a0c3f02",
-          "type": "waitUntil",
-          "condition": [
-            "local counter = 1",
-            "",
-            "for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
-            "    if loc.stances[index + 1] ~= self:GetEntity(soldierIndex):GetStance() then",
-            "        return false",
-            "    end",
-            "    counter = counter + 1",
-            "end",
-            "",
-            "return true"
-          ]
-        },
-        {
-          "name": "Succeed",
-          "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
-          "type": "success"
+          "name": "Wait Forever",
+          "id": "79ffff4b-401c-4e63-8f2f-541d4bd3339d",
+          "type": "waitForever"
         }
       ]
     },
@@ -210,6 +155,114 @@
       ]
     }
   ],
+  "unlinked-trees": [
+    {
+      "name": "Soldiers All in place?",
+      "id": "61b093f5-a004-48c0-9873-5eddde134561",
+      "type": "waitUntil",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "61b093f5-a004-48c0-9873-5eddde134561",
+            "position": "1712.5,669.1"
+          }
+        ],
+        "editorObjects": []
+      },
+      "condition": [
+        "local counter = 1",
+        "",
+        "for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+        "    if loc.Covers[index + 1].position:DistanceXY(self:GetEntity(soldierIndex):GetPosition()) > 1 then",
+        "        return false",
+        "    end",
+        "    counter = counter + 1",
+        "end",
+        "",
+        "return true"
+      ]
+    },
+    {
+      "name": "Send Messages",
+      "id": "7b9b46a8-3049-459b-9319-6381a79dc847",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "7b9b46a8-3049-459b-9319-6381a79dc847",
+            "position": "1887.5,665.8"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"Stance\"",
+        "orderData.stance = 0",
+        "",
+        "loc.stances = {}",
+        "",
+        "local counter = 1",
+        "",
+        "if arg.orderData.soldierIndexes ~= nil then",
+        "    for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+        "        if loc.Covers[index + 1].cover == nil then",
+        "            loc.stances[index + 1] = Stance.Prone",
+        "        elseif loc.Covers[index + 1].cover < 0.9 then",
+        "            loc.stances[index + 1] = Stance.Crouched",
+        "        else",
+        "            loc.stances[index + 1] = Stance.Standing",
+        "        end",
+        "        orderData.stance = loc.stances[index + 1]",
+        "        DebugLog(\"SEND STANCE\" .. tostring(soldierIndex))",
+        "        self:SendMessage(self:GetEntity(soldierIndex), \"NewOrder\", orderData)",
+        "        counter = counter + 1",
+        "    end",
+        "    return",
+        "end"
+      ]
+    },
+    {
+      "name": "Soldiers in stance?",
+      "id": "bba7569d-1963-4cbc-be24-95183a0c3f02",
+      "type": "waitUntil",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "bba7569d-1963-4cbc-be24-95183a0c3f02",
+            "position": "2062.5,665.8"
+          }
+        ],
+        "editorObjects": []
+      },
+      "condition": [
+        "local counter = 1",
+        "",
+        "for index, soldierIndex in pairs(arg.orderData.soldierIndexes) do",
+        "    if loc.stances[index + 1] ~= self:GetEntity(soldierIndex):GetStance() then",
+        "        return false",
+        "    end",
+        "    counter = counter + 1",
+        "end",
+        "",
+        "return true"
+      ]
+    },
+    {
+      "name": "Succeed",
+      "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
+      "type": "success",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
+            "position": "2250,665.8"
+          }
+        ],
+        "editorObjects": []
+      }
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
@@ -237,20 +290,8 @@
         "position": "1537.5,669.1"
       },
       {
-        "id": "61b093f5-a004-48c0-9873-5eddde134561",
-        "position": "1712.5,669.1"
-      },
-      {
-        "id": "7b9b46a8-3049-459b-9319-6381a79dc847",
-        "position": "1887.5,665.8"
-      },
-      {
-        "id": "bba7569d-1963-4cbc-be24-95183a0c3f02",
-        "position": "2062.5,665.8"
-      },
-      {
-        "id": "199c65f1-0d6b-4b25-bec8-87e100c6e397",
-        "position": "2250,665.8"
+        "id": "79ffff4b-401c-4e63-8f2f-541d4bd3339d",
+        "position": "1693.7,581"
       },
       {
         "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",

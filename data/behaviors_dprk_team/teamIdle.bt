@@ -469,6 +469,7 @@
                     "loc.orderDataSub1.position = arg.orderData.position + (loc.orderDataSub1.target - arg.orderData.position) / 4.5",
                     "",
                     "loc.orderDataSub1.soldierIndexes = loc.firstTeam",
+                    "loc.orderDataSub1.poly = loc.firstPoly",
                     "",
                     "loc.firstPolyChanged = false"
                   ]
@@ -484,52 +485,6 @@
                   "arguments": {
                     "orderData": "loc.orderDataSub1"
                   }
-                },
-                {
-                  "name": "Fire At Enemies",
-                  "id": "9e4555ba-5cd2-49d7-8f71-d28fb0779e54",
-                  "type": "sequence",
-                  "subtrees": [
-                    {
-                      "name": "Fill OrderData1",
-                      "id": "c2c30c8e-7c17-4123-854c-6a66f382eddf",
-                      "type": "scriptAction",
-                      "script": [
-                        "loc.orderDataSub1 = {}",
-                        "",
-                        "loc.orderDataSub1.soldierIndexes = loc.firstTeam",
-                        "",
-                        "loc.orderDataSub1.position = loc.enemiesInFirstPoly[1]"
-                      ]
-                    },
-                    {
-                      "name": "FireAt",
-                      "id": "8c4dc5e6-5fbb-4894-b2fa-f9105a46ad2a",
-                      "type": "reference",
-                      "target": [
-                        "behaviors_dprk_team",
-                        "subteamFireAt"
-                      ],
-                      "arguments": {
-                        "orderData": "loc.orderDataSub1"
-                      }
-                    },
-                    {
-                      "name": "Wait 1",
-                      "id": "072ca37a-6d69-48fa-a3a5-f10f7712642c",
-                      "type": "wait",
-                      "time": [
-                        "return 1"
-                      ]
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "258d8fce-d97a-4c3e-8959-aa760239e316",
-                      "type": "loopForever",
-                      "name": "Loop"
-                    }
-                  ]
                 }
               ]
             }
@@ -609,6 +564,7 @@
                     "loc.orderDataSub2.position = arg.orderData.position + (loc.orderDataSub2.target - arg.orderData.position) / 4.5",
                     "",
                     "loc.orderDataSub2.soldierIndexes = loc.secondTeam",
+                    "loc.orderDataSub2.poly = loc.secondPoly",
                     "",
                     "loc.secondPolyChanged = false"
                   ]
@@ -624,53 +580,6 @@
                   "arguments": {
                     "orderData": "loc.orderDataSub2"
                   }
-                },
-                {
-                  "name": "Fire At Enemies",
-                  "id": "57bf1fe9-7d57-48d5-90dc-049ffee7b673",
-                  "type": "sequence",
-                  "subtrees": [
-                    {
-                      "name": "Fill OrderData2",
-                      "id": "8efe7620-7d05-4352-895c-80bdd419181c",
-                      "type": "scriptAction",
-                      "script": [
-                        "loc.orderDataSub2 = {}",
-                        "loc.orderDataSub2.soldierIndexes = {}",
-                        "",
-                        "loc.orderDataSub2.soldierIndexes = loc.secondTeam",
-                        "",
-                        "loc.orderDataSub2.position = loc.enemiesInSecondPoly[1]"
-                      ]
-                    },
-                    {
-                      "name": "FireAt",
-                      "id": "b6654b62-f333-4c43-b068-f527c2cb1289",
-                      "type": "reference",
-                      "target": [
-                        "behaviors_dprk_team",
-                        "subteamFireAt"
-                      ],
-                      "arguments": {
-                        "orderData": "loc.orderDataSub2"
-                      }
-                    },
-                    {
-                      "name": "Wait 1",
-                      "id": "bb0f943e-b411-4551-b72f-c360fa9a78da",
-                      "type": "wait",
-                      "time": [
-                        "return 1"
-                      ]
-                    }
-                  ],
-                  "decorators": [
-                    {
-                      "id": "bf7f805f-11d0-4d0e-97bc-e54695a24669",
-                      "type": "loopForever",
-                      "name": "Loop"
-                    }
-                  ]
                 }
               ]
             }
@@ -789,6 +698,143 @@
           "name": "Loop"
         }
       ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Fire At Enemies",
+      "id": "9e4555ba-5cd2-49d7-8f71-d28fb0779e54",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Fill OrderData1",
+          "id": "c2c30c8e-7c17-4123-854c-6a66f382eddf",
+          "type": "scriptAction",
+          "script": [
+            "loc.orderDataSub1 = {}",
+            "",
+            "loc.orderDataSub1.soldierIndexes = loc.firstTeam",
+            "",
+            "loc.orderDataSub1.position = loc.enemiesInFirstPoly[1]"
+          ]
+        },
+        {
+          "name": "FireAt",
+          "id": "8c4dc5e6-5fbb-4894-b2fa-f9105a46ad2a",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_team",
+            "subteamFireAt"
+          ],
+          "arguments": {
+            "orderData": "loc.orderDataSub1"
+          }
+        },
+        {
+          "name": "Wait 1",
+          "id": "072ca37a-6d69-48fa-a3a5-f10f7712642c",
+          "type": "wait",
+          "time": [
+            "return 1"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "258d8fce-d97a-4c3e-8959-aa760239e316",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "9e4555ba-5cd2-49d7-8f71-d28fb0779e54",
+            "position": "3056.80866666667,941.997777777778"
+          },
+          {
+            "id": "c2c30c8e-7c17-4123-854c-6a66f382eddf",
+            "position": "2956.80866666667,1091.99777777778"
+          },
+          {
+            "id": "8c4dc5e6-5fbb-4894-b2fa-f9105a46ad2a",
+            "position": "3131.80866666667,1104.49777777778"
+          },
+          {
+            "id": "072ca37a-6d69-48fa-a3a5-f10f7712642c",
+            "position": "3306.80866666667,1104.49777777778"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Fire At Enemies",
+      "id": "57bf1fe9-7d57-48d5-90dc-049ffee7b673",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Fill OrderData2",
+          "id": "8efe7620-7d05-4352-895c-80bdd419181c",
+          "type": "scriptAction",
+          "script": [
+            "loc.orderDataSub2 = {}",
+            "loc.orderDataSub2.soldierIndexes = {}",
+            "",
+            "loc.orderDataSub2.soldierIndexes = loc.secondTeam",
+            "",
+            "loc.orderDataSub2.position = loc.enemiesInSecondPoly[1]"
+          ]
+        },
+        {
+          "name": "FireAt",
+          "id": "b6654b62-f333-4c43-b068-f527c2cb1289",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_team",
+            "subteamFireAt"
+          ],
+          "arguments": {
+            "orderData": "loc.orderDataSub2"
+          }
+        },
+        {
+          "name": "Wait 1",
+          "id": "bb0f943e-b411-4551-b72f-c360fa9a78da",
+          "type": "wait",
+          "time": [
+            "return 1"
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "bf7f805f-11d0-4d0e-97bc-e54695a24669",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "57bf1fe9-7d57-48d5-90dc-049ffee7b673",
+            "position": "3756.80866666667,929.497777777779"
+          },
+          {
+            "id": "8efe7620-7d05-4352-895c-80bdd419181c",
+            "position": "3656.80866666667,1079.49777777778"
+          },
+          {
+            "id": "b6654b62-f333-4c43-b068-f527c2cb1289",
+            "position": "3831.80866666667,1091.99777777778"
+          },
+          {
+            "id": "bb0f943e-b411-4551-b72f-c360fa9a78da",
+            "position": "4006.80866666667,1091.99777777778"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
@@ -910,22 +956,6 @@
         "position": "2769.30866666667,941.997777777778"
       },
       {
-        "id": "9e4555ba-5cd2-49d7-8f71-d28fb0779e54",
-        "position": "3056.80866666667,941.997777777778"
-      },
-      {
-        "id": "c2c30c8e-7c17-4123-854c-6a66f382eddf",
-        "position": "2956.80866666667,1091.99777777778"
-      },
-      {
-        "id": "8c4dc5e6-5fbb-4894-b2fa-f9105a46ad2a",
-        "position": "3131.80866666667,1104.49777777778"
-      },
-      {
-        "id": "072ca37a-6d69-48fa-a3a5-f10f7712642c",
-        "position": "3306.80866666667,1104.49777777778"
-      },
-      {
         "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
         "position": "3431.80866666667,654.497777777778"
       },
@@ -952,22 +982,6 @@
       {
         "id": "9ece4fc9-3500-484c-9261-7984f85055d4",
         "position": "3469.30866666667,929.497777777779"
-      },
-      {
-        "id": "57bf1fe9-7d57-48d5-90dc-049ffee7b673",
-        "position": "3756.80866666667,929.497777777779"
-      },
-      {
-        "id": "8efe7620-7d05-4352-895c-80bdd419181c",
-        "position": "3656.80866666667,1079.49777777778"
-      },
-      {
-        "id": "b6654b62-f333-4c43-b068-f527c2cb1289",
-        "position": "3831.80866666667,1091.99777777778"
-      },
-      {
-        "id": "bb0f943e-b411-4551-b72f-c360fa9a78da",
-        "position": "4006.80866666667,1091.99777777778"
       },
       {
         "id": "61534d3d-d838-48a3-8226-e9676450f630",

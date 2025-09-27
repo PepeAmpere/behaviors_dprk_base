@@ -1,6 +1,7 @@
 {
   "name": "behaviors_dprk_team",
   "trees": [
+    "soldierDefendAngle.bt",
     "soldierEliminate.bt",
     "soldierFireAt.bt",
     "soldierFollow.bt",
