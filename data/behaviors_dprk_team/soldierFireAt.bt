@@ -89,6 +89,11 @@
           "name": "Forever"
         }
       ]
+    },
+    {
+      "name": "Do Nothing",
+      "id": "fc0f15f9-0653-452d-9408-91b5bdce6cc7",
+      "type": "success"
     }
   ],
   "meta": {
@@ -116,6 +121,10 @@
       {
         "id": "a892d7a6-10ef-4676-8b54-59b6ce23f919",
         "position": "1800,466.3"
+      },
+      {
+        "id": "fc0f15f9-0653-452d-9408-91b5bdce6cc7",
+        "position": "1975,253.8"
       }
     ],
     "editorObjects": [],
