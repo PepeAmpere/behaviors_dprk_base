@@ -48,14 +48,15 @@
         "local soldierCount = self:GetEntityCount()",
         "",
         "local counter = 0",
-        "for sodlierIndex = 0, soldierCount - 1 do",
-        "    if loc.positions[counter]:DistanceXY(self:GetEntity(counter):GetPosition()) > 2 then",
-        "        return false",
+        "for i = 0, soldierCount - 1 do",
+        "    if loc.positions[counter]:DistanceXY(self:GetEntity(counter):GetPosition()) < 25 then",
+        "        return true ",
         "    end",
         "    counter = counter + 1",
         "end",
         "",
-        "return true"
+        "",
+        "return false"
       ]
     },
     {
@@ -75,33 +76,34 @@
     "nodesInfo": [
       {
         "id": "0543eaec-48e7-4eed-8387-6d75eacd5748",
-        "position": "1799.6,104"
+        "position": "1799.6,131.2"
       },
       {
         "id": "0688a65a-d85b-4ef9-b56e-dd1115d13f28",
-        "position": "1337.5,303.2"
+        "position": "1337.5,330.4"
       },
       {
         "id": "07950acf-2e5a-40fb-90ce-44c995e57d48",
-        "position": "1538.1,303.6"
+        "position": "1538.1,330.8"
       },
       {
         "id": "c463b2c9-a909-4bda-9d1d-709585cc9224",
-        "position": "1794,307.2"
+        "position": "1794,334.4"
       },
       {
         "id": "a7e9b3c4-0368-4409-b6d3-8e093bc0664e",
-        "position": "2091.6,258.4"
+        "position": "2091.6,285.6"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2403.2",
-    "gridPadding": "0,3.20000000000005"
+    "canvasSize": "3840,2433.6",
+    "gridPadding": "0,5.39999999999995"
   },
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {

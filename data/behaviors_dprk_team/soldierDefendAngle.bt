@@ -82,8 +82,12 @@
                     "local count = 1",
                     "for i = 1, #enemiesInFirstPoly do",
                     "    if enemiesInFirstPoly[count]:IsAlive() then",
-                    "        if self:CanSeeEnemy() then",
-                    "            count = count + 1",
+                    "        if not self:AreFriendliesInCone(enemiesInFirstPoly[count], 30, 100) then",
+                    "            if self:IsVisible(enemiesInFirstPoly[count]) then",
+                    "                count = count + 1",
+                    "            else",
+                    "                table.remove(enemiesInFirstPoly, count)  ",
+                    "            end",
                     "        else",
                     "            table.remove(enemiesInFirstPoly, count)  ",
                     "        end",
@@ -123,8 +127,12 @@
                     "local count = 1",
                     "for i = 1, #enemiesInFirstPoly do",
                     "    if enemiesInFirstPoly[count]:IsAlive() then",
-                    "        if self:CanSeeEnemy() then",
-                    "            count = count + 1",
+                    "        if not self:AreFriendliesInCone(enemiesInFirstPoly[count], 30, 100) then",
+                    "            if self:IsVisible(enemiesInFirstPoly[count]) then",
+                    "                count = count + 1",
+                    "            else",
+                    "                table.remove(enemiesInFirstPoly, count)  ",
+                    "            end",
                     "        else",
                     "            table.remove(enemiesInFirstPoly, count)  ",
                     "        end",
@@ -172,48 +180,48 @@
     "nodesInfo": [
       {
         "id": "885a3cad-2821-4e89-b4dc-6013ba651792",
-        "position": "1775,196.6"
+        "position": "1775,197.4"
       },
       {
         "id": "6679a70d-3b78-4b23-a2eb-6ef48a11fe59",
-        "position": "1537.5,259.1"
+        "position": "1537.5,259.9"
       },
       {
         "id": "df27b5ce-1f5d-4cb5-8dc3-b68ee362b04d",
-        "position": "1637.5,321.6"
+        "position": "1637.5,322.4"
       },
       {
         "id": "d44afd60-063c-48bf-8502-de57682c7f59",
-        "position": "1475,421.6"
+        "position": "1475,422.4"
       },
       {
         "id": "96e29944-d70c-4064-9320-001d3d99365d",
-        "position": "1712.5,421.6"
+        "position": "1712.5,422.4"
       },
       {
         "id": "2cfec7ff-eec3-4fb3-b7ce-567b76516a73",
-        "position": "2137.5,321.6"
+        "position": "2137.5,322.4"
       },
       {
         "id": "53912745-598c-4f9d-a5d1-a9095a78a871",
-        "position": "2037.5,459.1"
+        "position": "2037.5,459.9"
       },
       {
         "id": "c1f9ad73-bfb8-4f64-be98-c91178e3a053",
-        "position": "1950,596.6"
+        "position": "1950,597.4"
       },
       {
         "id": "3372056f-4149-4394-8c59-b84fede5b262",
-        "position": "2125,609.1"
+        "position": "2125,609.9"
       },
       {
         "id": "39d798b4-b6da-4d70-baa8-e811477ddd00",
-        "position": "2361.1,501"
+        "position": "2361.1,501.8"
       }
     ],
     "editorObjects": [],
     "canvasSize": "3840,2522.4",
-    "gridPadding": "0,9.10000000000002"
+    "gridPadding": "0,9.90000000000003"
   },
   "parameters": [
     {
