@@ -427,22 +427,6 @@
               "type": "sequence",
               "subtrees": [
                 {
-                  "name": "Send Wait",
-                  "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
-                  "type": "scriptAction",
-                  "script": [
-                    "local orderData = {}",
-                    "orderData.orderName = \"OccupyMaty\"",
-                    "",
-                    "for i, sI in pairs(loc.firstTeam) do",
-                    "    orderData.position = self:GetEntity(sI):GetPosition()",
-                    "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
-                    "end ",
-                    "",
-                    "loc.firstPolyChanged = false"
-                  ]
-                },
-                {
                   "name": "Wait Forever",
                   "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
                   "type": "waitForever"
@@ -517,22 +501,6 @@
               "id": "9bf845a0-c81c-4547-9228-d9639a738262",
               "type": "sequence",
               "subtrees": [
-                {
-                  "name": "Send Wait",
-                  "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
-                  "type": "scriptAction",
-                  "script": [
-                    "local orderData = {}",
-                    "orderData.orderName = \"OccupyMaty\"",
-                    "",
-                    "for i, sI in pairs(loc.secondTeam) do",
-                    "    orderData.position = self:GetEntity(sI):GetPosition()",
-                    "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
-                    "end ",
-                    "",
-                    "loc.secondPolyChanged = false"
-                  ]
-                },
                 {
                   "name": "Wait Forever",
                   "id": "660d6a22-22bb-41d2-af8c-98609e1dd347",
@@ -702,6 +670,58 @@
       ]
     }
   ],
+  "unlinked-trees": [
+    {
+      "name": "Send Wait",
+      "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
+            "position": "2456.80866666667,830.297777777778"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"OccupyMaty\"",
+        "",
+        "for i, sI in pairs(loc.firstTeam) do",
+        "    orderData.position = self:GetEntity(sI):GetPosition()",
+        "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
+        "end ",
+        "",
+        "loc.firstPolyChanged = false"
+      ]
+    },
+    {
+      "name": "Send Wait",
+      "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
+            "position": "3156.80866666667,817.797777777779"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"OccupyMaty\"",
+        "",
+        "for i, sI in pairs(loc.secondTeam) do",
+        "    orderData.position = self:GetEntity(sI):GetPosition()",
+        "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
+        "end ",
+        "",
+        "loc.secondPolyChanged = false"
+      ]
+    }
+  ],
   "meta": {
     "nodesInfo": [
       {
@@ -801,10 +821,6 @@
         "position": "2531.80866666667,705.297777777778"
       },
       {
-        "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
-        "position": "2456.80866666667,830.297777777778"
-      },
-      {
         "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
         "position": "2606.80866666667,830.297777777778"
       },
@@ -827,10 +843,6 @@
       {
         "id": "9bf845a0-c81c-4547-9228-d9639a738262",
         "position": "3231.80866666667,692.797777777779"
-      },
-      {
-        "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
-        "position": "3156.80866666667,817.797777777779"
       },
       {
         "id": "660d6a22-22bb-41d2-af8c-98609e1dd347",
