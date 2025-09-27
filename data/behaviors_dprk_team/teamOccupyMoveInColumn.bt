@@ -1,47 +1,19 @@
 {
-  "name": "Choose action",
-  "id": "840be581-815f-4d75-8eb0-6ed788d7442d",
-  "type": "selector",
+  "name": "Root",
+  "id": "aa5310d3-78d6-49da-837b-0ca06d2e671c",
+  "type": "sequence",
   "subtrees": [
     {
-      "name": "Do Idle",
-      "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
-      "type": "reference",
-      "decorators": [
-        {
-          "id": "b2aebb61-17b4-4db7-bd6f-2cd788648ba7",
-          "type": "scriptCondition",
-          "name": "If is in target position",
-          "script": [
-            "if loc.idleOrderData == nil then",
-            "    loc.idleOrderData = {",
-            "        position = arg.orderData.target",
-            "    }",
-            "end",
-            "",
-            "",
-            "local MAX_SUCCESS_DISTANCE_FROM_TARGET = 25",
-            "",
-            "for member in self:GetEntities() do",
-            "    if member:Valid() and member:IsAlive() then",
-            "\t    if member:GetPosition():Distance(arg.orderData.target) < MAX_SUCCESS_DISTANCE_FROM_TARGET then",
-            "\t\t    return true",
-            "\t    end",
-            "\t    --return false",
-            "    end",
-            "end",
-            "",
-            "return false"
-          ]
-        }
-      ],
-      "target": [
-        "behaviors_dprk_team",
-        "teamIdle"
-      ],
-      "arguments": {
-        "orderData": "loc.idleOrderData"
-      }
+      "name": "SetupVars",
+      "id": "d23abaf0-50bd-4ab7-af41-4c3ab317c002",
+      "type": "scriptAction",
+      "script": [
+        "if loc.idleOrderData == nil then",
+        "    loc.idleOrderData = {",
+        "        position = arg.orderData.target",
+        "    }",
+        "end"
+      ]
     },
     {
       "name": "Do Move in Column",
@@ -54,28 +26,95 @@
       "arguments": {
         "orderData": "arg.orderData"
       }
+    },
+    {
+      "name": "Do Idle",
+      "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_team",
+        "teamIdle"
+      ],
+      "arguments": {
+        "orderData": "loc.idleOrderData"
+      }
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Choose action",
+      "id": "840be581-815f-4d75-8eb0-6ed788d7442d",
+      "type": "selector",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "840be581-815f-4d75-8eb0-6ed788d7442d",
+            "position": "1950,431.271428571428"
+          }
+        ],
+        "editorObjects": []
+      },
+      "active": true
+    },
+    {
+      "name": "If is in target position",
+      "id": "b2aebb61-17b4-4db7-bd6f-2cd788648ba7",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "b2aebb61-17b4-4db7-bd6f-2cd788648ba7",
+            "position": "1850,606.271428571428"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "if loc.idleOrderData == nil then",
+        "    loc.idleOrderData = {",
+        "        position = arg.orderData.target",
+        "    }",
+        "end",
+        "",
+        "",
+        "local MAX_SUCCESS_DISTANCE_FROM_TARGET = 25",
+        "",
+        "for member in self:GetEntities() do",
+        "    if member:Valid() and member:IsAlive() then",
+        "\t    if member:GetPosition():Distance(arg.orderData.target) < MAX_SUCCESS_DISTANCE_FROM_TARGET then",
+        "\t\t    return true",
+        "\t    end",
+        "\t    --return false",
+        "    end",
+        "end",
+        "",
+        "return false"
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "840be581-815f-4d75-8eb0-6ed788d7442d",
-        "position": "1881.32857142857,450.857142857143"
+        "id": "aa5310d3-78d6-49da-837b-0ca06d2e671c",
+        "position": "2350,168.771428571428"
       },
       {
-        "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
-        "position": "1725,567.6"
+        "id": "d23abaf0-50bd-4ab7-af41-4c3ab317c002",
+        "position": "1925,343.771428571428"
       },
       {
         "id": "4dec6851-2bb0-404b-b51c-9540a2d7d71b",
-        "position": "2025,592.6"
+        "position": "2175,356.271428571428"
+      },
+      {
+        "id": "569f1512-93c3-405f-8a19-acf1dae6fb70",
+        "position": "2525,356.271428571428"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2617.6",
-    "gridPadding": "0,5.10000000000002"
+    "canvasSize": "3840,2668.77142857143",
+    "gridPadding": "0,6.27142857142846"
   },
-  "active": true,
   "parameters": [
     {
       "name": "orderData",
