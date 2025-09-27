@@ -327,9 +327,9 @@
                         "loc.covers = FindCovers(threats, area, positions,     ",
                         "{",
                         "    weights = {",
-                        "        protection = 50,",
+                        "        protection = 40,",
                         "        distance = -1,",
-                        "        lineOfFire = 0,",
+                        "        lineOfFire = 20,",
                         "        }   ",
                         "    }",
                         ")"
