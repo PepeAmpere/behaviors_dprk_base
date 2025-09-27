@@ -1,112 +1,260 @@
 {
-  "name": "Reloading can be done during move",
-  "id": "68e1e06c-3895-4b81-ad80-f98b056d7a1c",
-  "type": "parallel",
+  "name": "<unnamed>",
+  "id": "75663f84-b388-4393-8f7d-a1da48d7e888",
+  "type": "sequence",
   "subtrees": [
     {
-      "name": "Shoot if threatened",
-      "id": "dcbedfdb-be91-4801-a849-d4fe7b2543e5",
-      "type": "selector",
+      "name": "<unnamed>",
+      "id": "0daca6d2-6269-423b-a9fb-8a78954f3750",
+      "type": "supervisedParallel",
       "subtrees": [
         {
-          "name": "Reload",
-          "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
-          "type": "reloadWeapon",
-          "decorators": [
+          "name": "Shoot if threatened",
+          "id": "dcbedfdb-be91-4801-a849-d4fe7b2543e5",
+          "type": "selector",
+          "subtrees": [
             {
-              "id": "420028d5-225d-4626-939c-c46410f265f8",
-              "type": "scriptCondition",
-              "name": "No ammo in mag/No Mag",
-              "script": [
-                "",
-                "local mag=self:GetCurrentMagazine()",
-                "if mag~=nil then",
-                "    if self:GetCurrentMagazine().rounds==0 then",
-                "        return true",
-                "    end",
-                "else return true --Reload should fail anyways and this ensures we stay reloading if the thing is more complicated than I guess",
-                "end",
-                "",
-                "return false"
+              "name": "Reload",
+              "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
+              "type": "reloadWeapon",
+              "decorators": [
+                {
+                  "id": "420028d5-225d-4626-939c-c46410f265f8",
+                  "type": "scriptCondition",
+                  "name": "No ammo in mag/No Mag",
+                  "script": [
+                    "",
+                    "local mag=self:GetCurrentMagazine()",
+                    "if mag~=nil then",
+                    "    if self:GetCurrentMagazine().rounds==0 then",
+                    "        loc.antiStuckActive=true",
+                    "        return true",
+                    "    end",
+                    "else",
+                    "    loc.antiStuckActive=true",
+                    "    return true --Reload should fail anyways and this ensures we stay reloading if the thing is more complicated than I guess",
+                    "end",
+                    "",
+                    "return false"
+                  ]
+                }
               ]
-            }
-          ]
-        },
-        {
-          "name": "Aim and fire",
-          "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
-          "type": "fire",
-          "decorators": [
+            },
             {
-              "id": "f164ba00-098e-4d05-9e97-e8b280145520",
-              "type": "scriptCondition",
-              "name": "If see enemy at <50m",
-              "script": [
+              "name": "Aim and fire",
+              "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
+              "type": "fire",
+              "decorators": [
+                {
+                  "id": "f164ba00-098e-4d05-9e97-e8b280145520",
+                  "type": "scriptCondition",
+                  "name": "If see enemy at <50m",
+                  "script": [
+                    "local enemies = self:GetVisibleEnemies(50)",
+                    "if #enemies > 0 and not loc.antiStuckActive then",
+                    "    loc.shootInProgress=true",
+                    "    return true",
+                    "end",
+                    "loc.shootInProgress=false",
+                    "return false"
+                  ]
+                }
+              ],
+              "rounds": [
                 "local enemies = self:GetVisibleEnemies(50)",
-                "if #enemies > 0 then",
-                "    return true",
-                "end",
-                "return false"
-              ]
+                "self:ReqHeadingAimAtEntity(enemies[1])",
+                "return 10 --Some ammo waste, but firing one was inconsistent"
+              ],
+              "forced": false
+            },
+            {
+              "name": "<unnamed>",
+              "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_team",
+                "soldierMove"
+              ],
+              "arguments": {
+                "orderData": "arg.orderData"
+              }
             }
           ],
-          "rounds": [
-            "local enemies = self:GetVisibleEnemies(50)",
-            "self:ReqHeadingAimAtEntity(enemies[1])",
-            "return 1"
-          ],
-          "forced": false
+          "active": true
         },
         {
           "name": "<unnamed>",
-          "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
-          "type": "reference",
-          "target": [
-            "behaviors_dprk_team",
-            "soldierMove"
+          "id": "b03e04b4-e080-42d5-b41c-c82ec22e0d5f",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Anti-stuck activator",
+              "id": "666ad977-98e4-46c3-ba6f-db8b0a628e9c",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Wait 5s",
+                  "id": "f294bc93-a0fd-4155-bd78-ddeaa0c1ebb1",
+                  "type": "wait",
+                  "time": [
+                    "return 5"
+                  ]
+                },
+                {
+                  "name": "Activate anti-stuck if still firing after 3s",
+                  "id": "405994e4-a714-4a59-be4c-7faa4d704d6b",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.antiStuckActive=true"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "84b78705-1e28-44d0-a2ae-a37b79e83edc",
+                  "type": "scriptCondition",
+                  "name": "Are we shooting right now?",
+                  "script": [
+                    "return loc.shootInProgress"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Wait Forever",
+              "id": "288d1425-a2ca-48cd-8046-5f43837ea12d",
+              "type": "waitForever"
+            }
           ],
-          "arguments": {
-            "orderData": "arg.orderData"
-          }
+          "active": true
+        },
+        {
+          "name": "<unnamed>",
+          "id": "f40f0502-d479-4dbd-b72e-0a628813ba3c",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "<unnamed>",
+              "id": "a6e0ed9a-4438-4576-878d-99942f8e9135",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Wait 5s",
+                  "id": "65eb5dfa-4601-4484-9dc2-d20706028e3a",
+                  "type": "wait",
+                  "time": [
+                    "return 5"
+                  ]
+                },
+                {
+                  "name": "Deactivate anti-stuck",
+                  "id": "39c52d79-978c-4446-a7cd-a7c1a100ff8f",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.antiStuckActive=false"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "c72e5bcb-01c1-40f9-be5f-3137df4b283a",
+                  "type": "scriptCondition",
+                  "name": "Is anti-stuck active?",
+                  "script": [
+                    "return loc.antiStuckActive==true"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Wait Forever",
+              "id": "9ea44bc5-7dbe-4a7d-ab37-b2df05467dd6",
+              "type": "waitForever"
+            }
+          ],
+          "active": true
         }
       ],
-      "active": true
-    }
-  ],
-  "decorators": [
-    {
-      "id": "626b3adc-789f-4617-bafc-16c31fe2ebbd",
-      "type": "loopForever",
-      "name": "Repeat"
+      "decorators": [
+        {
+          "id": "a9e3b190-6d0e-4070-945b-d0d235206480",
+          "type": "loopForever",
+          "name": "<unnamed>"
+        }
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "68e1e06c-3895-4b81-ad80-f98b056d7a1c",
-        "position": "1662.5,87.5"
+        "id": "75663f84-b388-4393-8f7d-a1da48d7e888",
+        "position": "1675,183.5"
+      },
+      {
+        "id": "0daca6d2-6269-423b-a9fb-8a78954f3750",
+        "position": "1675,321"
       },
       {
         "id": "dcbedfdb-be91-4801-a849-d4fe7b2543e5",
-        "position": "1725,275"
+        "position": "1437.5,521"
       },
       {
         "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
-        "position": "1437.5,525"
+        "position": "1200,733.5"
       },
       {
         "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
-        "position": "1712.5,525"
+        "position": "1400,733.5"
       },
       {
         "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
-        "position": "2012.5,556"
+        "position": "1575,733.5"
+      },
+      {
+        "id": "b03e04b4-e080-42d5-b41c-c82ec22e0d5f",
+        "position": "1800,521"
+      },
+      {
+        "id": "666ad977-98e4-46c3-ba6f-db8b0a628e9c",
+        "position": "1762.5,658.5"
+      },
+      {
+        "id": "f294bc93-a0fd-4155-bd78-ddeaa0c1ebb1",
+        "position": "1750,796"
+      },
+      {
+        "id": "405994e4-a714-4a59-be4c-7faa4d704d6b",
+        "position": "1900,796"
+      },
+      {
+        "id": "288d1425-a2ca-48cd-8046-5f43837ea12d",
+        "position": "1975,708.5"
+      },
+      {
+        "id": "f40f0502-d479-4dbd-b72e-0a628813ba3c",
+        "position": "2150,408.5"
+      },
+      {
+        "id": "a6e0ed9a-4438-4576-878d-99942f8e9135",
+        "position": "2150,521"
+      },
+      {
+        "id": "65eb5dfa-4601-4484-9dc2-d20706028e3a",
+        "position": "2075,633.5"
+      },
+      {
+        "id": "39c52d79-978c-4446-a7cd-a7c1a100ff8f",
+        "position": "2250,633.5"
+      },
+      {
+        "id": "9ea44bc5-7dbe-4a7d-ab37-b2df05467dd6",
+        "position": "2337.5,521"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2646",
+    "gridPadding": "0,8.5"
   },
-  "waitForAll": true,
   "parameters": [
     {
       "name": "orderData",
@@ -115,5 +263,8 @@
       "evaluation": "passByReference"
     }
   ],
-  "locals": {}
+  "locals": {
+    "antiStuckActive": "return false",
+    "shootInProgress": "return false"
+  }
 }
