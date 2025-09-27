@@ -115,7 +115,8 @@
                   "type": "scriptCondition",
                   "name": "Are we shooting right now?",
                   "script": [
-                    "return loc.shootInProgress"
+                    "local closeToEnd=self:GetPosition():Distance(arg.orderData.position)>1",
+                    "return loc.shootInProgress and not closeToEnd"
                   ]
                 }
               ]
