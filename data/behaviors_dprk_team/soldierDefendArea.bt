@@ -1,0 +1,110 @@
+{
+  "name": "Reloading can be done during move",
+  "id": "c2056bcf-b02f-4cd0-9bba-572149cbd0d6",
+  "type": "parallel",
+  "subtrees": [
+    {
+      "name": "Shoot if threatened",
+      "id": "418b99f8-074a-4628-892e-50c413ca87a5",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Reload",
+          "id": "1e431dba-1616-4e98-a89e-d770bf5feb5a",
+          "type": "reloadWeapon",
+          "decorators": [
+            {
+              "id": "3b64d3f1-3458-4fc2-899a-c7e1bdbd19d7",
+              "type": "scriptCondition",
+              "name": "No ammo in mag/No Mag",
+              "script": [
+                "",
+                "local mag=self:GetCurrentMagazine()",
+                "if mag~=nil then",
+                "    if self:GetCurrentMagazine().rounds==0 then",
+                "        return true",
+                "    end",
+                "else return true --Reload should fail anyways and this ensures we stay reloading if the thing is more complicated than I guess",
+                "end",
+                "",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Aim and fire",
+          "id": "a5cb91d2-6d5a-4d75-8661-05e2a8b6999c",
+          "type": "fire",
+          "decorators": [
+            {
+              "id": "ab971db0-4676-4638-9a86-e6b7519e6fd8",
+              "type": "scriptCondition",
+              "name": "If see enemy at <50m",
+              "script": [
+                "local enemies = self:GetVisibleEnemies(50)",
+                "if #enemies > 0 then",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ],
+          "rounds": [
+            "local enemies = self:GetVisibleEnemies(50)",
+            "self:ReqHeadingAimAtEntity(enemies[1])",
+            "return 1"
+          ],
+          "forced": false
+        },
+        {
+          "name": "Succeed",
+          "id": "07207ac4-854e-4a8b-940a-06fc9c6e3687",
+          "type": "success"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "decorators": [
+    {
+      "id": "74aeb4cd-b26d-4375-ab82-984fbc2a3557",
+      "type": "loopForever",
+      "name": "Repeat"
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "c2056bcf-b02f-4cd0-9bba-572149cbd0d6",
+        "position": "1800,0"
+      },
+      {
+        "id": "418b99f8-074a-4628-892e-50c413ca87a5",
+        "position": "1862.5,187.5"
+      },
+      {
+        "id": "1e431dba-1616-4e98-a89e-d770bf5feb5a",
+        "position": "1575,437.5"
+      },
+      {
+        "id": "a5cb91d2-6d5a-4d75-8661-05e2a8b6999c",
+        "position": "1850,437.5"
+      },
+      {
+        "id": "07207ac4-854e-4a8b-940a-06fc9c6e3687",
+        "position": "2112.5,437.5"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2550"
+  },
+  "waitForAll": true,
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false
+    }
+  ],
+  "locals": {}
+}

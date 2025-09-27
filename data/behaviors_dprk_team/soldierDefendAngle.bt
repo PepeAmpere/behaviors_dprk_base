@@ -17,8 +17,8 @@
       "type": "selector",
       "subtrees": [
         {
-          "name": "Occupy",
-          "id": "b45b5bbb-d7de-4753-b6ea-98330b89d92c",
+          "name": "occupy",
+          "id": "d44afd60-063c-48bf-8502-de57682c7f59",
           "type": "reference",
           "decorators": [
             {
@@ -32,10 +32,10 @@
           ],
           "target": [
             "behaviors_dprk_team",
-            "soldierOccupy"
+            "soldierOccupyMaty"
           ],
           "arguments": {
-            "orderData": "loc.orderData"
+            "orderData": "arg.orderData"
           }
         },
         {
@@ -82,7 +82,11 @@
                     "local count = 1",
                     "for i = 1, #enemiesInFirstPoly do",
                     "    if enemiesInFirstPoly[count]:IsAlive() then",
-                    "        count = count + 1",
+                    "        if self:CanSeeEnemy() then",
+                    "            count = count + 1",
+                    "        else",
+                    "            table.remove(enemiesInFirstPoly, count)  ",
+                    "        end",
                     "    else",
                     "        table.remove(enemiesInFirstPoly, count)       ",
                     "    end",
@@ -119,7 +123,11 @@
                     "local count = 1",
                     "for i = 1, #enemiesInFirstPoly do",
                     "    if enemiesInFirstPoly[count]:IsAlive() then",
-                    "        count = count + 1",
+                    "        if self:CanSeeEnemy() then",
+                    "            count = count + 1",
+                    "        else",
+                    "            table.remove(enemiesInFirstPoly, count)  ",
+                    "        end",
                     "    else",
                     "        table.remove(enemiesInFirstPoly, count)       ",
                     "    end",
@@ -135,12 +143,12 @@
               ]
             },
             {
-              "name": "defendClose",
-              "id": "3cf9d025-0474-4159-8c7c-3b52e9289639",
+              "name": "defend",
+              "id": "39d798b4-b6da-4d70-baa8-e811477ddd00",
               "type": "reference",
               "target": [
                 "behaviors_dprk_team",
-                "soldierOccupy"
+                "soldierDefendArea"
               ],
               "arguments": {
                 "orderData": "arg.orderData"
@@ -164,47 +172,48 @@
     "nodesInfo": [
       {
         "id": "885a3cad-2821-4e89-b4dc-6013ba651792",
-        "position": "1775,75"
+        "position": "1775,196.6"
       },
       {
         "id": "6679a70d-3b78-4b23-a2eb-6ef48a11fe59",
-        "position": "1537.5,137.5"
+        "position": "1537.5,259.1"
       },
       {
         "id": "df27b5ce-1f5d-4cb5-8dc3-b68ee362b04d",
-        "position": "1637.5,200"
+        "position": "1637.5,321.6"
       },
       {
-        "id": "b45b5bbb-d7de-4753-b6ea-98330b89d92c",
-        "position": "1475,275"
+        "id": "d44afd60-063c-48bf-8502-de57682c7f59",
+        "position": "1475,421.6"
       },
       {
         "id": "96e29944-d70c-4064-9320-001d3d99365d",
-        "position": "1712.5,300"
+        "position": "1712.5,421.6"
       },
       {
         "id": "2cfec7ff-eec3-4fb3-b7ce-567b76516a73",
-        "position": "2137.5,200"
+        "position": "2137.5,321.6"
       },
       {
         "id": "53912745-598c-4f9d-a5d1-a9095a78a871",
-        "position": "2037.5,337.5"
+        "position": "2037.5,459.1"
       },
       {
         "id": "c1f9ad73-bfb8-4f64-be98-c91178e3a053",
-        "position": "1950,475"
+        "position": "1950,596.6"
       },
       {
         "id": "3372056f-4149-4394-8c59-b84fede5b262",
-        "position": "2125,487.5"
+        "position": "2125,609.1"
       },
       {
-        "id": "3cf9d025-0474-4159-8c7c-3b52e9289639",
-        "position": "2287.5,337.5"
+        "id": "39d798b4-b6da-4d70-baa8-e811477ddd00",
+        "position": "2361.1,501"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2522.4",
+    "gridPadding": "0,9.10000000000002"
   },
   "parameters": [
     {

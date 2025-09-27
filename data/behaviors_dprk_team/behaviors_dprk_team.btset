@@ -2,6 +2,7 @@
   "name": "behaviors_dprk_team",
   "trees": [
     "soldierDefendAngle.bt",
+    "soldierDefendArea.bt",
     "soldierEliminate.bt",
     "soldierFireAt.bt",
     "soldierFollow.bt",
@@ -13,6 +14,7 @@
     "soldierOccupyMaty.bt",
     "soldierReset.bt",
     "soldierRoot.bt",
+    "soldierStance.bt",
     "soldierSuppress.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",

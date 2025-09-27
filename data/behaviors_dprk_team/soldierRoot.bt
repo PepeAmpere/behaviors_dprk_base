@@ -64,6 +64,10 @@
         "    DefendAngle = {",
         "        bbset = \"behaviors_dprk_team\",",
         "        tree = \"soldierDefendAngle\"",
+        "    },",
+        "    DefendArea = {",
+        "        bbset = \"behaviors_dprk_team\",",
+        "        tree = \"soldierDefendArea\"",
         "    }",
         "}   "
       ]
