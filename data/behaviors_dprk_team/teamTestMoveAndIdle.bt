@@ -48,14 +48,15 @@
         "local soldierCount = self:GetEntityCount()",
         "",
         "local counter = 0",
-        "for sodlierIndex = 0, soldierCount - 1 do",
-        "    if loc.positions[counter]:DistanceXY(self:GetEntity(counter):GetPosition()) > 20 then",
-        "        return false",
+        "for i = 0, soldierCount - 1 do",
+        "    if loc.positions[counter]:DistanceXY(self:GetEntity(counter):GetPosition()) < 25 then",
+        "        return true ",
         "    end",
         "    counter = counter + 1",
         "end",
         "",
-        "return true"
+        "",
+        "return false"
       ]
     },
     {

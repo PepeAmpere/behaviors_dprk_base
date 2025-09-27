@@ -30,7 +30,7 @@
             "    groupPos[index + 1] = self:GetEntity(soldierIndex):GetPosition()",
             "end",
             "",
-            "local params = { weights = { distance = -1, protection = 20, lineOfFire = 20, preferenceTowardThreats = 0.3 }, constraints = {coneOfFire = 60} }",
+            "local params = { weights = { distance = -0.1, protection = 20, lineOfFire = 20, preferenceTowardThreats = 0.3 }, constraints = {coneOfFire = 60} }",
             "",
             "loc.futureCovers = FindCovers(threats, ",
             "    Circle(arg.orderData.position, loc.coverRadius),",
@@ -85,7 +85,7 @@
         },
         {
           "name": "Wait Forever",
-          "id": "79ffff4b-401c-4e63-8f2f-541d4bd3339d",
+          "id": "62ffcb5e-55d8-4975-a2c2-277d43e8e302",
           "type": "waitForever"
         }
       ]
@@ -290,8 +290,8 @@
         "position": "1537.5,669.1"
       },
       {
-        "id": "79ffff4b-401c-4e63-8f2f-541d4bd3339d",
-        "position": "1693.7,581"
+        "id": "62ffcb5e-55d8-4975-a2c2-277d43e8e302",
+        "position": "1723.1,593"
       },
       {
         "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",
