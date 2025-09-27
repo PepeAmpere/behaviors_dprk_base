@@ -1,0 +1,177 @@
+{
+  "name": "Start",
+  "id": "a7c2b27f-eda5-42a7-91e7-444b58309f44",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Set up watched for areas",
+      "id": "4e64338a-77bd-41a5-9b2c-9e40f03422b2",
+      "type": "scriptAction"
+    },
+    {
+      "name": "Set stance to Standing",
+      "id": "c2d6c993-6ea1-4a28-83af-3e2646d95c5e",
+      "type": "setStance",
+      "stance": [
+        "return Stance.Standing"
+      ]
+    },
+    {
+      "name": "",
+      "id": "15913980-7169-47bb-bbb2-fca69d9c7ecd",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "Add args to order data for firing and fire",
+          "id": "244e1b16-8ce9-4b99-93cf-8a4779355784",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Add soldier to oData",
+              "id": "5a5e8f62-a680-4ae2-8d3c-9ec9d1c90694",
+              "type": "scriptAction"
+            },
+            {
+              "name": "<unnamed>",
+              "id": "cc9bb117-ab5f-49ef-ac02-b4c9d6280f94",
+              "type": "reference",
+              "target": [
+                "behaviors_dprk_team",
+                "soldierFireAt"
+              ],
+              "arguments": {
+                "orderData": "loc.oData"
+              }
+            }
+          ],
+          "decorators": [
+            {
+              "id": "908ad21d-be5b-4f03-b8d1-298b974949e3",
+              "type": "scriptCondition",
+              "name": "If see enemy in effective range and overwatched area",
+              "script": [
+                "local enemies = self:GetVisibleEnemies()",
+                "",
+                "if #enemies > 0 then",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Wait Forever",
+          "id": "3c765a21-b4e3-428b-bc67-970aca52030a",
+          "type": "waitForever"
+        }
+      ],
+      "decorators": [
+        {
+          "id": "437156b4-f99b-4a29-8c2f-bc4a96a90905",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "a7c2b27f-eda5-42a7-91e7-444b58309f44",
+        "position": "2012.5,112.5"
+      },
+      {
+        "id": "8fff574b-3125-4a02-a2ed-41aea23d0af3",
+        "position": "1600,325"
+      },
+      {
+        "id": "1556d263-474d-4712-a36b-6adec57e19dc",
+        "position": "1850,575"
+      },
+      {
+        "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
+        "position": "1600,237.5"
+      },
+      {
+        "id": "4e64338a-77bd-41a5-9b2c-9e40f03422b2",
+        "position": "1587.5,262.5"
+      },
+      {
+        "id": "c2d6c993-6ea1-4a28-83af-3e2646d95c5e",
+        "position": "1825,300"
+      },
+      {
+        "id": "15913980-7169-47bb-bbb2-fca69d9c7ecd",
+        "position": "2150,287.5"
+      },
+      {
+        "id": "244e1b16-8ce9-4b99-93cf-8a4779355784",
+        "position": "1862.5,450"
+      },
+      {
+        "id": "5a5e8f62-a680-4ae2-8d3c-9ec9d1c90694",
+        "position": "1875,600"
+      },
+      {
+        "id": "cc9bb117-ab5f-49ef-ac02-b4c9d6280f94",
+        "position": "2087.5,600"
+      },
+      {
+        "id": "3c765a21-b4e3-428b-bc67-970aca52030a",
+        "position": "2275,462.5"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "8fff574b-3125-4a02-a2ed-41aea23d0af3",
+        "type": "comment",
+        "header": "",
+        "body": "Not ideal since it may not use cover appropriately, but I'm short on time",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "1556d263-474d-4712-a36b-6adec57e19dc",
+        "type": "comment",
+        "header": "TODO",
+        "body": "",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
+        "type": "comment",
+        "header": "TODO",
+        "body": "",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "3840,2400"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "distAroundPath": "return 50",
+    "areasToWatchIn": null,
+    "enemyToFireAt": null,
+    "maxDistToFireAt": "return 300",
+    "oData": null
+  }
+}
