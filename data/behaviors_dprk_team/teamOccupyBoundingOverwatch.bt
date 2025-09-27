@@ -296,18 +296,30 @@
                       "id": "29e7e202-bb4c-447f-8766-078781d232b2",
                       "type": "scriptAction",
                       "script": [
-                        "local threats = {",
-                        "    {area = Circle(loc.route:Value():EndPoint(), 3), avoidance = 1}",
-                        "}",
+                        "local threats = {}",
+                        "",
+                        "local threatHop=loc.distAlongRoute+loc.teamHopDist+5 --Static offset so we don't screw up the areas",
+                        "while threatHop-loc.distAlongRoute<=loc.maxThreatsDist do",
+                        "    threats[#threats+1]={area = Circle(loc.route:Value():PositionAlongPath(threatHop), loc.teamHopDist), avoidance = 1}",
+                        "    threatHop=threatHop+loc.teamHopDist",
+                        "end",
                         "",
                         "local goal=loc.route:Value():PositionAlongPath(loc.distAlongRoute)",
                         "local offset = loc.teamCoverSearchDist",
                         "",
                         "local area= Circle(goal, offset)",
                         "",
-                        "local entityCount=self:GetEntityCount()",
+                        "--counting alive soldiers (Could have been done better, but it's D:-2 from last credit date",
+                        "local aliveCount=0",
+                        "for i=1, #loc.subteamStatic do",
+                        "    if loc.subteamStatic[i]:IsAlive() then aliveCount=aliveCount+1",
+                        "end",
+                        "for i=1, #loc.subteamMoving do",
+                        "    if loc.subteamMoving[i]:IsAlive() then aliveCount=aliveCount+1",
+                        "end",
+                        "",
                         "local positions = {}",
-                        "for i=1, entityCount do",
+                        "for i=1, aliveCount do",
                         "    --we assign the center if there are no good positions. Not much I can do before the consult",
                         "    positions[i]=goal",
                         "end",
@@ -393,11 +405,11 @@
                   ]
                 },
                 {
-                  "name": "Wait 3s so soldiers end moves for sure",
+                  "name": "Wait 1s so soldiers end moves (More is from awaiting covers)",
                   "id": "eba69077-a194-4bde-abe7-7616bc47374b",
                   "type": "wait",
                   "time": [
-                    "return 3"
+                    "return 1"
                   ]
                 }
               ]
@@ -596,11 +608,12 @@
     "distAlongRoute": "return 0",
     "subteamMoving": "return nil",
     "subteamStatic": "return nil",
-    "teamHopDist": "return 20",
-    "teamCoverSearchDist": "return 8",
+    "teamHopDist": "return 25",
+    "teamCoverSearchDist": "return 15",
     "covers": "return nil",
     "coverTroopsAlloc": "return nil",
     "orderHasCompleted": "return false",
-    "waitBeforeTeamIdleComplete": "return false"
+    "waitBeforeTeamIdleComplete": "return false",
+    "maxThreatsDist": "return 350"
   }
 }

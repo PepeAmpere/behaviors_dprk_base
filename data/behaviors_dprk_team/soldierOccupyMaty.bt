@@ -48,9 +48,9 @@
                 {
                   "id": "f164ba00-098e-4d05-9e97-e8b280145520",
                   "type": "scriptCondition",
-                  "name": "If see enemy at <50m",
+                  "name": "If see enemy in threat radius",
                   "script": [
-                    "local enemies = self:GetVisibleEnemies(50)",
+                    "local enemies = self:GetVisibleEnemies(loc.enemyThreatRadius)",
                     "if #enemies > 0 and not loc.antiStuckActive then",
                     "    loc.shootInProgress=true",
                     "    return true",
@@ -61,7 +61,7 @@
                 }
               ],
               "rounds": [
-                "local enemies = self:GetVisibleEnemies(50)",
+                "local enemies = self:GetVisibleEnemies(loc.enemyThreatRadius)",
                 "self:ReqHeadingAimAtEntity(enemies[1])",
                 "return 10 --Some ammo waste, but firing one was inconsistent"
               ],
@@ -201,11 +201,11 @@
       },
       {
         "id": "3e65e45c-dae3-4bf8-9070-b1e0900cefd8",
-        "position": "1200,733.5"
+        "position": "1125,737.5"
       },
       {
         "id": "ab7f08a9-e360-45fb-a107-a726734cb7e8",
-        "position": "1400,733.5"
+        "position": "1325,737.5"
       },
       {
         "id": "649fc832-31cd-4fa9-b5d1-92947dd7fff3",
@@ -265,6 +265,7 @@
   ],
   "locals": {
     "antiStuckActive": "return false",
-    "shootInProgress": "return false"
+    "shootInProgress": "return false",
+    "enemyThreatRadius": "return 100"
   }
 }
