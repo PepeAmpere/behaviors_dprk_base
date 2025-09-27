@@ -60,6 +60,39 @@
               "type": "selector",
               "subtrees": [
                 {
+                  "name": "restart",
+                  "id": "77dcd6d4-d2e8-4178-950d-3cf0f4e577e6",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "restart done",
+                      "id": "278be958-6b53-4ac2-b9cc-5e305d9caad2",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.restart = false"
+                      ]
+                    },
+                    {
+                      "name": "wait 0.1",
+                      "id": "b9c7061d-3258-4b00-86bf-3921d3aa4d46",
+                      "type": "wait",
+                      "time": [
+                        "return 0.1"
+                      ]
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "f59f9877-1cc4-4024-b840-f934a3a10880",
+                      "type": "scriptCondition",
+                      "name": "restarted",
+                      "script": [
+                        "return loc.restart"
+                      ]
+                    }
+                  ]
+                },
+                {
                   "name": "OrderTree",
                   "id": "8f1ff38d-3279-4ca0-ac8d-ade668f8b04e",
                   "type": "scriptedReference",
@@ -115,7 +148,9 @@
             "",
             "if message.value.orderName == nil then return end",
             "",
-            "loc.orderData = message.value"
+            "loc.orderData = message.value",
+            "",
+            "loc.restart = true"
           ]
         }
       ],
@@ -151,6 +186,18 @@
         "position": "1731,563.5"
       },
       {
+        "id": "77dcd6d4-d2e8-4178-950d-3cf0f4e577e6",
+        "position": "1368.35,621.4"
+      },
+      {
+        "id": "278be958-6b53-4ac2-b9cc-5e305d9caad2",
+        "position": "1280.85,771.4"
+      },
+      {
+        "id": "b9c7061d-3258-4b00-86bf-3921d3aa4d46",
+        "position": "1455.85,771.4"
+      },
+      {
         "id": "8f1ff38d-3279-4ca0-ac8d-ade668f8b04e",
         "position": "1731,738.5"
       },
@@ -169,6 +216,7 @@
   },
   "parameters": [],
   "locals": {
-    "orderData": "nil"
+    "orderData": "nil",
+    "restart": "false"
   }
 }
