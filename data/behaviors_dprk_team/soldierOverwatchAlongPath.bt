@@ -1,5 +1,5 @@
 {
-  "name": "Start",
+  "name": "Setup and further instructions",
   "id": "a7c2b27f-eda5-42a7-91e7-444b58309f44",
   "type": "sequence",
   "subtrees": [
@@ -19,13 +19,7 @@
         "        routeDistCur=routeDistCur+loc.distBetweenCircles",
         "    end",
         "    areasToWatchIn[#areasToWatchIn+1]=Circle(route:PositionAlongPath(routeDistEnd), loc.distAroundPath)",
-        "    loc.areasToWatchIn=areasToWatchIn",
-        "    for i=0, #areasToWatchIn-1 do",
-        "        DebugLine(",
-        "            areasToWatchIn[i]:Center(), areasToWatchIn[i+1]:Center(),",
-        "            0,1,0,1",
-        "        )",
-        "    end",
+        "    loc.areasToWatchIn=areasToWatchIn   ",
         "end"
       ]
     },
@@ -71,8 +65,10 @@
                 "if #enemies > 0 then",
                 "    --Cycle through visible enemies ",
                 "    --and for each visible enemy cycle through all overwatched areas",
-                "    for enemy in enemies do",
-                "        for area in loc.areasToWatchIn do",
+                "    for i=1, #enemies do",
+                "        for j=1, #loc.areasToWatchIn do",
+                "            local enemy=enemies[i]",
+                "            local area=loc.areasToWatchIn[j]",
                 "            if area:Contains(enemy:GetPosition()) then",
                 "                --TODO: Check if enemy is in one of the areas",
                 "                loc.oData.entityToFireAt=enemy --assign an enemy which fulfills both to oData",
@@ -87,9 +83,19 @@
           ]
         },
         {
-          "name": "Wait Forever",
-          "id": "3c765a21-b4e3-428b-bc67-970aca52030a",
-          "type": "waitForever"
+          "name": "Show simplfied path of overwatched area",
+          "id": "0939aaca-0f2e-4c49-aa24-25ed41b5a5ae",
+          "type": "scriptAction",
+          "script": [
+            "if loc.areasToWatchIn~=nil then",
+            "    for i=1, #loc.areasToWatchIn-1 do",
+            "        DebugLine(",
+            "            loc.areasToWatchIn[i]:Center(), loc.areasToWatchIn[i+1]:Center(),",
+            "            0,1,0",
+            "        )",
+            "    end",
+            "end"
+          ]
         }
       ],
       "decorators": [
@@ -106,43 +112,43 @@
     "nodesInfo": [
       {
         "id": "a7c2b27f-eda5-42a7-91e7-444b58309f44",
-        "position": "2012.5,112.5"
+        "position": "2037.5,403.5"
       },
       {
         "id": "8fff574b-3125-4a02-a2ed-41aea23d0af3",
-        "position": "1600,325"
+        "position": "1600,591"
       },
       {
         "id": "1556d263-474d-4712-a36b-6adec57e19dc",
-        "position": "1875,425"
+        "position": "1875,691"
       },
       {
         "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
-        "position": "1600,237.5"
+        "position": "1600,503.5"
       },
       {
         "id": "4e64338a-77bd-41a5-9b2c-9e40f03422b2",
-        "position": "1587.5,262.5"
+        "position": "1587.5,528.5"
       },
       {
         "id": "c2d6c993-6ea1-4a28-83af-3e2646d95c5e",
-        "position": "1825,300"
+        "position": "1825,566"
       },
       {
         "id": "15913980-7169-47bb-bbb2-fca69d9c7ecd",
-        "position": "2150,287.5"
+        "position": "2125,566"
       },
       {
         "id": "244e1b16-8ce9-4b99-93cf-8a4779355784",
-        "position": "1862.5,450"
+        "position": "1862.5,716"
       },
       {
         "id": "cc9bb117-ab5f-49ef-ac02-b4c9d6280f94",
-        "position": "1975,600"
+        "position": "1975,866"
       },
       {
-        "id": "3c765a21-b4e3-428b-bc67-970aca52030a",
-        "position": "2275,462.5"
+        "id": "0939aaca-0f2e-4c49-aa24-25ed41b5a5ae",
+        "position": "2262.5,716"
       }
     ],
     "editorObjects": [
@@ -171,7 +177,7 @@
       {
         "id": "54ef8094-6a60-467a-bc62-2463a9783c79",
         "type": "comment",
-        "header": "Test it",
+        "header": "Setup works",
         "body": "",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
@@ -180,21 +186,23 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "3840,2400"
+    "canvasSize": "3840,2666",
+    "gridPadding": "0,3.5"
   },
   "parameters": [
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],
   "locals": {
     "distAroundPath": "return 50",
-    "areasToWatchIn": null,
-    "enemyToFireAt": null,
+    "areasToWatchIn": "return nil",
+    "enemyToFireAt": "return nil",
     "maxDistToFireAt": "return 300",
-    "oData": null,
+    "oData": "return nil",
     "distBetweenCircles": "return 50"
   }
 }
