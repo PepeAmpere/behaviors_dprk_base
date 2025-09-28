@@ -456,7 +456,7 @@
                     "loc.orderDataSub1 = {}",
                     "",
                     "loc.orderDataSub1.target = (loc.firstPoly:Vertex(2) + loc.firstPoly:Vertex(3)) / 2",
-                    "loc.orderDataSub1.position = arg.orderData.position + (loc.orderDataSub1.target - arg.orderData.position) / 4.5",
+                    "loc.orderDataSub1.position = arg.orderData.position + (loc.orderDataSub1.target - arg.orderData.position) / 6.5",
                     "",
                     "loc.orderDataSub1.soldierIndexes = loc.firstTeam",
                     "loc.orderDataSub1.poly = loc.firstPoly",
@@ -531,7 +531,7 @@
                     "loc.orderDataSub2 = {}",
                     "",
                     "loc.orderDataSub2.target = (loc.secondPoly:Vertex(2) + loc.secondPoly:Vertex(3)) / 2",
-                    "loc.orderDataSub2.position = arg.orderData.position + (loc.orderDataSub2.target - arg.orderData.position) / 4.5",
+                    "loc.orderDataSub2.position = arg.orderData.position + (loc.orderDataSub2.target - arg.orderData.position) / 6.5",
                     "",
                     "loc.orderDataSub2.soldierIndexes = loc.secondTeam",
                     "loc.orderDataSub2.poly = loc.secondPoly",
@@ -893,7 +893,7 @@
     }
   ],
   "locals": {
-    "outerRadius": "100",
+    "outerRadius": "150",
     "innerRadius": "25",
     "enemies": "nil",
     "firstPoly": "nil",
