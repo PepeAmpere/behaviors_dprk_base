@@ -130,6 +130,7 @@
           "type": "messageHandler",
           "handler": [
             "local message = msg",
+            "--[[",
             "DebugLog(\"Group order\")",
             "if message.value then",
             "    for k, v in pairs(message.value) do",
@@ -145,7 +146,7 @@
             "end",
             "",
             "DebugLog(\"------------\")",
-            "",
+            "]]--",
             "if message.value.orderName == nil then return end",
             "",
             "loc.orderData = message.value",
