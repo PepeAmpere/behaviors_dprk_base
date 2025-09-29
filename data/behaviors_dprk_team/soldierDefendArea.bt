@@ -43,8 +43,13 @@
               "name": "If see enemy at <50m",
               "script": [
                 "local enemies = self:GetVisibleEnemies(50)",
+                "local count = 1",
                 "if #enemies > 0 then",
-                "    return true",
+                "    for i = 1, #enemies do",
+                "        if not self:AreFriendliesInCone(enemies[i], 30, 100) then",
+                "                return true",
+                "        end",
+                "    end",
                 "end",
                 "return false"
               ]
@@ -52,8 +57,16 @@
           ],
           "rounds": [
             "local enemies = self:GetVisibleEnemies(50)",
-            "self:ReqHeadingAimAtEntity(enemies[1])",
-            "return 1"
+            "local count = 1",
+            "if #enemies > 0 then",
+            "    for i = 1, #enemies do",
+            "        if not self:AreFriendliesInCone(enemies[i], 30, 100) then",
+            "                self:ReqHeadingAimAtEntity(enemies[i])",
+            "                return 1",
+            "        end",
+            "    end",
+            "end",
+            "return 0"
           ],
           "forced": false
         },
@@ -104,7 +117,8 @@
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false
+      "isOptional": false,
+      "defaultValue": ""
     }
   ],
   "locals": {}
