@@ -35,149 +35,36 @@
       "active": true
     },
     {
-      "name": "Select Action",
-      "id": "69b152a6-fb93-4230-9739-6a1e13505116",
-      "type": "selector",
+      "name": "<unnamed>",
+      "id": "a0517f56-c4b2-4d6c-a969-b0a9570cf930",
+      "type": "supervisedParallel",
       "subtrees": [
         {
-          "name": "Fire at enemy",
-          "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
-          "type": "reference",
-          "decorators": [
-            {
-              "id": "65a56ae0-5f04-49aa-a064-bae8353cb679",
-              "type": "scriptCondition",
-              "name": "If we can see enemy in reactRadius distance",
-              "script": [
-                "local enemy = GetEnemyNearby(self, loc.reactRadius)",
-                "",
-                "if(enemy == nil) then ",
-                "    return false",
-                "end",
-                "",
-                "arg.orderData.entityToFireAt = enemy",
-                "",
-                "return true"
-              ]
-            }
-          ],
-          "target": [
-            "behaviors_dprk_team",
-            "soldierFireAt"
-          ],
-          "arguments": {
-            "orderData": "arg.orderData"
-          }
-        },
-        {
-          "name": "Supervised Parallel",
-          "id": "28c1ecba-f932-4f97-a9d3-26e59d785004",
-          "type": "supervisedParallel",
-          "subtrees": [
-            {
-              "name": "Move sequence",
-              "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-              "type": "sequence",
-              "subtrees": [
-                {
-                  "name": "Reset",
-                  "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-                  "type": "reference",
-                  "target": [
-                    "behaviors_dprk_team",
-                    "soldierReset"
-                  ],
-                  "arguments": {}
-                },
-                {
-                  "name": "Move",
-                  "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-                  "type": "move",
-                  "decorators": [
-                    {
-                      "id": "8b017212-775e-41b9-aeb6-5fbbd87c9779",
-                      "type": "countedLoop",
-                      "name": "Move to all points",
-                      "count": [
-                        "return #arg.orderData.offsetPositions"
-                      ],
-                      "variableName": "movePoint"
-                    }
-                  ],
-                  "position": [
-                    "return arg.orderData.offsetPositions[loc.movePoint]"
-                  ]
-                },
-                {
-                  "name": "Send Order Completed",
-                  "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-                  "type": "scriptAction",
-                  "script": [
-                    "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})",
-                    "loc.moveOrderComplete = true"
-                  ]
-                }
-              ]
-            },
-            {
-              "name": "Debug Move Points",
-              "id": "bf2a76ff-4094-4578-b945-3ac286872d6c",
-              "type": "scriptAction",
-              "script": [
-                "if arg.orderData.offsetPositions ~= nil then",
-                "    for i = 1, #arg.orderData.offsetPositions do",
-                "        local point = arg.orderData.offsetPositions[i]",
-                "",
-                "        DebugLine(",
-                "            point,",
-                "            point + Vec3(0, 0, 5),",
-                "            1, 0, 0, 1",
-                "        )",
-                "    end",
-                "end"
-              ]
-            }
-          ],
-          "decorators": [
-            {
-              "id": "8717765f-748d-4ea1-b9b2-2983ec923138",
-              "type": "scriptCondition",
-              "name": "If state is Move",
-              "script": [
-                "return arg.orderData.state == loc.move and not loc.moveOrderComplete"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Choose Idle or Shoot",
-          "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+          "name": "Select Action",
+          "id": "69b152a6-fb93-4230-9739-6a1e13505116",
           "type": "selector",
           "subtrees": [
             {
               "name": "Fire at enemy",
-              "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+              "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
               "type": "reference",
               "decorators": [
                 {
-                  "id": "9b497163-766e-4b1e-8fff-815ca9c0a455",
+                  "id": "65a56ae0-5f04-49aa-a064-bae8353cb679",
                   "type": "scriptCondition",
-                  "name": "If we see enemies",
+                  "name": "If we can see enemy in reactRadius distance",
                   "script": [
-                    "loc.enemies = nil",
-                    "loc.enemies = GetEntitiesInArea(arg.orderData.enemyPolygon, { enemyOf = self } )",
+                    "local enemy = GetEnemyNearby(self, loc.reactRadius)",
                     "",
-                    "",
-                    "if #loc.enemies > 0 then",
-                    "    for i = 1, #loc.enemies do",
-                    "        local enemy = loc.enemies[i]",
-                    "        if loc.enemies[i]:GetHealth() > 0 then",
-                    "            arg.orderData.entityToFireAt = enemy",
-                    "            return true",
-                    "        end",
-                    "    end",
+                    "if enemy == nil or not self:IsVisible(enemy) then ",
+                    "    return false",
                     "end",
-                    "return false"
+                    "",
+                    "",
+                    "",
+                    "arg.orderData.entityToFireAt = enemy",
+                    "",
+                    "return true"
                   ]
                 }
               ],
@@ -190,103 +77,464 @@
               }
             },
             {
-              "name": "Check back",
-              "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
-              "type": "scriptAction",
-              "script": [
-                "self:ReqHeadingAtPos(arg.orderData.startPos)"
+              "name": "Supervised Parallel",
+              "id": "28c1ecba-f932-4f97-a9d3-26e59d785004",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "Move sequence",
+                  "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Reset",
+                      "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
+                      "type": "reference",
+                      "target": [
+                        "behaviors_dprk_team",
+                        "soldierReset"
+                      ],
+                      "arguments": {}
+                    },
+                    {
+                      "name": "Move",
+                      "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
+                      "type": "move",
+                      "decorators": [
+                        {
+                          "id": "8b017212-775e-41b9-aeb6-5fbbd87c9779",
+                          "type": "countedLoop",
+                          "name": "Move to all points",
+                          "count": [
+                            "return #arg.orderData.offsetPositions"
+                          ],
+                          "variableName": "movePoint"
+                        }
+                      ],
+                      "position": [
+                        "return arg.orderData.offsetPositions[loc.movePoint]"
+                      ]
+                    },
+                    {
+                      "name": "Send Order Completed",
+                      "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
+                      "type": "scriptAction",
+                      "script": [
+                        "self:SendMessage(self:GetParentGroup(), \"MoveOrderCompleted\", {self})",
+                        "loc.moveOrderComplete = true"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Debug Move Points",
+                  "id": "bf2a76ff-4094-4578-b945-3ac286872d6c",
+                  "type": "scriptAction",
+                  "script": [
+                    "if arg.orderData.offsetPositions ~= nil then",
+                    "    for i = 1, #arg.orderData.offsetPositions do",
+                    "        local point = arg.orderData.offsetPositions[i]",
+                    "",
+                    "        DebugLine(",
+                    "            point,",
+                    "            point + Vec3(0, 0, 5),",
+                    "            1, 0, 0, 1",
+                    "        )",
+                    "    end",
+                    "end"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "8717765f-748d-4ea1-b9b2-2983ec923138",
+                  "type": "scriptCondition",
+                  "name": "If state is Move",
+                  "script": [
+                    "return arg.orderData.state == loc.move and not loc.moveOrderComplete"
+                  ]
+                }
               ]
+            },
+            {
+              "name": "Choose Idle or Shoot",
+              "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "Fire at enemy",
+                  "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
+                  "type": "reference",
+                  "decorators": [
+                    {
+                      "id": "9b497163-766e-4b1e-8fff-815ca9c0a455",
+                      "type": "scriptCondition",
+                      "name": "If we see enemies",
+                      "script": [
+                        "arg.orderData.enemyToFireAt = nil",
+                        "loc.enemies = nil",
+                        "loc.enemies = GetEntitiesInArea(arg.orderData.enemyPolygon, { enemyOf = self } )",
+                        "",
+                        "if #loc.enemies > 0 then",
+                        "    for i = 1, #loc.enemies do",
+                        "        local enemy = loc.enemies[i]",
+                        "        if loc.enemies[i]:GetHealth() > 0 and loc.enemies[i]:Valid() then",
+                        "            arg.orderData.entityToFireAt = enemy",
+                        "            break",
+                        "        end",
+                        "    end",
+                        "end",
+                        "",
+                        "local enemy = arg.orderData.entityToFireAt",
+                        "if enemy ~= nil and self:IsVisible(enemy) then",
+                        "\treturn true",
+                        "end",
+                        "",
+                        "return false"
+                      ]
+                    }
+                  ],
+                  "target": [
+                    "behaviors_dprk_team",
+                    "soldierFireAt"
+                  ],
+                  "arguments": {
+                    "orderData": "arg.orderData"
+                  }
+                },
+                {
+                  "name": "Set defilade",
+                  "id": "c1424613-fc4a-4dc3-bbf8-5b42bc6710c4",
+                  "type": "sequence",
+                  "subtrees": [
+                    {
+                      "name": "Find Path",
+                      "id": "a57f07d0-b04f-4578-abd8-15abab25ae39",
+                      "type": "scriptAction",
+                      "script": [
+                        "loc.pathRequest = FindPath(self:GetPosition(), arg.orderData.entityToFireAt:GetPosition())"
+                      ]
+                    },
+                    {
+                      "name": "Wait until path request done",
+                      "id": "d7d62bdc-afa4-4d30-a50d-49c2025d86f2",
+                      "type": "waitUntil",
+                      "condition": [
+                        "if loc.pathRequest:IsReady() then",
+                        "    loc.path = loc.pathRequest:Value()",
+                        "    return true",
+                        "end",
+                        "return false"
+                      ]
+                    },
+                    {
+                      "name": "Calculate defilade",
+                      "id": "d7239daf-1f2a-4a0f-b7cb-753fbffde503",
+                      "type": "scriptAction",
+                      "script": [
+                        "local enemyPos = arg.orderData.entityToFireAt:GetPosition()",
+                        "local vertices = {",
+                        "    enemyPos + Vec3 (10, 10, 0),",
+                        "    enemyPos + Vec3 (10, -10, 0),",
+                        "    enemyPos + Vec3 (-10, 10, 0),",
+                        "    enemyPos + Vec3 (-10, -10, 0),",
+                        "}",
+                        "",
+                        "local polygon = Polygon(vertices)",
+                        "",
+                        "loc.defiladeRequest = FindDefiladeOnGrid(",
+                        "    enemyPos,",
+                        "    polygon,",
+                        "    {",
+                        "        cellSize = 4,",
+                        "    }    ",
+                        ")"
+                      ]
+                    },
+                    {
+                      "name": "Wait until defilade request done",
+                      "id": "a9ca2f0e-aa0c-4bab-be6d-1810a0338931",
+                      "type": "waitUntil",
+                      "condition": [
+                        "if loc.defiladeRequest:IsReady() then",
+                        "    loc.defilade = loc.defiladeRequest:Value()",
+                        "    return true",
+                        "end",
+                        "return false"
+                      ]
+                    },
+                    {
+                      "name": "Send rays",
+                      "id": "40ec7a1e-a8c7-45d2-85a8-b7fc9397fa42",
+                      "type": "scriptAction",
+                      "script": [
+                        "local correction = Vec3(0,0,1.8)",
+                        "",
+                        "loc.raycastRequests = {}",
+                        "loc.raycasts = {}",
+                        "",
+                        "for i=1, #loc.defilade do",
+                        "    loc.raycastRequests[i] = Raycast(",
+                        "        loc.defilade[i].position + correction, ",
+                        "        arg.orderData.entityToFireAt:GetPosition()",
+                        "    ) ",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "Wait until rays request done",
+                      "id": "04e3cf2b-7c9a-4b17-8baa-273e0ec65a63",
+                      "type": "waitUntil",
+                      "condition": [
+                        "for i = 1, #loc.raycastRequests do",
+                        "    if not loc.raycastRequests[i]:IsReady() then",
+                        "        return false",
+                        "    end",
+                        "    loc.raycasts[i] = loc.raycastRequests[i]:Value()",
+                        "end",
+                        "return true"
+                      ]
+                    },
+                    {
+                      "name": "Check visibility",
+                      "id": "3b42a0d5-4fd4-43ae-87ec-34714daf6cc8",
+                      "type": "scriptAction",
+                      "script": [
+                        "local CORRECTION = Vec3(0,0,1.8)",
+                        "local BIAS = 1",
+                        "local goalPos = arg.orderData.entityToFireAt:GetPosition()",
+                        "",
+                        "for i = 1, #loc.raycasts do",
+                        "    local actualDistance = goalPos:Distance(loc.defilade[i].position)",
+                        "    local rayDistance = loc.raycasts[i]",
+                        "    if math.abs(actualDistance - rayDistance) < BIAS then",
+                        "        loc.defiladePos = loc.defilade[i]",
+                        "        loc.raycastValue = loc.raycasts[i]",
+                        "        break",
+                        "    end",
+                        "end"
+                      ]
+                    },
+                    {
+                      "name": "Move",
+                      "id": "70181512-da7c-4ad1-813c-fa55b817f00a",
+                      "type": "move",
+                      "decorators": [
+                        {
+                          "id": "718a5db7-f86d-4013-8c35-3260c864cc38",
+                          "type": "scriptCondition",
+                          "name": "If we have defilade point to move",
+                          "script": [
+                            "if loc.defiladePos ~= nil then",
+                            "    return true",
+                            "end",
+                            "return false"
+                          ]
+                        }
+                      ],
+                      "position": [
+                        "return loc.defiladePos.position"
+                      ]
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "69ef3458-d4a4-4a91-8061-47aaa48e52e2",
+                      "type": "scriptCondition",
+                      "name": "if we don't see enemies",
+                      "script": [
+                        "",
+                        "local enemy = arg.orderData.entityToFireAt",
+                        "if enemy ~= nil and enemy:GetHealth() > 0 and not self:IsVisible(enemy) then",
+                        "\treturn true",
+                        "end",
+                        "",
+                        "arg.orderData.entityToFireAt = nil",
+                        "return false"
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "Check back",
+                  "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
+                  "type": "scriptAction",
+                  "script": [
+                    "self:ReqHeadingAtPos(arg.orderData.startPos)"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "b3828376-f4b8-4e78-bada-cb5b85a344af",
+                  "type": "scriptCondition",
+                  "name": "If state is Cover",
+                  "script": [
+                    "return arg.orderData.state == loc.cover"
+                  ]
+                }
+              ],
+              "active": true
             }
           ],
           "decorators": [
             {
-              "id": "b3828376-f4b8-4e78-bada-cb5b85a344af",
-              "type": "scriptCondition",
-              "name": "If state is Cover",
-              "script": [
-                "return arg.orderData.state == loc.cover"
-              ]
+              "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
+              "type": "loopForever",
+              "name": "Loop forever"
             }
           ],
           "active": true
-        }
-      ],
-      "decorators": [
+        },
         {
-          "id": "e1bb1c67-ee19-4619-ab15-f75a0c4538a0",
-          "type": "loopForever",
-          "name": "Loop forever"
+          "name": "Debug defillade",
+          "id": "a0322c70-4cf7-44c0-aa99-a361041b4f02",
+          "type": "scriptAction",
+          "script": [
+            "if loc.defilade ~= nil then",
+            "    for i=1, #loc.defilade do",
+            "        local pointData = loc.defilade[i]",
+            "        DebugLine(",
+            "            pointData.position,",
+            "            pointData.position + Vec3(0, 0, pointData.height),",
+            "            1,0,0,1",
+            "        )",
+            "    end",
+            "end"
+          ]
         }
-      ],
-      "active": true
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "Setup variables",
+      "id": "f72f3b38-6f56-4c37-a1b1-d504a4526d86",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "f72f3b38-6f56-4c37-a1b1-d504a4526d86",
+            "position": "1560.5,595.723244444444"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "arg.orderData.enemyToFireAt = nil"
+      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "8c16dc86-ff9a-4b75-aa3e-79406f4b9663",
-        "position": "1873,325.923244444444"
+        "position": "1873,370.723244444444"
       },
       {
         "id": "a80dde81-a0d3-44cd-886e-f20eaedc5a88",
-        "position": "1544.85714285714,551.780844444444"
+        "position": "1069.85714285714,584.080844444444"
       },
       {
         "id": "1f6e51f8-a9fe-4da3-b136-cbe9b524c68c",
-        "position": "1369.85714285714,664.280844444444"
+        "position": "894.85714285714,696.580844444444"
       },
       {
         "id": "da31f041-cf3e-455a-a0b4-aab8d14be0f2",
-        "position": "1760.5,675.923244444444"
+        "position": "1285.5,708.223244444444"
+      },
+      {
+        "id": "a0517f56-c4b2-4d6c-a969-b0a9570cf930",
+        "position": "2197.4246031746,481.889911111111"
       },
       {
         "id": "69b152a6-fb93-4230-9739-6a1e13505116",
-        "position": "2110.5,638.423244444444"
+        "position": "2110.5,683.223244444444"
       },
       {
         "id": "a4aaab0f-fae4-4d4a-a9a0-9514db0396bb",
-        "position": "1385.5,988.423244444444"
+        "position": "1385.5,1033.22324444444"
       },
       {
         "id": "28c1ecba-f932-4f97-a9d3-26e59d785004",
-        "position": "2110.5,963.423244444444"
+        "position": "2110.5,1008.22324444444"
       },
       {
         "id": "caa288fe-0bda-4ac9-bc9a-e2103abedfd3",
-        "position": "2110.5,1163.42324444444"
+        "position": "2110.5,1208.22324444444"
       },
       {
         "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-        "position": "1798,1350.92324444444"
+        "position": "1798,1395.72324444444"
       },
       {
         "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-        "position": "2110.5,1325.92324444444"
+        "position": "2110.5,1370.72324444444"
       },
       {
         "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
-        "position": "2360.5,1363.42324444444"
+        "position": "2360.5,1408.22324444444"
       },
       {
         "id": "bf2a76ff-4094-4578-b945-3ac286872d6c",
-        "position": "2535.5,1163.42324444444"
+        "position": "2535.5,1208.22324444444"
       },
       {
         "id": "6510460c-67c2-48ca-811a-e8fa85d7d475",
-        "position": "3285.5,925.923244444444"
+        "position": "3285.5,970.723244444444"
       },
       {
         "id": "826bdcec-cdd9-4224-8674-d5b49b68c511",
-        "position": "2985.5,1313.42324444444"
+        "position": "2735.5,1283.22324444444"
+      },
+      {
+        "id": "c1424613-fc4a-4dc3-bbf8-5b42bc6710c4",
+        "position": "3110.5,1295.72324444444"
+      },
+      {
+        "id": "a57f07d0-b04f-4578-abd8-15abab25ae39",
+        "position": "2960.5,1533.22324444444"
+      },
+      {
+        "id": "d7d62bdc-afa4-4d30-a50d-49c2025d86f2",
+        "position": "2998,1595.72324444444"
+      },
+      {
+        "id": "d7239daf-1f2a-4a0f-b7cb-753fbffde503",
+        "position": "3073,1658.22324444444"
+      },
+      {
+        "id": "a9ca2f0e-aa0c-4bab-be6d-1810a0338931",
+        "position": "3110.5,1733.22324444444"
+      },
+      {
+        "id": "40ec7a1e-a8c7-45d2-85a8-b7fc9397fa42",
+        "position": "3223,1795.72324444444"
+      },
+      {
+        "id": "04e3cf2b-7c9a-4b17-8baa-273e0ec65a63",
+        "position": "3273,1858.22324444444"
+      },
+      {
+        "id": "3b42a0d5-4fd4-43ae-87ec-34714daf6cc8",
+        "position": "3360.5,1920.72324444444"
+      },
+      {
+        "id": "70181512-da7c-4ad1-813c-fa55b817f00a",
+        "position": "3423,1508.22324444444"
       },
       {
         "id": "5f538793-5f99-412e-ac99-d5eadc7b08f6",
-        "position": "3485.5,1300.92324444444"
+        "position": "3923,1295.72324444444"
+      },
+      {
+        "id": "a0322c70-4cf7-44c0-aa99-a361041b4f02",
+        "position": "2535.5,608.223244444444"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "6032,3818.42324444444",
-    "gridPadding": "10.5,0.923244444444347"
+    "canvasSize": "6032,3863.22324444444",
+    "gridPadding": "10.5,8.2232444444443"
   },
   "parameters": [
     {
@@ -301,6 +549,14 @@
     "cover": "\"cover\"",
     "reactRadius": "30",
     "moveOrderComplete": "false",
-    "enemies": "nil"
+    "enemies": "nil",
+    "path": "nil",
+    "pathRequest": "nil",
+    "defilade": "nil",
+    "defiladePos": "nil",
+    "raycasts": "nil",
+    "raycastRequests": "nil",
+    "raycastValue": "-1",
+    "defiladeRequest": "nil"
   }
 }
