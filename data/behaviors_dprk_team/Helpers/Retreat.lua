@@ -26,7 +26,6 @@ return {
         for _, soldierData in ipairs(updateData) do
             if soldierData.unit == finishedEntity then
                 soldierData.hasDoneOrder = true
-                DebugLog("Unit at index " .. soldierData.index .. " marked as DONE.")
                 break
             end
         end

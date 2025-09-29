@@ -12,7 +12,6 @@
         "",
         "local group = self",
         "local count = group:GetEntityCount()",
-        "DebugLog(\"Count: \" .. count)",
         "",
         "for i = 0, count - 1 do",
         "    local soldier = group:GetEntity(i)",
@@ -23,10 +22,8 @@
         "            state = \"unknown\",",
         "            hasDoneOrder = false",
         "        })",
-        "        DebugLog(\"Soldier: \" .. soldier)",
         "    end",
-        "end",
-        "DebugLog(\"------------\")"
+        "end"
       ]
     },
     {
@@ -44,9 +41,7 @@
         "    else",
         "        soldierData.state = loc.cover",
         "    end",
-        "    DebugLog(\"Unit \" .. i .. \" assigned state: \" .. soldierData.state)",
-        "end",
-        "DebugLog(\"------------\")"
+        "end"
       ]
     },
     {
@@ -301,7 +296,7 @@
                         "if loc.covers ~= nil then",
                         "    for i, cover in ipairs(loc.covers) do",
                         "        if cover.edgeStart and cover.edgeEnd then",
-                        "            if loc.previousCoverSpot ~= nil and loc.previousCoverSpot:Distance(cover.position) < avoidanceRadius then",
+                        "            if loc.previousCoverSpot ~= nil and loc.previousCoverSpot.position:Distance(cover.position) < avoidanceRadius then",
                         "                goto continue",
                         "            end",
                         "            ",
@@ -434,8 +429,6 @@
             "        local health = data.unit:GetHealth()",
             "        if health <= 0 then",
             "            data.state = loc.deadState",
-            "            DebugLog(\"SOLDIER DEAD: \" .. tostring(data.unit))",
-            "            DebugLog(\"------------\")",
             "        end",
             "    end",
             "end"
@@ -447,27 +440,19 @@
           "type": "messageHandler",
           "handler": [
             "local message = msg",
-            "DebugLog(\"Retreat order\")",
-            "DebugLog(message.subject)",
             "if message.value then",
             "    for k, v in pairs(message.value) do",
-            "        DebugLog(k .. \": \" .. tostring(v))",
             "    end",
             "end",
             "",
             "if message.subject == loc.moveOrderCompleted then",
-            "    DebugLog(\"Move order completed\")",
             "    local finishedEntity = message.value[1]",
             "    loc.orderReady = CheckMoveOrderUpdate(loc.updateData, finishedEntity, loc.cover, loc.move)",
             "    if (loc.orderReady) then",
-            "        DebugLog(\"ORDER READY FULLY, SWITCH ROLES\")",
             "        SwitchRoles(loc.updateData, loc.cover, loc.move)",
             "    end",
             "",
-            "end",
-            "    ",
-            "",
-            "DebugLog(\"------------\")"
+            "end"
           ]
         },
         {
@@ -584,13 +569,11 @@
         "",
         "if soldierCount ~= 1 then",
         "    if IsRoleDead(loc.updateData, loc.cover) or IsRoleDead(loc.updateData, loc.move) then",
-        "        DebugLog(\"RESTART RESTART RESTART\")",
         "        return true",
         "    end",
         "end",
         "",
         "if IsAnyoneDeleted(loc.updateData) then",
-        "    DebugLog(\"Someone got deleted, restart\")",
         "    return true",
         "end",
         "",

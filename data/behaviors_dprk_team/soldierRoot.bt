@@ -162,7 +162,7 @@
           "type": "messageHandler",
           "handler": [
             "local message = msg",
-            "",
+            "--[[",
             "DebugLog(\"SOLDIER ORDER START: \" .. tostring(self))",
             "",
             "if message.value then",
@@ -172,7 +172,7 @@
             "end",
             "",
             "DebugLog(\"------------\")",
-            "",
+            "]]--",
             "if message.value.orderName == nil then return end",
             "",
             "loc.orderData = message.value",
