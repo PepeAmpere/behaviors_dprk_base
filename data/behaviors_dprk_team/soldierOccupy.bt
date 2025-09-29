@@ -234,10 +234,10 @@
                       "script": [
                         "local enemyPos = arg.orderData.entityToFireAt:GetPosition()",
                         "local vertices = {",
-                        "    enemyPos + Vec3 (10, 10, 0),",
-                        "    enemyPos + Vec3 (10, -10, 0),",
-                        "    enemyPos + Vec3 (-10, 10, 0),",
-                        "    enemyPos + Vec3 (-10, -10, 0),",
+                        "    enemyPos + Vec3 (20, 20, 0),",
+                        "    enemyPos + Vec3 (20, -20, 0),",
+                        "    enemyPos + Vec3 (-20, 20, 0),",
+                        "    enemyPos + Vec3 (-20, -20, 0),",
                         "}",
                         "",
                         "local polygon = Polygon(vertices)",
@@ -423,6 +423,23 @@
       "script": [
         "arg.orderData.enemyToFireAt = nil"
       ]
+    },
+    {
+      "name": "Wait",
+      "id": "accd5931-7948-4023-a2d0-9118e6dfa053",
+      "type": "wait",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "accd5931-7948-4023-a2d0-9118e6dfa053",
+            "position": "2173,1433.22324444444"
+          }
+        ],
+        "editorObjects": []
+      },
+      "time": [
+        "1"
+      ]
     }
   ],
   "meta": {
@@ -465,11 +482,11 @@
       },
       {
         "id": "7edf9073-0aac-49c1-8319-dc926a170a2b",
-        "position": "1798,1395.72324444444"
+        "position": "1623,1408.22324444444"
       },
       {
         "id": "339f5b79-b21c-42b7-930c-0cb7ecb134fd",
-        "position": "2110.5,1370.72324444444"
+        "position": "1935.5,1383.22324444444"
       },
       {
         "id": "93a3dc70-5950-42f0-8892-d9a857d71def",
