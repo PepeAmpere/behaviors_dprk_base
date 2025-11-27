@@ -1,0 +1,28 @@
+{
+  "author" : "STUDENT",
+  "color" : "#00deff",
+  "description" : "",
+  "displayName" : "unit-tests-2025-Advance",
+  "editorContent" : true,
+  "geoContent" : true,
+  "hash" : "daae95b49a805510c049f233a33fbfff167854a3",
+  "id" : "unit-tests-2025-Advance",
+  "isTraining" : false,
+  "numPlayableUnits" : 53,
+  "numPlayerUnits" : 0,
+  "planContent" : false,
+  "posLatLongAlt" : 
+  [
+    49.17225,
+    11.9837,
+    348.93559
+  ],
+  "readOnly" : false,
+  "tags" : [],
+  "timestamp" : "2025.11.27 09:38:31",
+  "virtualFolderStructure" : 
+  {
+    "category" : "",
+    "subcategory" : ""
+  }
+}

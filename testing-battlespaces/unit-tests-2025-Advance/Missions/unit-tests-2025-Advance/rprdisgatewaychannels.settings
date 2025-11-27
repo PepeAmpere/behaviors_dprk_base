@@ -1,0 +1,56 @@
+lobbyvoicechannel = {
+  frequency = 1
+}
+
+voicechannels = [
+  {
+    name = "Announcement"
+    frequency = 2
+  }
+
+  {
+    name = "Dead"
+    frequency = 3
+  }
+
+  {
+    name = "Global"
+    frequency = 5
+  }
+
+  {
+    name = "Blufor"
+    frequency = 6
+  }
+
+  {
+    name = "Opfor"
+    frequency = 7
+  }
+
+  {
+    name = "Civilian"
+    frequency = 8
+  }
+
+  {
+    name = "Independent"
+    frequency = 9
+  }
+
+]
+
+radiochannels = [
+  {
+    name = "Intercom"
+  }
+
+  {
+    name = "AdminDirectChannel"
+  }
+
+  {
+    name = "DefaultRadioChannel"
+  }
+
+]
