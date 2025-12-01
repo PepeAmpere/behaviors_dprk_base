@@ -1,0 +1,2573 @@
+class _prefix_0
+{
+	objectType="prefix";
+	class Arguments
+	{
+		TITLE="unit-tests-2025-Advance";
+		VERSION="11";
+		ADDON[]=
+		{
+			"vbs2_people_us_mc_rifleman",
+			"vbs2_people_cz_cz_army_rifleman",
+			"vbs2_editor",
+			"vbs2_vbs_plugins_vbscontrol_behavioreo"
+		};
+	};
+	MapGeoCenter[]={0.85821766,0.20915502,6.0900749};
+	layers[]={};
+};
+class _group_5
+{
+	objectType="group";
+	height=-0.0025405665;
+	class Arguments
+	{
+		NAME="1-1-A-5";
+		DISPLAY_NAME="1-1-A-5";
+		DISPLAY_NAME_TREE="1-1-A-5";
+		POSITION="[999551.85967, 999332.18587, 386.48629]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+	};
+};
+class _group_6
+{
+	objectType="group";
+	height=-290.77991;
+	class Arguments
+	{
+		NAME="MAIN";
+		DISPLAY_NAME="MAIN";
+		DISPLAY_NAME_TREE="MAIN";
+		POSITION="[999606.54067, 999353.54384, 97.32996]";
+		SIDE="west";
+		SELECTED_SIDE="west";
+		CATEGORY="vbs2_au_army_d";
+		TYPE_GROUP="fireteam";
+		SIDC="SFGPUCI----B";
+		PLAYABLE="2";
+		FORMATION="Wedge";
+		GROUP_MEMBERS_NAME="";
+		GROUP_MEMBERS2="VBS2_AU_Army_Grenadier_d_F88A1";
+		PREVIEW_PIC2="\vbs2\people\au\adf_Rifleman\data\ico\preview_adf_grenadier_des_ca.paa";
+		CREATE_GROUP="";
+		SIDE_NEW="west";
+		CATEGORY_NEW="West";
+		CATEGORY_DELETE="";
+		CATEGORY_NAME="";
+		TYPE_NEW="West";
+		TYPE_DELETE="";
+		GROUP_MEMBERS="";
+		AVAILBLE_MEMBERS="";
+		MEMBER_UP="";
+		MEMBER_DOWN="";
+		ADD_MEMBER="";
+		REMOVE_MEMBER="";
+		COPY_MEMBER="";
+		EDIT_UNIT2="";
+		NEW_UNIT2="";
+		IS_EDIT="";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_7",
+			"_group_8",
+			"_group_9",
+			"_group_10"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_7
+{
+	objectType="group";
+	height=-0.0026854395;
+	class Arguments
+	{
+		NAME="1-1-A-6";
+		DISPLAY_NAME="1-1-A-6";
+		DISPLAY_NAME_TREE="1-1-A-6";
+		PARENT="_group_6";
+		POSITION="[999615.05931, 999372.79157, 389.31839]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_8
+{
+	objectType="group";
+	height=-0.0044903322;
+	class Arguments
+	{
+		NAME="1-1-A-7";
+		DISPLAY_NAME="1-1-A-7";
+		DISPLAY_NAME_TREE="1-1-A-7";
+		PARENT="_group_6";
+		POSITION="[999601.55931, 999345.79161, 387.05685]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_9
+{
+	objectType="group";
+	height=-0.004155498;
+	class Arguments
+	{
+		NAME="1-1-A-8";
+		DISPLAY_NAME="1-1-A-8";
+		DISPLAY_NAME_TREE="1-1-A-8";
+		PARENT="_group_6";
+		POSITION="[999628.55931, 999345.79158, 385.75973]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_10
+{
+	objectType="group";
+	height=-0.0034523048;
+	class Arguments
+	{
+		NAME="1-1-A-9";
+		DISPLAY_NAME="1-1-A-9";
+		DISPLAY_NAME_TREE="1-1-A-9";
+		PARENT="_group_6";
+		POSITION="[999580.98477, 999318.60192, 384.54916]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_11
+{
+	objectType="group";
+	height=-254.02789;
+	class Arguments
+	{
+		NAME="TEST-TOWN";
+		DISPLAY_NAME="TEST-TOWN";
+		DISPLAY_NAME_TREE="TEST-TOWN";
+		POSITION="[997462.02477, 995750.92337, 84.94077]";
+		SIDE="west";
+		SELECTED_SIDE="west";
+		CATEGORY="vbs2_au_army_d";
+		TYPE_GROUP="fireteam";
+		SIDC="SFGPUCI----B";
+		PLAYABLE="2";
+		FORMATION="Wedge";
+		GROUP_MEMBERS_NAME="";
+		GROUP_MEMBERS2="VBS2_AU_Army_Grenadier_d_F88A1";
+		PREVIEW_PIC2="\vbs2\people\au\adf_Rifleman\data\ico\preview_adf_grenadier_des_ca.paa";
+		CREATE_GROUP="";
+		SIDE_NEW="west";
+		CATEGORY_NEW="West";
+		CATEGORY_DELETE="";
+		CATEGORY_NAME="";
+		TYPE_NEW="West";
+		TYPE_DELETE="";
+		GROUP_MEMBERS="";
+		AVAILBLE_MEMBERS="";
+		MEMBER_UP="";
+		MEMBER_DOWN="";
+		ADD_MEMBER="";
+		REMOVE_MEMBER="";
+		COPY_MEMBER="";
+		EDIT_UNIT2="";
+		NEW_UNIT2="";
+		IS_EDIT="";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_12",
+			"_group_13",
+			"_group_14",
+			"_group_15"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_12
+{
+	objectType="group";
+	height=-0.0015941113;
+	class Arguments
+	{
+		NAME="1-1-A-11";
+		DISPLAY_NAME="1-1-A-11";
+		DISPLAY_NAME_TREE="1-1-A-11";
+		PARENT="_group_11";
+		POSITION="[997468.77477, 995770.12369, 339.76162]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_13
+{
+	objectType="group";
+	height=-0.0015258203;
+	class Arguments
+	{
+		NAME="1-1-A-12";
+		DISPLAY_NAME="1-1-A-12";
+		DISPLAY_NAME_TREE="1-1-A-12";
+		PARENT="_group_11";
+		POSITION="[997455.27477, 995743.12368, 338.55719]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_14
+{
+	objectType="group";
+	height=-0.0011646582;
+	class Arguments
+	{
+		NAME="1-1-A-13";
+		DISPLAY_NAME="1-1-A-13";
+		DISPLAY_NAME_TREE="1-1-A-13";
+		PARENT="_group_11";
+		POSITION="[997482.27477, 995743.12370, 338.59286]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_15
+{
+	objectType="group";
+	height=-0.0027161231;
+	class Arguments
+	{
+		NAME="1-1-A-14";
+		DISPLAY_NAME="1-1-A-14";
+		DISPLAY_NAME_TREE="1-1-A-14";
+		PARENT="_group_11";
+		POSITION="[997441.77477, 995716.12371, 337.09906]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_16
+{
+	objectType="group";
+	height=-260.00449;
+	class Arguments
+	{
+		NAME="TEST-RIVER";
+		DISPLAY_NAME="TEST-RIVER";
+		DISPLAY_NAME_TREE="TEST-RIVER";
+		POSITION="[997551.04792, 995506.40840, 86.48465]";
+		SIDE="WEST";
+		CATEGORY="structure_groups";
+		SIDC="SFGPUCI----B";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_17",
+			"_group_18",
+			"_group_19",
+			"_group_20"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_17
+{
+	objectType="group";
+	height=-0.007053867;
+	class Arguments
+	{
+		NAME="1-1-A-15";
+		DISPLAY_NAME="1-1-A-15";
+		DISPLAY_NAME_TREE="1-1-A-15";
+		PARENT="_group_16";
+		POSITION="[997557.66509, 995526.06938, 345.93716]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_18
+{
+	objectType="group";
+	height=-0.028659198;
+	class Arguments
+	{
+		NAME="1-1-A-16";
+		DISPLAY_NAME="1-1-A-16";
+		DISPLAY_NAME_TREE="1-1-A-16";
+		PARENT="_group_16";
+		POSITION="[997544.16509, 995499.06936, 344.74252]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_19
+{
+	objectType="group";
+	height=-0.0092207808;
+	class Arguments
+	{
+		NAME="1-1-A-17";
+		DISPLAY_NAME="1-1-A-17";
+		DISPLAY_NAME_TREE="1-1-A-17";
+		PARENT="_group_16";
+		POSITION="[997571.16509, 995499.06939, 352.59283]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_20
+{
+	objectType="group";
+	height=0.010068896;
+	class Arguments
+	{
+		NAME="1-1-A-18";
+		DISPLAY_NAME="1-1-A-18";
+		DISPLAY_NAME_TREE="1-1-A-18";
+		PARENT="_group_16";
+		POSITION="[997531.19641, 995470.22679, 347.31320]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_21
+{
+	objectType="group";
+	height=-259.50638;
+	class Arguments
+	{
+		NAME="TEST-HILL";
+		DISPLAY_NAME="TEST-HILL";
+		DISPLAY_NAME_TREE="TEST-HILL";
+		POSITION="[997228.42419, 998975.06080, 86.92795]";
+		SIDE="WEST";
+		CATEGORY="structure_groups";
+		SIDC="SFGPUCI----B";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_22",
+			"_group_23",
+			"_group_24",
+			"_group_25"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_22
+{
+	objectType="group";
+	height=-0.086311378;
+	class Arguments
+	{
+		NAME="1-1-A-19";
+		DISPLAY_NAME="1-1-A-19";
+		DISPLAY_NAME_TREE="1-1-A-19";
+		PARENT="_group_21";
+		POSITION="[997217.87969, 998991.56049, 347.71035]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_23
+{
+	objectType="group";
+	height=-0.0011915137;
+	class Arguments
+	{
+		NAME="1-1-A-20";
+		DISPLAY_NAME="1-1-A-20";
+		DISPLAY_NAME_TREE="1-1-A-20";
+		PARENT="_group_21";
+		POSITION="[997204.37969, 998964.56048, 343.08911]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_24
+{
+	objectType="group";
+	height=-0.001349668;
+	class Arguments
+	{
+		NAME="1-1-A-21";
+		DISPLAY_NAME="1-1-A-21";
+		DISPLAY_NAME_TREE="1-1-A-21";
+		PARENT="_group_21";
+		POSITION="[997231.37969, 998964.56048, 345.24981]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_25
+{
+	objectType="group";
+	height=-0.0028775586;
+	class Arguments
+	{
+		NAME="1-1-A-22";
+		DISPLAY_NAME="1-1-A-22";
+		DISPLAY_NAME_TREE="1-1-A-22";
+		PARENT="_group_21";
+		POSITION="[997260.05770, 998948.36306, 344.15087]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_26
+{
+	objectType="group";
+	height=-299.27301;
+	class Arguments
+	{
+		NAME="TEST-TOWN-TO-TOWN";
+		DISPLAY_NAME="TEST-TOWN-TO-TOWN";
+		DISPLAY_NAME_TREE="TEST-TOWN-TO-TOWN";
+		POSITION="[998214.70715, 1001921.09255, 99.62671]";
+		SIDE="WEST";
+		CATEGORY="structure_groups";
+		SIDC="SFGPUCI----B";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_27",
+			"_group_28",
+			"_group_29",
+			"_group_30"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_27
+{
+	objectType="group";
+	height=0.0008223633;
+	class Arguments
+	{
+		NAME="1-1-A-23";
+		DISPLAY_NAME="1-1-A-23";
+		DISPLAY_NAME_TREE="1-1-A-23";
+		PARENT="_group_26";
+		POSITION="[998221.45715, 1001940.29289, 398.50540]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_28
+{
+	objectType="group";
+	height=-0.00016146485;
+	class Arguments
+	{
+		NAME="1-1-A-24";
+		DISPLAY_NAME="1-1-A-24";
+		DISPLAY_NAME_TREE="1-1-A-24";
+		PARENT="_group_26";
+		POSITION="[998207.95715, 1001913.29287, 399.07009]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_29
+{
+	objectType="group";
+	height=-0.00025112304;
+	class Arguments
+	{
+		NAME="1-1-A-25";
+		DISPLAY_NAME="1-1-A-25";
+		DISPLAY_NAME_TREE="1-1-A-25";
+		PARENT="_group_26";
+		POSITION="[998234.95715, 1001913.29289, 399.92965]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_30
+{
+	objectType="group";
+	height=0.00069920899;
+	class Arguments
+	{
+		NAME="1-1-A-26";
+		DISPLAY_NAME="1-1-A-26";
+		DISPLAY_NAME_TREE="1-1-A-26";
+		PARENT="_group_26";
+		POSITION="[998194.45715, 1001886.29288, 402.24426]";
+		SIDE="WEST";
+		CATEGORY="";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _unit_35
+{
+	objectType="unit";
+	height=-0.0011646582;
+	class Arguments
+	{
+		OME_ID="32";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997482.27477, 995743.12370, 338.59286]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_14";
+	};
+};
+class _unit_36
+{
+	objectType="unit";
+	height=-0.00091530272;
+	class Arguments
+	{
+		OME_ID="69";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997477.77477, 995734.12368, 338.24527]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_35";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_14";
+	};
+};
+class _unit_37
+{
+	objectType="unit";
+	height=-0.00092080078;
+	class Arguments
+	{
+		OME_ID="94";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997486.77477, 995734.12370, 338.35290]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_35";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_14";
+	};
+};
+class _unit_38
+{
+	objectType="unit";
+	height=0.00088414061;
+	class Arguments
+	{
+		OME_ID="160";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997472.83420, 995724.34023, 337.75064]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_35";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_14";
+	};
+};
+class _unit_39
+{
+	objectType="unit";
+	height=-0.0027161231;
+	class Arguments
+	{
+		OME_ID="195";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997441.77477, 995716.12371, 337.09906]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_15";
+	};
+};
+class _unit_40
+{
+	objectType="unit";
+	height=-0.0018391211;
+	class Arguments
+	{
+		OME_ID="232";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997437.27477, 995707.12369, 337.13726]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_39";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_15";
+	};
+};
+class _unit_41
+{
+	objectType="unit";
+	height=-0.0011046093;
+	class Arguments
+	{
+		OME_ID="257";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997446.27477, 995707.12370, 337.04162]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_39";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_15";
+	};
+};
+class _unit_42
+{
+	objectType="unit";
+	height=-0.002048037;
+	class Arguments
+	{
+		OME_ID="323";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997432.77477, 995698.12368, 337.17944]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_39";
+		DISPLAY_NAME="(PL) AT Gunner - SMAW";
+		DISPLAY_NAME_TREE="(PL) AT Gunner - SMAW";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_15";
+	};
+};
+class _unit_22
+{
+	objectType="unit";
+	height=-0.004155498;
+	class Arguments
+	{
+		OME_ID="356";
+		SIDE="west";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999628.55931, 999345.79158, 385.75973]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_9";
+	};
+};
+class _unit_23
+{
+	objectType="unit";
+	height=-0.0042798826;
+	class Arguments
+	{
+		OME_ID="393";
+		SIDE="west";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999624.05931, 999336.79161, 384.64135]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_22";
+		DISPLAY_NAME="Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_9";
+	};
+};
+class _unit_24
+{
+	objectType="unit";
+	height=-0.0043042088;
+	class Arguments
+	{
+		OME_ID="418";
+		SIDE="west";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999633.05931, 999336.79158, 384.39276]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_22";
+		DISPLAY_NAME="Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_9";
+	};
+};
+class _unit_25
+{
+	objectType="unit";
+	height=-0.0028386817;
+	class Arguments
+	{
+		OME_ID="484";
+		SIDE="west";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999619.55931, 999327.79161, 383.64331]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_22";
+		DISPLAY_NAME="Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_9";
+	};
+};
+class _unit_26
+{
+	objectType="unit";
+	height=-0.0034523048;
+	class Arguments
+	{
+		OME_ID="519";
+		SIDE="west";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999580.98477, 999318.60192, 384.54916]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_10";
+	};
+};
+class _unit_43
+{
+	objectType="unit";
+	height=-0.007053867;
+	class Arguments
+	{
+		OME_ID="556";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997557.66509, 995526.06938, 345.93716]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_17";
+	};
+};
+class _unit_44
+{
+	objectType="unit";
+	height=-0.028659198;
+	class Arguments
+	{
+		OME_ID="593";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997544.16509, 995499.06936, 344.74252]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_18";
+	};
+};
+class _unit_45
+{
+	objectType="unit";
+	height=-0.026161533;
+	class Arguments
+	{
+		OME_ID="630";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997539.66509, 995490.06935, 345.25341]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_44";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_18";
+	};
+};
+class _unit_46
+{
+	objectType="unit";
+	height=-0.007512656;
+	class Arguments
+	{
+		OME_ID="655";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997548.66509, 995490.06939, 348.38946]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_44";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_18";
+	};
+};
+class _unit_47
+{
+	objectType="unit";
+	height=-0.028901817;
+	class Arguments
+	{
+		OME_ID="721";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997535.16509, 995481.06937, 345.88571]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_44";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_18";
+	};
+};
+class _unit_48
+{
+	objectType="unit";
+	height=-0.0092207808;
+	class Arguments
+	{
+		OME_ID="756";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997571.16509, 995499.06939, 352.59283]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_19";
+	};
+};
+class _unit_49
+{
+	objectType="unit";
+	height=-0.0081798928;
+	class Arguments
+	{
+		OME_ID="793";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997566.66509, 995490.06939, 352.71646]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_48";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_19";
+	};
+};
+class _unit_50
+{
+	objectType="unit";
+	height=-0.0090087503;
+	class Arguments
+	{
+		OME_ID="818";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997575.66509, 995490.06938, 355.25271]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_48";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_19";
+	};
+};
+class _unit_51
+{
+	objectType="unit";
+	height=-0.0080259861;
+	class Arguments
+	{
+		OME_ID="884";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997562.16509, 995481.06937, 353.01886]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_48";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_19";
+	};
+};
+class _unit_52
+{
+	objectType="unit";
+	height=0.010068896;
+	class Arguments
+	{
+		OME_ID="919";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997531.19641, 995470.22679, 347.31320]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_20";
+	};
+};
+class _unit_53
+{
+	objectType="unit";
+	height=-0.022345068;
+	class Arguments
+	{
+		OME_ID="956";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997526.16509, 995463.06939, 346.73385]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_52";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_20";
+	};
+};
+class _unit_54
+{
+	objectType="unit";
+	height=-0.0073289648;
+	class Arguments
+	{
+		OME_ID="981";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997535.16509, 995463.06938, 349.27386]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_52";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_20";
+	};
+};
+class _unit_55
+{
+	objectType="unit";
+	height=-0.012726699;
+	class Arguments
+	{
+		OME_ID="1047";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997521.66509, 995454.06938, 347.03189]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_52";
+		DISPLAY_NAME="(PL) AT Gunner - SMAW";
+		DISPLAY_NAME_TREE="(PL) AT Gunner - SMAW";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_20";
+	};
+};
+class _unit_27
+{
+	objectType="unit";
+	height=-0.0025342188;
+	class Arguments
+	{
+		OME_ID="1080";
+		SIDE="west";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999576.48477, 999309.60195, 383.87979]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_26";
+		DISPLAY_NAME="Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_10";
+	};
+};
+class _unit_28
+{
+	objectType="unit";
+	height=-0.0026913867;
+	class Arguments
+	{
+		OME_ID="1105";
+		SIDE="west";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999585.48477, 999309.60193, 383.46673]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_26";
+		DISPLAY_NAME="Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_10";
+	};
+};
+class _unit_29
+{
+	objectType="unit";
+	height=-0.0037593751;
+	class Arguments
+	{
+		OME_ID="1171";
+		SIDE="west";
+		TYPE="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999577.76815, 999303.85510, 383.50210]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_26";
+		DISPLAY_NAME="AT Gunner - SMAW";
+		DISPLAY_NAME_TREE="AT Gunner - SMAW";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_10";
+	};
+};
+class _unit_16
+{
+	objectType="unit";
+	height=-0.0025405665;
+	class Arguments
+	{
+		OME_ID="1201";
+		SIDE="west";
+		TYPE="vbs_cz_army_leader_des_m_medium_none_none_cz805a1_none";
+		PLAYABLE="true";
+		PLAYABILITY="Playable";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999551.85967, 999332.18587, 386.48629]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - CZ805A1";
+		DISPLAY_NAME_TREE="(PL) Leader - CZ805A1";
+		PARENT="_group_5";
+	};
+};
+class _unit_17
+{
+	objectType="unit";
+	height=-0.0026854395;
+	class Arguments
+	{
+		OME_ID="1230";
+		SIDE="west";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999615.05931, 999372.79157, 389.31839]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_7";
+	};
+};
+class _unit_56
+{
+	objectType="unit";
+	height=-0.086311378;
+	class Arguments
+	{
+		OME_ID="1267";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997217.87969, 998991.56049, 347.71035]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_22";
+	};
+};
+class _unit_57
+{
+	objectType="unit";
+	height=-0.0011915137;
+	class Arguments
+	{
+		OME_ID="1304";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997204.37969, 998964.56048, 343.08911]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_23";
+	};
+};
+class _unit_58
+{
+	objectType="unit";
+	height=-0.0012272266;
+	class Arguments
+	{
+		OME_ID="1341";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997199.87969, 998955.56049, 342.34118]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_57";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_23";
+	};
+};
+class _unit_59
+{
+	objectType="unit";
+	height=-0.0012582128;
+	class Arguments
+	{
+		OME_ID="1366";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997208.87969, 998955.56048, 342.91491]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_57";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_23";
+	};
+};
+class _unit_60
+{
+	objectType="unit";
+	height=-6.1289065e-05;
+	class Arguments
+	{
+		OME_ID="1432";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997195.64510, 998947.14439, 341.86676]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_57";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_23";
+	};
+};
+class _unit_61
+{
+	objectType="unit";
+	height=-0.001349668;
+	class Arguments
+	{
+		OME_ID="1467";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997231.37969, 998964.56048, 345.24981]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_24";
+	};
+};
+class _unit_62
+{
+	objectType="unit";
+	height=-0.0013148828;
+	class Arguments
+	{
+		OME_ID="1504";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997226.87969, 998955.56048, 344.03494]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_61";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_24";
+	};
+};
+class _unit_63
+{
+	objectType="unit";
+	height=-0.0015001172;
+	class Arguments
+	{
+		OME_ID="1529";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997235.87969, 998955.56048, 344.44662]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_61";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_24";
+	};
+};
+class _unit_64
+{
+	objectType="unit";
+	height=-0.0012558594;
+	class Arguments
+	{
+		OME_ID="1595";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997222.37969, 998946.56049, 343.34225]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_61";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_24";
+	};
+};
+class _unit_65
+{
+	objectType="unit";
+	height=-0.0028775586;
+	class Arguments
+	{
+		OME_ID="1630";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997260.05770, 998948.36306, 344.15087]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_25";
+	};
+};
+class _unit_66
+{
+	objectType="unit";
+	height=-0.00070457032;
+	class Arguments
+	{
+		OME_ID="1667";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997259.45640, 998934.65510, 342.91348]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_65";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_25";
+	};
+};
+class _unit_67
+{
+	objectType="unit";
+	height=0.0029273634;
+	class Arguments
+	{
+		OME_ID="1692";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997263.89623, 998938.36556, 343.02313]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_65";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_25";
+	};
+};
+class _unit_68
+{
+	objectType="unit";
+	height=-0.0018028613;
+	class Arguments
+	{
+		OME_ID="1758";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997252.45367, 998934.13251, 343.36688]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_65";
+		DISPLAY_NAME="(PL) AT Gunner - SMAW";
+		DISPLAY_NAME_TREE="(PL) AT Gunner - SMAW";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_25";
+	};
+};
+class _unit_18
+{
+	objectType="unit";
+	height=-0.0044903322;
+	class Arguments
+	{
+		OME_ID="1791";
+		SIDE="west";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999601.55931, 999345.79161, 387.05685]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_8";
+	};
+};
+class _unit_19
+{
+	objectType="unit";
+	height=-0.005040918;
+	class Arguments
+	{
+		OME_ID="1828";
+		SIDE="west";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999597.05931, 999336.79160, 385.82815]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_18";
+		DISPLAY_NAME="Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_8";
+	};
+};
+class _unit_20
+{
+	objectType="unit";
+	height=-0.0046397364;
+	class Arguments
+	{
+		OME_ID="1853";
+		SIDE="west";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999606.05931, 999336.79160, 385.33084]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_18";
+		DISPLAY_NAME="Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_8";
+	};
+};
+class _aibehavior_0
+{
+	objectType="aibehavior";
+	height=0.00039677735;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="-0.00625807617188912";
+		LINKED_TARGETS="";
+		GROUP="_group_6";
+		POSITION="[999001.40548, 999271.04666, 349.63620]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base2\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="1915";
+	};
+};
+class _unit_21
+{
+	objectType="unit";
+	height=-0.002992627;
+	class Arguments
+	{
+		OME_ID="1921";
+		SIDE="west";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		TRAINING="0";
+		EXPERIENCE="0";
+		LEADERSHIP="0";
+		ENDURANCE="0";
+		CARGO_CREATED="true";
+		POSITION="[999592.55931, 999327.79158, 384.84445]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_18";
+		DISPLAY_NAME="Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_8";
+	};
+};
+class _unit_69
+{
+	objectType="unit";
+	height=0.0008223633;
+	class Arguments
+	{
+		OME_ID="1956";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998221.45715, 1001940.29289, 398.50540]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_27";
+	};
+};
+class _unit_70
+{
+	objectType="unit";
+	height=-0.00016146485;
+	class Arguments
+	{
+		OME_ID="1993";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998207.95715, 1001913.29287, 399.07009]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_28";
+	};
+};
+class _unit_71
+{
+	objectType="unit";
+	height=0.00051722658;
+	class Arguments
+	{
+		OME_ID="2030";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998203.45715, 1001904.29289, 399.78311]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_70";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_28";
+	};
+};
+class _unit_72
+{
+	objectType="unit";
+	height=0.00041866212;
+	class Arguments
+	{
+		OME_ID="2055";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998212.45715, 1001904.29287, 399.69979]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_70";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_28";
+	};
+};
+class _unit_73
+{
+	objectType="unit";
+	height=-0.00019081055;
+	class Arguments
+	{
+		OME_ID="2121";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998198.95715, 1001895.29290, 400.83889]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_70";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_28";
+	};
+};
+class _unit_74
+{
+	objectType="unit";
+	height=-0.00025112304;
+	class Arguments
+	{
+		OME_ID="2156";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998234.95715, 1001913.29289, 399.92965]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_29";
+	};
+};
+class _unit_75
+{
+	objectType="unit";
+	height=0.00042113281;
+	class Arguments
+	{
+		OME_ID="2193";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998230.45715, 1001904.29286, 399.99151]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_74";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_29";
+	};
+};
+class _unit_76
+{
+	objectType="unit";
+	height=-3.6093748e-05;
+	class Arguments
+	{
+		OME_ID="2218";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998239.45715, 1001904.29290, 400.42721]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_74";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_29";
+	};
+};
+class _unit_77
+{
+	objectType="unit";
+	height=5.5253906e-05;
+	class Arguments
+	{
+		OME_ID="2284";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998225.95715, 1001895.29287, 400.27392]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_74";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_29";
+	};
+};
+class _unit_78
+{
+	objectType="unit";
+	height=0.00069920899;
+	class Arguments
+	{
+		OME_ID="2319";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998194.45715, 1001886.29288, 402.24426]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_30";
+	};
+};
+class _unit_79
+{
+	objectType="unit";
+	height=0.00039348632;
+	class Arguments
+	{
+		OME_ID="2356";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998189.95715, 1001877.29286, 404.10632]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_78";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_30";
+	};
+};
+class _unit_80
+{
+	objectType="unit";
+	height=0.00011474609;
+	class Arguments
+	{
+		OME_ID="2381";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998198.95715, 1001877.29290, 403.44500]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_78";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_30";
+	};
+};
+class _unit_81
+{
+	objectType="unit";
+	height=0.0013063379;
+	class Arguments
+	{
+		OME_ID="2447";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[998185.45715, 1001868.29286, 406.16131]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_78";
+		DISPLAY_NAME="(PL) AT Gunner - SMAW";
+		DISPLAY_NAME_TREE="(PL) AT Gunner - SMAW";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_30";
+	};
+};
+class _unit_30
+{
+	objectType="unit";
+	height=-0.0015941113;
+	class Arguments
+	{
+		OME_ID="2480";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997468.77477, 995770.12369, 339.76162]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_12";
+	};
+};
+class _unit_31
+{
+	objectType="unit";
+	height=-0.0015258203;
+	class Arguments
+	{
+		OME_ID="2517";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997455.27477, 995743.12368, 338.55719]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_13";
+	};
+};
+class _unit_32
+{
+	objectType="unit";
+	height=-0.0017108106;
+	class Arguments
+	{
+		OME_ID="2554";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997450.77477, 995734.12368, 337.89987]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_31";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_13";
+	};
+};
+class _unit_33
+{
+	objectType="unit";
+	height=-0.004952129;
+	class Arguments
+	{
+		OME_ID="2579";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997459.77477, 995734.12369, 337.96923]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_31";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_13";
+	};
+};
+class _unit_34
+{
+	objectType="unit";
+	height=-0.0019228613;
+	class Arguments
+	{
+		OME_ID="2645";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[997446.27477, 995725.12370, 337.67926]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_31";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_13";
+	};
+};
+class _aibehavior_1
+{
+	objectType="aibehavior";
+	height=-0.027284365;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_26";
+		POSITION="[998288.02165, 1002389.60356, 414.97769]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base2\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="2676";
+	};
+};
+class _aibehavior_2
+{
+	objectType="aibehavior";
+	height=0.004094033;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_21";
+		POSITION="[997155.59259, 999788.26372, 344.46671]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base2\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="2678";
+	};
+};
+class _aibehavior_3
+{
+	objectType="aibehavior";
+	height=-0.0053739846;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_16";
+		POSITION="[997285.09153, 995156.90538, 338.73071]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base2\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="2680";
+	};
+};
+class _aibehavior_4
+{
+	objectType="aibehavior";
+	height=0.00018495118;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="1.84570313876975e-06";
+		LINKED_TARGETS="";
+		GROUP="_group_11";
+		POSITION="[997518.53895, 995902.56073, 340.59836]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base2\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="2682";
+	};
+};
+class _postfix_0
+{
+	objectType="postfix";
+	class Arguments
+	{
+	};
+};
