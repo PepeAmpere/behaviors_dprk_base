@@ -1,0 +1,316 @@
+version=24;
+MapGeoCenter[]={0.87884551,0.28881812,8.3989};
+class Mission
+{
+	addOns[]=
+	{
+		"vbs2_people_us_mc_rifleman",
+		"vbs2_plugins_training",
+		"vbs2_people_cz_cz_army_rifleman",
+		"vbs2_editor",
+		"vbs2_vbs_plugins_vbscontrol_behavioreo"
+	};
+	addOnsAuto[]=
+	{
+		"vbs2_people_us_mc_rifleman",
+		"vbs2_plugins_training",
+		"vbs2_people_cz_cz_army_rifleman",
+		"vbs2_editor",
+		"vbs2_vbs_plugins_vbscontrol_behavioreo"
+	};
+	randomSeed=4875259;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class Groups
+	{
+		items=5;
+		class Item0
+		{
+			side="WEST";
+			name="1-1-A-4";
+			class Vehicles
+			{
+				items=4;
+				class Item0
+				{
+					position[]={999988.06,476.89227,1000036.9};
+					positionASL[]={999988.06,476.89227,1000036.9};
+					special="CAN_COLLIDE";
+					id=0;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_38";
+					sidc="";
+				};
+				class Item1
+				{
+					position[]={999988.5,478.3273,1000026.4};
+					positionASL[]={999988.5,478.3273,1000026.4};
+					special="CAN_COLLIDE";
+					id=1;
+					side="WEST";
+					vehicle="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_39";
+					sidc="";
+				};
+				class Item2
+				{
+					position[]={999996.81,477.23727,1000030.5};
+					positionASL[]={999996.81,477.23727,1000030.5};
+					special="CAN_COLLIDE";
+					id=2;
+					side="WEST";
+					vehicle="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_40";
+					sidc="";
+				};
+				class Item3
+				{
+					position[]={999988.62,479.7287,1000016.1};
+					positionASL[]={999988.62,479.7287,1000016.1};
+					special="CAN_COLLIDE";
+					id=3;
+					side="WEST";
+					vehicle="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_41";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item1
+		{
+			side="WEST";
+			name="1-1-A-5";
+			class Vehicles
+			{
+				items=4;
+				class Item0
+				{
+					position[]={999973.94,481.7261,1000010.5};
+					positionASL[]={999973.94,481.7261,1000010.5};
+					special="CAN_COLLIDE";
+					id=4;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_42";
+					sidc="";
+				};
+				class Item1
+				{
+					position[]={999974.12,483.31799,999999.56};
+					positionASL[]={999974.12,483.31799,999999.56};
+					special="CAN_COLLIDE";
+					id=5;
+					side="WEST";
+					vehicle="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_43";
+					sidc="";
+				};
+				class Item2
+				{
+					position[]={999982.31,482.32047,1000002.9};
+					positionASL[]={999982.31,482.32047,1000002.9};
+					special="CAN_COLLIDE";
+					id=6;
+					side="WEST";
+					vehicle="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_44";
+					sidc="";
+				};
+				class Item3
+				{
+					position[]={999973.88,484.76242,999989};
+					positionASL[]={999973.88,484.76242,999989};
+					special="CAN_COLLIDE";
+					id=7;
+					side="WEST";
+					vehicle="vbs_us_mc_atrifleman_wdl_m_medium_mtw_none_m16a4_smaw";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_45";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item2
+		{
+			side="WEST";
+			name="1-1-A-1";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={999892.5,487.5448,1000006.1};
+					positionASL[]={999892.5,487.5448,1000006.1};
+					special="CAN_COLLIDE";
+					id=8;
+					side="WEST";
+					vehicle="vbs_cz_army_afvcrew_wdl_m_medium_none_none_cz805a1_none";
+					player="PLAYER COMMANDER";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_0";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item3
+		{
+			side="WEST";
+			name="1-1-A-2";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={999963.19,477.39493,1000041.9};
+					positionASL[]={999963.19,477.39493,1000041.9};
+					special="CAN_COLLIDE";
+					id=9;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_33";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item4
+		{
+			side="WEST";
+			name="1-1-A-3";
+			class Vehicles
+			{
+				items=4;
+				class Item0
+				{
+					position[]={999961.12,480.05072,1000025.2};
+					positionASL[]={999961.12,480.05072,1000025.2};
+					special="CAN_COLLIDE";
+					id=10;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_34";
+					sidc="";
+				};
+				class Item1
+				{
+					position[]={999961.38,481.75916,1000014.8};
+					positionASL[]={999961.38,481.75916,1000014.8};
+					special="CAN_COLLIDE";
+					id=11;
+					side="WEST";
+					vehicle="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_35";
+					sidc="";
+				};
+				class Item2
+				{
+					position[]={999968.31,480.77597,1000018.4};
+					positionASL[]={999968.31,480.77597,1000018.4};
+					special="CAN_COLLIDE";
+					id=12;
+					side="WEST";
+					vehicle="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_36";
+					sidc="";
+				};
+				class Item3
+				{
+					position[]={999959.25,483.41412,1000004.8};
+					positionASL[]={999959.25,483.41412,1000004.8};
+					special="CAN_COLLIDE";
+					id=13;
+					side="WEST";
+					vehicle="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_37";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class Intro
+{
+	randomSeed=9325553;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=-4.4287262e-31;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class OutroWin
+{
+	randomSeed=2477564;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class OutroLoose
+{
+	randomSeed=9703305;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
