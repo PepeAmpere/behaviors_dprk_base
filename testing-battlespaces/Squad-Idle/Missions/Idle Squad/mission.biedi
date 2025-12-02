@@ -7,6 +7,7 @@ class _prefix_0
 		ADDON[]=
 		{
 			"vbs2_people_us_mc_rifleman",
+			"vbs2_people_afg_afg_man",
 			"vbs2_editor",
 			"vbs2_vbs_plugins_vbscontrol_behavioreo"
 		};
@@ -14,550 +15,219 @@ class _prefix_0
 	MapGeoCenter[]={0.87805089,0.28981419,7.1879403};
 	layers[]={};
 };
-class _group_9
+class _group_14
 {
 	objectType="group";
-	height=-0.15653878;
+	height=0.00069556641;
 	class Arguments
 	{
-		NAME="1-1-A-10";
-		DISPLAY_NAME="1-1-A-10";
-		DISPLAY_NAME_TREE="1-1-A-10";
-		POSITION="[1003219.81970, 998132.77368, 367.79622]";
-		SIDE="WEST";
-		CATEGORY="structure_groups";
-		SIDC="SFGPUCI----B";
-		COLLAPSED="FALSE";
-		CREATED_BY_PLAN="true";
-		SUBORDINATE_GROUP[]=
-		{
-			"_group_10",
-			"_group_11",
-			"_group_12"
-		};
-	};
-};
-class _group_10
-{
-	objectType="group";
-	height=0.0078424122;
-	class Arguments
-	{
-		NAME="1-1-A-6";
-		DISPLAY_NAME="1-1-A-6";
-		DISPLAY_NAME_TREE="1-1-A-6";
-		PARENT="_group_9";
-		POSITION="[1003215.59288, 998145.99877, 366.67987]";
+		NAME="1-1-A-5";
+		DISPLAY_NAME="1-1-A-5";
+		DISPLAY_NAME_TREE="1-1-A-5";
+		PARENT="";
+		POSITION="[1002853.85617, 998748.68099, 355.40249]";
 		SIDE="WEST";
 		CATEGORY="";
 		COLLAPSED="FALSE";
-		CREATED_BY_PLAN="true";
 	};
 };
-class _group_11
+class _group_15
 {
 	objectType="group";
-	height=-0.0028758789;
+	height=0.0031704102;
 	class Arguments
 	{
-		NAME="1-1-A-7";
-		DISPLAY_NAME="1-1-A-7";
-		DISPLAY_NAME_TREE="1-1-A-7";
-		PARENT="_group_9";
-		POSITION="[1003203.86249, 998128.67459, 365.65490]";
+		NAME="1-1-A-9";
+		DISPLAY_NAME="1-1-A-9";
+		DISPLAY_NAME_TREE="1-1-A-9";
+		PARENT="";
+		POSITION="[1002827.31705, 998764.60567, 354.34100]";
 		SIDE="WEST";
 		CATEGORY="";
 		IS_LEAD_GROUP="true";
 		COLLAPSED="FALSE";
-		CREATED_BY_PLAN="true";
-		TASK_CONTROLAI="";
 		SUPERIOR_GROUP_LINK="";
 		SUBORDINATE_GROUP_LINK="";
 	};
 };
-class _group_12
+class _group_18
 {
 	objectType="group";
-	height=-0.0018626368;
+	height=-0.0061421581;
 	class Arguments
 	{
-		NAME="1-1-A-8";
-		DISPLAY_NAME="1-1-A-8";
-		DISPLAY_NAME_TREE="1-1-A-8";
-		PARENT="_group_9";
-		POSITION="[1003240.00374, 998123.64769, 371.04959]";
+		NAME="1-1-A-12";
+		DISPLAY_NAME="1-1-A-12";
+		DISPLAY_NAME_TREE="1-1-A-12";
+		POSITION="[1002854.73511, 998754.08760, 354.45507]";
 		SIDE="WEST";
 		CATEGORY="";
 		COLLAPSED="FALSE";
-		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_19
+{
+	objectType="group";
+	height=-0.0002222168;
+	class Arguments
+	{
+		NAME="1-1-A-14";
+		DISPLAY_NAME="1-1-A-14";
+		DISPLAY_NAME_TREE="1-1-A-14";
+		POSITION="[1002835.07280, 998762.23922, 354.18505]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_20
+{
+	objectType="group";
+	height=-0.0029599511;
+	class Arguments
+	{
+		NAME="1-1-A-15";
+		DISPLAY_NAME="1-1-A-15";
+		DISPLAY_NAME_TREE="1-1-A-15";
+		POSITION="[1002847.46438, 998756.62298, 354.44574]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_21
+{
+	objectType="group";
+	height=-0.004738545;
+	class Arguments
+	{
+		NAME="1-1-A-16";
+		DISPLAY_NAME="1-1-A-16";
+		DISPLAY_NAME_TREE="1-1-A-16";
+		POSITION="[1002831.21703, 998719.77168, 360.31652]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_22
+{
+	objectType="group";
+	height=-0.00031180665;
+	class Arguments
+	{
+		NAME="1-1-A-11";
+		DISPLAY_NAME="1-1-A-11";
+		DISPLAY_NAME_TREE="1-1-A-11";
+		POSITION="[1002803.70522, 998747.79473, 357.52279]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_23
+{
+	objectType="group";
+	height=-0.0026312794;
+	class Arguments
+	{
+		NAME="1-1-A-17";
+		DISPLAY_NAME="1-1-A-17";
+		DISPLAY_NAME_TREE="1-1-A-17";
+		POSITION="[1002812.07240, 998745.13294, 357.56643]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_24
+{
+	objectType="group";
+	height=-0.0035721681;
+	class Arguments
+	{
+		NAME="1-1-A-18";
+		DISPLAY_NAME="1-1-A-18";
+		DISPLAY_NAME_TREE="1-1-A-18";
+		POSITION="[1002806.96263, 998745.01325, 357.72415]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_38
+{
+	objectType="group";
+	height=-0.0014348535;
+	class Arguments
+	{
+		NAME="1-1-A-19";
+		DISPLAY_NAME="1-1-A-19";
+		DISPLAY_NAME_TREE="1-1-A-19";
+		POSITION="[1002821.25000, 998754.31250, 356.07904]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+	};
+};
+class _group_95
+{
+	objectType="group";
+	height=0.0058289552;
+	class Arguments
+	{
+		NAME="1-1-A-1";
+		DISPLAY_NAME="1-1-A-1";
+		DISPLAY_NAME_TREE="1-1-A-1";
+		POSITION="[1002878.73167, 998689.15834, 360.64740]";
+		SIDE="EAST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
 		TASK_CONTROLAI="";
 		SUPERIOR_GROUP_LINK="";
 		SUBORDINATE_GROUP_LINK="";
 	};
 };
-class _aibehavior_1
+class _group_97
 {
-	objectType="aibehavior";
-	height=4.1406252e-06;
+	objectType="group";
+	height=0.0010043164;
 	class Arguments
 	{
-		DISPLAY_NAME_TREE="Defend";
-		VERSION="1";
-		BEHAVIOR="Defend";
-		FORMATION="";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="4.14062498066414e-06";
-		LINKED_TARGETS="";
-		POSITION="[1002857.62500, 998750.50000, 354.93726]";
-		AZIMUTH="351.481506347656";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
-		ICON_TEXT="Defend";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="12";
-	};
-};
-class _aibehavior_3
-{
-	objectType="aibehavior";
-	height=3.3593751e-06;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Defend";
-		VERSION="1";
-		BEHAVIOR="Defend";
-		FORMATION="";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="3.35937500040018e-06";
-		LINKED_TARGETS="";
-		POSITION="[1002308.00000, 1004649.68750, 313.91431]";
-		AZIMUTH="357.880523681641";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
-		ICON_TEXT="Defend";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="14";
-	};
-};
-class _aibehavior_4
-{
-	objectType="aibehavior";
-	height=-2.1191406e-06;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Defend";
-		VERSION="1";
-		BEHAVIOR="Defend";
-		FORMATION="";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="-2.11914061765128e-06";
-		LINKED_TARGETS="";
-		POSITION="[1003298.93750, 998222.50000, 369.23892]";
-		AZIMUTH="0.634660184383392";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
-		ICON_TEXT="Defend";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="16";
-	};
-};
-class _aibehavior_8
-{
-	objectType="aibehavior";
-	height=0.00018433594;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		BEHAVIOR_LINK="_aibehavior_9";
-		LINKED_TARGETS="";
-		POSITION="[1003314.56328, 998195.56053, 371.82599]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="18";
-	};
-};
-class _aibehavior_9
-{
-	objectType="aibehavior";
-	height=0.0014955957;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		BEHAVIOR_LINK="_aibehavior_10";
-		LINKED_TARGETS="";
-		POSITION="[1003333.93311, 998221.22089, 370.97876]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="20";
-	};
-};
-class _aibehavior_10
-{
-	objectType="aibehavior";
-	height=-0.002376836;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		LINKED_TARGETS="";
-		POSITION="[1003315.03161, 998269.16136, 366.52338]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="22";
-	};
-};
-class _unit_23
-{
-	objectType="unit";
-	height=0.0078424122;
-	class Arguments
-	{
-		OME_ID="29";
-		SIDE="west";
-		TYPE="vbs_us_mc_cbrnSoldier_levelb_wht_m_medium_none_none_none";
-		PLAYER="true";
-		PLAYABLE="true";
-		PLAYABILITY="Player";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		BG_ENDURANCE="";
-		BG_HEIGHT="";
-		BG_BMI="";
-		BG_DISPERSION="";
-		TRAINING="0";
-		EXPERIENCE="0";
-		LEADERSHIP="0";
-		ENDURANCE="0";
-		CARGO_CREATED="true";
-		POSITION="[1003215.59288, 998145.99877, 366.67987]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		DISPLAY_NAME="(P) (PL) CBRN Unit - Level A";
-		DISPLAY_NAME_TREE="(P) (PL) CBRN Unit - Level A";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_10";
-	};
-};
-class _unit_24
-{
-	objectType="unit";
-	height=-0.0028758789;
-	class Arguments
-	{
-		OME_ID="38";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003203.86249, 998128.67459, 365.65490]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
-		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_11";
-	};
-};
-class _unit_25
-{
-	objectType="unit";
-	height=-0.0034271972;
-	class Arguments
-	{
-		OME_ID="75";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003199.36249, 998119.67461, 365.32070]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_24";
-		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
-		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_11";
-	};
-};
-class _unit_26
-{
-	objectType="unit";
-	height=-0.003235254;
-	class Arguments
-	{
-		OME_ID="100";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003208.36249, 998119.67459, 367.00415]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_24";
-		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
-		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_11";
-	};
-};
-class _unit_27
-{
-	objectType="unit";
-	height=-0.0042124023;
-	class Arguments
-	{
-		OME_ID="166";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003194.86248, 998110.67459, 364.52600]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_24";
-		DISPLAY_NAME="(PL) Marksman - M14 DMR";
-		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_11";
-	};
-};
-class _unit_28
-{
-	objectType="unit";
-	height=-0.0018626368;
-	class Arguments
-	{
-		OME_ID="201";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003240.00374, 998123.64769, 371.04959]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
-		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_12";
-	};
-};
-class _unit_29
-{
-	objectType="unit";
-	height=-0.0022286915;
-	class Arguments
-	{
-		OME_ID="238";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003235.50374, 998114.64770, 371.03543]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_28";
-		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
-		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_12";
-	};
-};
-class _unit_30
-{
-	objectType="unit";
-	height=-0.0021082617;
-	class Arguments
-	{
-		OME_ID="263";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003244.50374, 998114.64769, 371.93411]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_28";
-		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
-		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_12";
-	};
-};
-class _unit_31
-{
-	objectType="unit";
-	height=-0.0015293066;
-	class Arguments
-	{
-		OME_ID="329";
-		SIDE="WEST";
-		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
-		PLAYABLE="true";
-		NO_DAMAGE="DEFAULT";
-		UNLIMITED_AMMO="DEFAULT";
-		TRAINING="-1";
-		EXPERIENCE="-1";
-		LEADERSHIP="-1";
-		ENDURANCE="-1";
-		HEIGHT="1.82000005245209";
-		CARGO_CREATED="true";
-		POSITION="[1003231.00374, 998105.64771, 370.82626]";
-		COLOR="[0.5999895,0.5999895,0.9999825]";
-		LEADER="_unit_28";
-		DISPLAY_NAME="(PL) Marksman - M14 DMR";
-		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
-		WOUNDS="[]";
-		CREATED_BY_PLAN="true";
-		PARENT="_group_12";
-	};
-};
-class _trigger_2
-{
-	objectType="trigger";
-	height=-0.0076632812;
-	class Arguments
-	{
-		NAME="";
-		POSITION="[1003224.29911, 998149.46723, 367.66470]";
-		A="2";
-		B="2";
-		RECTANGULAR="true";
-		ACTIVATION="WEST";
-		FORM_LIST="";
-		ADVANCED="";
-		EFFRESOURCE="vbs3_loadGame_splashScreen";
-		EFFOBJECT="$NONE$";
-	};
-};
-class _aibehavior_11
-{
-	objectType="aibehavior";
-	height=-0.00018526368;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		TRIGGER_LINK="_trigger_2";
-		BEHAVIOR_LINK="_aibehavior_13";
-		LINKED_TARGETS="";
-		GROUP="_group_12";
-		POSITION="[1003270.05041, 998147.48909, 372.17996]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="362";
+		NAME="1-1-A-2";
+		DISPLAY_NAME="1-1-A-2";
+		DISPLAY_NAME_TREE="1-1-A-2";
+		POSITION="[1002872.61880, 998685.49386, 361.92233]";
+		SIDE="EAST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+		TASK_CONTROLAI="";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
 	};
 };
 class _trigger_4
 {
 	objectType="trigger";
-	height=0.044185255;
+	height=-0.0016447461;
 	class Arguments
 	{
 		NAME="";
-		POSITION="[1003283.85884, 998175.95876, 371.53680]";
+		POSITION="[1003283.85884, 998175.95876, 371.49097]";
 		A="2";
 		B="2";
 		ACTIVATION="EAST";
@@ -570,11 +240,11 @@ class _trigger_4
 class _trigger_7
 {
 	objectType="trigger";
-	height=-0.0086709959;
+	height=0.0008280371;
 	class Arguments
 	{
 		NAME="";
-		POSITION="[1003271.54738, 998146.54628, 372.30035]";
+		POSITION="[1003270.27834, 998147.38845, 372.19434]";
 		A="2";
 		B="2";
 		RECTANGULAR="true";
@@ -588,7 +258,7 @@ class _trigger_7
 class _aibehavior_5
 {
 	objectType="aibehavior";
-	height=0.0085160155;
+	height=0.0096468851;
 	class Arguments
 	{
 		DISPLAY_NAME_TREE="Advance";
@@ -600,8 +270,7 @@ class _aibehavior_5
 		DESTINATION_ALTITUDE="-0.00838987304689454";
 		BEHAVIOR_LINK="_aibehavior_7";
 		LINKED_TARGETS="";
-		GROUP="_group_11";
-		POSITION="[1003225.13568, 998150.32336, 367.68210]";
+		POSITION="[1003226.43627, 998153.28864, 367.62009]";
 		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
 		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
 		ICON_TEXT="Advance";
@@ -609,7 +278,7 @@ class _aibehavior_5
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="368";
+		OME_ID="22";
 	};
 };
 class _aibehavior_7
@@ -636,7 +305,7 @@ class _aibehavior_7
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="370";
+		OME_ID="24";
 	};
 };
 class _aibehavior_13
@@ -662,7 +331,7 @@ class _aibehavior_13
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="372";
+		OME_ID="26";
 	};
 };
 class _aibehavior_14
@@ -688,7 +357,7 @@ class _aibehavior_14
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="374";
+		OME_ID="28";
 	};
 };
 class _aibehavior_15
@@ -714,7 +383,7 @@ class _aibehavior_15
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="376";
+		OME_ID="30";
 	};
 };
 class _aibehavior_16
@@ -739,7 +408,1000 @@ class _aibehavior_16
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="378";
+		OME_ID="32";
+	};
+};
+class _unit_32
+{
+	objectType="unit";
+	height=0.00069556641;
+	class Arguments
+	{
+		OME_ID="38";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-58.793";
+		POSITION="[1002853.85617, 998748.68099, 355.40249]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_14";
+	};
+};
+class _unit_33
+{
+	objectType="unit";
+	height=-0.00031180665;
+	class Arguments
+	{
+		OME_ID="75";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002803.70522, 998747.79473, 357.52279]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_22";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_34
+{
+	objectType="unit";
+	height=-0.0026312794;
+	class Arguments
+	{
+		OME_ID="112";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002812.07240, 998745.13294, 357.56643]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_23";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_35
+{
+	objectType="unit";
+	height=-0.0035721681;
+	class Arguments
+	{
+		OME_ID="137";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002806.96263, 998745.01325, 357.72415]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_24";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_36
+{
+	objectType="unit";
+	height=0.0031704102;
+	class Arguments
+	{
+		OME_ID="203";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002827.31705, 998764.60567, 354.34100]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_15";
+	};
+};
+class _unit_37
+{
+	objectType="unit";
+	height=-0.0061421581;
+	class Arguments
+	{
+		OME_ID="238";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002854.73511, 998754.08760, 354.45507]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		DISPLAY_NAME_TREE="(PL) Leader - M16A4 ACOG / Trace / Binoc / Smoke";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_18";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_38
+{
+	objectType="unit";
+	height=-0.0002222168;
+	class Arguments
+	{
+		OME_ID="275";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002835.07280, 998762.23922, 354.18505]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Automatic Rifleman - M249";
+		DISPLAY_NAME_TREE="(PL) Automatic Rifleman - M249";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_19";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_39
+{
+	objectType="unit";
+	height=-0.0029599511;
+	class Arguments
+	{
+		OME_ID="300";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002847.46438, 998756.62298, 354.44574]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Grenadier - M16A2/M203";
+		DISPLAY_NAME_TREE="(PL) Grenadier - M16A2/M203";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_20";
+		PARENT_VEHICLE="";
+	};
+};
+class _unit_40
+{
+	objectType="unit";
+	height=-0.004738545;
+	class Arguments
+	{
+		OME_ID="366";
+		SIDE="WEST";
+		TYPE="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+		PLAYABLE="true";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		AZIMUT="-38.292";
+		POSITION="[1002831.21703, 998719.77168, 360.31652]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(PL) Marksman - M14 DMR";
+		DISPLAY_NAME_TREE="(PL) Marksman - M14 DMR";
+		WOUNDS="[]";
+		TASK_CONTROLAI="";
+		PARENT="_group_21";
+		PARENT_VEHICLE="";
+	};
+};
+class _aibehavior_3
+{
+	objectType="aibehavior";
+	height=3.3593751e-06;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="3.35937500040018e-06";
+		LINKED_TARGETS="";
+		POSITION="[1002308.00000, 1004649.68750, 313.91431]";
+		AZIMUTH="357.880523681641";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="397";
+	};
+};
+class _aibehavior_4
+{
+	objectType="aibehavior";
+	height=-2.1191406e-06;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="-2.11914061765128e-06";
+		LINKED_TARGETS="";
+		POSITION="[1003298.93750, 998222.50000, 369.23892]";
+		AZIMUTH="0.634660243988037";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="399";
+	};
+};
+class _aibehavior_19
+{
+	objectType="aibehavior";
+	height=-0.005158789;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="-1.31835935235358e-06";
+		LINKED_TARGETS="";
+		GROUP="_group_18";
+		POSITION="[1002853.82307, 998753.95696, 354.57260]";
+		AZIMUTH="0.549199998378754";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="401";
+	};
+};
+class _trigger_9
+{
+	objectType="trigger";
+	height=0.0019191406;
+	class Arguments
+	{
+		NAME="";
+		POSITION="[1002859.07271, 998740.86174, 356.45480]";
+		A="2";
+		B="2";
+		ANGLE="4.08506";
+		RECTANGULAR="true";
+		ACTIVATION="WEST";
+		FORM_LIST="";
+		ADVANCED="";
+		EFFRESOURCE="vbs3_loadGame_splashScreen";
+		EFFOBJECT="$NONE$";
+	};
+};
+class _aibehavior_22
+{
+	objectType="aibehavior";
+	height=0.0010032422;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_19";
+		POSITION="[1002834.70002, 998762.57107, 354.14468]";
+		AZIMUTH="0.549199998378754";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="405";
+	};
+};
+class _aibehavior_25
+{
+	objectType="aibehavior";
+	height=-3.0664062e-06;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="-3.06640623648491e-06";
+		BEHAVIOR_LINK="_aibehavior_146";
+		LINKED_TARGETS="";
+		GROUP="_group_20";
+		POSITION="[1002848.25000, 998757.00000, 354.27789]";
+		AZIMUTH="2.42203998565674";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="407";
+	};
+};
+class _aibehavior_28
+{
+	objectType="aibehavior";
+	height=-0.011806191;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_15";
+		POSITION="[1002825.43642, 998765.33690, 354.36179]";
+		AZIMUTH="0.549199998378754";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="409";
+	};
+};
+class _aibehavior_31
+{
+	objectType="aibehavior";
+	height=0.0037840724;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		BEHAVIOR_LINK="_aibehavior_145";
+		LINKED_TARGETS="";
+		GROUP="_group_24";
+		POSITION="[1002808.93060, 998750.15649, 357.08786]";
+		AZIMUTH="359.877349853516";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="411";
+	};
+};
+class _aibehavior_34
+{
+	objectType="aibehavior";
+	height=0.34518516;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0.344574794921868";
+		LINKED_TARGETS="";
+		GROUP="_group_14";
+		POSITION="[1002853.81638, 998750.05704, 355.55066]";
+		AZIMUTH="359.877349853516";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="413";
+	};
+};
+class _aibehavior_37
+{
+	objectType="aibehavior";
+	height=0.0068943654;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		BEHAVIOR_LINK="_aibehavior_144";
+		LINKED_TARGETS="";
+		GROUP="_group_23";
+		POSITION="[1002812.74610, 998747.16060, 357.31442]";
+		AZIMUTH="359.877349853516";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="415";
+	};
+};
+class _aibehavior_39
+{
+	objectType="aibehavior";
+	height=-0.0015267383;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_22";
+		POSITION="[1002804.74610, 998750.74823, 357.17163]";
+		AZIMUTH="359.877349853516";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="417";
+	};
+};
+class _aibehavior_8
+{
+	objectType="aibehavior";
+	height=0.00018433594;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		BEHAVIOR_LINK="_aibehavior_9";
+		LINKED_TARGETS="";
+		POSITION="[1003314.56328, 998195.56053, 371.82599]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="419";
+	};
+};
+class _aibehavior_9
+{
+	objectType="aibehavior";
+	height=0.0014955957;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		BEHAVIOR_LINK="_aibehavior_10";
+		LINKED_TARGETS="";
+		POSITION="[1003333.93311, 998221.22089, 370.97876]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="421";
+	};
+};
+class _aibehavior_10
+{
+	objectType="aibehavior";
+	height=-0.002376836;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		POSITION="[1003315.03161, 998269.16136, 366.52338]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="423";
+	};
+};
+class _aibehavior_41
+{
+	objectType="aibehavior";
+	height=-0.0014671582;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_21";
+		POSITION="[1002831.78579, 998720.89056, 360.16287]";
+		AZIMUTH="0.649050116539001";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="563";
+	};
+};
+class _unit_63
+{
+	objectType="unit";
+	height=-0.0014348535;
+	class Arguments
+	{
+		OME_ID="602";
+		SIDE="west";
+		TYPE="vbs_us_mc_afvCrew_wdl_m_medium_mtw_none_m4a1";
+		PLAYER="true";
+		PLAYABLE="true";
+		PLAYABILITY="Player";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		ENDURANCE="0";
+		AZIMUT="-4.0014";
+		POSITION="[1002821.25000, 998754.31250, 356.07904]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(P) (PL) Armor Crew - M4A1";
+		DISPLAY_NAME_TREE="(P) (PL) Armor Crew - M4A1";
+		PARENT="_group_38";
+	};
+};
+class _unit_143
+{
+	objectType="unit";
+	height=0.0058289552;
+	class Arguments
+	{
+		OME_ID="795";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74gla";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[1002878.73167, 998689.15834, 360.64740]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		DISPLAY_NAME="Taliban - AK-74 / GP-25 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 / GP-25 (Random)";
+		PARENT="_group_95";
+	};
+};
+class _trigger_2
+{
+	objectType="trigger";
+	height=8.7226559e-05;
+	class Arguments
+	{
+		NAME="";
+		POSITION="[1003226.14372, 998154.31216, 367.56393]";
+		A="2";
+		B="2";
+		RECTANGULAR="true";
+		ACTIVATION="WEST";
+		FORM_LIST="";
+		ADVANCED="";
+		EFFRESOURCE="vbs3_loadGame_splashScreen";
+		EFFOBJECT="$NONE$";
+	};
+};
+class _unit_145
+{
+	objectType="unit";
+	height=-0.0043975683;
+	class Arguments
+	{
+		OME_ID="824";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74gla";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[1002876.01079, 998689.38996, 361.19711]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_143";
+		DISPLAY_NAME="Taliban - AK-74 / GP-25 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 / GP-25 (Random)";
+		PARENT="_group_95";
+	};
+};
+class _aibehavior_11
+{
+	objectType="aibehavior";
+	height=-0.00018526368;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		TRIGGER_LINK="_trigger_2";
+		BEHAVIOR_LINK="_aibehavior_13";
+		LINKED_TARGETS="";
+		POSITION="[1003270.05041, 998147.48909, 372.17996]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="850";
+	};
+};
+class _unit_149
+{
+	objectType="unit";
+	height=0.0010043164;
+	class Arguments
+	{
+		OME_ID="853";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74gla";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[1002872.61880, 998685.49386, 361.92233]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		DISPLAY_NAME="Taliban - AK-74 / GP-25 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 / GP-25 (Random)";
+		PARENT="_group_97";
+	};
+};
+class _unit_150
+{
+	objectType="unit";
+	height=-0.00058370118;
+	class Arguments
+	{
+		OME_ID="880";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74gla";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[1002869.86880, 998685.74386, 362.03796]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_149";
+		DISPLAY_NAME="Taliban - AK-74 / GP-25 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 / GP-25 (Random)";
+		PARENT="_group_97";
+	};
+};
+class _aibehavior_136
+{
+	objectType="aibehavior";
+	height=-0.0013435449;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="4.99023440170276e-06";
+		BEHAVIOR_LINK="_aibehavior_143";
+		LINKED_TARGETS="";
+		GROUP="_group_97";
+		POSITION="[1002846.00000, 998725.51302, 359.11679]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="906";
+	};
+};
+class _aibehavior_138
+{
+	objectType="aibehavior";
+	height=0.0091274222;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0.00561790039063226";
+		LINKED_TARGETS="";
+		GROUP="_group_95";
+		POSITION="[1002853.45159, 998741.28486, 356.49277]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="908";
+	};
+};
+class _trigger_33
+{
+	objectType="trigger";
+	height=0.00079264649;
+	class Arguments
+	{
+		NAME="";
+		POSITION="[1002848.40479, 998724.73245, 359.08908]";
+		A="2";
+		B="2";
+		RECTANGULAR="true";
+		ACTIVATION="WEST";
+		FORM_LIST="";
+		ADVANCED="";
+		EFFRESOURCE="vbs3_loadGame_splashScreen";
+		EFFOBJECT="$NONE$";
+	};
+};
+class _aibehavior_143
+{
+	objectType="aibehavior";
+	height=-0.0013459473;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Advance";
+		VERSION="1";
+		BEHAVIOR="Advance";
+		FORMATION="SB_Default";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		POSITION="[1002838.20963, 998727.75348, 359.17825]";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
+		ICON_TEXT="Advance";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="912";
+	};
+};
+class _aibehavior_144
+{
+	objectType="aibehavior";
+	height=-0.0012791211;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		TRIGGER_LINK="_trigger_33";
+		LINKED_TARGETS="";
+		POSITION="[1002819.03159, 998743.20910, 357.63782]";
+		AZIMUTH="122.156364440918";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="914";
+	};
+};
+class _aibehavior_145
+{
+	objectType="aibehavior";
+	height=-0.00085275393;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="0";
+		TRIGGER_LINK="_trigger_33";
+		LINKED_TARGETS="";
+		POSITION="[1002816.58093, 998741.94178, 357.84247]";
+		AZIMUTH="107.04207611084";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="916";
+	};
+};
+class _aibehavior_146
+{
+	objectType="aibehavior";
+	height=0.0035686817;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="Defend";
+		VERSION="1";
+		BEHAVIOR="Defend";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
+		DESTINATION_ALTITUDE="-1.87500000947693e-06";
+		TRIGGER_LINK="_trigger_9";
+		LINKED_TARGETS="";
+		GROUP="_group_20";
+		POSITION="[1002854.04202, 998751.98590, 354.88867]";
+		AZIMUTH="115.817481994629";
+		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
+		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
+		ICON_TEXT="Defend";
+		BTSET="behaviors_dprk_team";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
+		BEHAVIOR_ENTITY="soldierRoot";
+		BEHAVIOR_GROUP="teamRoot";
+		OME_ID="918";
 	};
 };
 class _postfix_0

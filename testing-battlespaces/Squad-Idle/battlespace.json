@@ -5,10 +5,10 @@
   "displayName" : "Idle Squad",
   "editorContent" : true,
   "geoContent" : true,
-  "hash" : "5e307dd62a2c5fd3f69bc693d970224bf4ab7283",
+  "hash" : "0b04ea8f1a85b5d2e3f7f4381a1734d3cf982c07",
   "id" : "Idle Squad",
   "isTraining" : false,
-  "numPlayableUnits" : 9,
+  "numPlayableUnits" : 10,
   "numPlayerUnits" : 1,
   "planContent" : false,
   "posLatLongAlt" : 
@@ -19,7 +19,7 @@
   ],
   "readOnly" : false,
   "tags" : [],
-  "timestamp" : "2025.12.02 15:12:47",
+  "timestamp" : "2025.12.02 15:59:53",
   "virtualFolderStructure" : 
   {
     "category" : "",
