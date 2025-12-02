@@ -1,0 +1,28 @@
+{
+  "author" : "IVAN MUDRAK",
+  "color" : "#ffffff",
+  "description" : "",
+  "displayName" : "Idle Squad",
+  "editorContent" : true,
+  "geoContent" : true,
+  "hash" : "5e307dd62a2c5fd3f69bc693d970224bf4ab7283",
+  "id" : "Idle Squad",
+  "isTraining" : false,
+  "numPlayableUnits" : 9,
+  "numPlayerUnits" : 1,
+  "planContent" : false,
+  "posLatLongAlt" : 
+  [
+    50.30861,
+    16.60513,
+    411.83864
+  ],
+  "readOnly" : false,
+  "tags" : [],
+  "timestamp" : "2025.12.02 15:12:47",
+  "virtualFolderStructure" : 
+  {
+    "category" : "",
+    "subcategory" : ""
+  }
+}

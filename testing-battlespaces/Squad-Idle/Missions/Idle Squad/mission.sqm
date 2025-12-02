@@ -1,0 +1,233 @@
+version=24;
+MapGeoCenter[]={0.87805086,0.2898142,7.1879401};
+class Mission
+{
+	addOns[]=
+	{
+		"vbs2_people_us_mc_rifleman",
+		"vbs2_editor",
+		"vbs2_vbs_plugins_vbscontrol_behavioreo"
+	};
+	addOnsAuto[]=
+	{
+		"vbs2_people_us_mc_rifleman",
+		"vbs2_editor",
+		"vbs2_vbs_plugins_vbscontrol_behavioreo"
+	};
+	randomSeed=13183086;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class Groups
+	{
+		items=3;
+		class Item0
+		{
+			side="WEST";
+			name="1-1-A-6";
+			class Vehicles
+			{
+				items=1;
+				class Item0
+				{
+					position[]={1003215.6,366.67987,998146};
+					positionASL[]={1003215.6,366.67987,998146};
+					special="CAN_COLLIDE";
+					id=0;
+					side="WEST";
+					vehicle="vbs_us_mc_cbrnSoldier_levelb_wht_m_medium_none_none_none";
+					player="PLAYER COMMANDER";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_23";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item1
+		{
+			side="WEST";
+			name="1-1-A-7";
+			class Vehicles
+			{
+				items=4;
+				class Item0
+				{
+					position[]={1003203.9,365.65491,998128.69};
+					positionASL[]={1003203.9,365.65491,998128.69};
+					special="CAN_COLLIDE";
+					id=1;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					player="PLAY CDG";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_24";
+					sidc="";
+				};
+				class Item1
+				{
+					position[]={1003199.4,365.32071,998119.69};
+					positionASL[]={1003199.4,365.32071,998119.69};
+					special="CAN_COLLIDE";
+					id=2;
+					side="WEST";
+					vehicle="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_25";
+					sidc="";
+				};
+				class Item2
+				{
+					position[]={1003208.4,367.00415,998119.69};
+					positionASL[]={1003208.4,367.00415,998119.69};
+					special="CAN_COLLIDE";
+					id=3;
+					side="WEST";
+					vehicle="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_26";
+					sidc="";
+				};
+				class Item3
+				{
+					position[]={1003194.9,364.526,998110.69};
+					positionASL[]={1003194.9,364.526,998110.69};
+					special="CAN_COLLIDE";
+					id=4;
+					side="WEST";
+					vehicle="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_27";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+		class Item2
+		{
+			side="WEST";
+			name="1-1-A-8";
+			class Vehicles
+			{
+				items=4;
+				class Item0
+				{
+					position[]={1003240,371.04959,998123.62};
+					positionASL[]={1003240,371.04959,998123.62};
+					special="CAN_COLLIDE";
+					id=5;
+					side="WEST";
+					vehicle="vbs_us_mc_officer_wdl_m_medium_mtw_none_m16a4_m150";
+					player="PLAY CDG";
+					leader=1;
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_28";
+					sidc="";
+				};
+				class Item1
+				{
+					position[]={1003235.5,371.03543,998114.62};
+					positionASL[]={1003235.5,371.03543,998114.62};
+					special="CAN_COLLIDE";
+					id=6;
+					side="WEST";
+					vehicle="vbs_us_mc_machinegunner_wdl_m_medium_mtw_none_m249";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_29";
+					sidc="";
+				};
+				class Item2
+				{
+					position[]={1003244.5,371.93411,998114.62};
+					positionASL[]={1003244.5,371.93411,998114.62};
+					special="CAN_COLLIDE";
+					id=7;
+					side="WEST";
+					vehicle="vbs_us_mc_grenadier_wdl_m_medium_mtw_none_m16a2_m203";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_30";
+					sidc="";
+				};
+				class Item3
+				{
+					position[]={1003231,370.82626,998105.62};
+					positionASL[]={1003231,370.82626,998105.62};
+					special="CAN_COLLIDE";
+					id=8;
+					side="WEST";
+					vehicle="vbs_us_mc_sniper_wdl_m_medium_mtw_none_m14dmr";
+					player="PLAY CDG";
+					rankName="PRIVATE";
+					skill=0.60000002;
+					text="unit_31";
+					sidc="";
+				};
+			};
+			sidc="SFGPUCI----A";
+		};
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class Intro
+{
+	randomSeed=11181439;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class OutroWin
+{
+	randomSeed=1742144;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
+class OutroLoose
+{
+	randomSeed=7422484;
+	class Intel
+	{
+		startFogDecay=0.0049333;
+		forecastFogDecay=0.0049333;
+		forecastWaterOpacity=0;
+	};
+	class DeletedMapObjects
+	{
+		items=0;
+	};
+};
