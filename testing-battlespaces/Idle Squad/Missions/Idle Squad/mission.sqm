@@ -16,7 +16,7 @@ class Mission
 		"vbs2_editor",
 		"vbs2_vbs_plugins_vbscontrol_behavioreo"
 	};
-	randomSeed=16381881;
+	randomSeed=7802798;
 	class Intel
 	{
 		startFogDecay=0.0049333;
@@ -358,7 +358,7 @@ class Mission
 };
 class Intro
 {
-	randomSeed=8228601;
+	randomSeed=11244479;
 	class Intel
 	{
 		startFogDecay=0.0049333;
@@ -372,7 +372,7 @@ class Intro
 };
 class OutroWin
 {
-	randomSeed=5703061;
+	randomSeed=716416;
 	class Intel
 	{
 		startFogDecay=0.0049333;
@@ -386,7 +386,7 @@ class OutroWin
 };
 class OutroLoose
 {
-	randomSeed=15231977;
+	randomSeed=7914068;
 	class Intel
 	{
 		startFogDecay=0.0049333;

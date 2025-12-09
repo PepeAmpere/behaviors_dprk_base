@@ -220,120 +220,6 @@ class _group_97
 		SUBORDINATE_GROUP_LINK="";
 	};
 };
-class _trigger_4
-{
-	objectType="trigger";
-	height=-0.0016447461;
-	class Arguments
-	{
-		NAME="";
-		POSITION="[1003283.85884, 998175.95876, 371.49097]";
-		A="2";
-		B="2";
-		ACTIVATION="EAST";
-		FORM_LIST="";
-		ADVANCED="";
-		EFFRESOURCE="vbs3_loadGame_splashScreen";
-		EFFOBJECT="$NONE$";
-	};
-};
-class _trigger_7
-{
-	objectType="trigger";
-	height=0.0008280371;
-	class Arguments
-	{
-		NAME="";
-		POSITION="[1003270.27834, 998147.38845, 372.19434]";
-		A="2";
-		B="2";
-		RECTANGULAR="true";
-		ACTIVATION="WEST";
-		FORM_LIST="";
-		ADVANCED="";
-		EFFRESOURCE="vbs3_loadGame_splashScreen";
-		EFFOBJECT="$NONE$";
-	};
-};
-class _aibehavior_5
-{
-	objectType="aibehavior";
-	height=0.0096468851;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="-0.00838987304689454";
-		BEHAVIOR_LINK="_aibehavior_7";
-		LINKED_TARGETS="";
-		POSITION="[1003226.43627, 998153.28864, 367.62009]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="22";
-	};
-};
-class _aibehavior_7
-{
-	objectType="aibehavior";
-	height=-0.0031753613;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		TRIGGER_LINK="_trigger_7";
-		BEHAVIOR_LINK="_aibehavior_8";
-		LINKED_TARGETS="";
-		POSITION="[1003285.41606, 998176.21739, 371.56082]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="24";
-	};
-};
-class _aibehavior_13
-{
-	objectType="aibehavior";
-	height=-0.0016830371;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		TRIGGER_LINK="_trigger_4";
-		LINKED_TARGETS="";
-		POSITION="[1003315.85866, 998188.28802, 372.00793]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="26";
-	};
-};
 class _aibehavior_14
 {
 	objectType="aibehavior";
@@ -349,7 +235,7 @@ class _aibehavior_14
 		DESTINATION_ALTITUDE="4.67773435275376e-06";
 		LINKED_TARGETS="";
 		POSITION="[1001100.31250, 999314.93750, 372.96671]";
-		AZIMUTH="332.718475341797";
+		AZIMUTH="329.823760986328";
 		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
 		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
 		ICON_TEXT="Defend";
@@ -363,7 +249,7 @@ class _aibehavior_14
 class _aibehavior_15
 {
 	objectType="aibehavior";
-	height=-0.0026201562;
+	height=-1.5625e-07;
 	class Arguments
 	{
 		DISPLAY_NAME_TREE="Defend";
@@ -372,10 +258,10 @@ class _aibehavior_15
 		FORMATION="";
 		ADVANCED_PARS="";
 		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="4.35546877497472e-06";
+		DESTINATION_ALTITUDE="-1.56249996052793e-07";
 		LINKED_TARGETS="";
-		POSITION="[1002358.87500, 999161.81250, 375.51154]";
-		AZIMUTH="359.976623535156";
+		POSITION="[1002358.87500, 999161.81250, 375.51416]";
+		AZIMUTH="340.518798828125";
 		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
 		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
 		ICON_TEXT="Defend";
@@ -389,7 +275,7 @@ class _aibehavior_15
 class _aibehavior_16
 {
 	objectType="aibehavior";
-	height=-0.00047865234;
+	height=1.3476563e-06;
 	class Arguments
 	{
 		DISPLAY_NAME_TREE="Defend";
@@ -398,9 +284,10 @@ class _aibehavior_16
 		FORMATION="";
 		ADVANCED_PARS="";
 		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
+		DESTINATION_ALTITUDE="1.34765622306077e-06";
 		LINKED_TARGETS="";
-		POSITION="[1003372.05957, 998268.73284, 370.93989]";
+		POSITION="[1003372.06250, 998268.75000, 370.94037]";
+		AZIMUTH="0.451120018959045";
 		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
 		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
 		ICON_TEXT="Defend";
@@ -685,7 +572,7 @@ class _aibehavior_3
 		DESTINATION_ALTITUDE="3.35937500040018e-06";
 		LINKED_TARGETS="";
 		POSITION="[1002308.00000, 1004649.68750, 313.91431]";
-		AZIMUTH="357.880523681641";
+		AZIMUTH="7.86629962921143";
 		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
 		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
 		ICON_TEXT="Defend";
@@ -694,32 +581,6 @@ class _aibehavior_3
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
 		OME_ID="397";
-	};
-};
-class _aibehavior_4
-{
-	objectType="aibehavior";
-	height=-2.1191406e-06;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Defend";
-		VERSION="1";
-		BEHAVIOR="Defend";
-		FORMATION="";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="-2.11914061765128e-06";
-		LINKED_TARGETS="";
-		POSITION="[1003298.93750, 998222.50000, 369.23892]";
-		AZIMUTH="0.634660243988037";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\defend_map.paa";
-		ICON_TEXT="Defend";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="399";
 	};
 };
 class _aibehavior_19
@@ -752,11 +613,11 @@ class _aibehavior_19
 class _trigger_9
 {
 	objectType="trigger";
-	height=0.0019191406;
+	height=0.0022891406;
 	class Arguments
 	{
 		NAME="";
-		POSITION="[1002859.07271, 998740.86174, 356.45480]";
+		POSITION="[1002859.07271, 998740.86174, 356.45517]";
 		A="2";
 		B="2";
 		ANGLE="4.08506";
@@ -960,83 +821,6 @@ class _aibehavior_39
 		OME_ID="417";
 	};
 };
-class _aibehavior_8
-{
-	objectType="aibehavior";
-	height=0.00018433594;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		BEHAVIOR_LINK="_aibehavior_9";
-		LINKED_TARGETS="";
-		POSITION="[1003314.56328, 998195.56053, 371.82599]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="419";
-	};
-};
-class _aibehavior_9
-{
-	objectType="aibehavior";
-	height=0.0014955957;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		BEHAVIOR_LINK="_aibehavior_10";
-		LINKED_TARGETS="";
-		POSITION="[1003333.93311, 998221.22089, 370.97876]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="421";
-	};
-};
-class _aibehavior_10
-{
-	objectType="aibehavior";
-	height=-0.002376836;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		LINKED_TARGETS="";
-		POSITION="[1003315.03161, 998269.16136, 366.52338]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="423";
-	};
-};
 class _aibehavior_41
 {
 	objectType="aibehavior";
@@ -1061,7 +845,7 @@ class _aibehavior_41
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="563";
+		OME_ID="425";
 	};
 };
 class _unit_63
@@ -1070,7 +854,7 @@ class _unit_63
 	height=-0.0014348535;
 	class Arguments
 	{
-		OME_ID="602";
+		OME_ID="429";
 		SIDE="west";
 		TYPE="vbs_us_mc_afvCrew_wdl_m_medium_mtw_none_m4a1";
 		PLAYER="true";
@@ -1097,7 +881,7 @@ class _unit_143
 	height=0.0058289552;
 	class Arguments
 	{
-		OME_ID="795";
+		OME_ID="459";
 		SIDE="EAST";
 		TYPE="vbs2_af_taliban_ak74gla";
 		NO_DAMAGE="DEFAULT";
@@ -1113,31 +897,13 @@ class _unit_143
 		PARENT="_group_95";
 	};
 };
-class _trigger_2
-{
-	objectType="trigger";
-	height=8.7226559e-05;
-	class Arguments
-	{
-		NAME="";
-		POSITION="[1003226.14372, 998154.31216, 367.56393]";
-		A="2";
-		B="2";
-		RECTANGULAR="true";
-		ACTIVATION="WEST";
-		FORM_LIST="";
-		ADVANCED="";
-		EFFRESOURCE="vbs3_loadGame_splashScreen";
-		EFFOBJECT="$NONE$";
-	};
-};
 class _unit_145
 {
 	objectType="unit";
 	height=-0.0043975683;
 	class Arguments
 	{
-		OME_ID="824";
+		OME_ID="488";
 		SIDE="EAST";
 		TYPE="vbs2_af_taliban_ak74gla";
 		NO_DAMAGE="DEFAULT";
@@ -1154,40 +920,13 @@ class _unit_145
 		PARENT="_group_95";
 	};
 };
-class _aibehavior_11
-{
-	objectType="aibehavior";
-	height=-0.00018526368;
-	class Arguments
-	{
-		DISPLAY_NAME_TREE="Advance";
-		VERSION="1";
-		BEHAVIOR="Advance";
-		FORMATION="SB_Default";
-		ADVANCED_PARS="";
-		ADVANCED_PARS_DATA="[[""debugEnabled"",[""Debug Enabled"",""false"",""boolean""]]]";
-		DESTINATION_ALTITUDE="0";
-		TRIGGER_LINK="_trigger_2";
-		BEHAVIOR_LINK="_aibehavior_13";
-		LINKED_TARGETS="";
-		POSITION="[1003270.05041, 998147.48909, 372.17996]";
-		TREE_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move.paa";
-		MAP_PIC="\vbs2\vbs_plugins\ai\standard_behaviors\data\icons\move_map.paa";
-		ICON_TEXT="Advance";
-		BTSET="behaviors_dprk_team";
-		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
-		BEHAVIOR_ENTITY="soldierRoot";
-		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="850";
-	};
-};
 class _unit_149
 {
 	objectType="unit";
 	height=0.0010043164;
 	class Arguments
 	{
-		OME_ID="853";
+		OME_ID="517";
 		SIDE="EAST";
 		TYPE="vbs2_af_taliban_ak74gla";
 		NO_DAMAGE="DEFAULT";
@@ -1209,7 +948,7 @@ class _unit_150
 	height=-0.00058370118;
 	class Arguments
 	{
-		OME_ID="880";
+		OME_ID="544";
 		SIDE="EAST";
 		TYPE="vbs2_af_taliban_ak74gla";
 		NO_DAMAGE="DEFAULT";
@@ -1250,7 +989,7 @@ class _aibehavior_136
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="906";
+		OME_ID="570";
 	};
 };
 class _aibehavior_138
@@ -1276,17 +1015,17 @@ class _aibehavior_138
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="908";
+		OME_ID="572";
 	};
 };
 class _trigger_33
 {
 	objectType="trigger";
-	height=0.00079264649;
+	height=0.0014626465;
 	class Arguments
 	{
 		NAME="";
-		POSITION="[1002848.40479, 998724.73245, 359.08908]";
+		POSITION="[1002848.40479, 998724.73245, 359.08975]";
 		A="2";
 		B="2";
 		RECTANGULAR="true";
@@ -1319,7 +1058,7 @@ class _aibehavior_143
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="912";
+		OME_ID="576";
 	};
 };
 class _aibehavior_144
@@ -1346,7 +1085,7 @@ class _aibehavior_144
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="914";
+		OME_ID="578";
 	};
 };
 class _aibehavior_145
@@ -1373,7 +1112,7 @@ class _aibehavior_145
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="916";
+		OME_ID="580";
 	};
 };
 class _aibehavior_146
@@ -1401,7 +1140,7 @@ class _aibehavior_146
 		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\behaviors_dprk_base\data\behaviors_dprk_team\behaviors_dprk_team.btset";
 		BEHAVIOR_ENTITY="soldierRoot";
 		BEHAVIOR_GROUP="teamRoot";
-		OME_ID="918";
+		OME_ID="582";
 	};
 };
 class _postfix_0
