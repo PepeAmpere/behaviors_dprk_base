@@ -17,6 +17,7 @@
     "soldierRoot.bt",
     "soldierStance.bt",
     "soldierSuppress.bt",
+    "squadAlternatingRetreat.bt",
     "subteamFireAt.bt",
     "subteamMove.bt",
     "subteamMoveToDefensivePosition.bt",
