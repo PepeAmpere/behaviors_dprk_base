@@ -1,0 +1,447 @@
+{
+  "name": "<unnamed>",
+  "id": "a9f9a29d-915c-47a8-b453-373ef856857a",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "prepare order data",
+      "id": "d4f375fc-9883-44a8-8938-e1d26b023be3",
+      "type": "scriptAction",
+      "script": [
+        "",
+        "-- content for every message",
+        "loc.subOrderData = {orderName = \"Advance\"}",
+        "loc.subordinates = {}",
+        "",
+        "loc.subordinateData = InternalTable()",
+        "-- liat of subordinates",
+        "local listOfSubordinates = self:GetChildGroups()",
+        "",
+        "--for i = 0, listOfSubordinates do",
+        "local subordinate = self:GetChildGroup(1):GetEntity(0)",
+        "loc.subordinates[#loc.subordinates+1] = subordinate",
+        "",
+        "loc.subordinateData = {",
+        "    orderName = \"Move\",",
+        "    destination = arg.orderData.destination",
+        "}",
+        "",
+        "--self:SendMessage(subordinate, \"NewActionRequest\", {treePath = {\"standard_behaviors\", \"Advance\"}})",
+        "self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
+        "DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
+        "    ",
+        "--end"
+      ]
+    },
+    {
+      "name": "Typical AA advance order",
+      "id": "f3dd8a26-8b6f-4da3-af9c-ed06674c125a",
+      "type": "reference",
+      "target": [
+        "standard_behaviors",
+        "ExecuteSubordinateOrder"
+      ],
+      "arguments": {
+        "orderData": "return loc.subOrderData",
+        "subordinates": "return loc.subordinates",
+        "subordinateData": "return loc.subordinateData",
+        "update": "return false"
+      }
+    },
+    {
+      "name": "Wait Forever",
+      "id": "556e0f17-be4b-458d-a78e-69e3c2816c22",
+      "type": "waitForever"
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "<unnamed>",
+      "id": "10458910-656c-49c7-bb68-a65f2a8a60f9",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "10458910-656c-49c7-bb68-a65f2a8a60f9",
+            "position": "2237.5,409.8"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "self:SendMessage(",
+        "    self:GetChildGroup(1),",
+        "    \"NewOrder\",",
+        "    {",
+        "        destination = arg.orderData.destination,",
+        "        orderName = \"Advance\"",
+        "    }",
+        ")",
+        "",
+        "DebugLog(self .. \" - Sent Message - \" .. self:GetChildGroup(1) .. \" . \" .. arg.orderData.destination)"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "8cb01a5d-432f-4fae-a584-a81fbd68314e",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Wait Forever",
+          "id": "65d1bbd6-f03d-4073-8ead-152c0f2a52a1",
+          "type": "waitForever"
+        },
+        {
+          "name": "DebugDraw",
+          "id": "081cab9d-4527-4db5-b1ac-8304a7d08d3d",
+          "type": "scriptAction",
+          "script": [
+            "if bb.target ~= nil then",
+            "    DebugLine(self:GetPosition() + Vec3(0, 0, 2), bb.target:GetPosition() + Vec3(0, 0, 2), 0, 1, 1, 1)",
+            "end"
+          ]
+        },
+        {
+          "name": "path1",
+          "id": "e6469bf5-4f16-40a3-9301-de17a9149005",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "define start pos",
+              "id": "ae2ef465-b5d1-4ab6-944c-21b4ab37f79d",
+              "type": "scriptAction",
+              "script": [
+                "loc.startingPos = self:GetEntity(1):GetPosition()"
+              ]
+            },
+            {
+              "name": "define end pos",
+              "id": "d7e9dee3-a943-4602-bc83-ea3eb96ef16c",
+              "type": "scriptAction",
+              "script": [
+                "loc.endPos = arg.orderData.destination"
+              ]
+            },
+            {
+              "name": "request path",
+              "id": "47062e74-4f96-4766-94d3-40973fb03c70",
+              "type": "scriptAction",
+              "script": [
+                "loc.directPathReq = FindPath(loc.startingPos, loc.endPos)"
+              ]
+            },
+            {
+              "name": "path ready",
+              "id": "312e748c-04f2-4ae3-a38a-139440c697ea",
+              "type": "waitUntil",
+              "condition": [
+                "return loc.directPathReq:IsReady()"
+              ]
+            },
+            {
+              "name": "save path",
+              "id": "43aa08b7-d78d-4074-a5a6-b51e901a2827",
+              "type": "scriptAction",
+              "script": [
+                "loc.directPath = loc.directPathReq:Value()"
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "8f0a7e6c-58ec-4ee9-8720-c0e9f400986a",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "Wait Forever",
+                  "id": "967fee24-31fb-402e-b1a1-f47567bee5d2",
+                  "type": "waitForever"
+                },
+                {
+                  "name": "debugDirectPath",
+                  "id": "c15a1eca-12f1-4dd4-b5e9-25947eb2054d",
+                  "type": "scriptAction",
+                  "script": [
+                    "if loc.startingPos ~= nil then",
+                    "    DebugLine(loc.startingPos + Vec3(0, 0, 0), loc.startingPos + Vec3(0, 0, 2), 1, 0, 1, 1)  ",
+                    "end",
+                    "",
+                    "if loc.endPos ~= nil then",
+                    "    DebugLine(loc.endPos + Vec3(0, 0, 0), loc.endPos + Vec3(0, 0, 2), 1, 0, 1, 1)",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "debug path",
+                  "id": "7422e4c7-927c-4752-aa1a-bdd21ba29c64",
+                  "type": "scriptAction",
+                  "script": [
+                    "if loc.directPath ~= nil then",
+                    "    local count = loc.directPath:GetSegmentCount()",
+                    "",
+                    "    for i=0,count-1 do",
+                    "        DebugLine(",
+                    "            loc.directPath:GetSegmentStart(i) + Vec3(0, 0, 1),",
+                    "            loc.directPath:GetSegmentEnd(i) + Vec3(0, 0, 1),",
+                    "            1, 1, 1, 1",
+                    "        )",
+                    "    end",
+                    "end"
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "path1",
+          "id": "c9328c45-b3bf-4698-ad4f-5b8618bb6f46",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "request path",
+              "id": "62fdaf00-84df-45da-a035-ebfe1e940cc4",
+              "type": "scriptAction",
+              "script": [
+                "loc.tacticalPathReq = FindPath(",
+                "    loc.startingPos, ",
+                "    loc.endPos, ",
+                "    {",
+                "        threats = {",
+                "            {avoidance = 3 }",
+                "        }",
+                "    }",
+                ")"
+              ]
+            },
+            {
+              "name": "path ready",
+              "id": "2c5b156b-beac-477f-83c4-40e9eabc34a3",
+              "type": "waitUntil",
+              "condition": [
+                "return loc.tacticalPathReq:IsReady()"
+              ]
+            },
+            {
+              "name": "save path",
+              "id": "1e1664d5-85b4-4702-a280-8bb28fe4cf8b",
+              "type": "scriptAction",
+              "script": [
+                "loc.tacticalPath = loc.tacticalPathReq:Value()"
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "ea1427d8-5103-4dba-b4d3-783d45488ab1",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "Wait Forever",
+                  "id": "ccb92227-bdd0-49ac-bd22-bab5959bd8c8",
+                  "type": "waitForever"
+                },
+                {
+                  "name": "debugDirectPath",
+                  "id": "21d03858-a7a2-4190-83ae-f3d563788f42",
+                  "type": "scriptAction",
+                  "script": [
+                    "if loc.startingPos ~= nil then",
+                    "    DebugLine(loc.startingPos + Vec3(0, 0, 0), loc.startingPos + Vec3(0, 0, 2), 1, 0, 1, 1)  ",
+                    "end",
+                    "",
+                    "if loc.endPos ~= nil then",
+                    "    DebugLine(loc.endPos + Vec3(0, 0, 0), loc.endPos + Vec3(0, 0, 2), 1, 0, 1, 1)",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "debug path",
+                  "id": "8668f768-a084-471f-98cf-9d265e1cb92e",
+                  "type": "scriptAction",
+                  "script": [
+                    "if loc.tacticalPath ~= nil then",
+                    "    local count = loc.tacticalPath:GetSegmentCount()",
+                    "",
+                    "    for i=0,count-1 do",
+                    "        DebugLine(",
+                    "            loc.tacticalPath:GetSegmentStart(i) + Vec3(0, 0, 1.1),",
+                    "            loc.tacticalPath:GetSegmentEnd(i) + Vec3(0, 0, 1.1),",
+                    "            1, 0, 0, 1",
+                    "        )",
+                    "    end",
+                    "end"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "8cb01a5d-432f-4fae-a584-a81fbd68314e",
+            "position": "1807.6,493.8"
+          },
+          {
+            "id": "65d1bbd6-f03d-4073-8ead-152c0f2a52a1",
+            "position": "650,584.8"
+          },
+          {
+            "id": "081cab9d-4527-4db5-b1ac-8304a7d08d3d",
+            "position": "825,584.8"
+          },
+          {
+            "id": "e6469bf5-4f16-40a3-9301-de17a9149005",
+            "position": "1200,622.3"
+          },
+          {
+            "id": "ae2ef465-b5d1-4ab6-944c-21b4ab37f79d",
+            "position": "551.257142857143,725.953968253968"
+          },
+          {
+            "id": "d7e9dee3-a943-4602-bc83-ea3eb96ef16c",
+            "position": "713.4619047619,726.026984126984"
+          },
+          {
+            "id": "47062e74-4f96-4766-94d3-40973fb03c70",
+            "position": "875.9619047619,726.026984126984"
+          },
+          {
+            "id": "312e748c-04f2-4ae3-a38a-139440c697ea",
+            "position": "1050.9619047619,726.026984126984"
+          },
+          {
+            "id": "43aa08b7-d78d-4074-a5a6-b51e901a2827",
+            "position": "1212.5,722.3"
+          },
+          {
+            "id": "8f0a7e6c-58ec-4ee9-8720-c0e9f400986a",
+            "position": "1412.5,722.3"
+          },
+          {
+            "id": "967fee24-31fb-402e-b1a1-f47567bee5d2",
+            "position": "1212.5,797.3"
+          },
+          {
+            "id": "c15a1eca-12f1-4dd4-b5e9-25947eb2054d",
+            "position": "1387.5,797.3"
+          },
+          {
+            "id": "7422e4c7-927c-4752-aa1a-bdd21ba29c64",
+            "position": "1550,797.3"
+          },
+          {
+            "id": "c9328c45-b3bf-4698-ad4f-5b8618bb6f46",
+            "position": "1737.5,647.3"
+          },
+          {
+            "id": "62fdaf00-84df-45da-a035-ebfe1e940cc4",
+            "position": "1588.46190476191,713.526984126984"
+          },
+          {
+            "id": "2c5b156b-beac-477f-83c4-40e9eabc34a3",
+            "position": "1763.46190476191,713.526984126984"
+          },
+          {
+            "id": "1e1664d5-85b4-4702-a280-8bb28fe4cf8b",
+            "position": "1925,709.8"
+          },
+          {
+            "id": "ea1427d8-5103-4dba-b4d3-783d45488ab1",
+            "position": "2152.11904761905,730.226984126984"
+          },
+          {
+            "id": "ccb92227-bdd0-49ac-bd22-bab5959bd8c8",
+            "position": "1975,797.3"
+          },
+          {
+            "id": "21d03858-a7a2-4190-83ae-f3d563788f42",
+            "position": "2165.29523809524,796.193650793651"
+          },
+          {
+            "id": "8668f768-a084-471f-98cf-9d265e1cb92e",
+            "position": "2350,797.3"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Not everyone arrived",
+      "id": "a80704d1-9f78-4c25-9147-18607ce1bdbb",
+      "type": "scriptCondition",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "a80704d1-9f78-4c25-9147-18607ce1bdbb",
+            "position": "2175,947.3"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for _, fireTeam in ipairs(loc.aliveFireTeams) do",
+        "    if fireTeam:GetLeader():GetPosition():Distance(arg.orderData.destination) > 65 then -- TODO: finetune this variable",
+        "        DebugLog(\"Team is too far: \"..fireTeam:GetLeader():GetPosition():Distance(arg.orderData.destination))",
+        "        return true",
+        "    end",
+        "end",
+        "",
+        "",
+        "for i, fireTeam in ipairs(loc.singleManTeams) do",
+        "    if fireTeam:GetEntityCount() >= 1 then",
+        "        if fireTeam:GetLeader():GetPosition():Distance(arg.orderData.destination) > 65 then -- TODO: finetune this variable",
+        "            DebugLog(\"Team is too far: \"..fireTeam:GetLeader():GetPosition():Distance(arg.orderData.destination))",
+        "            return true",
+        "        end",
+        "    end",
+        "end",
+        "",
+        "DebugLog(\"All teams close enough\")",
+        "return false"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "a9f9a29d-915c-47a8-b453-373ef856857a",
+        "position": "2525,209.8"
+      },
+      {
+        "id": "d4f375fc-9883-44a8-8938-e1d26b023be3",
+        "position": "2400,347.3"
+      },
+      {
+        "id": "f3dd8a26-8b6f-4da3-af9c-ed06674c125a",
+        "position": "2575,347.3"
+      },
+      {
+        "id": "556e0f17-be4b-458d-a78e-69e3c2816c22",
+        "position": "2950,359.8"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3863.2,2909.8",
+    "gridPadding": "0,9.79999999999995"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "startingPos": "return nil",
+    "endPos": "return nil",
+    "directPathReq": "return nil",
+    "directPath": "return nil",
+    "tacticalPathReq": "return nil",
+    "tacticalPath": "return nil",
+    "subordinates": "return nil",
+    "subordinateData": "return nil",
+    "subOrderData": "return nil"
+  }
+}

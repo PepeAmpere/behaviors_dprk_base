@@ -9,6 +9,7 @@
     "DPRKsquad\\AllTeamsDefendFront.bt",
     "DPRKsquad\\AllTeamsIdle.bt",
     "DPRKsquad\\AlternatingAdvance.bt",
+    "DPRKsquad\\AlternatingAdvancePopek.bt",
     "DPRKsquad\\AlternatingRetreat.bt",
     "DPRKsquad\\SuccesiveAdvance.bt",
     "AutonomousBehavior.bt",

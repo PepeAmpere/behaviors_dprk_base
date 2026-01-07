@@ -51,6 +51,11 @@ return {
                 tree = 'AnalysisTest',
                 parameters = {},
             },
+            AlternatingAdvancePopek = {
+                description = 'New Squad Alternating Advance',
+                tree = 'AlternatingAdvancePopek',
+                parameters = {},
+            },
         },
     },
 }
