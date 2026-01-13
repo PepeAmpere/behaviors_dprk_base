@@ -10,7 +10,7 @@
       "script": [
         "",
         "-- content for every message",
-        "loc.subOrderData = {orderName = \"Advance\"}",
+        "loc.subOrderData = {orderName = \"Move\", destination = arg.orderData.destination}",
         "loc.subordinates = {}",
         "",
         "loc.subordinateData = InternalTable()",
@@ -18,16 +18,18 @@
         "local listOfSubordinates = self:GetChildGroups()",
         "",
         "--for i = 0, listOfSubordinates do",
-        "local subordinate = self:GetChildGroup(1):GetEntity(0)",
+        "local subordinate = self:GetChildGroup(1)",
         "loc.subordinates[#loc.subordinates+1] = subordinate",
         "",
-        "loc.subordinateData = {",
-        "    orderName = \"Move\",",
-        "    destination = arg.orderData.destination",
+        "table.insert(loc.subordinates, subordinate)    ",
+        "loc.subordinateData[subordinate] = {",
+        "    destination = position",
         "}",
         "",
         "--self:SendMessage(subordinate, \"NewActionRequest\", {treePath = {\"standard_behaviors\", \"Advance\"}})",
+        "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
         "self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
+        "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
         "DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
         "    ",
         "--end"
@@ -63,7 +65,7 @@
         "nodesInfo": [
           {
             "id": "10458910-656c-49c7-bb68-a65f2a8a60f9",
-            "position": "2237.5,409.8"
+            "position": "2162.5,447.3"
           }
         ],
         "editorObjects": []
@@ -400,6 +402,42 @@
         "DebugLog(\"All teams close enough\")",
         "return false"
       ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
+            "position": "2150,322.3"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local subordinate = self:GetChildGroup(1)",
+        "",
+        "self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "97034dbe-d803-4e74-a2f8-de0d85b53112",
+      "type": "wait",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "97034dbe-d803-4e74-a2f8-de0d85b53112",
+            "position": "2375,459.8"
+          }
+        ],
+        "editorObjects": []
+      },
+      "time": [
+        "return 1"
+      ]
     }
   ],
   "meta": {
@@ -410,7 +448,7 @@
       },
       {
         "id": "d4f375fc-9883-44a8-8938-e1d26b023be3",
-        "position": "2400,347.3"
+        "position": "2350,347.3"
       },
       {
         "id": "f3dd8a26-8b6f-4da3-af9c-ed06674c125a",
