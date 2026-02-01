@@ -56,6 +56,11 @@ return {
                 tree = 'AlternatingAdvancePopek',
                 parameters = {},
             },
+            AlternatingIdleMudrak = {
+                description = 'New Squad Alternating Idle',
+                tree = 'AlternatingIdleMudrak',
+                parameters = {},
+            }
         },
     },
 }

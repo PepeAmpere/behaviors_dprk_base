@@ -320,6 +320,49 @@ class CfgAvailableBehaviors
 			};
 		};
 	};
+	class behaviors_dprk_AlternatingIdleMudrak
+	{
+		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
+		allowRotate = true; // you also get direction
+
+
+		displayname = "DPRK Debug Alternating Idle Mudrak";
+		description = "DPRK Debug Alternating Idle Mudrak";
+
+		orderName = "AlternatingIdleMudrak"; // it will implicitly have position as well
+		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
+
+		class RootBehaviors
+		{
+			group[] = { "standard_behaviors", "GroupRoot" };
+			entity[] = { "standard_behaviors", "EntityRoot" };
+			vehicle[] = { "standard_behaviors", "VehicleRoot" };
+		};
+
+		class Parameters
+		{
+			class debugEnabled
+			{
+				displayName = "debugEnabled";
+				value = "true";
+				type = "boolean";
+			};
+			class advancedDebugType
+			{
+				displayName = "advancedDebugType";
+				value = "0";
+				type = "number";
+			};
+			class analysisType
+			{
+				displayName = "analysisType";
+				value = "0";
+				type = "number";
+			};
+		};
+	};
+
+
 	class behaviors_dprk_AlternatingAdvanceAutonomous
 	{
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aaa.paa";
