@@ -1,0 +1,167 @@
+{
+  "name": "<unnamed>",
+  "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "prepare order data",
+          "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
+          "type": "scriptAction",
+          "script": [
+            "",
+            "-- content for every message",
+            "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
+            "loc.subordinates = {}",
+            "",
+            "loc.subordinateData = InternalTable()",
+            "-- liat of subordinates",
+            "local listOfSubordinates = self:GetChildGroups()",
+            "",
+            "--for i = 0, listOfSubordinates do",
+            "local subordinate = self:GetChildGroup(1)",
+            "loc.subordinates[#loc.subordinates+1] = subordinate",
+            "",
+            "table.insert(loc.subordinates, subordinate)    ",
+            "loc.subordinateData[subordinate] = {",
+            "    destination = position",
+            "}",
+            "",
+            "--self:SendMessage(subordinate, \"NewActionRequest\", {treePath = {\"standard_behaviors\", \"Advance\"}})",
+            "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
+            "self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
+            "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
+            "DebugLog(\"Test\")",
+            "",
+            "DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
+            "    ",
+            "--end"
+          ]
+        },
+        {
+          "name": "Setup Area",
+          "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
+          "type": "scriptAction",
+          "script": [
+            "local myPosition = arg.orderData.destination",
+            "",
+            "local half = 25",
+            "",
+            "local verts = {",
+            "    myPosition + Vec3(-half, -half, 2),",
+            "    myPosition + Vec3( half, -half, 2),",
+            "    myPosition + Vec3( half,  half, 2),",
+            "    myPosition + Vec3(-half,  half, 2),",
+            "}",
+            "",
+            "if loc.areaOfDefence == nil then",
+            "    loc.areaOfDefence = {}",
+            "end",
+            "",
+            "for i, v in ipairs(verts) do",
+            "    table.insert(loc.areaOfDefence, v)",
+            "end"
+          ]
+        },
+        {
+          "name": "Set all soldiers idle",
+          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.subOrderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Wait Forever",
+          "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
+          "type": "waitForever"
+        }
+      ]
+    },
+    {
+      "name": "Draw Area ",
+      "id": "37511152-7fa0-4b6b-a879-434aff25b436",
+      "type": "scriptAction",
+      "script": [
+        "if loc.areaOfDefence ~= nil then",
+        "    local area = {polygon = Polygon(loc.areaOfDefence), verts = loc.areaOfDefence }",
+        "",
+        "    if area ~= nil then",
+        "        -- DEBUG POLYGON",
+        "        for i = 1, #area.verts do",
+        "            local a = area.verts[i]",
+        "            local b = area.verts[(i % #area.verts) + 1]",
+        "            DebugLine(a, b, 1, 1, 0, 1)",
+        "        end",
+        "",
+        "        for i = 1, #area.verts do",
+        "            local a = area.verts[i]",
+        "            DebugLine(a, a + Vec3(0, 0, 5), 1, 1, 0, 1)",
+        "        end",
+        "",
+        "        -- DEBUG POLYGON END",
+        "    end",
+        "end"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
+        "position": "1737.5,236"
+      },
+      {
+        "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
+        "position": "1387,377.25"
+      },
+      {
+        "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
+        "position": "887.5,573.5"
+      },
+      {
+        "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
+        "position": "1129.5,593"
+      },
+      {
+        "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+        "position": "1350,636"
+      },
+      {
+        "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
+        "position": "1825,598.5"
+      },
+      {
+        "id": "37511152-7fa0-4b6b-a879-434aff25b436",
+        "position": "2187.5,411"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2811",
+    "gridPadding": "0,11"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "subOrderData": "return nil",
+    "subordinates": "return nil",
+    "subordinateData": "return nil",
+    "areaOfDefence": "return nil"
+  }
+}
