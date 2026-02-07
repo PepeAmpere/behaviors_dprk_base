@@ -13,7 +13,7 @@
     "DPRKsquad\\AlternatingIdleMudrak.bt",
     "DPRKsquad\\AlternatingRetreat.bt",
     "DPRKsquad\\SuccesiveAdvance.bt",
-    "Test\\TestPathVolume.bt",
+    "Tests\\TestPathVolume.bt",
     "AutonomousBehavior.bt",
     "OP4sensor.bt",
     "Reaction.bt"
@@ -21,7 +21,7 @@
   "initScripts": [
     "Analysis\\analytics.lua",
     "DPRKsquad\\DPRKsquad.class.lua",
-    "Sensor\\PathVolumeSensors.lua",
+    "Sensors\\PathVolumeSensors.lua",
     "classes.lua"
   ],
   "parameters": {},
