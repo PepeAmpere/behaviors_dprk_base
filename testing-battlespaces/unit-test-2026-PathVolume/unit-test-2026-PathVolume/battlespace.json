@@ -1,0 +1,28 @@
+{
+  "author" : "STUDENT",
+  "color" : "#ffffff",
+  "description" : "",
+  "displayName" : "unit-test-2026-PathVolume",
+  "editorContent" : true,
+  "geoContent" : false,
+  "hash" : "345691e812cc9a92b9515eaad34b1d81b0c2cfe2",
+  "id" : "unit-test-2026-PathVolume",
+  "isTraining" : false,
+  "numPlayableUnits" : 1,
+  "numPlayerUnits" : 1,
+  "planContent" : false,
+  "posLatLongAlt" : 
+  [
+    50.35547,
+    16.55744,
+    450.79288
+  ],
+  "readOnly" : false,
+  "tags" : [],
+  "timestamp" : "2026.02.05 21:09:23",
+  "virtualFolderStructure" : 
+  {
+    "category" : "",
+    "subcategory" : ""
+  }
+}

@@ -4,6 +4,23 @@
   "type": "sequence",
   "subtrees": [
     {
+      "name": "<unnamed>",
+      "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
+      "type": "scriptAction",
+      "script": [
+        "local sideOffset = 30",
+        "local startOffset = 30",
+        "local startAngle = 45",
+        "local endOffset = 30",
+        "local endAngle = 45",
+        "loc.pathVolume = BuildPathVolume(",
+        "    loc.path, sideOffset, ",
+        "    startOffset, startAngle, ",
+        "    endOffset, endAngle",
+        ")"
+      ]
+    },
+    {
       "name": "prepare order data",
       "id": "d4f375fc-9883-44a8-8938-e1d26b023be3",
       "type": "scriptAction",
@@ -411,25 +428,6 @@
     },
     {
       "name": "<unnamed>",
-      "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
-            "position": "2150,322.3"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local subordinate = self:GetChildGroup(1)",
-        "",
-        "self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})"
-      ]
-    },
-    {
-      "name": "<unnamed>",
       "id": "97034dbe-d803-4e74-a2f8-de0d85b53112",
       "type": "wait",
       "meta": {
@@ -451,6 +449,10 @@
       {
         "id": "a9f9a29d-915c-47a8-b453-373ef856857a",
         "position": "2525,209.8"
+      },
+      {
+        "id": "b2ace545-f168-4c82-a254-afa9c0eb2a0c",
+        "position": "2150,322.3"
       },
       {
         "id": "d4f375fc-9883-44a8-8938-e1d26b023be3",

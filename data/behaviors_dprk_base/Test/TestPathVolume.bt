@@ -1,0 +1,243 @@
+{
+  "name": "root",
+  "id": "f8333527-a586-43f4-9173-950126a493ff",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "collect data",
+      "id": "a7c3ed9f-e005-4a9e-ac60-48c973d3400d",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "get path",
+          "id": "d9a3fd64-8901-4fe4-bcfd-fbbb54252774",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "hi",
+              "id": "1fcaa84e-afad-4254-bbf8-5c3ed511a306",
+              "type": "scriptAction",
+              "script": [
+                "DebugLog(\"hi\")"
+              ]
+            },
+            {
+              "name": "request path",
+              "id": "6390b536-4d7b-4e71-9c95-3e86649a80dc",
+              "type": "scriptAction",
+              "script": [
+                "",
+                "local fireTeamCount = self:GetChildGroupCount()",
+                "local iGroup = self:GetChildGroup(fireTeamCount - 1)",
+                "loc.leader = iGroup:GetLeader()",
+                "local leaderPos = loc.leader:GetPosition()",
+                "",
+                "local endPos= arg.orderData.destination",
+                "",
+                "loc.pathFuture = FindPath(",
+                "    leaderPos, endPos,",
+                "    {",
+                "        threats = {{avoidance = 3 }},",
+                "    }",
+                ")"
+              ]
+            },
+            {
+              "name": "wait until path found",
+              "id": "8fef88af-961a-4db9-8dce-e2027f8ac7a7",
+              "type": "waitUntil",
+              "condition": [
+                "if loc.pathFuture:IsReady() then",
+                "    loc.path = loc.pathFuture:Value()",
+                "    return true",
+                "end",
+                "return false"
+              ]
+            },
+            {
+              "name": "hello",
+              "id": "710d6f97-9f20-4112-ae16-b3b05b474674",
+              "type": "scriptAction",
+              "script": [
+                "DebugLog(\"hello\")"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "get path volume",
+          "id": "574df2ee-9d0c-43f7-9577-252965239339",
+          "type": "scriptAction",
+          "script": [
+            "local sideOffset = 30",
+            "local startOffset = 30",
+            "local startAngle = 45",
+            "local endOffset = 30",
+            "local endAngle = 45",
+            "loc.pathVolume = BuildPathVolume(",
+            "    loc.path, sideOffset, ",
+            "    startOffset, startAngle, ",
+            "    endOffset, endAngle",
+            ")"
+          ]
+        },
+        {
+          "name": "get enemies inside volume",
+          "id": "7457d2e9-a82d-45f5-90b0-b63421b141d7",
+          "type": "scriptAction",
+          "script": [
+            "local refEntity = self",
+            "loc.enemies = GetEnemiesInPathVolume(",
+            "    loc.pathVolume, loc.leader",
+            ")"
+          ]
+        },
+        {
+          "name": "Wait Forever",
+          "id": "5a336744-5944-49c1-af79-c97335577a0e",
+          "type": "waitForever"
+        }
+      ]
+    },
+    {
+      "name": "Wait Forever",
+      "id": "9001ec66-46e7-40ad-94c9-22cdf47a7cef",
+      "type": "waitForever"
+    },
+    {
+      "name": "debug draw",
+      "id": "7dcdc3a8-0992-4808-bc52-bc6931e6f8ec",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "wait until path found",
+          "id": "58c068f9-aa9c-4e24-b1e0-e8acfcbe20d0",
+          "type": "waitUntil",
+          "condition": [
+            "return loc.path ~= nil"
+          ]
+        },
+        {
+          "name": "draw path volume",
+          "id": "b9340ac6-db5d-413a-9008-add570ce0c5b",
+          "type": "scriptAction",
+          "script": [
+            "local offsetZ = 5",
+            "local red = 1",
+            "local green = 0",
+            "local blue = 0",
+            "DrawPathVolume(",
+            "\tloc.pathVolume, offsetZ, red, green, blue",
+            ")"
+          ]
+        },
+        {
+          "name": "draw enemy positions",
+          "id": "2f39339b-7db6-41d4-aa63-2ca4033d7dc8",
+          "type": "scriptAction",
+          "script": [
+            "for i=1, #loc.enemies do",
+            "    local enemyPos = loc.enemies[i]:GetPosition()",
+            "    DebugDraw(",
+            "        enemyPos, enemyPos + Vec3(0, 0, 5),",
+            "        1, 1, 0, 1",
+            "    )",
+            "end"
+          ]
+        }
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "f8333527-a586-43f4-9173-950126a493ff",
+        "position": "2259.23333333333,532.4"
+      },
+      {
+        "id": "a7c3ed9f-e005-4a9e-ac60-48c973d3400d",
+        "position": "1950,791.233333333333"
+      },
+      {
+        "id": "d9a3fd64-8901-4fe4-bcfd-fbbb54252774",
+        "position": "1425,953.733333333333"
+      },
+      {
+        "id": "1fcaa84e-afad-4254-bbf8-5c3ed511a306",
+        "position": "1125,1141.23333333333",
+        "height": 50.0
+      },
+      {
+        "id": "6390b536-4d7b-4e71-9c95-3e86649a80dc",
+        "position": "1300,1141.23333333333"
+      },
+      {
+        "id": "8fef88af-961a-4db9-8dce-e2027f8ac7a7",
+        "position": "1462.5,1141.23333333333",
+        "width": 173.33333333333323,
+        "height": 50.0
+      },
+      {
+        "id": "710d6f97-9f20-4112-ae16-b3b05b474674",
+        "position": "1650,1141.23333333333"
+      },
+      {
+        "id": "574df2ee-9d0c-43f7-9577-252965239339",
+        "position": "1825,891.233333333333",
+        "height": 50.0
+      },
+      {
+        "id": "7457d2e9-a82d-45f5-90b0-b63421b141d7",
+        "position": "1912.5,966.233333333333"
+      },
+      {
+        "id": "5a336744-5944-49c1-af79-c97335577a0e",
+        "position": "2062.5,891.233333333333",
+        "height": 50.0
+      },
+      {
+        "id": "9001ec66-46e7-40ad-94c9-22cdf47a7cef",
+        "position": "2050,541.233333333333",
+        "height": 50.0
+      },
+      {
+        "id": "7dcdc3a8-0992-4808-bc52-bc6931e6f8ec",
+        "position": "2400,678.733333333333"
+      },
+      {
+        "id": "58c068f9-aa9c-4e24-b1e0-e8acfcbe20d0",
+        "position": "2275,878.733333333333",
+        "width": 173.33333333333323,
+        "height": 50.0
+      },
+      {
+        "id": "b9340ac6-db5d-413a-9008-add570ce0c5b",
+        "position": "2462.5,891.233333333333",
+        "height": 50.0
+      },
+      {
+        "id": "2f39339b-7db6-41d4-aa63-2ca4033d7dc8",
+        "position": "2537.5,778.733333333333",
+        "height": 50.0
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,3003.73333333333",
+    "gridPadding": "0,3.73333333333319"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": "",
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "pathFuture": "return nil",
+    "path": "return nil",
+    "pathVolume": "return nil",
+    "enemies": "return nil",
+    "leader": "return nil"
+  }
+}

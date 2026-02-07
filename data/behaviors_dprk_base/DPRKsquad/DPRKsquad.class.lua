@@ -60,6 +60,11 @@ return {
                 description = 'New Squad Alternating Idle',
                 tree = 'AlternatingIdleMudrak',
                 parameters = {},
+            },
+            TestPathVolume = {
+                description = 'Test Path Volume',
+                tree = 'TestPathVolume',
+                parameters = {},
             }
         },
     },
