@@ -1,22 +1,22 @@
 {
-  "name": "<unnamed>",
+  "name": "Root",
   "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
   "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "<unnamed>",
+      "name": "Logic",
       "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
       "type": "sequence",
       "subtrees": [
         {
-          "name": "Prepare order data",
-          "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-          "type": "scriptAction",
-          "decorators": [
+          "name": "Setup",
+          "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
+          "type": "sequence",
+          "subtrees": [
             {
+              "name": "Setup Defence Area",
               "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
               "type": "scriptAction",
-              "name": "Setup Defence Area",
               "script": [
                 "local myPosition = arg.orderData.destination",
                 "",
@@ -37,11 +37,14 @@
               ]
             },
             {
+              "name": "Create Defence Area for each FireTeam",
               "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
               "type": "scriptAction",
-              "name": "Create Defence Area for each FireTeam",
               "script": [
-                "loc.childGroupsCount = self:GetChildGroupCount();",
+                "loc.leaderGroup = self:GetLeaderGroup()",
+                "loc.leader = self:GetLeader()",
+                "",
+                "loc.childGroupsCount = self:GetChildGroupCount() - 1;",
                 "",
                 "local step = 2 * math.pi/loc.childGroupsCount;",
                 "local halfStep = step * 0.5;",
@@ -51,6 +54,7 @@
                 "",
                 "local z = center:Z();",
                 "loc.sectorPolygons = {}",
+                "loc.observationPolygons = {}",
                 "",
                 "",
                 "local x = center:X() + loc.defenceRadius * math.cos(0);",
@@ -58,21 +62,46 @@
                 "",
                 "local lastPoint = Vec3(x,y,z)",
                 "",
+                "x = center:X() + loc.observationRadius * math.cos(0);",
+                "y = center:Y() + loc.observationRadius * math.sin(0);",
+                "",
+                "local observationLastPoint = Vec3(x,y,z)",
+                "",
+                "",
                 "for i = 0, loc.childGroupsCount - 1 do",
                 "    local sectorVerts = {}",
+                "    local observationVerts = {}",
+                "",
+                "",
                 "    table.insert(sectorVerts, center)",
                 "    table.insert(sectorVerts, lastPoint);",
+                "    table.insert(observationVerts, center)",
+                "    table.insert(observationVerts, observationLastPoint);",
+                "",
+                "--",
                 "",
                 "    radians = i * step;",
                 "    x = center:X() + loc.defenceRadius * math.cos(radians + halfStep);",
                 "    y = center:Y() + loc.defenceRadius * math.sin(radians + halfStep);",
                 "    table.insert(sectorVerts, Vec3(x, y, z));",
-                "    ",
+                "",
+                "    x = center:X() + loc.observationRadius * math.cos(radians + halfStep);",
+                "    y = center:Y() + loc.observationRadius * math.sin(radians + halfStep);",
+                "    table.insert(observationVerts, Vec3(x, y, z));",
+                "",
+                " -- ",
+                "",
                 "    radians = radians + step;",
                 "    x = center:X() + loc.defenceRadius * math.cos(radians);",
                 "    y = center:Y() + loc.defenceRadius * math.sin(radians);",
                 "    lastPoint = Vec3(x,y,z);",
                 "    table.insert(sectorVerts, lastPoint);",
+                "",
+                "    x = center:X() + loc.observationRadius * math.cos(radians);",
+                "    y = center:Y() + loc.observationRadius * math.sin(radians);",
+                "    observationLastPoint = Vec3(x,y,z);",
+                "    table.insert(observationVerts, observationLastPoint);",
+                "",
                 "",
                 "--[[",
                 "    DebugLog(\"vertex\")    ",
@@ -92,6 +121,10 @@
                 "]]",
                 "    local poly = Polygon(sectorVerts);",
                 "    table.insert(loc.sectorPolygons, poly);",
+                "",
+                "    poly = Polygon(observationVerts);",
+                "    table.insert(loc.observationPolygons, poly);",
+                "",
                 "end",
                 "--[[",
                 "for i, poly in ipairs(loc.sectorPolygons) do",
@@ -120,27 +153,51 @@
                 "    table.insert(loc.sectorPolygonCenters, center)",
                 "end"
               ]
+            },
+            {
+              "name": "Prepare order data",
+              "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
+              "type": "scriptAction",
+              "script": [
+                "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
+                "",
+                "",
+                "-- content for every message",
+                "loc.subordinates = {}",
+                "",
+                "loc.subordinateData = InternalTable()",
+                "-- list of subordinates",
+                "if(self:GetChildGroupCount() - 1 ~= #loc.sectorPolygons) then",
+                "    DebugLog(\"Error 1\");",
+                "end",
+                "",
+                "",
+                "local index = 1;",
+                "",
+                "for i = 0, self:GetChildGroupCount() - 1 do",
+                "    local subordinate = self:GetChildGroup(i)",
+                "",
+                "    if subordinate ~= loc.leaderGroup then",
+                "        table.insert(loc.subordinates, subordinate)",
+                "",
+                "        loc.subordinateData[subordinate] = {",
+                "            orderName = \"Defend\",",
+                "            destination = loc.sectorPolygonCenters[index],",
+                "            heading = HeadingMode.AtPos",
+                "        }",
+                "",
+                "        index = index + 1",
+                "    end",
+                "end",
+                "",
+                "table.insert(loc.subordinates, loc.leaderGroup)",
+                "loc.subordinateData[loc.leaderGroup] = {",
+                "    orderName = \"Defend\",",
+                "    destination = arg.orderData.destination,",
+                "    heading = HeadingMode.AtPos",
+                "}"
+              ]
             }
-          ],
-          "script": [
-            "",
-            "-- content for every message",
-            "loc.subordinates = {}",
-            "",
-            "loc.subordinateData = InternalTable()",
-            "-- list of subordinates",
-            "if(self:GetChildGroupCount() ~= #loc.sectorPolygons) then",
-            "    DebugLog(\"Error\");",
-            "end",
-            "",
-            "for i = 0, self:GetChildGroupCount() - 1 do",
-            "    local subordinate = self:GetChildGroup(i);",
-            "    table.insert(loc.subordinates, subordinate)    ",
-            "    loc.subordinateData[subordinate] = {orderName = \"Defend\", destination = loc.sectorPolygonCenters[i], heading = HeadingMode.AtPos};",
-            "    self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData[subordinate])",
-            "    -- DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
-            "end",
-            "--end"
           ]
         },
         {
@@ -166,9 +223,75 @@
       ]
     },
     {
+      "name": "Debug",
+      "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "Draw Sectors",
+          "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
+          "type": "scriptAction",
+          "script": [
+            "local Z = arg.orderData.destination:Z();",
+            "",
+            "if loc.sectorPolygons ~= nil then",
+            "    for i, poly in ipairs(loc.sectorPolygons) do",
+            "        for i = 1, poly:Count() - 1 do",
+            "            local v1 = Vec3(poly:Vertex(i):X(), poly:Vertex(i):Y(), Z);",
+            "            local v2 = Vec3(poly:Vertex(i+1):X(), poly:Vertex(i+1):Y(), Z);",
+            "            DebugLine(v1, v2,  0, 0, 1, 1)",
+            "        end",
+            "        DebugLine(poly:Vertex(poly:Count()), poly:Vertex(1), 0, 0, 1, 1)",
+            "    end",
+            "end",
+            "",
+            "",
+            "",
+            "if loc.observationPolygons ~= nil then",
+            "    for i, poly in ipairs(loc.observationPolygons) do",
+            "        for i = 1, poly:Count() - 1 do",
+            "            local v1 = Vec3(poly:Vertex(i):X(), poly:Vertex(i):Y(), Z);",
+            "            local v2 = Vec3(poly:Vertex(i+1):X(), poly:Vertex(i+1):Y(), Z);",
+            "            DebugLine(v1, v2, 1, 1, 0, 1)",
+            "        end",
+            "        DebugLine(poly:Vertex(poly:Count()), poly:Vertex(1), 1, 1, 0, 1)",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Draw centers",
+          "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
+          "type": "scriptAction",
+          "script": [
+            "local Z = arg.orderData.destination:Z();",
+            "local CORRECTION = 2;",
+            "if loc.sectorPolygonCenters ~= nil then",
+            "    for i, center in ipairs(loc.sectorPolygonCenters) do",
+            "        local center1 = Vec3(center:X(), center:Y(), Z);",
+            "        local center2 = Vec3(center:X(), center:Y(), Z + CORRECTION);",
+            "        DebugLine(center1, center2, 1, 1, 1, 1)",
+            "    end",
+            "end"
+          ]
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
       "name": "Draw Area ",
       "id": "37511152-7fa0-4b6b-a879-434aff25b436",
       "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "37511152-7fa0-4b6b-a879-434aff25b436",
+            "position": "2187.5,627.5"
+          }
+        ],
+        "editorObjects": []
+      },
       "script": [
         "if loc.areaOfDefence ~= nil then",
         "    local area = {polygon = Polygon(loc.areaOfDefence), verts = loc.areaOfDefence }",
@@ -190,60 +313,58 @@
         "    end",
         "end"
       ]
-    },
-    {
-      "name": "Draw Sectors",
-      "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-      "type": "scriptAction",
-      "script": [
-        "local Z = arg.orderData.destination:Z();",
-        "if loc.sectorPolygons ~= nil then",
-        "    for i, poly in ipairs(loc.sectorPolygons) do",
-        "        for i = 1, poly:Count() - 1 do",
-        "            local v1 = Vec3(poly:Vertex(i):X(), poly:Vertex(i):Y(), Z);",
-        "            local v2 = Vec3(poly:Vertex(i+1):X(), poly:Vertex(i+1):Y(), Z);",
-        "            DebugLine(v1, v2, 1, 1, 1, 1)",
-        "        end",
-        "        DebugLine(poly:Vertex(poly:Count()), poly:Vertex(1), 1, 1, 1, 1)",
-        "    end",
-        "end"
-      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "1737.5,236"
+        "position": "1737.5,326"
       },
       {
         "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
-        "position": "1387,377.25"
+        "position": "1375,463.5"
+      },
+      {
+        "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
+        "position": "750,626"
+      },
+      {
+        "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
+        "position": "487.5,788.5"
+      },
+      {
+        "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
+        "position": "687.5,788.5"
       },
       {
         "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-        "position": "725,648.5"
+        "position": "1037.5,788.5"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "1350,636"
+        "position": "1300,738.5"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "1825,598.5"
+        "position": "1825,688.5"
       },
       {
-        "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-        "position": "2175,436"
+        "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
+        "position": "2337.5,463.5"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "2400,423.5"
+        "position": "2425,626"
+      },
+      {
+        "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
+        "position": "2737.5,613.5"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,2811",
-    "gridPadding": "0,11"
+    "canvasSize": "3840,2901",
+    "gridPadding": "0,1"
   },
   "parameters": [
     {
@@ -258,8 +379,12 @@
     "subordinateData": "return nil",
     "areaOfDefence": "return nil",
     "childGroupsCount": "return nil",
-    "defenceRadius": "return 25",
+    "defenceRadius": "return 30",
     "sectorPolygons": "return nil",
-    "sectorPolygonCenters": "return nil"
+    "sectorPolygonCenters": "return nil",
+    "leaderGroup": "return nil",
+    "leader": "return nil",
+    "observationRadius": "return 75",
+    "observationPolygons": "return nil"
   }
 }
