@@ -174,93 +174,121 @@
       ]
     },
     {
-      "name": "draw path",
-      "id": "a64057bd-8207-4634-a090-860d8cdeb2b0",
-      "type": "sequence",
+      "name": "draw or not to draw",
+      "id": "544ba104-5041-49f3-9453-29fd940f0398",
+      "type": "selector",
       "subtrees": [
         {
-          "name": "draw main path",
-          "id": "8527ed8f-904f-425e-9112-d20caa5741bb",
-          "type": "supervisedParallel",
+          "name": "draw path",
+          "id": "a64057bd-8207-4634-a090-860d8cdeb2b0",
+          "type": "sequence",
           "subtrees": [
             {
-              "name": "debugTacticalPath",
-              "id": "11445519-5f10-4d63-8787-deb3ae464c16",
-              "type": "scriptAction",
-              "script": [
-                "if",
-                "    loc.tacticalPath ~= nil",
-                "then",
-                "    local OFFSET = Vec3(0,0,1.5) -- draw up",
-                "    local count = loc.tacticalPath:GetSegmentCount()",
-                "    for i=1, count-1 do",
-                "        DebugLine(",
-                "            loc.tacticalPath:GetSegmentStart(i) + OFFSET,",
-                "            loc.tacticalPath:GetSegmentEnd(i) + OFFSET,",
-                "            1, 0, 0, 1",
-                "        )",
-                "    end",
-                "end"
+              "name": "draw main path",
+              "id": "8527ed8f-904f-425e-9112-d20caa5741bb",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "debugTacticalPath",
+                  "id": "11445519-5f10-4d63-8787-deb3ae464c16",
+                  "type": "scriptAction",
+                  "script": [
+                    "if",
+                    "    loc.tacticalPath ~= nil",
+                    "then",
+                    "    local OFFSET = Vec3(0,0,1.5) -- draw up",
+                    "    local count = loc.tacticalPath:GetSegmentCount()",
+                    "    for i=1, count-1 do",
+                    "        DebugLine(",
+                    "            loc.tacticalPath:GetSegmentStart(i) + OFFSET,",
+                    "            loc.tacticalPath:GetSegmentEnd(i) + OFFSET,",
+                    "            1, 0, 0, 1",
+                    "        )",
+                    "    end",
+                    "end"
+                  ]
+                }
               ]
+            },
+            {
+              "name": "draw cicrles",
+              "id": "702e84c6-e088-4af9-b5ed-77139f688019",
+              "type": "supervisedParallel",
+              "subtrees": [
+                {
+                  "name": "debugCicrles",
+                  "id": "c629a076-f33a-495e-a824-77288d788f98",
+                  "type": "scriptAction",
+                  "script": [
+                    "if",
+                    "    loc.tacticalPath ~= nil",
+                    "then",
+                    "    local OFFSET = Vec3(0,0,1.5)",
+                    "    if loc.leftPoints and loc.rightPoints then",
+                    "        for i=1, math.min(#loc.leftPoints, #loc.rightPoints) do",
+                    "            -- draw base left-right line",
+                    "            DebugLine(",
+                    "                loc.leftPoints[i] + OFFSET,",
+                    "                loc.rightPoints[i] + OFFSET,",
+                    "                0, 1, 0, 1",
+                    "            )",
+                    "            -- draw precomputed markers for this line",
+                    "            if loc.lineMarkers and loc.lineMarkers[i] then",
+                    "                for j=1, #loc.lineMarkers[i] do",
+                    "                    local pt = loc.lineMarkers[i][j]",
+                    "                    DebugLine(",
+                    "                        pt + OFFSET,",
+                    "                        pt + OFFSET + Vec3(0,0,0.5),",
+                    "                        0, 1, 0, 1",
+                    "                    )",
+                    "                end",
+                    "            end",
+                    "        end",
+                    "    elseif loc.mainPoints then",
+                    "        for i=1, #loc.mainPoints do",
+                    "            DebugLine(",
+                    "                loc.mainPoints[i] + OFFSET,",
+                    "                loc.mainPoints[i] + OFFSET + OFFSET,",
+                    "                0, 1, 0, 1",
+                    "            )",
+                    "        end",
+                    "    end",
+                    "end"
+                  ]
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "db5c10c2-d7f0-4e80-82a5-f7cee917bc19",
+              "type": "scriptCondition",
+              "name": "is debug enabled",
+              "script": [
+                "return arg.orderData.debugEnabled"
+              ]
+            },
+            {
+              "id": "14c3d307-13a8-4f65-b4cf-6b716768c949",
+              "type": "loopForever",
+              "name": "draw every frame"
             }
           ]
         },
         {
-          "name": "draw cicrles",
-          "id": "702e84c6-e088-4af9-b5ed-77139f688019",
-          "type": "supervisedParallel",
-          "subtrees": [
-            {
-              "name": "debugCicrles",
-              "id": "c629a076-f33a-495e-a824-77288d788f98",
-              "type": "scriptAction",
-              "script": [
-                "if",
-                "    loc.tacticalPath ~= nil",
-                "then",
-                "    local OFFSET = Vec3(0,0,1.5)",
-                "    if loc.leftPoints and loc.rightPoints then",
-                "        for i=1, math.min(#loc.leftPoints, #loc.rightPoints) do",
-                "            -- draw base left-right line",
-                "            DebugLine(",
-                "                loc.leftPoints[i] + OFFSET,",
-                "                loc.rightPoints[i] + OFFSET,",
-                "                0, 1, 0, 1",
-                "            )",
-                "            -- draw precomputed markers for this line",
-                "            if loc.lineMarkers and loc.lineMarkers[i] then",
-                "                for j=1, #loc.lineMarkers[i] do",
-                "                    local pt = loc.lineMarkers[i][j]",
-                "                    DebugLine(",
-                "                        pt + OFFSET,",
-                "                        pt + OFFSET + Vec3(0,0,0.5),",
-                "                        0, 1, 0, 1",
-                "                    )",
-                "                end",
-                "            end",
-                "        end",
-                "    elseif loc.mainPoints then",
-                "        for i=1, #loc.mainPoints do",
-                "            DebugLine(",
-                "                loc.mainPoints[i] + OFFSET,",
-                "                loc.mainPoints[i] + OFFSET + OFFSET,",
-                "                0, 1, 0, 1",
-                "            )",
-                "        end",
-                "    end",
-                "end"
-              ]
-            }
-          ]
+          "name": "Wait Forever",
+          "id": "78442b20-1182-4ddd-a49f-b09026aae0b7",
+          "type": "waitForever"
         }
-      ]
+      ],
+      "active": true
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "b5ed7f35-2cd4-41d5-b4d0-60d4b63b8907",
-        "position": "1500,1461.1"
+        "position": "1500,1161.1"
       },
       {
         "id": "cd2f8545-0bcf-43f7-9401-1fb2b559ca17",
@@ -283,8 +311,12 @@
         "position": "1362.5,1748.6"
       },
       {
+        "id": "544ba104-5041-49f3-9453-29fd940f0398",
+        "position": "1844.5,1376.1"
+      },
+      {
         "id": "a64057bd-8207-4634-a090-860d8cdeb2b0",
-        "position": "1912.5,1536.1"
+        "position": "1862.5,1486.1"
       },
       {
         "id": "8527ed8f-904f-425e-9112-d20caa5741bb",
@@ -301,6 +333,10 @@
       {
         "id": "c629a076-f33a-495e-a824-77288d788f98",
         "position": "1912.5,1748.6"
+      },
+      {
+        "id": "78442b20-1182-4ddd-a49f-b09026aae0b7",
+        "position": "2135.5,1448.1"
       }
     ],
     "editorObjects": [],
@@ -311,11 +347,13 @@
     {
       "name": "orderData",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     },
     {
       "name": "result",
       "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],
@@ -330,7 +368,6 @@
     "rightPointOffset": "return nil",
     "numberPoints": "return nil",
     "mainPoints": "return nil",
-    "debug": "return nil",
     "leftPoints": "return nil",
     "rightPoints": "return nil",
     "lineMarkers": "return nil"
