@@ -1,0 +1,147 @@
+{
+  "name": "main",
+  "id": "b6d61006-0c93-4d5b-a661-9ebf2e51b95d",
+  "type": "supervisedParallel",
+  "subtrees": [
+    {
+      "name": "<unnamed>",
+      "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "GetSuperPath",
+          "id": "7df13009-25c0-4545-881e-fb65013d011d",
+          "type": "reference",
+          "target": [
+            "behaviors_dprk_base",
+            "GetPath"
+          ],
+          "arguments": {
+            "orderData": "loc.inputData",
+            "result": "loc.nextPositions"
+          }
+        },
+        {
+          "name": "Wait Forever",
+          "id": "6aeb7884-3c94-40f8-abd5-093b430e85a9",
+          "type": "waitForever"
+        }
+      ]
+    },
+    {
+      "name": "draw or not to draw",
+      "id": "76a3ceab-545e-4bf0-9373-7d947740680d",
+      "type": "selector",
+      "subtrees": [
+        {
+          "name": "debugCicrles",
+          "id": "eadf37aa-0138-49bb-8940-71c9571a99be",
+          "type": "scriptAction",
+          "decorators": [
+            {
+              "id": "00f0a057-e731-45a1-906c-93931ac84619",
+              "type": "scriptCondition",
+              "name": "is debug enabled",
+              "script": [
+                "return arg.orderData.debugEnabled"
+              ]
+            },
+            {
+              "id": "22ae115e-e349-4dd7-bc8b-d9e428b702fb",
+              "type": "loopForever",
+              "name": "draw every frame"
+            }
+          ],
+          "script": [
+            "if",
+            "    loc.tacticalPath ~= nil",
+            "then",
+            "    local OFFSET = Vec3(0,0,1.5)",
+            "    if loc.leftPoints and loc.rightPoints then",
+            "        for i=1, math.min(#loc.leftPoints, #loc.rightPoints) do",
+            "            -- draw base left-right line",
+            "            DebugLine(",
+            "                loc.leftPoints[i] + OFFSET,",
+            "                loc.rightPoints[i] + OFFSET,",
+            "                0, 1, 0, 1",
+            "            )",
+            "            -- draw precomputed markers for this line",
+            "            if loc.lineMarkers and loc.lineMarkers[i] then",
+            "                for j=1, #loc.lineMarkers[i] do",
+            "                    local pt = loc.lineMarkers[i][j]",
+            "                    DebugLine(",
+            "                        pt + OFFSET,",
+            "                        pt + OFFSET + Vec3(0,0,0.5),",
+            "                        0, 1, 0, 1",
+            "                    )",
+            "                end",
+            "            end",
+            "        end",
+            "    elseif loc.mainPoints then",
+            "        for i=1, #loc.mainPoints do",
+            "            DebugLine(",
+            "                loc.mainPoints[i] + OFFSET,",
+            "                loc.mainPoints[i] + OFFSET + OFFSET,",
+            "                0, 1, 0, 1",
+            "            )",
+            "        end",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Wait Forever",
+          "id": "56e54396-912d-4d37-ab53-b50a5f47830d",
+          "type": "waitForever"
+        }
+      ],
+      "active": true
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "b6d61006-0c93-4d5b-a661-9ebf2e51b95d",
+        "position": "1643,742.5"
+      },
+      {
+        "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
+        "position": "1637.5,837.06"
+      },
+      {
+        "id": "7df13009-25c0-4545-881e-fb65013d011d",
+        "position": "1537.5,924.56"
+      },
+      {
+        "id": "6aeb7884-3c94-40f8-abd5-093b430e85a9",
+        "position": "1712.5,924.56"
+      },
+      {
+        "id": "76a3ceab-545e-4bf0-9373-7d947740680d",
+        "position": "1862.5,824.56"
+      },
+      {
+        "id": "eadf37aa-0138-49bb-8940-71c9571a99be",
+        "position": "1862.5,974.56"
+      },
+      {
+        "id": "56e54396-912d-4d37-ab53-b50a5f47830d",
+        "position": "2141,921.56"
+      }
+    ],
+    "editorObjects": [],
+    "canvasSize": "3840,2987.16",
+    "gridPadding": "0,12.0599999999999"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "evaluation": "passByReference"
+    }
+  ],
+  "locals": {
+    "inputData": "return nil",
+    "nextPositions": "return nil"
+  }
+}

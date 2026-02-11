@@ -208,6 +208,16 @@
                     "end"
                   ]
                 }
+              ],
+              "decorators": [
+                {
+                  "id": "88f526ea-1f12-436e-b2da-55a431f56434",
+                  "type": "scriptCondition",
+                  "name": "is debug one enabled",
+                  "script": [
+                    "return arg.orderData.debugOneEnabled"
+                  ]
+                }
               ]
             },
             {
@@ -254,6 +264,16 @@
                     "        end",
                     "    end",
                     "end"
+                  ]
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "bad654c3-5cad-4d13-b4d9-c2441b8560a9",
+                  "type": "scriptCondition",
+                  "name": "is debug two enabled",
+                  "script": [
+                    "return arg.orderData.debugTwoEnabled"
                   ]
                 }
               ]
@@ -320,11 +340,11 @@
       },
       {
         "id": "8527ed8f-904f-425e-9112-d20caa5741bb",
-        "position": "1750,1661.1"
+        "position": "1725,1662.1"
       },
       {
         "id": "11445519-5f10-4d63-8787-deb3ae464c16",
-        "position": "1750,1748.6"
+        "position": "1725,1812.1"
       },
       {
         "id": "702e84c6-e088-4af9-b5ed-77139f688019",
@@ -332,7 +352,7 @@
       },
       {
         "id": "c629a076-f33a-495e-a824-77288d788f98",
-        "position": "1912.5,1748.6"
+        "position": "1925,1812.1"
       },
       {
         "id": "78442b20-1182-4ddd-a49f-b09026aae0b7",
@@ -341,7 +361,7 @@
     ],
     "editorObjects": [],
     "canvasSize": "3840,2625.5",
-    "gridPadding": "0,11.0999999999999"
+    "gridPadding": "0,12.0999999999999"
   },
   "parameters": [
     {
