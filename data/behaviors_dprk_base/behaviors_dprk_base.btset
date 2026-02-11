@@ -13,6 +13,7 @@
     "DPRKsquad\\AlternatingIdleMudrak.bt",
     "DPRKsquad\\AlternatingRetreat.bt",
     "DPRKsquad\\SuccesiveAdvance.bt",
+    "DPRKsquad\\GetPath.bt",
     "Tests\\TestPathVolume.bt",
     "AutonomousBehavior.bt",
     "OP4sensor.bt",
