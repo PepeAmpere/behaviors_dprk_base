@@ -65,6 +65,11 @@ return {
                 description = 'Test Path Volume',
                 tree = 'TestPathVolume',
                 parameters = {},
+            },
+            TestGetPath = {
+                description = 'Test Get Path',
+                tree = 'TestGetPath',
+                parameters = {},
             }
         },
     },

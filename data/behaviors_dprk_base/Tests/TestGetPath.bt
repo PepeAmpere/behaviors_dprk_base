@@ -4,10 +4,37 @@
   "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "<unnamed>",
+      "name": "Wait Forever",
+      "id": "fe3dec0c-6740-45c0-9cc3-b7c4a4503f6f",
+      "type": "waitForever"
+    },
+    {
+      "name": "get super path",
       "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
       "type": "sequence",
       "subtrees": [
+        {
+          "name": "debugCicrles",
+          "id": "dd273635-5346-44cd-aeac-407ca8f60f54",
+          "type": "scriptAction",
+          "script": [
+            "loc.inputData = {}",
+            "loc.inputData.startPosition = self:GetPosition()",
+            "if arg.orderData.destination ~= nil then",
+            "    loc.inputData.endPosition = arg.orderData.destination ",
+            "else",
+            " loc.inputData.endPosition = bb.target:GetPosition()",
+            "end",
+            "loc.inputData.stepAlongPath = 100",
+            "loc.inputData.leftPointOffset = 20",
+            "loc.inputData.rightPointOffset = 20",
+            "loc.inputData.numberPoints = 5",
+            "loc.inputData.debugOneEnabled = true",
+            "loc.inputData.debugTwoEnabled = false",
+            "",
+            "loc.nextPositions = {}"
+          ]
+        },
         {
           "name": "GetSuperPath",
           "id": "7df13009-25c0-4545-881e-fb65013d011d",
@@ -53,38 +80,15 @@
             }
           ],
           "script": [
-            "if",
-            "    loc.tacticalPath ~= nil",
-            "then",
-            "    local OFFSET = Vec3(0,0,1.5)",
-            "    if loc.leftPoints and loc.rightPoints then",
-            "        for i=1, math.min(#loc.leftPoints, #loc.rightPoints) do",
-            "            -- draw base left-right line",
-            "            DebugLine(",
-            "                loc.leftPoints[i] + OFFSET,",
-            "                loc.rightPoints[i] + OFFSET,",
-            "                0, 1, 0, 1",
-            "            )",
-            "            -- draw precomputed markers for this line",
-            "            if loc.lineMarkers and loc.lineMarkers[i] then",
-            "                for j=1, #loc.lineMarkers[i] do",
-            "                    local pt = loc.lineMarkers[i][j]",
-            "                    DebugLine(",
-            "                        pt + OFFSET,",
-            "                        pt + OFFSET + Vec3(0,0,0.5),",
-            "                        0, 1, 0, 1",
-            "                    )",
-            "                end",
-            "            end",
-            "        end",
-            "    elseif loc.mainPoints then",
-            "        for i=1, #loc.mainPoints do",
-            "            DebugLine(",
-            "                loc.mainPoints[i] + OFFSET,",
-            "                loc.mainPoints[i] + OFFSET + OFFSET,",
-            "                0, 1, 0, 1",
-            "            )",
-            "        end",
+            "if loc.nextPositions ~= nil and loc.nextPositions.output ~= nil and #loc.nextPositions.output > 0 then",
+            "    local OFFSET = Vec3(0,0,0.5)",
+            "    for i=1, #loc.nextPositions.output do",
+            "        local pt = loc.nextPositions.output[i]",
+            "        DebugLine(",
+            "            pt + OFFSET,",
+            "            pt + OFFSET + Vec3(0,0,1),",
+            "            0, 1, 0, 1",
+            "        )",
             "    end",
             "end"
           ]
@@ -102,11 +106,19 @@
     "nodesInfo": [
       {
         "id": "b6d61006-0c93-4d5b-a661-9ebf2e51b95d",
-        "position": "1643,742.5"
+        "position": "1712.5,724.56"
+      },
+      {
+        "id": "fe3dec0c-6740-45c0-9cc3-b7c4a4503f6f",
+        "position": "1462.5,724.56"
       },
       {
         "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
-        "position": "1637.5,837.06"
+        "position": "1537.5,837.06"
+      },
+      {
+        "id": "dd273635-5346-44cd-aeac-407ca8f60f54",
+        "position": "1362.5,924.56"
       },
       {
         "id": "7df13009-25c0-4545-881e-fb65013d011d",
@@ -118,15 +130,15 @@
       },
       {
         "id": "76a3ceab-545e-4bf0-9373-7d947740680d",
-        "position": "1862.5,824.56"
+        "position": "1875,837.06"
       },
       {
         "id": "eadf37aa-0138-49bb-8940-71c9571a99be",
-        "position": "1862.5,974.56"
+        "position": "1875,924.56"
       },
       {
         "id": "56e54396-912d-4d37-ab53-b50a5f47830d",
-        "position": "2141,921.56"
+        "position": "2050,924.56"
       }
     ],
     "editorObjects": [],
@@ -136,7 +148,8 @@
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": false,
+      "isOptional": true,
+      "defaultValue": "return { destination = nil, debugEnabled = true}",
       "evaluation": "passByReference"
     }
   ],

@@ -19,16 +19,15 @@
           "type": "scriptAction",
           "script": [
             "-- inputs",
-            "loc.endPosition = bb.target:GetPosition()   -- end",
-            "loc.stepAlongPath = 100                     -- distance between points along the path (optional, default is 100)",
-            "loc.leftPointOffset = 10                    -- offset to the left of the path (optional, default is 10)",
-            "loc.rightPointOffset = 10                   -- offset to the right of the path (optional, default is 10)",
-            "loc.numberPoints = 5                        -- number of points in each step along the path (optional, default is 3 - just two squads and captain in the middle)",
+            "loc.endPosition = arg.orderData.endPosition",
+            "loc.stepAlongPath = arg.orderData.stepAlongPath",
+            "loc.leftPointOffset = arg.orderData.leftPointOffset",
+            "loc.rightPointOffset = arg.orderData.rightPointOffset",
+            "loc.numberPoints = arg.orderData.numberPoints",
+            "loc.startPosition = arg.orderData.startPosition",
             "",
-            "-- helpers",
-            "loc.startPosition = self:GetPosition()      -- start",
-            "loc.circles = {}                            -- helper array to store positions of the circle objects for drawing",
-            "loc.mainPoints = {}                             -- array to store points along the path (main points, without offsets)"
+            "--helpers",
+            "loc.mainPoints = {}"
           ]
         },
         {
@@ -166,9 +165,43 @@
             "        end",
             "    end",
             "",
+            "    loc.output = { nextPosition = loc.mainPoints[2], markers = (loc.lineMarkers and loc.lineMarkers[2]) or {} }",
+            "",
+            "    loc.outputPath = {}",
+            "",
+            "    for i = 1, #loc.output.markers do",
+            "        local distToMarker = loc.output.nextPosition:Distance(loc.output.markers[i])",
+            "        DebugLog(tostring(distToMarker))",
+            "        loc.outputPath[#loc.outputPath+1] = FindPath(",
+            "            loc.output.nextPosition,",
+            "            loc.output.markers[i],",
+            "            { maxRemainingDistance = distToMarker }",
+            "        )",
+            "    end",
             "    return true",
             "end",
             "return false"
+          ]
+        },
+        {
+          "name": "waitUntilCalcDone",
+          "id": "85631a3b-e99d-4af2-9e8d-a75f3887a92f",
+          "type": "waitUntil",
+          "condition": [
+            "for i=1, #loc.outputPath do",
+            "    if loc.outputPath[i]:IsReady() == false then",
+            "        return false",
+            "    end",
+            "end",
+            "",
+            "loc.outputPathPoints = {}",
+            "for i=1, #loc.outputPath do",
+            "    loc.outputPathPoints[i] = loc.outputPath[i]:Value():EndPoint()",
+            "    DebugLog(tostring(loc.outputPath[i]:Value():Length()))",
+            "end",
+            "",
+            "arg.result.output = loc.outputPathPoints",
+            "return true"
           ]
         }
       ]
@@ -285,7 +318,7 @@
               "type": "scriptCondition",
               "name": "is debug enabled",
               "script": [
-                "return arg.orderData.debugEnabled"
+                "return arg.orderData.debugOneEnabled or arg.orderData.debugTwoEnabled"
               ]
             },
             {
@@ -308,43 +341,51 @@
     "nodesInfo": [
       {
         "id": "b5ed7f35-2cd4-41d5-b4d0-60d4b63b8907",
-        "position": "1500,1161.1"
+        "position": "1612.5,1312.1"
+      },
+      {
+        "id": "114240bc-6279-4c4d-bf21-d636ad0da504",
+        "position": "1025,1387.1"
       },
       {
         "id": "cd2f8545-0bcf-43f7-9401-1fb2b559ca17",
-        "position": "1075,1536.1"
+        "position": "1362.5,1312.1"
       },
       {
         "id": "6908fac2-95a9-45db-baab-51edb418ce77",
-        "position": "1200,1636.1"
+        "position": "1370.5,1424.6"
       },
       {
         "id": "ce83a80d-7981-47ef-a6cd-0bc55c52d16f",
-        "position": "1037.5,1748.6"
+        "position": "1045.5,1549.6"
       },
       {
         "id": "be7a7bee-0edc-46a0-bc0c-bf3e80d962f6",
-        "position": "1200,1748.6"
+        "position": "1208,1549.6"
       },
       {
         "id": "cac13a3f-a5df-4002-8881-0e8b756e81fc",
-        "position": "1362.5,1748.6"
+        "position": "1370.5,1549.6"
+      },
+      {
+        "id": "85631a3b-e99d-4af2-9e8d-a75f3887a92f",
+        "position": "1533,1549.6"
       },
       {
         "id": "544ba104-5041-49f3-9453-29fd940f0398",
-        "position": "1844.5,1376.1"
+        "position": "1825,1387.1"
       },
       {
         "id": "a64057bd-8207-4634-a090-860d8cdeb2b0",
-        "position": "1862.5,1486.1"
+        "position": "1825,1487.1"
       },
       {
         "id": "8527ed8f-904f-425e-9112-d20caa5741bb",
-        "position": "1725,1662.1"
+        "position": "1737.5,1662.1"
       },
       {
         "id": "11445519-5f10-4d63-8787-deb3ae464c16",
-        "position": "1725,1812.1"
+        "position": "1750,1812.1"
       },
       {
         "id": "702e84c6-e088-4af9-b5ed-77139f688019",
@@ -352,14 +393,28 @@
       },
       {
         "id": "c629a076-f33a-495e-a824-77288d788f98",
-        "position": "1925,1812.1"
+        "position": "1912.5,1812.1"
       },
       {
         "id": "78442b20-1182-4ddd-a49f-b09026aae0b7",
-        "position": "2135.5,1448.1"
+        "position": "1987.5,1487.1"
       }
     ],
-    "editorObjects": [],
+    "editorObjects": [
+      {
+        "id": "114240bc-6279-4c4d-bf21-d636ad0da504",
+        "type": "comment",
+        "header": "Main logic",
+        "body": "- maping input variables on locals\r\n- calling build-in FindPath\r\n- calculating all main points on road in given steps\r\n- calculating all positions on those poinst\r\n- finding accesible next poits throught FindPath\r\n  with maximum distance\r\n- return next tupple in outputs variables",
+        "bodyAlignment": "Left",
+        "width": 670.0,
+        "height": 331.0,
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
     "canvasSize": "3840,2625.5",
     "gridPadding": "0,12.0999999999999"
   },
@@ -378,18 +433,20 @@
     }
   ],
   "locals": {
+    "tacticalPath": "return nil",
+    "tacticalPathRequest": "return nil",
     "startPosition": "return nil",
     "endPosition": "return nil",
-    "tacticalPathRequest": "return nil",
-    "tacticalPath": "return nil",
-    "circles": "return nil",
     "stepAlongPath": "return nil",
     "leftPointOffset": "return nil",
     "rightPointOffset": "return nil",
     "numberPoints": "return nil",
-    "mainPoints": "return nil",
     "leftPoints": "return nil",
     "rightPoints": "return nil",
-    "lineMarkers": "return nil"
+    "lineMarkers": "return nil",
+    "mainPoints": "return nil",
+    "output": "return nil",
+    "outputPath": "return nil",
+    "outputPathPoints": "return nil"
   }
 }
