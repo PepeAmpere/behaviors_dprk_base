@@ -368,11 +368,11 @@ class CfgAvailableBehaviors
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
 		allowRotate = true; // you also get direction
 
+		displayname = "DPRK Test Path Volume";
+		description = "DPRK Test Path Volume";
 
-		displayname = "DPRK Test Get Path";
-		description = "DPRK Test Get Path";
+		orderName = "TestPathVolume"; // it will implicitly have position as well
 
-		orderName = "TestGetPath"; // it will implicitly have position as well
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 
 		class RootBehaviors
@@ -409,11 +409,11 @@ class CfgAvailableBehaviors
 		icon = "\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
 		allowRotate = true; // you also get direction
 
+		displayname = "DPRK Test Get Path";
+		description = "DPRK Test Get Path";
 
-		displayname = "DPRK Test Path Volume";
-		description = "DPRK Test Path Volume";
+		orderName = "TestGetPath"; // it will implicitly have position as well
 
-		orderName = "TestPathVolume"; // it will implicitly have position as well
 		prepareActionMessage = "vbs2\vbs_plugins\ai\standard_behaviors\data\scripts\PrepareBTParameters.sqf";
 
 		class RootBehaviors
@@ -425,23 +425,47 @@ class CfgAvailableBehaviors
 
 		class Parameters
 		{
-			class debugEnabled
+			class stepAlongPath
 			{
-				displayName = "debugEnabled";
-				value = "true";
+				displayName = "stepAlongPath";
+				value = "100";
+				type = "number";
+			};
+			class leftPointOffset
+			{
+				displayName = "leftPointOffset";
+				value = "80";
+				type = "number";
+			};
+			class rightPointOffset
+			{
+				displayName = "rightPointOffset";
+				value = "80";
+				type = "number";
+			};
+			class numberPoints
+			{
+				displayName = "numberPoints";
+				value = "5";
+				type = "number";
+			};
+			class debugPath
+			{
+				displayName = "debugPath";
+				value = "false";
 				type = "boolean";
 			};
-			class advancedDebugType
+			class debugPartialPath
 			{
-				displayName = "advancedDebugType";
-				value = "0";
-				type = "number";
+				displayName = "debugPartialPath";
+				value = "false";
+				type = "boolean";
 			};
-			class analysisType
+			class debugPosition
 			{
-				displayName = "analysisType";
-				value = "0";
-				type = "number";
+				displayName = "debugPosition";
+				value = "false";
+				type = "boolean";
 			};
 		};
 	};
