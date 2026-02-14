@@ -4,33 +4,22 @@
   "type": "supervisedParallel",
   "subtrees": [
     {
-      "name": "Wait Forever",
-      "id": "fe3dec0c-6740-45c0-9cc3-b7c4a4503f6f",
-      "type": "waitForever"
-    },
-    {
       "name": "get super path",
       "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
       "type": "sequence",
       "subtrees": [
         {
-          "name": "debugCicrles",
+          "name": "init variables",
           "id": "dd273635-5346-44cd-aeac-407ca8f60f54",
           "type": "scriptAction",
           "script": [
             "loc.inputData = {}",
-            "loc.inputData.startPosition = self:GetPosition()",
-            "if arg.orderData.destination ~= nil then",
-            "    loc.inputData.endPosition = arg.orderData.destination ",
-            "else",
-            " loc.inputData.endPosition = bb.target:GetPosition()",
-            "end",
-            "loc.inputData.stepAlongPath = 100",
-            "loc.inputData.leftPointOffset = 20",
-            "loc.inputData.rightPointOffset = 20",
-            "loc.inputData.numberPoints = 5",
-            "loc.inputData.debugOneEnabled = true",
-            "loc.inputData.debugTwoEnabled = false",
+            "loc.inputData.startPosition = self:GetChildGroup(0):GetEntity(0):GetPosition()",
+            "loc.inputData.endPosition = arg.orderData.destination ",
+            "loc.inputData.stepAlongPath = arg.orderData.stepAlongPath",
+            "loc.inputData.leftPointOffset = arg.orderData.leftPointOffset",
+            "loc.inputData.rightPointOffset = arg.orderData.rightPointOffset",
+            "loc.inputData.numberPoints = arg.orderData.numberPoints",
             "",
             "loc.nextPositions = {}"
           ]
@@ -56,61 +45,84 @@
       ]
     },
     {
-      "name": "draw or not to draw",
-      "id": "76a3ceab-545e-4bf0-9373-7d947740680d",
-      "type": "selector",
-      "subtrees": [
+      "name": "debugTacticalPath",
+      "id": "7632c80c-066a-40ce-b156-f2d6592e6c06",
+      "type": "scriptAction",
+      "script": [
+        "if loc.nextPositions.outputPath ~= nil and arg.orderData.debugPath == true then",
+        "    local OFFSET = Vec3(0,0,1.5)",
+        "    ai_core_public.draw.Path(",
+        "        loc.nextPositions.outputPath,",
+        "        1, 0, 0, 1,",
+        "        OFFSET",
+        "    )",
+        "end"
+      ]
+    },
+    {
+      "name": "debugPartialPaths",
+      "id": "96bb2ce7-f4bc-4ee5-8ad9-d15de9a4ffc6",
+      "type": "scriptAction",
+      "decorators": [
         {
-          "name": "debugCicrles",
-          "id": "eadf37aa-0138-49bb-8940-71c9571a99be",
-          "type": "scriptAction",
-          "decorators": [
-            {
-              "id": "00f0a057-e731-45a1-906c-93931ac84619",
-              "type": "scriptCondition",
-              "name": "is debug enabled",
-              "script": [
-                "return arg.orderData.debugEnabled"
-              ]
-            },
-            {
-              "id": "22ae115e-e349-4dd7-bc8b-d9e428b702fb",
-              "type": "loopForever",
-              "name": "draw every frame"
-            }
-          ],
-          "script": [
-            "if loc.nextPositions ~= nil and loc.nextPositions.output ~= nil and #loc.nextPositions.output > 0 then",
-            "    local OFFSET = Vec3(0,0,0.5)",
-            "    for i=1, #loc.nextPositions.output do",
-            "        local pt = loc.nextPositions.output[i]",
-            "        DebugLine(",
-            "            pt + OFFSET,",
-            "            pt + OFFSET + Vec3(0,0,1),",
-            "            0, 1, 0, 1",
-            "        )",
-            "    end",
-            "end"
-          ]
-        },
-        {
-          "name": "Wait Forever",
-          "id": "56e54396-912d-4d37-ab53-b50a5f47830d",
-          "type": "waitForever"
+          "id": "65d3ff46-b03a-4d27-a687-3a4f75b461b2",
+          "type": "succeeder",
+          "name": "Always Succeed"
         }
       ],
-      "active": true
+      "script": [
+        "if loc.nextPositions.outputPartialPaths == nil or arg.orderData.debugPartialPath ~= true  then",
+        "    return false",
+        "end",
+        "",
+        "for i=1, #loc.nextPositions.outputPartialPaths do",
+        "    local OFFSET = Vec3(0,0,1.5)",
+        "    ai_core_public.draw.Path(",
+        "        loc.nextPositions.outputPartialPaths[i],",
+        "        1, 0, 0, 1,",
+        "        OFFSET",
+        "    )",
+        "end"
+      ]
+    },
+    {
+      "name": "debugPoints",
+      "id": "c55b2bf6-e2ef-4932-be4c-6346bbef70ad",
+      "type": "scriptAction",
+      "decorators": [
+        {
+          "id": "533156a7-26ee-4925-bb4e-4a00bf7d6b15",
+          "type": "succeeder",
+          "name": "Always Succeed"
+        }
+      ],
+      "script": [
+        "if loc.nextPositions.outputPoints == nil or arg.orderData.debugPosition ~= true  then",
+        "    return false",
+        "end",
+        "",
+        "for i=1, #loc.nextPositions.outputPoints do",
+        "    local pt = loc.nextPositions.outputPoints[i]",
+        "    local OFFSET = Vec3(0,0,1.5)",
+        "    DebugLine(",
+        "        pt + OFFSET,",
+        "        pt + OFFSET + OFFSET,",
+        "        0, 1, 0, 1",
+        "    )",
+        "end"
+      ]
+    },
+    {
+      "name": "Wait Forever",
+      "id": "4c15d895-f4a2-4c68-a4d6-a2676ee94b33",
+      "type": "waitForever"
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "b6d61006-0c93-4d5b-a661-9ebf2e51b95d",
-        "position": "1712.5,724.56"
-      },
-      {
-        "id": "fe3dec0c-6740-45c0-9cc3-b7c4a4503f6f",
-        "position": "1462.5,724.56"
+        "position": "1537.5,724.56"
       },
       {
         "id": "7e5f3d9c-fdb4-4bb4-aee5-d24c65318b80",
@@ -129,16 +141,20 @@
         "position": "1712.5,924.56"
       },
       {
-        "id": "76a3ceab-545e-4bf0-9373-7d947740680d",
-        "position": "1875,837.06"
+        "id": "7632c80c-066a-40ce-b156-f2d6592e6c06",
+        "position": "1900,924.56"
       },
       {
-        "id": "eadf37aa-0138-49bb-8940-71c9571a99be",
-        "position": "1875,924.56"
+        "id": "96bb2ce7-f4bc-4ee5-8ad9-d15de9a4ffc6",
+        "position": "2062.5,874.56"
       },
       {
-        "id": "56e54396-912d-4d37-ab53-b50a5f47830d",
-        "position": "2050,924.56"
+        "id": "c55b2bf6-e2ef-4932-be4c-6346bbef70ad",
+        "position": "2225,874.56"
+      },
+      {
+        "id": "4c15d895-f4a2-4c68-a4d6-a2676ee94b33",
+        "position": "2387.5,924.56"
       }
     ],
     "editorObjects": [],
@@ -148,8 +164,8 @@
   "parameters": [
     {
       "name": "orderData",
-      "isOptional": true,
-      "defaultValue": "return { destination = nil, debugEnabled = true}",
+      "isOptional": false,
+      "defaultValue": "",
       "evaluation": "passByReference"
     }
   ],
