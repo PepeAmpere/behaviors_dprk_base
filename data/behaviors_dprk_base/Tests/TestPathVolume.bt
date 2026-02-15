@@ -138,7 +138,7 @@
           "script": [
             "for i=1, #loc.enemies do",
             "    local enemyPos = loc.enemies[i]:GetPosition()",
-            "    DebugDraw(",
+            "    DebugLine(",
             "        enemyPos, enemyPos + Vec3(0, 0, 5),",
             "        1, 1, 0, 1",
             "    )",

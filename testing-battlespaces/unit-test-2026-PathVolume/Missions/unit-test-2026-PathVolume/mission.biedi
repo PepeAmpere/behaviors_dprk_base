@@ -1,0 +1,507 @@
+class _prefix_0
+{
+	objectType="prefix";
+	class Arguments
+	{
+		VERSION="11";
+		ADDON[]=
+		{
+			"vbs2_people_au_au_army_rifleman",
+			"vbs2_people_se_army_rifleman",
+			"vbs2_people_afg_afg_man",
+			"vbs2_editor",
+			"vbs2_vbs_plugins_vbscontrol_behavioreo"
+		};
+	};
+	MapGeoCenter[]={0.87886875,0.28898184,7.86782};
+	layers[]={};
+};
+class _group_3
+{
+	objectType="group";
+	height=0.0021902735;
+	class Arguments
+	{
+		NAME="1-1-A-4";
+		DISPLAY_NAME="1-1-A-4";
+		DISPLAY_NAME_TREE="1-1-A-4";
+		POSITION="[1000004.22613, 1000061.50216, 448.41491]";
+		SIDE="WEST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+	};
+};
+class _group_4
+{
+	objectType="group";
+	height=0.0006675293;
+	class Arguments
+	{
+		NAME="1-1-A-5";
+		DISPLAY_NAME="1-1-A-5";
+		DISPLAY_NAME_TREE="1-1-A-5";
+		POSITION="[999963.59422, 1000498.32681, 429.33395]";
+		SIDE="WEST";
+		CATEGORY="structure_groups";
+		SIDC="SFGPUCI----B";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		TASK_CONTROLAI="";
+		SUBORDINATE_GROUP[]=
+		{
+			"_group_5",
+			"_group_6"
+		};
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_5
+{
+	objectType="group";
+	height=0.0006675293;
+	class Arguments
+	{
+		NAME="1-1-A-2";
+		DISPLAY_NAME="1-1-A-2";
+		DISPLAY_NAME_TREE="1-1-A-2";
+		PARENT="_group_4";
+		POSITION="[999963.59422, 1000498.32681, 429.33395]";
+		SIDE="WEST";
+		CATEGORY="";
+		SIDC="SFGPUCI----A";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+		SUPERIOR_GROUP_LINK="";
+		SUBORDINATE_GROUP_LINK="";
+	};
+};
+class _group_6
+{
+	objectType="group";
+	height=-0.00046208984;
+	class Arguments
+	{
+		NAME="1-1-A-3";
+		DISPLAY_NAME="1-1-A-3";
+		DISPLAY_NAME_TREE="1-1-A-3";
+		PARENT="_group_4";
+		POSITION="[999999.66306, 1000484.50492, 425.93893]";
+		SIDE="WEST";
+		CATEGORY="";
+		SIDC="SFGPUCI----A";
+		IS_LEAD_GROUP="true";
+		COLLAPSED="FALSE";
+		CREATED_BY_PLAN="true";
+	};
+};
+class _group_7
+{
+	objectType="group";
+	height=-0.0020140626;
+	class Arguments
+	{
+		NAME="1-1-A-1";
+		DISPLAY_NAME="1-1-A-1";
+		DISPLAY_NAME_TREE="1-1-A-1";
+		POSITION="[999652.21320, 1000754.74169, 427.14740]";
+		SIDE="EAST";
+		CATEGORY="";
+		COLLAPSED="FALSE";
+	};
+};
+class _unit_8
+{
+	objectType="unit";
+	height=0.0021902735;
+	class Arguments
+	{
+		OME_ID="19";
+		SIDE="WEST";
+		TYPE="vbs_au_army_afvcommander_amcu_m_medium_tbas0_none_ef88_helmet";
+		PLAYER="true";
+		PLAYABLE="true";
+		PLAYABILITY="Player";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[1000004.22613, 1000061.50216, 448.41491]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="(P) (PL) AFV Commander - EF88 - TBAS 0";
+		DISPLAY_NAME_TREE="(P) (PL) AFV Commander - EF88 - TBAS 0";
+		PARENT="_group_3";
+	};
+};
+class _unit_9
+{
+	objectType="unit";
+	height=0.0006675293;
+	class Arguments
+	{
+		OME_ID="35";
+		SIDE="WEST";
+		TYPE="vbs_se_army_leader_wdl_M_medium_fmv1_mopp0_ak5c_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999963.59422, 1000498.32681, 429.33395]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Leader - AK5C - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Leader - AK5C - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_5";
+	};
+};
+class _unit_10
+{
+	objectType="unit";
+	height=0.0032006835;
+	class Arguments
+	{
+		OME_ID="59";
+		SIDE="WEST";
+		TYPE="vbs_se_army_mgunner_wdl_M_medium_fmv1_mopp0_ksp58_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999964.25132, 1000493.02407, 429.22250]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_9";
+		DISPLAY_NAME="Machinegunner - Ksp58 - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Machinegunner - Ksp58 - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_5";
+	};
+};
+class _aibehavior_4
+{
+	objectType="aibehavior";
+	height=-0.0011567872;
+	class Arguments
+	{
+		DISPLAY_NAME_TREE="DPRK Test Path Volume";
+		VERSION="1";
+		BEHAVIOR="behaviors_dprk_TestPathVolume";
+		FORMATION="";
+		ADVANCED_PARS="";
+		ADVANCED_PARS_DATA="[[""debugEnabled"",[""debugEnabled"",""true"",""boolean""]],[""advancedDebugType"",[""advancedDebugType"",""0"",""number""]],[""analysisType"",[""analysisType"",""0"",""number""]]]";
+		DESTINATION_ALTITUDE="0";
+		LINKED_TARGETS="";
+		GROUP="_group_4";
+		POSITION="[999650.97402, 1000764.70767, 426.81705]";
+		AZIMUTH="79.924446105957";
+		TREE_PIC="\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
+		MAP_PIC="\vbs2\customer\plugins\behaviors_dprk_base\data\aa.paa";
+		ICON_TEXT="DPRK Test Path Volume";
+		BTSET="behaviors_dprk_base";
+		BTSETPATH="P:\vbs2\customer\plugins\behaviors_dprk_base\data\behaviors_dprk_base\behaviors_dprk_base.btset";
+		BEHAVIOR_ENTITY="AutonomousBehavior";
+		OME_ID="74";
+	};
+};
+class _unit_11
+{
+	objectType="unit";
+	height=-0.0042466111;
+	class Arguments
+	{
+		OME_ID="77";
+		SIDE="WEST";
+		TYPE="vbs_se_army_medic_wdl_M_medium_fmv1_mopp0_ak5c_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999973.25131, 1000493.02404, 428.51678]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_9";
+		DISPLAY_NAME="Medic - AK5C - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Medic - AK5C - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_5";
+	};
+};
+class _unit_12
+{
+	objectType="unit";
+	height=-0.010256094;
+	class Arguments
+	{
+		OME_ID="95";
+		SIDE="WEST";
+		TYPE="vbs_se_army_sniper_wdl_M_medium_fmv1_mopp0_psg90a_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999959.75132, 1000484.02407, 429.22949]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_9";
+		DISPLAY_NAME="Sniper - PSG90A - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Sniper - PSG90A - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_5";
+	};
+};
+class _unit_17
+{
+	objectType="unit";
+	height=-0.0020140626;
+	class Arguments
+	{
+		OME_ID="106";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999652.21320, 1000754.74169, 427.14740]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		DISPLAY_NAME="Taliban - AK-74 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 (Random)";
+		PARENT="_group_7";
+	};
+};
+class _unit_13
+{
+	objectType="unit";
+	height=-0.00046208984;
+	class Arguments
+	{
+		OME_ID="112";
+		SIDE="WEST";
+		TYPE="vbs_se_army_grenadier_wdl_M_medium_fmv1_mopp0_ak5c_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999999.66306, 1000484.50492, 425.93893]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		DISPLAY_NAME="Grenadier - AK5C / M203 - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Grenadier - AK5C / M203 - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_6";
+	};
+};
+class _unit_19
+{
+	objectType="unit";
+	height=3.0810548e-05;
+	class Arguments
+	{
+		OME_ID="125";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999658.00000, 1000757.93750, 427.47345]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_17";
+		DISPLAY_NAME="Taliban - AK-74 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 (Random)";
+		PARENT="_group_7";
+	};
+};
+class _unit_21
+{
+	objectType="unit";
+	height=0.008631641;
+	class Arguments
+	{
+		OME_ID="131";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999662.75000, 1000762.87500, 427.54745]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_17";
+		DISPLAY_NAME="Taliban - AK-74 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 (Random)";
+		PARENT="_group_7";
+	};
+};
+class _unit_23
+{
+	objectType="unit";
+	height=-0.002686084;
+	class Arguments
+	{
+		OME_ID="137";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999665.12500, 1000754.87500, 427.87680]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_17";
+		DISPLAY_NAME="Taliban - AK-74 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 (Random)";
+		PARENT="_group_7";
+	};
+};
+class _unit_25
+{
+	objectType="unit";
+	height=-0.001130957;
+	class Arguments
+	{
+		OME_ID="143";
+		SIDE="EAST";
+		TYPE="vbs2_af_taliban_ak74";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		BG_ENDURANCE="";
+		BG_HEIGHT="";
+		BG_BMI="";
+		BG_DISPERSION="";
+		POSITION="[999660.18750, 1000751.06250, 427.61685]";
+		COLOR="[0.9999825,0.501952,0.501952]";
+		LEADER="_unit_17";
+		DISPLAY_NAME="Taliban - AK-74 (Random)";
+		DISPLAY_NAME_TREE="Taliban - AK-74 (Random)";
+		PARENT="_group_7";
+	};
+};
+class _unit_14
+{
+	objectType="unit";
+	height=0.0016142676;
+	class Arguments
+	{
+		OME_ID="149";
+		SIDE="WEST";
+		TYPE="vbs_se_army_mgunner_wdl_M_medium_fmv1_mopp0_ksp90_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999995.16306, 1000475.50492, 426.25549]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_13";
+		DISPLAY_NAME="Automatic Rifleman - Ksp90 - Helmet - FMV1";
+		DISPLAY_NAME_TREE="Automatic Rifleman - Ksp90 - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_6";
+	};
+};
+class _unit_15
+{
+	objectType="unit";
+	height=-0.00025356445;
+	class Arguments
+	{
+		OME_ID="164";
+		SIDE="WEST";
+		TYPE="vbs_se_army_atsoldier_wdl_M_medium_fmv1_mopp0_ak5crb57_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[1000004.16306, 1000475.50495, 425.40090]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_13";
+		DISPLAY_NAME="AT Gunner - AK5C / Rb57 - Helmet - FMV1";
+		DISPLAY_NAME_TREE="AT Gunner - AK5C / Rb57 - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_6";
+	};
+};
+class _unit_16
+{
+	objectType="unit";
+	height=0.0021271093;
+	class Arguments
+	{
+		OME_ID="185";
+		SIDE="WEST";
+		TYPE="vbs_se_army_atsoldier_wdl_M_medium_fmv1_mopp0_ak5crb57_helmet";
+		UNITPOS="Auto";
+		NO_DAMAGE="DEFAULT";
+		UNLIMITED_AMMO="DEFAULT";
+		TRAINING="-1";
+		EXPERIENCE="-1";
+		LEADERSHIP="-1";
+		ENDURANCE="-1";
+		HEIGHT="1.82000005245209";
+		CARGO_CREATED="true";
+		POSITION="[999990.66306, 1000466.50493, 426.51409]";
+		COLOR="[0.5999895,0.5999895,0.9999825]";
+		LEADER="_unit_13";
+		DISPLAY_NAME="AT Gunner - AK5C / Rb57 - Helmet - FMV1";
+		DISPLAY_NAME_TREE="AT Gunner - AK5C / Rb57 - Helmet - FMV1";
+		WOUNDS="[]";
+		CREATED_BY_PLAN="true";
+		PARENT="_group_6";
+	};
+};
+class _postfix_0
+{
+	objectType="postfix";
+	class Arguments
+	{
+	};
+};
