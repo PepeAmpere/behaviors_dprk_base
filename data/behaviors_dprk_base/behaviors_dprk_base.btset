@@ -23,6 +23,7 @@
   "initScripts": [
     "Analysis\\analytics.lua",
     "DPRKsquad\\DPRKsquad.class.lua",
+    "Helpers\\Geometry.lua",
     "Sensors\\PathVolumeSensors.lua",
     "classes.lua"
   ],
