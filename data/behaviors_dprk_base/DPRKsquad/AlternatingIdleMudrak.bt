@@ -144,25 +144,22 @@
               ]
             },
             {
-              "name": "Cover Requests",
-              "id": "69696262-3782-4fbe-9cab-324297208c87",
+              "name": "CoverOutlines Requests",
+              "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
               "type": "scriptAction",
               "script": [
                 "loc.coverRequests = {}",
-                "local params = { weights = { distance = -1, protection = 50}}",
                 "",
                 "if loc.sectorPolygons ~= nil then",
                 "    for i, poly in ipairs(loc.sectorPolygons) do",
-                "        local center = GetPolygonCenter(poly)",
-                "        local threats = {{area = Circle(center, loc.defenceRadius), avoidance = 10}, {avoidance = 0}}",
-                "        loc.coverRequests[i] = FindCovers(threats, poly, loc.sectorPolygonCenters, params);",
+                "        loc.coverRequests[i] = GetCoverOutlines(poly);",
                 "    end",
                 "end"
               ]
             },
             {
-              "name": "Covers ready",
-              "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
+              "name": "CoverOutlines ready",
+              "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
               "type": "waitUntil",
               "condition": [
                 "for _, coverRequest in ipairs(loc.coverRequests) do",
@@ -177,6 +174,17 @@
                 "end",
                 "",
                 "return true"
+              ]
+            },
+            {
+              "name": "Generate Lattice Points",
+              "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
+              "type": "scriptAction",
+              "script": [
+                "loc.latticePoints = {}",
+                "for i, poly in ipairs(loc.sectorPolygons) do",
+                "    table.insert(loc.latticePoints, GenerateGridPoints(poly, loc.latticePointsStep))",
+                "end"
               ]
             },
             {
@@ -283,24 +291,30 @@
           ]
         },
         {
-          "name": "Draw covers",
-          "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
+          "name": "Draw cover outlines",
+          "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
           "type": "scriptAction",
           "script": [
-            "--[[if loc.covers then",
-            "    for i, cover in ipairs(loc.covers) do",
-            "        if #cover > 0 then",
-            "            ai_core_public.draw.PolygonOnSurface(cover[2].vertices, 1, 1, 0, 1, Vec3(0,0,1))",
-            "        end",
-            "    end",
-            "end]]",
-            "local offset = Vec3(0,0,20)",
             "if loc.covers ~= nil then",
             "    for i, sectorCover in ipairs(loc.covers) do",
             "        for j, cover in ipairs(sectorCover) do",
-            "            if cover.firingPosition then",
-            "                DebugLine(cover.firingPosition, cover.firingPosition + offset, 1, 0, 0, 1)",
-            "            end",
+            "            local color = math.random()",
+            "            ai_core_public.draw.PolylineOnSurface(cover.vertices, color, color, color, 1, Vec3(0,0,2))",
+            "        end",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Draw cover outlines",
+          "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
+          "type": "scriptAction",
+          "script": [
+            "local offset = Vec3(0,0,3)",
+            "if loc.covers ~= nil then",
+            "    for i, sectorLatticePoints in ipairs(loc.latticePoints) do",
+            "        for j, latticePoint in ipairs(sectorLatticePoints) do",
+            "            DebugLine(latticePoint, latticePoint + offset, 1, 0, 0, 1)",
             "        end",
             "    end",
             "end"
@@ -310,6 +324,93 @@
     }
   ],
   "unlinked-trees": [
+    {
+      "name": "Cover Requests",
+      "id": "69696262-3782-4fbe-9cab-324297208c87",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "69696262-3782-4fbe-9cab-324297208c87",
+            "position": "1052.70736111111,1061"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "loc.coverRequests = {}",
+        "local params = { weights = { distance = -1, protection = 50}}",
+        "",
+        "if loc.sectorPolygons ~= nil then",
+        "    for i, poly in ipairs(loc.sectorPolygons) do",
+        "        local center = GetPolygonCenter(poly)",
+        "        local threats = {{area = Circle(center, loc.defenceRadius), avoidance = 10}, {avoidance = 0}}",
+        "        loc.coverRequests[i] = FindCovers(threats, poly, loc.sectorPolygonCenters, params);",
+        "    end",
+        "end"
+      ]
+    },
+    {
+      "name": "Covers ready",
+      "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
+      "type": "waitUntil",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
+            "position": "1252.70736111111,1061"
+          }
+        ],
+        "editorObjects": []
+      },
+      "condition": [
+        "for _, coverRequest in ipairs(loc.coverRequests) do",
+        "    if not coverRequest:IsReady() then",
+        "        return false",
+        "    end",
+        "end",
+        "",
+        "loc.covers = {}",
+        "for i, coverRequest in ipairs(loc.coverRequests) do",
+        "    loc.covers[i] = coverRequest:Value()",
+        "end",
+        "",
+        "return true"
+      ]
+    },
+    {
+      "name": "Draw covers",
+      "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
+            "position": "2990.20736111111,686"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "--[[if loc.covers then",
+        "    for i, cover in ipairs(loc.covers) do",
+        "        if #cover > 0 then",
+        "            ai_core_public.draw.PolygonOnSurface(cover[2].vertices, 1, 1, 0, 1, Vec3(0,0,1))",
+        "        end",
+        "    end",
+        "end]]",
+        "local offset = Vec3(0,0,20)",
+        "if loc.covers ~= nil then",
+        "    for i, sectorCover in ipairs(loc.covers) do",
+        "        for j, cover in ipairs(sectorCover) do",
+        "            if cover.firingPosition then",
+        "                DebugLine(cover.firingPosition, cover.firingPosition + offset, 1, 0, 0, 1)",
+        "            end",
+        "        end",
+        "    end",
+        "end"
+      ]
+    },
     {
       "name": "Draw Area ",
       "id": "37511152-7fa0-4b6b-a879-434aff25b436",
@@ -344,47 +445,6 @@
         "    end",
         "end"
       ]
-    },
-    {
-      "name": "Draw covers",
-      "id": "defc9603-fb7a-4b0e-bd4a-5d2f5d4ca6a5",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "defc9603-fb7a-4b0e-bd4a-5d2f5d4ca6a5",
-            "position": "3147.87518037518,688.391414141414"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "if loc.covers ~= nil then",
-        "    for i, sectorCover in ipairs(loc.covers) do",
-        "        for j, cover in ipairs(loc.sectorCover) do",
-        "            DebugLog(0)",
-        "            if cover.edgeStart and cover.edgeEnd then",
-        "                DebugLog(1)",
-        "                DebugLine(",
-        "                    cover.position,",
-        "                    cover.position + Vec3(0, 0, 5),",
-        "                    0, 1, 0, 1 ",
-        "                )",
-        "",
-        "                if cover.edgeStart and cover.edgeEnd then",
-        "                    DebugLog(2)",
-        "                    DebugLine(cover.edgeStart, cover.edgeEnd, 0, 0, 1, 1)",
-        "                end",
-        "",
-        "                if cover.firingPosition then",
-        "                    DebugLog(3)",
-        "                    DebugLine(cover.position, cover.firingPosition, 1, 0, 0, 1)",
-        "                end",
-        "            end",
-        "        end",
-        "    end",
-        "end"
-      ]
     }
   ],
   "meta": {
@@ -403,23 +463,27 @@
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "502.707361111111,911"
+        "position": "202.70736111111,911"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "727.707361111111,911"
+        "position": "427.70736111111,911"
       },
       {
-        "id": "69696262-3782-4fbe-9cab-324297208c87",
-        "position": "1065.20736111111,911"
+        "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
+        "position": "752.70736111111,911"
       },
       {
-        "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
-        "position": "1265.20736111111,911"
+        "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
+        "position": "990.20736111111,911"
+      },
+      {
+        "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
+        "position": "1202.70736111111,911"
       },
       {
         "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-        "position": "1452.70736111111,911"
+        "position": "1415.20736111111,911"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
@@ -442,8 +506,12 @@
         "position": "2840.20736111111,686"
       },
       {
-        "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
-        "position": "2990.20736111111,686"
+        "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
+        "position": "3152.70736111111,686"
+      },
+      {
+        "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
+        "position": "3327.70736111111,686"
       }
     ],
     "editorObjects": [],
@@ -471,6 +539,8 @@
     "observationRadius": "return 75",
     "observationPolygons": "return nil",
     "coverRequests": "return nil",
-    "covers": "return nil"
+    "covers": "return nil",
+    "latticePoints": "return nil",
+    "latticePointsStep": "return 3"
   }
 }
