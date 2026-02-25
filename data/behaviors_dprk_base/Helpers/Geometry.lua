@@ -68,13 +68,15 @@ return {
     }
 end,
 
+pointKey = function(p)
+    return string.format("%.4f_%.4f_%.4f", p:X(), p:Y(), p:Z())
+end,
+
 GenerateGridPoints = function(polygon, h)
     local aabb = GetAABB(polygon)
     local points = {}
-
     local startX = math.floor(aabb.minX / h) * h
     local startY = math.floor(aabb.minY / h) * h
-
     for x = startX, aabb.maxX, h do
         for y = startY, aabb.maxY, h do
             local point = GetSurfacePosition(Vec3(x, y, 0))
@@ -83,46 +85,54 @@ GenerateGridPoints = function(polygon, h)
             end
         end
     end
-
     return points
 end,
 
 GetCoverGrid = function(polygon, h, sectorCovers)
     local aabb = GetAABB(polygon)
-
     local grid = {
         minX = aabb.minX,
         minY = aabb.minY,
         h = h,
         cells = {}
     }
+    local pointNeighbors = {}
+    local pointMeta = {}
 
     for _, cover in ipairs(sectorCovers) do
-        for _, point in ipairs(cover.vertices) do
+        local verts = cover.vertices
+        local n = #verts
+        for i = 1, n do
+            local a = verts[i]
+            local b = verts[(i % n) + 1]
+            local ka = pointKey(a)
+            local kb = pointKey(b)
+            pointNeighbors[ka] = pointNeighbors[ka] or {}
+            pointNeighbors[kb] = pointNeighbors[kb] or {}
+            table.insert(pointNeighbors[ka], b)
+            table.insert(pointNeighbors[kb], a)
+        end
+        for _, point in ipairs(verts) do
             if IsInPolygon(polygon, point) then
                 local localX = point:X() - grid.minX
                 local localY = point:Y() - grid.minY
-
-                local i = math.floor(localX / h)
-                local j = math.floor(localY / h)
-
-                grid.cells[i] = grid.cells[i] or {}
-                grid.cells[i][j] = grid.cells[i][j] or {}
-
-                table.insert(grid.cells[i][j], point)
+                local gi = math.floor(localX / h)
+                local gj = math.floor(localY / h)
+                local k = pointKey(point)
+                pointMeta[k] = { gridI = gi, gridJ = gj, key = k, point = point }
+                grid.cells[gi] = grid.cells[gi] or {}
+                grid.cells[gi][gj] = grid.cells[gi][gj] or {}
+                table.insert(grid.cells[gi][gj], k)
             end
         end
     end
-    return grid
+    return grid, pointNeighbors, pointMeta
 end,
 
-
-GetClusters = function(grid, scale)
-    scale = scale or 1 
-
+GetClusters = function(grid, pointNeighbors, pointMeta, scale)
+    scale = scale or 1
     local visited = {}
     local clusters = {}
-
     local directions = {}
     for di = -scale, scale do
         for dj = -scale, scale do
@@ -132,50 +142,75 @@ GetClusters = function(grid, scale)
         end
     end
 
-    local function bfs(startI, startJ)
-        local queue = {{startI, startJ}}
+    local function getSpatialNeighborKeys(meta)
+        local result = {}
+        local i, j = meta.gridI, meta.gridJ
+        for _, d in ipairs(directions) do
+            local ni, nj = i + d[1], j + d[2]
+            if grid.cells[ni] and grid.cells[ni][nj] then
+                for _, k in ipairs(grid.cells[ni][nj]) do
+                    table.insert(result, k)
+                end
+            end
+        end
+        return result
+    end
+
+    local function bfs(startKey)
+        local queue = {startKey}
         local clusterPoints = {}
-
-        visited[startI] = visited[startI] or {}
-        visited[startI][startJ] = true
-
+        visited[startKey] = true
         local head = 1
         while head <= #queue do
-            local cell = queue[head]
+            local k = queue[head]
             head = head + 1
-
-            local i, j = cell[1], cell[2]
-
-            for _, point in ipairs(grid.cells[i][j]) do
-                table.insert(clusterPoints, point)
-            end
-
-            for _, d in ipairs(directions) do
-                local ni, nj = i + d[1], j + d[2]
-                if grid.cells[ni] and grid.cells[ni][nj] then
-                    visited[ni] = visited[ni] or {}
-                    if not visited[ni][nj] then
-                        visited[ni][nj] = true
-                        table.insert(queue, {ni, nj})
+            local meta = pointMeta[k]
+            if meta then
+                table.insert(clusterPoints, meta.point)
+                for _, neighbor in ipairs(pointNeighbors[k] or {}) do
+                    local nk = pointKey(neighbor)
+                    if not visited[nk] then
+                        visited[nk] = true
+                        table.insert(queue, nk)
+                    end
+                end
+                for _, nk in ipairs(getSpatialNeighborKeys(meta)) do
+                    if not visited[nk] then
+                        visited[nk] = true
+                        table.insert(queue, nk)
                     end
                 end
             end
         end
-
-        local polygon = Polygon(clusterPoints)
-        return polygon
+        return Polygon(clusterPoints)
     end
 
-    for i, row in pairs(grid.cells) do
-        for j, _ in pairs(row) do
-            visited[i] = visited[i] or {}
-            if not visited[i][j] then
-                local clusterPoly = bfs(i, j)
-                table.insert(clusters, clusterPoly)
+    for _, row in pairs(grid.cells) do
+        for _, cell in pairs(row) do
+            for _, k in ipairs(cell) do
+                if not visited[k] then
+                    local clusterPoly = bfs(k)
+                    table.insert(clusters, clusterPoly)
+                end
             end
         end
     end
-
     return clusters
+end,
+
+SortPolygonVertices = function(polygon)
+    local center = GetPolygonCenter(polygon)
+    local points = {}
+    for i = 1, polygon:Count() do
+        points[i] = polygon:Vertex(i)
+    end
+
+    table.sort(points, function(a, b)
+        local angleA = math.atan2(a:Y() - center:Y(), a:X() - center:X())
+        local angleB = math.atan2(b:Y() - center:Y(), b:X() - center:X())
+        return angleA < angleB
+    end)
+
+    return Polygon(points)
 end
 }

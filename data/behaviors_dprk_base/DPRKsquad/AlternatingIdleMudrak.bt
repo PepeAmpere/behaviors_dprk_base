@@ -189,8 +189,8 @@
                 "",
                 "loc.coverClusters = {}",
                 "for i, poly in ipairs(loc.sectorPolygons) do",
-                "    local coverGrid = GetCoverGrid(poly, loc.latticePointsStep, loc.covers[i])",
-                "    table.insert(loc.coverClusters, GetClusters(coverGrid, loc.clusterScale))",
+                "    local coverGrid, pointNeighbors, pointMeta = GetCoverGrid(poly, loc.latticePointsStep, loc.covers[i])",
+                "    table.insert(loc.coverClusters, GetClusters(coverGrid, pointNeighbors, pointMeta, loc.clusterScale))",
                 "end"
               ]
             },
@@ -317,12 +317,13 @@
           "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
           "type": "scriptAction",
           "script": [
-            "local offset = Vec3(0,0,3)",
+            "local offset = Vec3(0,0,15)",
             "",
             "if loc.coverClusters ~= nil then",
             "    for i, sectorcoverClusters in ipairs(loc.coverClusters) do",
             "        for j, poly in ipairs(sectorcoverClusters) do",
-            "            ai_core_public.draw.PolygonOnSurface(poly, 1, 0, 0, 1, offset)",
+            "            local color = math.random()",
+            "            ai_core_public.draw.PolygonOnSurface(SortPolygonVertices(poly), color, 0, 0, 1, offset)",
             "        end",
             "    end",
             "end"
@@ -547,7 +548,7 @@
       }
     ],
     "editorObjects": [],
-    "canvasSize": "4305.20736111111,2936",
+    "canvasSize": "4314.20736111111,2936",
     "gridPadding": "2.70736111111046,11"
   },
   "parameters": [
