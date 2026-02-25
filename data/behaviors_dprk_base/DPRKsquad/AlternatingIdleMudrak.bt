@@ -182,8 +182,15 @@
               "type": "scriptAction",
               "script": [
                 "loc.latticePoints = {}",
+                "",
                 "for i, poly in ipairs(loc.sectorPolygons) do",
                 "    table.insert(loc.latticePoints, GenerateGridPoints(poly, loc.latticePointsStep))",
+                "end",
+                "",
+                "loc.coverClusters = {}",
+                "for i, poly in ipairs(loc.sectorPolygons) do",
+                "    local coverGrid = GetCoverGrid(poly, loc.latticePointsStep, loc.covers[i])",
+                "    table.insert(loc.coverClusters, GetClusters(coverGrid, loc.clusterScale))",
                 "end"
               ]
             },
@@ -306,15 +313,16 @@
           ]
         },
         {
-          "name": "Draw cover outlines",
-          "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
+          "name": "Draw lattice points",
+          "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
           "type": "scriptAction",
           "script": [
             "local offset = Vec3(0,0,3)",
-            "if loc.covers ~= nil then",
-            "    for i, sectorLatticePoints in ipairs(loc.latticePoints) do",
-            "        for j, latticePoint in ipairs(sectorLatticePoints) do",
-            "            DebugLine(latticePoint, latticePoint + offset, 1, 0, 0, 1)",
+            "",
+            "if loc.coverClusters ~= nil then",
+            "    for i, sectorcoverClusters in ipairs(loc.coverClusters) do",
+            "        for j, poly in ipairs(sectorcoverClusters) do",
+            "            ai_core_public.draw.PolygonOnSurface(poly, 1, 0, 0, 1, offset)",
             "        end",
             "    end",
             "end"
@@ -324,6 +332,30 @@
     }
   ],
   "unlinked-trees": [
+    {
+      "name": "Draw lattice points",
+      "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
+            "position": "3327.70736111111,686"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local offset = Vec3(0,0,3)",
+        "if loc.covers ~= nil then",
+        "    for i, sectorLatticePoints in ipairs(loc.latticePoints) do",
+        "        for j, latticePoint in ipairs(sectorLatticePoints) do",
+        "            DebugLine(latticePoint, latticePoint + offset, 1, 0, 0, 1)",
+        "        end",
+        "    end",
+        "end"
+      ]
+    },
     {
       "name": "Cover Requests",
       "id": "69696262-3782-4fbe-9cab-324297208c87",
@@ -510,8 +542,8 @@
         "position": "3152.70736111111,686"
       },
       {
-        "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
-        "position": "3327.70736111111,686"
+        "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
+        "position": "3502.70736111111,686"
       }
     ],
     "editorObjects": [],
@@ -541,6 +573,9 @@
     "coverRequests": "return nil",
     "covers": "return nil",
     "latticePoints": "return nil",
-    "latticePointsStep": "return 3"
+    "latticePointsStep": "return 1",
+    "coverGrid": "return nil",
+    "coverClusters": "return nil",
+    "clusterScale": "return 1"
   }
 }
