@@ -178,20 +178,73 @@
             },
             {
               "name": "Generate Lattice Points",
-              "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
+              "id": "9db278a8-1982-45c8-a2f2-89974da30720",
               "type": "scriptAction",
               "script": [
                 "loc.latticePoints = {}",
                 "",
                 "for i, poly in ipairs(loc.sectorPolygons) do",
                 "    table.insert(loc.latticePoints, GenerateGridPoints(poly, loc.latticePointsStep))",
-                "end",
-                "",
+                "end"
+              ]
+            },
+            {
+              "name": "Generate Cover Clusters",
+              "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
+              "type": "scriptAction",
+              "script": [
                 "loc.coverClusters = {}",
                 "for i, poly in ipairs(loc.sectorPolygons) do",
                 "    local coverGrid, pointNeighbors, pointMeta = GetCoverGrid(poly, loc.latticePointsStep, loc.covers[i])",
-                "    table.insert(loc.coverClusters, GetClusters(coverGrid, pointNeighbors, pointMeta, loc.clusterScale))",
+                "    local sectorClusters = GetClusters(coverGrid, pointNeighbors, pointMeta, loc.clusterScale)",
+                "    for j, cluster in ipairs(sectorClusters) do",
+                "        cluster.polygon = SortPolygonVertices(cluster.polygon)",
+                "    end",
+                "    sectorClusters.sector = poly",
+                "    table.insert(loc.coverClusters, sectorClusters)",
+                "end",
+                ""
+              ]
+            },
+            {
+              "name": "Check Clusters Neighbors ",
+              "id": "812c24ef-d88f-4ab6-b2c2-1887ef9edf16",
+              "type": "scriptAction",
+              "script": [
+                "loc.clustersPathRequests = {}",
+                "",
+                "for i = 1, #loc.coverClusters - 1 do",
+                "    local startSectorClusters = loc.coverClusters[i]",
+                "    for j, startCluster in ipairs(startSectorClusters) do",
+                "        for k = i + 1, #loc.coverClusters do",
+                "            local goalSectorClusters = loc.coverClusters[k]",
+                "            for l, goalCluster in ipairs(goalSectorClusters) do",
+                "                local index = #loc.clustersPathRequests + 1",
+                "                loc.clustersPathRequests[index] = {path = FindPath(startCluster.center, goalCluster.center)}  ",
+                "                loc.clustersPathRequests[index].startClusterIndex = {i, j}",
+                "                loc.clustersPathRequests[index].endClusterIndex = {k, l}",
+                "            end",
+                "        end",
+                "    end",
                 "end"
+              ]
+            },
+            {
+              "name": "CoverOutlines ready",
+              "id": "a0ca8976-5522-496e-a7ad-7e0909a1dcdc",
+              "type": "waitUntil",
+              "condition": [
+                "for _, clustersPathRequest in ipairs(loc.clustersPathRequests) do",
+                "    if not clustersPathRequest.path:IsReady() then",
+                "        return false",
+                "    end",
+                "end",
+                "",
+                "loc.clustersPaths = {}",
+                "for i, clustersPathRequest in ipairs(loc.clustersPathRequests) do",
+                "    loc.clustersPaths[i] = clustersPathRequest.path:Value()",
+                "end",
+                "return true"
               ]
             },
             {
@@ -290,41 +343,40 @@
           "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
           "type": "scriptAction",
           "script": [
-            "if loc.sectorPolygonCenters ~= nil then",
-            "    for i, center in ipairs(loc.sectorPolygonCenters) do",
-            "        ai_core_public.draw.SpotMarkerOnSurface(center, 1,1,1, Vec3(0,0,1), 1, 1);",
+            "if loc.sectorPolygons ~= nil then",
+            "    for i, poly in ipairs(loc.sectorPolygons) do",
+            "        ai_core_public.draw.SpotMarkerOnSurface(GetPolygonCenter(poly), 1,1,1, Vec3(0,0,1), 1, 1);",
             "    end",
             "end"
           ]
         },
         {
-          "name": "Draw cover outlines",
-          "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-          "type": "scriptAction",
-          "script": [
-            "if loc.covers ~= nil then",
-            "    for i, sectorCover in ipairs(loc.covers) do",
-            "        for j, cover in ipairs(sectorCover) do",
-            "            local color = math.random()",
-            "            ai_core_public.draw.PolylineOnSurface(cover.vertices, color, color, color, 1, Vec3(0,0,2))",
-            "        end",
-            "    end",
-            "end"
-          ]
-        },
-        {
-          "name": "Draw lattice points",
+          "name": "Draw clusters",
           "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
           "type": "scriptAction",
           "script": [
-            "local offset = Vec3(0,0,15)",
+            "local offset = Vec3(0,0,3)",
             "",
             "if loc.coverClusters ~= nil then",
             "    for i, sectorcoverClusters in ipairs(loc.coverClusters) do",
-            "        for j, poly in ipairs(sectorcoverClusters) do",
-            "            local color = math.random()",
-            "            ai_core_public.draw.PolygonOnSurface(SortPolygonVertices(poly), color, 0, 0, 1, offset)",
+            "        for j, coverCluster in ipairs(sectorcoverClusters) do",
+            "            ai_core_public.draw.PolygonOnSurface(coverCluster.polygon, 1, 0, 0, 1, offset)",
             "        end",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Draw path",
+          "id": "d6041fd1-936c-4d05-8bcc-21b4a41c5bed",
+          "type": "scriptAction",
+          "script": [
+            "local offset = Vec3(0,0,3)",
+            "",
+            "if loc.clustersPaths ~= nil then",
+            "    for i, clustersPath in ipairs(loc.clustersPaths) do",
+            "        local color = math.random()",
+            "        ai_core_public.draw.Path(clustersPath, color, color, color, 1, offset)",
             "    end",
             "end"
           ]
@@ -334,6 +386,30 @@
   ],
   "unlinked-trees": [
     {
+      "name": "Draw cover outlines",
+      "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
+            "position": "3737.5,686"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "if loc.covers ~= nil then",
+        "    for i, sectorCover in ipairs(loc.covers) do",
+        "        for j, cover in ipairs(sectorCover) do",
+        "            local color = math.random()",
+        "            ai_core_public.draw.PolylineOnSurface(cover.vertices, color, color, color, 1, Vec3(0,0,2))",
+        "        end",
+        "    end",
+        "end"
+      ]
+    },
+    {
       "name": "Draw lattice points",
       "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
       "type": "scriptAction",
@@ -341,7 +417,7 @@
         "nodesInfo": [
           {
             "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
-            "position": "3327.70736111111,686"
+            "position": "3912.5,686"
           }
         ],
         "editorObjects": []
@@ -365,7 +441,7 @@
         "nodesInfo": [
           {
             "id": "69696262-3782-4fbe-9cab-324297208c87",
-            "position": "1052.70736111111,1061"
+            "position": "1650,1186"
           }
         ],
         "editorObjects": []
@@ -391,7 +467,7 @@
         "nodesInfo": [
           {
             "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
-            "position": "1252.70736111111,1061"
+            "position": "1850,1186"
           }
         ],
         "editorObjects": []
@@ -419,7 +495,7 @@
         "nodesInfo": [
           {
             "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
-            "position": "2990.20736111111,686"
+            "position": "3575,686"
           }
         ],
         "editorObjects": []
@@ -452,7 +528,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "2540.20736111111,686"
+            "position": "3125,686"
           }
         ],
         "editorObjects": []
@@ -484,72 +560,84 @@
     "nodesInfo": [
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "2202.70736111111,361"
+        "position": "2787.5,361"
       },
       {
         "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
-        "position": "1840.20736111111,498.5"
+        "position": "2425,498.5"
       },
       {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "952.707361111111,723.5"
+        "position": "1537.5,723.5"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "202.70736111111,911"
+        "position": "0,911"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "427.70736111111,911"
+        "position": "225,911"
       },
       {
         "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
-        "position": "752.70736111111,911"
+        "position": "550,911"
       },
       {
         "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
-        "position": "990.20736111111,911"
+        "position": "787.5,911"
+      },
+      {
+        "id": "9db278a8-1982-45c8-a2f2-89974da30720",
+        "position": "987.5,911"
       },
       {
         "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
-        "position": "1202.70736111111,911"
+        "position": "1212.5,911"
+      },
+      {
+        "id": "812c24ef-d88f-4ab6-b2c2-1887ef9edf16",
+        "position": "1425,911"
+      },
+      {
+        "id": "a0ca8976-5522-496e-a7ad-7e0909a1dcdc",
+        "position": "1675,911"
       },
       {
         "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-        "position": "1415.20736111111,911"
+        "position": "1937.5,911"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "1765.20736111111,773.5"
+        "position": "2350,773.5"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "2290.20736111111,723.5"
+        "position": "2875,723.5"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "2765.20736111111,536"
+        "position": "3350,536"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "2690.20736111111,686"
+        "position": "3275,686"
       },
       {
         "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-        "position": "2840.20736111111,686"
-      },
-      {
-        "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-        "position": "3152.70736111111,686"
+        "position": "3425,686"
       },
       {
         "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
-        "position": "3502.70736111111,686"
+        "position": "4087.5,686"
+      },
+      {
+        "id": "d6041fd1-936c-4d05-8bcc-21b4a41c5bed",
+        "position": "4287.5,686"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "4314.20736111111,2936",
-    "gridPadding": "2.70736111111046,11"
+    "canvasSize": "5018.44047619048,2936",
+    "gridPadding": "0,11"
   },
   "parameters": [
     {
@@ -575,8 +663,9 @@
     "covers": "return nil",
     "latticePoints": "return nil",
     "latticePointsStep": "return 1",
-    "coverGrid": "return nil",
     "coverClusters": "return nil",
-    "clusterScale": "return 1"
+    "clusterScale": "return 1",
+    "clustersPathRequests": "return nil",
+    "clustersPaths": "return nil"
   }
 }

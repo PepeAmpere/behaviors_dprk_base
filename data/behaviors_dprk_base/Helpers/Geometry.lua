@@ -190,7 +190,10 @@ GetClusters = function(grid, pointNeighbors, pointMeta, scale)
             for _, k in ipairs(cell) do
                 if not visited[k] then
                     local clusterPoly = bfs(k)
-                    table.insert(clusters, clusterPoly)
+                    local cluster = {polygon = clusterPoly, center = GetPolygonCenter(clusterPoly)}
+                    if cluster.polygon:Count() > 2 then
+                        table.insert(clusters, cluster)
+                    end
                 end
             end
         end
