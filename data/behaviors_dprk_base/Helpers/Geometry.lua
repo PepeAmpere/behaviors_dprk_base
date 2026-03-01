@@ -215,5 +215,22 @@ SortPolygonVertices = function(polygon)
     end)
 
     return Polygon(points)
+end,
+
+PolygonArea = function(poly)
+    local n = poly:Count()
+
+    local points = {}
+    for i = 1, n do
+        points[i] = poly:Vertex(i)
+    end
+
+    local sum = 0
+    for i = 1, n do
+        local j = (i % n) + 1 
+        sum = sum + points[i]:X() * points[j]:Y()
+                  - points[j]:X() * points[i]:Y()
+    end
+    return math.abs(sum) / 2
 end
 }
