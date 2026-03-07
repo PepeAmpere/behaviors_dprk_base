@@ -1,17 +1,16 @@
 return {
     GetPolygonCenter = function(polygon)
-        local sumX, sumY, sumZ = 0, 0, 0
+        local sumX, sumY = 0, 0
         local count = polygon:Count()
 
         for j = 1, count do
             local v = polygon:Vertex(j)
             sumX = sumX + v:X()
             sumY = sumY + v:Y()
-            sumZ = sumZ + v:Z()
         end
 
-        local center = Vec3(sumX / count, sumY / count, sumZ / count)
-        return center
+        local center = Vec3(sumX / count, sumY / count, 0)
+        return GetSurfacePosition(center)
     end,
 
     IsInPolygon = function(polygon, point)
@@ -86,6 +85,36 @@ GenerateGridPoints = function(polygon, h)
         end
     end
     return points
+end,
+
+GenerateCells = function(polygon, w, h)
+    local aabb = GetAABB(polygon)
+    local rects = {}
+
+    local startX = math.floor(aabb.minX / w) * w
+    local startY = math.floor(aabb.minY / h) * h
+
+    for x = startX, aabb.maxX, w do
+        for y = startY, aabb.maxY, h do
+            local center = GetSurfacePosition(Vec3(x + w/2, y + h/2, 0))
+
+            local rect = {
+                GetSurfacePosition(Vec3(x,     y,     0)),
+                GetSurfacePosition(Vec3(x + w, y,     0)),
+                GetSurfacePosition(Vec3(x + w, y + h, 0)),
+                GetSurfacePosition(Vec3(x,     y + h, 0))
+            }
+
+            table.insert(rects, 
+            {cellId = #rects + 1, 
+             center = GetSurfacePosition(center), 
+             polygon = Polygon(rect), 
+             isValid = IsInPolygon(polygon, center)
+             })
+        end
+    end
+
+    return rects
 end,
 
 GetCoverGrid = function(polygon, h, sectorCovers)
@@ -232,5 +261,19 @@ PolygonArea = function(poly)
                   - points[j]:X() * points[i]:Y()
     end
     return math.abs(sum) / 2
-end
+end,
+
+DetermineCorrespondingSector = function(cells, polygonSectors)
+    for i, cell in ipairs(cells) do
+        if (cell.isValid) then
+            for j, poly in ipairs(polygonSectors) do
+                if (IsInPolygon(poly, cell.center)) then
+                    cell.sector = poly
+                    cell.sectorId = j
+                    break
+                end
+            end
+        end
+    end
+end,
 }
