@@ -159,18 +159,14 @@
                 "    loc.sectorCells[i] = {sector = sector, cells = {}}",
                 "end",
                 "",
-                "",
                 "loc.cells = GenerateCells(loc.defencePolygon, loc.cellWidth, loc.cellHeight)",
                 "DetermineCorrespondingSector(loc.cells, loc.sectorPolygons)",
                 "",
                 "for i, cell in ipairs(loc.cells) do",
+                "    cell.coverOutlines = {}",
                 "    if (cell.isValid) then",
-                "        table.insert(loc.sectorCells[cell.sectorId].cells, cell)",
+                "        cell.coverOutlines = GetCoverOutlines(cell.polygon);",
                 "    end",
-                "end",
-                "",
-                "for i, cell in ipairs(loc.cells) do",
-                "    cell.coverOutlines = GetCoverOutlines(cell.polygon);",
                 "end"
               ]
             },
@@ -180,18 +176,128 @@
               "type": "waitUntil",
               "condition": [
                 "for _, cell in ipairs(loc.cells) do",
-                "    if not cell.coverOutlines:IsReady() then",
+                "    if (cell.isValid and not cell.coverOutlines:IsReady()) then",
                 "        return false",
                 "    end",
                 "end",
                 "",
-                "loc.covers = {}",
                 "for i, cell in ipairs(loc.cells) do",
-                "    cell.coverOutlines = cell.coverOutlines:Value()",
+                "    if (cell.isValid) then",
+                "        cell.coverOutlines = cell.coverOutlines:Value()",
+                "    end",
                 "end",
                 "",
                 "loc.cells.coversReady = true;",
                 "return true"
+              ]
+            },
+            {
+              "name": "Set sector cells",
+              "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
+              "type": "scriptAction",
+              "script": [
+                "for i, cell in ipairs(loc.cells) do",
+                "    if (cell.isValid) then",
+                "        table.insert(loc.sectorCells[cell.sectorId].cells, cell)",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Sort cells",
+              "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
+              "type": "scriptAction",
+              "script": [
+                "local cellsNumber = 3",
+                "local cellRange = 5",
+                "loc.destinationCells = {}",
+                "for i, sector in ipairs(loc.sectorCells) do",
+                "    loc.destinationCells[i] = {sector = sector.sector, cells = {}}",
+                "",
+                "    local sectorCenter = GetPolygonCenter(sector.sector)",
+                "    table.sort(sector.cells, function(a, b)",
+                "        return #a.coverOutlines > #b.coverOutlines",
+                "    end)",
+                "    cellsNumber = math.min(cellsNumber, #sector.cells)",
+                "    for j = 1, cellsNumber do",
+                "        sector.cells[j].mostCoveredNeighbor = GetMostCoveredNeighbor(loc.cells, sector.cells[j], cellRange)",
+                "        table.insert(loc.destinationCells[i].cells, sector.cells[j])",
+                "    end",
+                "end",
+                "",
+                "",
+                "for i, sectorCells in ipairs(loc.destinationCells) do",
+                "    table.sort(sectorCells.cells, function(a, b)",
+                "        local ca = #(a.coverOutlines or {})",
+                "        local cb = #(b.coverOutlines or {})",
+                "",
+                "        if ca > cb * 1.25 then return true end",
+                "        if cb > ca * 1.25 then return false end",
+                "",
+                "        local na = a.mostCoveredNeighbor or 0",
+                "        local nb = b.mostCoveredNeighbor or 0",
+                "",
+                "        if na ~= nb then",
+                "            return na > nb",
+                "        end",
+                "",
+                "        return ca > cb",
+                "    end)",
+                "end"
+              ]
+            },
+            {
+              "name": "Prepare order data",
+              "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
+              "type": "scriptAction",
+              "script": [
+                "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
+                "",
+                "",
+                "-- content for every message",
+                "loc.subordinates = {}",
+                "loc.destinations = {}",
+                "",
+                "loc.subordinateData = InternalTable()",
+                "-- list of subordinates",
+                "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
+                "    DebugLog(\"Error 1\");",
+                "end",
+                "",
+                "",
+                "local index = 1;",
+                "",
+                "for i = 0, self:GetChildGroupCount() - 1 do",
+                "    local subordinate = self:GetChildGroup(i)",
+                "",
+                "    if subordinate ~= loc.leaderGroup then",
+                "        table.insert(loc.subordinates, subordinate)",
+                "       ",
+                "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
+                "",
+                "        if #loc.sectorCells[index].cells > 0 then",
+                "            destination = loc.sectorCells[index].cells[1].center",
+                "        end",
+                "",
+                "        loc.destinations[#loc.destinations + 1] = destination",
+                "",
+                "        loc.subordinateData[subordinate] = {",
+                "            orderName = \"Defend\",",
+                "            destination = destination,",
+                "            heading = HeadingMode.AtPos",
+                "        }",
+                "",
+                "        index = index + 1",
+                "    end",
+                "end",
+                "",
+                "loc.destinations[#loc.destinations + 1] = arg.orderData.destination",
+                "table.insert(loc.subordinates, loc.leaderGroup)",
+                "loc.subordinateData[loc.leaderGroup] = {",
+                "    orderName = \"Defend\",",
+                "    destination = arg.orderData.destination,",
+                "    heading = HeadingMode.AtPos",
+                "}"
               ]
             },
             {
@@ -213,6 +319,21 @@
               ]
             }
           ]
+        },
+        {
+          "name": "Set all soldiers idle",
+          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+          "type": "reference",
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.subOrderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
         },
         {
           "name": "Wait Forever",
@@ -268,8 +389,7 @@
             "        ai_core_public.draw.Line(point, point + offset, 1, 0, 0, 1)",
             "    end",
             "    ai_core_public.draw.PolygonOnSurface(loc.defencePolygon, 1, 0, 0, 0, Vec3(0,0,1))",
-            "end",
-            ""
+            "end"
           ]
         },
         {
@@ -278,17 +398,29 @@
           "type": "scriptAction",
           "script": [
             "local digitOffset = Vec3(0,0,40)",
-            "",
+            "local lineOffset = Vec3(0,0,50)",
             "if loc.cells ~= nil and loc.cells.coversReady then",
             "    for i, cell in ipairs(loc.cells) do",
             "        local color = {1, 0, 0}",
             "        if (cell.isValid) then",
             "            color = loc.debugColors[cell.sectorId]",
+            "            if (#cell.coverOutlines ~= 0) then",
+            "                ai_core_public.draw.Digit(#cell.coverOutlines, cell.center + digitOffset, 1, 1, 1, 1, 2)",
+            "            end",
             "        end",
             "        ai_core_public.draw.PolygonOnSurface(cell.polygon, color[1], color[2], color[3], 1, Vec3(0,0,1));",
-            "        if(#cell.coverOutlines ~= 0) then",
-            "            ai_core_public.draw.Digit(#cell.coverOutlines, cell.center + digitOffset, 1, 1, 1, 1, 2)",
+            "    end",
+            "end",
+            "",
+            "if loc.destinationCells ~= nil then",
+            "    for i, sectorCells in ipairs(loc.destinationCells) do",
+            "        local pos = sectorCells.cells[1].center",
+            "        local coversCount = #sectorCells.cells[1].coverOutlines",
+            "        if (coversCount > 9) then",
+            "            coversCount = 9",
             "        end",
+            "        ai_core_public.draw.Digit(coversCount, pos + lineOffset, 1, 1, 1, 1, 2)",
+            "        DebugLine(pos, pos + lineOffset, 1, 0, 0, 1)",
             "    end",
             "end"
           ]
@@ -305,7 +437,7 @@
         "nodesInfo": [
           {
             "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
-            "position": "1651.88810793913,1277"
+            "position": "1674.88810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -328,7 +460,7 @@
         "nodesInfo": [
           {
             "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
-            "position": "1864.38810793913,1277"
+            "position": "1887.38810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -356,7 +488,7 @@
         "nodesInfo": [
           {
             "id": "9db278a8-1982-45c8-a2f2-89974da30720",
-            "position": "2064.38810793913,1277"
+            "position": "2087.38810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -377,7 +509,7 @@
         "nodesInfo": [
           {
             "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
-            "position": "2289.38810793913,1277"
+            "position": "2312.38810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -405,7 +537,7 @@
         "nodesInfo": [
           {
             "id": "812c24ef-d88f-4ab6-b2c2-1887ef9edf16",
-            "position": "2501.88810793913,1277"
+            "position": "2524.88810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -438,7 +570,7 @@
         "nodesInfo": [
           {
             "id": "a0ca8976-5522-496e-a7ad-7e0909a1dcdc",
-            "position": "2751.88810793913,1277"
+            "position": "2774.88810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -464,7 +596,7 @@
         "nodesInfo": [
           {
             "id": "62eda2e6-d1a1-47c9-a5e4-f4df6274a27f",
-            "position": "2939.38810793913,1277"
+            "position": "2962.38810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -512,7 +644,7 @@
         "nodesInfo": [
           {
             "id": "83cf8836-f6a3-4c5e-82cc-6f4d635f30d1",
-            "position": "3214.38810793913,1277"
+            "position": "3237.38810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -564,7 +696,7 @@
         "nodesInfo": [
           {
             "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-            "position": "3464.38810793913,1277"
+            "position": "3474.88810793913,1358.66936086136"
           }
         ],
         "editorObjects": []
@@ -619,30 +751,6 @@
       ]
     },
     {
-      "name": "Set all soldiers idle",
-      "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-      "type": "reference",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-            "position": "3914.38810793914,889.5"
-          }
-        ],
-        "editorObjects": []
-      },
-      "target": [
-        "standard_behaviors",
-        "ExecuteSubordinateOrder"
-      ],
-      "arguments": {
-        "orderData": "return loc.subOrderData",
-        "subordinates": "return loc.subordinates",
-        "subordinateData": "return loc.subordinateData",
-        "update": "return false"
-      }
-    },
-    {
       "name": "Draw covers",
       "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
       "type": "scriptAction",
@@ -650,7 +758,7 @@
         "nodesInfo": [
           {
             "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
-            "position": "5401.88810793913,939.5"
+            "position": "5424.88810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -683,7 +791,7 @@
         "nodesInfo": [
           {
             "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-            "position": "5564.38810793913,939.5"
+            "position": "5587.38810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -707,7 +815,7 @@
         "nodesInfo": [
           {
             "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
-            "position": "5914.38810793913,939.5"
+            "position": "5937.38810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -734,7 +842,7 @@
         "nodesInfo": [
           {
             "id": "b990de0f-dabf-4f7c-8827-ce9882fa642f",
-            "position": "6301.88810793913,939.5"
+            "position": "6324.88810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -758,7 +866,7 @@
         "nodesInfo": [
           {
             "id": "d6041fd1-936c-4d05-8bcc-21b4a41c5bed",
-            "position": "6126.88810793913,939.5"
+            "position": "6149.88810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -788,7 +896,7 @@
         "nodesInfo": [
           {
             "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
-            "position": "5739.38810793913,939.5"
+            "position": "5762.38810793913,1021.16936086136"
           }
         ],
         "editorObjects": []
@@ -812,7 +920,7 @@
         "nodesInfo": [
           {
             "id": "69696262-3782-4fbe-9cab-324297208c87",
-            "position": "3226.88810793913,1577"
+            "position": "3249.88810793913,1658.66936086136"
           }
         ],
         "editorObjects": []
@@ -838,7 +946,7 @@
         "nodesInfo": [
           {
             "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
-            "position": "3426.88810793913,1577"
+            "position": "3449.88810793913,1658.66936086136"
           }
         ],
         "editorObjects": []
@@ -866,7 +974,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "4701.88810793914,752"
+            "position": "4724.88810793914,833.669360861361"
           }
         ],
         "editorObjects": []
@@ -898,64 +1006,80 @@
     "nodesInfo": [
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "4364.38810793914,427"
+        "position": "4387.38810793914,508.669360861361"
       },
       {
         "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
-        "position": "4001.88810793914,564.5"
+        "position": "4024.88810793914,646.169360861361"
       },
       {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "2614.38810793914,764.5"
+        "position": "2637.38810793914,846.169360861361"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "1076.88810793913,952"
+        "position": "1099.88810793913,1033.66936086136"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "1301.88810793913,952"
+        "position": "1324.88810793913,1033.66936086136"
       },
       {
         "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-        "position": "1651.88810793913,952"
+        "position": "1674.88810793913,1033.66936086136"
       },
       {
         "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-        "position": "2014.38810793913,952"
+        "position": "2037.38810793913,1033.66936086136"
+      },
+      {
+        "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
+        "position": "2287.38810793913,1033.66936086136"
+      },
+      {
+        "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
+        "position": "2537.38810793913,1033.66936086136"
+      },
+      {
+        "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
+        "position": "2812.38810793913,1033.66936086136"
       },
       {
         "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
-        "position": "3264.38810793913,977"
+        "position": "3249.88810793913,1033.66936086136"
+      },
+      {
+        "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+        "position": "3937.38810793914,971.169360861361"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "4451.88810793914,789.5"
+        "position": "4474.88810793914,871.169360861361"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "4989.38810793914,577"
+        "position": "5012.38810793914,658.669360861361"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "4851.88810793914,752"
+        "position": "4874.88810793914,833.669360861361"
       },
       {
         "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-        "position": "5001.88810793914,752"
+        "position": "5024.88810793914,833.669360861361"
       },
       {
         "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-        "position": "5164.38810793913,752"
+        "position": "5187.38810793913,833.669360861361"
       },
       {
         "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-        "position": "5351.88810793913,752"
+        "position": "5374.88810793913,833.669360861361"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "7577.4285088574,3025.81649461649",
-    "gridPadding": "1.8881079391322,2"
+    "canvasSize": "7600.4285088574,3108.32255655455",
+    "gridPadding": "12.3881079391322,8.66936086136116"
   },
   "parameters": [
     {
@@ -990,6 +1114,7 @@
     "cellHeight": "return 5",
     "cellWidth": "return 5",
     "debugColors": "return nil",
-    "sectorCells": "return nil"
+    "sectorCells": "return nil",
+    "destinationCells": "return nil"
   }
 }

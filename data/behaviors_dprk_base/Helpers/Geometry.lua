@@ -96,6 +96,8 @@ GenerateCells = function(polygon, w, h)
 
     for x = startX, aabb.maxX, w do
         for y = startY, aabb.maxY, h do
+            local gx = (x - startX) / w
+            local gy = (y - startY) / h
             local center = GetSurfacePosition(Vec3(x + w/2, y + h/2, 0))
 
             local rect = {
@@ -107,6 +109,8 @@ GenerateCells = function(polygon, w, h)
 
             table.insert(rects, 
             {cellId = #rects + 1, 
+             gx = gx,
+             gy = gy,
              center = GetSurfacePosition(center), 
              polygon = Polygon(rect), 
              isValid = IsInPolygon(polygon, center)
@@ -115,6 +119,39 @@ GenerateCells = function(polygon, w, h)
     end
 
     return rects
+end,
+
+WorldToGrid = function(point, startX, startY, w, h)
+    local gx = math.floor((point.x - startX) / w)
+    local gy = math.floor((point.y - startY) / h)
+    return gx, gy
+end,
+
+GetCellsInCellRange = function(cells, gx, gy, range)
+    local result = {}
+
+    for _, cell in ipairs(cells) do
+        if math.abs(cell.gx - gx) <= range and math.abs(cell.gy - gy) <= range then
+            if cell.isValid then
+                table.insert(result, cell)
+            end
+        end
+    end
+    return result
+end,
+
+GetMostCoveredNeighbor = function(cells, cell, range)
+    local neighbors = GetCellsInCellRange(cells, cell.gx, cell.gy, range)
+    local mostCovered = 0
+    for i, neighbor in ipairs(neighbors) do
+        DebugLog(tostring(neighbor.sectorId))
+        if (neighbor.isValid and neighbor.sectorId ~= cell.sectorId) then
+            if (#neighbor.coverOutlines > mostCovered) then
+                mostCovered = #neighbor.coverOutlines
+            end
+        end
+    end
+    return mostCovered
 end,
 
 GetCoverGrid = function(polygon, h, sectorCovers)
