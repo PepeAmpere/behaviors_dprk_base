@@ -208,10 +208,11 @@
       "script": [
         "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
         "",
-        "",
         "-- content for every message",
         "loc.subordinates = {}",
         "loc.destinations = {}",
+        "loc.data = {}",
+        "loc.data.distracted = false;",
         "",
         "loc.subordinateData = InternalTable()",
         "-- list of subordinates",
@@ -227,19 +228,25 @@
         "",
         "    if subordinate ~= loc.leaderGroup then",
         "        table.insert(loc.subordinates, subordinate)",
-        "       ",
-        "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
         "",
+        "        local sector = loc.sectorPolygons[index]",
+        "        local observationSector = loc.observationPolygons[index]",
+        "        table.insert(loc.data, {squad = subordinate, sector = sector, observationSector = observationSector})",
+        "",
+        "        for member in subordinate:GetChildGroups() do",
+        "            member.ReqHeadingAimAtPos(GetPolygonCenter(observationSector), 1)",
+        "        end",
+        "",
+        "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
         "        if #loc.sectorCells[index].cells > 0 then",
         "            destination = loc.sectorCells[index].cells[1].center",
         "        end",
-        "",
         "        loc.destinations[#loc.destinations + 1] = destination",
         "",
         "        loc.subordinateData[subordinate] = {",
         "            orderName = \"Defend\",",
         "            destination = destination,",
-        "            heading = HeadingMode.AtPos",
+        "            heading = HeadingMode.AimAtPos",
         "        }",
         "",
         "        index = index + 1",
@@ -251,7 +258,7 @@
         "loc.subordinateData[loc.leaderGroup] = {",
         "    orderName = \"Defend\",",
         "    destination = arg.orderData.destination,",
-        "    heading = HeadingMode.AtPos",
+        "    heading = HeadingMode.AimAtPos",
         "}"
       ]
     },
@@ -284,39 +291,31 @@
           "type": "waitForever"
         },
         {
-          "name": "Logic",
-          "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
+          "name": "<unnamed>",
+          "id": "69a39a0a-8d38-4a21-82f2-a831a6044bcf",
           "type": "sequence",
           "subtrees": [
             {
-              "name": "Set restart false",
-              "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
-              "type": "scriptAction",
-              "script": [
-                "loc.restart = false"
-              ]
+              "name": "Set all soldiers idle",
+              "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+              "type": "reference",
+              "target": [
+                "standard_behaviors",
+                "ExecuteSubordinateOrder"
+              ],
+              "arguments": {
+                "orderData": "return loc.subOrderData",
+                "subordinates": "return loc.subordinates",
+                "subordinateData": "return loc.subordinateData",
+                "update": "return false"
+              }
             },
             {
-              "name": "<unnamed>",
-              "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
-              "type": "scriptAction"
+              "name": "Wait Forever",
+              "id": "65205d65-a307-4820-9eb0-a13ec84b6549",
+              "type": "waitForever"
             }
           ]
-        },
-        {
-          "name": "Set all soldiers idle",
-          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-          "type": "reference",
-          "target": [
-            "standard_behaviors",
-            "ExecuteSubordinateOrder"
-          ],
-          "arguments": {
-            "orderData": "return loc.subOrderData",
-            "subordinates": "return loc.subordinates",
-            "subordinateData": "return loc.subordinateData",
-            "update": "return false"
-          }
         },
         {
           "name": "Debug",
@@ -395,7 +394,7 @@
                 "        if (coversCount > 9) then",
                 "            coversCount = 9",
                 "        end",
-                "        -- ai_core_public.draw.Digit(coversCount, pos + lineOffset, 1, 1, 1, 1, 2)",
+                "        ai_core_public.draw.Digit(coversCount, pos + lineOffset, 1, 1, 1, 1, 2)",
                 "        -- DebugLine(pos, pos + lineOffset, 1, 0, 0, 1)",
                 "    end",
                 "end"
@@ -408,6 +407,59 @@
   ],
   "unlinked-trees": [
     {
+      "name": "Set restart false",
+      "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
+            "position": "3004.14182326223,1431.33103255855"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "loc.restart = false"
+      ]
+    },
+    {
+      "name": "Logic",
+      "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "<unnamed>",
+          "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
+          "type": "scriptAction",
+          "script": [
+            "loc.currentSituation = {}",
+            "for i, sectorData in ipairs(loc.data) do",
+            "    local enemies = GetEntitiesInArea( sectorData.observationSector, { hasBrain = true, enemyOf = self })",
+            "    if (#enemies > 5) then",
+            "        loc.currentSituation.mainSquad = sectorData.squad ",
+            "        loc.currentSituation.supplementarySquad = GetClosestSquadToEnemies(loc.data, enemies, sectorData.squad)",
+            "        ",
+            "    end",
+            "end"
+          ]
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
+            "position": "3529.14182326223,1193.83103255855"
+          },
+          {
+            "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
+            "position": "3479.14182326223,1343.83103255855"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
       "name": "Draw cover outlines",
       "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
       "type": "scriptAction",
@@ -415,7 +467,7 @@
         "nodesInfo": [
           {
             "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-            "position": "6016.64182326223,1107.66936086136"
+            "position": "6016.64182326223,1318.83103255855"
           }
         ],
         "editorObjects": []
@@ -438,7 +490,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "5191.64182326223,1107.66936086136"
+            "position": "5191.64182326223,1318.83103255855"
           }
         ],
         "editorObjects": []
@@ -473,7 +525,7 @@
         "nodesInfo": [
           {
             "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
-            "position": "4354.14182326223,932.669360861361"
+            "position": "4304.14182326223,1443.83103255855"
           }
         ],
         "editorObjects": []
@@ -487,87 +539,83 @@
     "nodesInfo": [
       {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "3979.14182326223,445.169360861361"
+        "position": "3979.14182326223,656.331032558553"
       },
       {
         "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
-        "position": "4129.14182326223,1095.16936086136"
+        "position": "4079.14182326223,1606.33103255855"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "2391.64182326222,595.16936086136"
+        "position": "2391.64182326222,806.331032558551"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "2579.14182326223,595.16936086136"
+        "position": "2579.14182326223,806.331032558551"
       },
       {
         "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-        "position": "2904.14182326223,595.16936086136"
+        "position": "2904.14182326223,806.331032558551"
       },
       {
         "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-        "position": "3241.64182326223,595.16936086136"
+        "position": "3241.64182326223,806.331032558551"
       },
       {
         "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
-        "position": "3429.14182326223,595.16936086136"
+        "position": "3429.14182326223,806.331032558551"
       },
       {
         "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
-        "position": "3604.14182326223,595.16936086136"
+        "position": "3604.14182326223,806.331032558551"
       },
       {
         "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
-        "position": "3766.64182326223,595.16936086136"
+        "position": "3766.64182326223,806.331032558553"
       },
       {
         "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
-        "position": "3929.14182326223,595.16936086136"
+        "position": "3929.14182326223,806.331032558551"
       },
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "4816.64182326223,720.169360861361"
+        "position": "4666.64182326223,968.831032558553"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "3129.14182326223,957.669360861361"
+        "position": "3016.64182326223,1193.83103255855"
       },
       {
-        "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
-        "position": "3629.14182326223,957.669360861362"
-      },
-      {
-        "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
-        "position": "3366.64182326223,1095.16936086136"
-      },
-      {
-        "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
-        "position": "3629.14182326223,1095.16936086136"
+        "id": "69a39a0a-8d38-4a21-82f2-a831a6044bcf",
+        "position": "4666.64182326223,1143.83103255855"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "4729.14182326223,970.169360861361"
+        "position": "4579.14182326223,1331.33103255855"
+      },
+      {
+        "id": "65205d65-a307-4820-9eb0-a13ec84b6549",
+        "position": "4954.14182326223,1331.33103255855"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "5191.64182326223,995.169360861361"
+        "position": "5191.64182326223,1206.33103255855"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "5341.64182326223,1107.66936086136"
+        "position": "5341.64182326223,1318.83103255855"
       },
       {
         "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-        "position": "5491.64182326223,1107.66936086136"
+        "position": "5491.64182326223,1318.83103255855"
       },
       {
         "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-        "position": "5654.14182326222,1107.66936086136"
+        "position": "5654.14182326222,1318.83103255855"
       },
       {
         "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-        "position": "5841.64182326222,1107.66936086136"
+        "position": "5841.64182326222,1318.83103255855"
       }
     ],
     "editorObjects": [
@@ -583,8 +631,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "7754.68222418049,3333.32255655455",
-    "gridPadding": "4.14182326222593,7.66936086136116"
+    "canvasSize": "7755.68222418049,3544.48422825174",
+    "gridPadding": "4.14182326222593,6.33103255855261"
   },
   "parameters": [
     {
@@ -611,6 +659,8 @@
     "debugColors": "return nil",
     "sectorCells": "return nil",
     "destinationCells": "return nil",
-    "restart": "false"
+    "restart": "false",
+    "data": "return nil",
+    "currentSituation": "return nil"
   }
 }

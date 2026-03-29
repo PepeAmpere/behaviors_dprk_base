@@ -312,4 +312,33 @@ DetermineCorrespondingSector = function(cells, polygonSectors)
         end
     end
 end,
+
+GetClosestSquadToEnemies = function (data, enemies, excludeSquad)
+    if #enemies == 0 then return nil end
+
+    local target = enemies[1]
+    local tx, ty = target:GetPosition()
+
+    local closestSquad = nil
+    local closestDist = math.huge
+
+    for i, sectorData in ipairs(data) do
+        local squad = sectorData.squad
+
+        if squad ~= excludeSquad then
+            local sx, sy = squad:GetPosition()
+
+            local dx = sx - tx
+            local dy = sy - ty
+            local dist = dx * dx + dy * dy
+
+            if dist < closestDist then
+                closestDist = dist
+                closestSquad = squad
+            end
+        end
+    end
+
+    return closestSquad
+end
 }
