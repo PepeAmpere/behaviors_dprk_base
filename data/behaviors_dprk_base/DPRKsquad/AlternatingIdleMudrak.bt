@@ -307,16 +307,6 @@
           "name": "Set all soldiers idle",
           "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
           "type": "reference",
-          "decorators": [
-            {
-              "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
-              "type": "restartIf",
-              "name": "Some stuff",
-              "script": [
-                "loc.restart"
-              ]
-            }
-          ],
           "target": [
             "standard_behaviors",
             "ExecuteSubordinateOrder"
@@ -474,6 +464,23 @@
         "    end",
         "end"
       ]
+    },
+    {
+      "name": "Some stuff",
+      "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
+      "type": "restartIf",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
+            "position": "4354.14182326223,932.669360861361"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "loc.restart"
+      ]
     }
   ],
   "meta": {
@@ -484,7 +491,7 @@
       },
       {
         "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
-        "position": "3804.14182326223,1095.16936086136"
+        "position": "4129.14182326223,1095.16936086136"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
@@ -520,27 +527,27 @@
       },
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "4541.64182326223,732.669360861361"
+        "position": "4816.64182326223,720.169360861361"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "3141.64182326223,945.169360861361"
+        "position": "3129.14182326223,957.669360861361"
       },
       {
         "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
-        "position": "3641.64182326223,957.669360861361"
+        "position": "3629.14182326223,957.669360861362"
       },
       {
         "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
-        "position": "3379.14182326223,1095.16936086136"
+        "position": "3366.64182326223,1095.16936086136"
       },
       {
         "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
-        "position": "3641.64182326223,1095.16936086136"
+        "position": "3629.14182326223,1095.16936086136"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "4454.14182326223,970.169360861361"
+        "position": "4729.14182326223,970.169360861361"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
