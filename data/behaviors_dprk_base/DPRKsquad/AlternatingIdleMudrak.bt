@@ -1,706 +1,210 @@
 {
-  "name": "Root",
-  "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-  "type": "supervisedParallel",
+  "name": "Setup",
+  "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
+  "type": "sequence",
   "subtrees": [
     {
-      "name": "Logic",
-      "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Setup",
-          "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-          "type": "sequence",
-          "subtrees": [
-            {
-              "name": "Setup Defence Area",
-              "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-              "type": "scriptAction",
-              "script": [
-                "local myPosition = arg.orderData.destination",
-                "",
-                "local verts = {",
-                "    myPosition + Vec3(-loc.defenceRadius, -loc.defenceRadius, 0),",
-                "    myPosition + Vec3( loc.defenceRadius, -loc.defenceRadius, 0),",
-                "    myPosition + Vec3( loc.defenceRadius,  loc.defenceRadius, 0),",
-                "    myPosition + Vec3(-loc.defenceRadius,  loc.defenceRadius, 0),",
-                "}",
-                "",
-                "if loc.areaOfDefence == nil then",
-                "    loc.areaOfDefence = {}",
-                "end",
-                "",
-                "for i, v in ipairs(verts) do",
-                "    table.insert(loc.areaOfDefence, v)",
-                "end"
-              ]
-            },
-            {
-              "name": "Create Defence Area for each FireTeam",
-              "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-              "type": "scriptAction",
-              "script": [
-                "loc.leaderGroup = self:GetLeaderGroup()",
-                "loc.leader = self:GetLeader()",
-                "",
-                "loc.childGroupsCount = self:GetChildGroupCount() - 1;",
-                "",
-                "local step = 2 * math.pi/loc.childGroupsCount;",
-                "local halfStep = step * 0.5;",
-                "",
-                "local center = arg.orderData.destination",
-                "local radians = 0;",
-                "",
-                "local z = center:Z();",
-                "loc.sectorPolygons = {}",
-                "loc.observationPolygons = {}",
-                "local defenceAreaVerts = {}",
-                "",
-                "local x = center:X() + loc.defenceRadius * math.cos(0);",
-                "local y = center:Y() + loc.defenceRadius * math.sin(0);",
-                "",
-                "local lastPoint = Vec3(x,y,z)",
-                "",
-                "x = center:X() + loc.observationRadius * math.cos(0);",
-                "y = center:Y() + loc.observationRadius * math.sin(0);",
-                "",
-                "local observationLastPoint = Vec3(x,y,z)",
-                "",
-                "",
-                "for i = 0, loc.childGroupsCount - 1 do",
-                "    local sectorVerts = {}",
-                "    local observationVerts = {}",
-                "",
-                "",
-                "    table.insert(sectorVerts, center)",
-                "    table.insert(sectorVerts, lastPoint);",
-                "    table.insert(defenceAreaVerts, lastPoint);",
-                "",
-                "",
-                "    table.insert(observationVerts, center)",
-                "    table.insert(observationVerts, observationLastPoint);",
-                "",
-                "--",
-                "",
-                "    radians = i * step;",
-                "    x = center:X() + loc.defenceRadius * math.cos(radians + halfStep);",
-                "    y = center:Y() + loc.defenceRadius * math.sin(radians + halfStep);",
-                "    lastPoint = Vec3(x,y,z);",
-                "    table.insert(sectorVerts, lastPoint);",
-                "    table.insert(defenceAreaVerts, lastPoint);",
-                "",
-                "    x = center:X() + loc.observationRadius * math.cos(radians + halfStep);",
-                "    y = center:Y() + loc.observationRadius * math.sin(radians + halfStep);",
-                "    table.insert(observationVerts, Vec3(x, y, z));",
-                "",
-                " -- ",
-                "",
-                "    radians = radians + step;",
-                "    x = center:X() + loc.defenceRadius * math.cos(radians);",
-                "    y = center:Y() + loc.defenceRadius * math.sin(radians);",
-                "    lastPoint = Vec3(x,y,z);",
-                "    table.insert(sectorVerts, lastPoint);",
-                "",
-                "    x = center:X() + loc.observationRadius * math.cos(radians);",
-                "    y = center:Y() + loc.observationRadius * math.sin(radians);",
-                "    observationLastPoint = Vec3(x,y,z);",
-                "    table.insert(observationVerts, observationLastPoint);",
-                "",
-                "",
-                "--[[",
-                "    DebugLog(\"vertex\")    ",
-                "    DebugLog(\"----------------------\")    ",
-                "    for _, v in ipairs(sectorVerts) do",
-                "        DebugLog(\"(\" .. v:X() .. \", \" .. v:Y() .. \", \" .. v:Z() .. \")\")    ",
-                "    end",
-                "    DebugLog(\"----------------------\")    ",
-                "    DebugLog(\"poly\")    ",
-                "",
-                "    for i = 1, poly:Count() do",
-                "        local v = poly:Vertex(i);",
-                "        DebugLog(\"(\" .. v:X() .. \", \" .. v:Y() .. \", \" .. v:Z() .. \")\")    ",
-                "    end",
-                "    DebugLog(\"----------------------\")    ",
-                "",
-                "]]",
-                "    local poly = Polygon(sectorVerts);",
-                "    table.insert(loc.sectorPolygons, poly);",
-                "",
-                "    poly = Polygon(observationVerts);",
-                "    table.insert(loc.observationPolygons, poly);",
-                "",
-                "end",
-                "--[[",
-                "for i, poly in ipairs(loc.sectorPolygons) do",
-                "    for i = 1, poly:Count() do",
-                "        local v = poly:Vertex(i);",
-                "        DebugLog(\"(\" .. v:X() .. \", \" .. v:Y() .. \", \" .. v:Z() .. \")\")    ",
-                "    end",
-                "    DebugLog(\"poly end\")    ",
-                "end",
-                "]]",
-                "",
-                "loc.defencePolygon = Polygon(defenceAreaVerts)",
-                "loc.sectorPolygonCenters = {}",
-                "",
-                "for i, poly in ipairs(loc.sectorPolygons) do",
-                "    table.insert(loc.sectorPolygonCenters, GetPolygonCenter(poly))",
-                "end"
-              ]
-            },
-            {
-              "name": "Generate cells & CoverOutlines Requests",
-              "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-              "type": "scriptAction",
-              "script": [
-                "loc.sectorCells = {}",
-                "for i, sector in ipairs(loc.sectorPolygons) do",
-                "    loc.sectorCells[i] = {sector = sector, cells = {}}",
-                "end",
-                "",
-                "loc.cells = GenerateCells(loc.defencePolygon, loc.cellWidth, loc.cellHeight)",
-                "DetermineCorrespondingSector(loc.cells, loc.sectorPolygons)",
-                "",
-                "for i, cell in ipairs(loc.cells) do",
-                "    cell.coverOutlines = {}",
-                "    if (cell.isValid) then",
-                "        cell.coverOutlines = GetCoverOutlines(cell.polygon);",
-                "    end",
-                "end"
-              ]
-            },
-            {
-              "name": "CoverOutlines ready",
-              "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-              "type": "waitUntil",
-              "condition": [
-                "for _, cell in ipairs(loc.cells) do",
-                "    if (cell.isValid and not cell.coverOutlines:IsReady()) then",
-                "        return false",
-                "    end",
-                "end",
-                "",
-                "for i, cell in ipairs(loc.cells) do",
-                "    if (cell.isValid) then",
-                "        cell.coverOutlines = cell.coverOutlines:Value()",
-                "    end",
-                "end",
-                "",
-                "loc.cells.coversReady = true;",
-                "return true"
-              ]
-            },
-            {
-              "name": "Set sector cells",
-              "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
-              "type": "scriptAction",
-              "script": [
-                "for i, cell in ipairs(loc.cells) do",
-                "    if (cell.isValid) then",
-                "        table.insert(loc.sectorCells[cell.sectorId].cells, cell)",
-                "    end",
-                "end"
-              ]
-            },
-            {
-              "name": "Sort cells",
-              "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
-              "type": "scriptAction",
-              "script": [
-                "local cellsNumber = 3",
-                "local cellRange = 5",
-                "loc.destinationCells = {}",
-                "for i, sector in ipairs(loc.sectorCells) do",
-                "    loc.destinationCells[i] = {sector = sector.sector, cells = {}}",
-                "",
-                "    local sectorCenter = GetPolygonCenter(sector.sector)",
-                "    table.sort(sector.cells, function(a, b)",
-                "        return #a.coverOutlines > #b.coverOutlines",
-                "    end)",
-                "    cellsNumber = math.min(cellsNumber, #sector.cells)",
-                "    for j = 1, cellsNumber do",
-                "        sector.cells[j].mostCoveredNeighbor = GetMostCoveredNeighbor(loc.cells, sector.cells[j], cellRange)",
-                "        table.insert(loc.destinationCells[i].cells, sector.cells[j])",
-                "    end",
-                "end",
-                "",
-                "",
-                "for i, sectorCells in ipairs(loc.destinationCells) do",
-                "    table.sort(sectorCells.cells, function(a, b)",
-                "        local ca = #(a.coverOutlines or {})",
-                "        local cb = #(b.coverOutlines or {})",
-                "",
-                "        if ca > cb * 1.25 then return true end",
-                "        if cb > ca * 1.25 then return false end",
-                "",
-                "        local na = a.mostCoveredNeighbor or 0",
-                "        local nb = b.mostCoveredNeighbor or 0",
-                "",
-                "        if na ~= nb then",
-                "            return na > nb",
-                "        end",
-                "",
-                "        return ca > cb",
-                "    end)",
-                "end"
-              ]
-            },
-            {
-              "name": "Prepare order data",
-              "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
-              "type": "scriptAction",
-              "script": [
-                "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
-                "",
-                "",
-                "-- content for every message",
-                "loc.subordinates = {}",
-                "loc.destinations = {}",
-                "",
-                "loc.subordinateData = InternalTable()",
-                "-- list of subordinates",
-                "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
-                "    DebugLog(\"Error 1\");",
-                "end",
-                "",
-                "",
-                "local index = 1;",
-                "",
-                "for i = 0, self:GetChildGroupCount() - 1 do",
-                "    local subordinate = self:GetChildGroup(i)",
-                "",
-                "    if subordinate ~= loc.leaderGroup then",
-                "        table.insert(loc.subordinates, subordinate)",
-                "       ",
-                "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
-                "",
-                "        if #loc.sectorCells[index].cells > 0 then",
-                "            destination = loc.sectorCells[index].cells[1].center",
-                "        end",
-                "",
-                "        loc.destinations[#loc.destinations + 1] = destination",
-                "",
-                "        loc.subordinateData[subordinate] = {",
-                "            orderName = \"Defend\",",
-                "            destination = destination,",
-                "            heading = HeadingMode.AtPos",
-                "        }",
-                "",
-                "        index = index + 1",
-                "    end",
-                "end",
-                "",
-                "loc.destinations[#loc.destinations + 1] = arg.orderData.destination",
-                "table.insert(loc.subordinates, loc.leaderGroup)",
-                "loc.subordinateData[loc.leaderGroup] = {",
-                "    orderName = \"Defend\",",
-                "    destination = arg.orderData.destination,",
-                "    heading = HeadingMode.AtPos",
-                "}"
-              ]
-            },
-            {
-              "name": "DEBUG: GENERATE CELLS COLOR",
-              "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
-              "type": "scriptAction",
-              "script": [
-                "loc.debugColors = {}",
-                "",
-                "for i = 1, #loc.sectorPolygons do",
-                "    local colors = {",
-                "        math.random(),",
-                "        math.random(),",
-                "        math.random(),",
-                "    }",
-                "",
-                "    loc.debugColors[i] = colors",
-                "end"
-              ]
-            }
-          ]
-        },
-        {
-          "name": "Set all soldiers idle",
-          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-          "type": "reference",
-          "target": [
-            "standard_behaviors",
-            "ExecuteSubordinateOrder"
-          ],
-          "arguments": {
-            "orderData": "return loc.subOrderData",
-            "subordinates": "return loc.subordinates",
-            "subordinateData": "return loc.subordinateData",
-            "update": "return false"
-          }
-        },
-        {
-          "name": "Wait Forever",
-          "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-          "type": "waitForever"
-        }
+      "name": "Setup Defence Area",
+      "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
+      "type": "scriptAction",
+      "script": [
+        "local myPosition = arg.orderData.destination",
+        "",
+        "local verts = {",
+        "    myPosition + Vec3(-loc.defenceRadius, -loc.defenceRadius, 0),",
+        "    myPosition + Vec3( loc.defenceRadius, -loc.defenceRadius, 0),",
+        "    myPosition + Vec3( loc.defenceRadius,  loc.defenceRadius, 0),",
+        "    myPosition + Vec3(-loc.defenceRadius,  loc.defenceRadius, 0),",
+        "}",
+        "",
+        "if loc.areaOfDefence == nil then",
+        "    loc.areaOfDefence = {}",
+        "end",
+        "",
+        "for i, v in ipairs(verts) do",
+        "    table.insert(loc.areaOfDefence, v)",
+        "end"
       ]
     },
     {
-      "name": "Debug",
-      "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "Draw Sectors",
-          "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-          "type": "scriptAction",
-          "script": [
-            "if loc.sectorPolygons ~= nil then",
-            "    for i, poly in ipairs(loc.sectorPolygons) do",
-            "        ai_core_public.draw.PolygonOnSurface(poly, 0, 0, 1, 1, Vec3(0,0,1));",
-            "    end",
-            "end",
-            "",
-            "if loc.observationPolygons ~= nil then",
-            "    for i, poly in ipairs(loc.observationPolygons) do",
-            "        ai_core_public.draw.PolygonOnSurface(poly, 1, 1, 0, 1, Vec3(0,0,1));",
-            "    end",
-            "end"
-          ]
-        },
-        {
-          "name": "Draw centers",
-          "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-          "type": "scriptAction",
-          "script": [
-            "if loc.sectorPolygons ~= nil then",
-            "    for i, poly in ipairs(loc.sectorPolygons) do",
-            "        ai_core_public.draw.SpotMarkerOnSurface(GetPolygonCenter(poly), 1,1,1, Vec3(0,0,1), 1, 1);",
-            "    end",
-            "end"
-          ]
-        },
-        {
-          "name": "Draw polygon",
-          "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-          "type": "scriptAction",
-          "script": [
-            "local offset = Vec3(0,0,3)",
-            "if loc.defencePolygon ~= nil then",
-            "    for i = 1, loc.defencePolygon:Count() do",
-            "        local point = GetSurfacePosition(loc.defencePolygon:Vertex(i))",
-            "        ai_core_public.draw.Line(point, point + offset, 1, 0, 0, 1)",
-            "    end",
-            "    ai_core_public.draw.PolygonOnSurface(loc.defencePolygon, 1, 0, 0, 0, Vec3(0,0,1))",
-            "end"
-          ]
-        },
-        {
-          "name": "Draw cells",
-          "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-          "type": "scriptAction",
-          "script": [
-            "local digitOffset = Vec3(0,0,40)",
-            "local lineOffset = Vec3(0,0,50)",
-            "if loc.cells ~= nil and loc.cells.coversReady then",
-            "    for i, cell in ipairs(loc.cells) do",
-            "        local color = {1, 0, 0}",
-            "        if (cell.isValid) then",
-            "            color = loc.debugColors[cell.sectorId]",
-            "            if (#cell.coverOutlines ~= 0) then",
-            "                ai_core_public.draw.Digit(#cell.coverOutlines, cell.center + digitOffset, 1, 1, 1, 1, 2)",
-            "            end",
-            "        end",
-            "        ai_core_public.draw.PolygonOnSurface(cell.polygon, color[1], color[2], color[3], 1, Vec3(0,0,1));",
-            "    end",
-            "end",
-            "",
-            "if loc.destinationCells ~= nil then",
-            "    for i, sectorCells in ipairs(loc.destinationCells) do",
-            "        local pos = sectorCells.cells[1].center",
-            "        local coversCount = #sectorCells.cells[1].coverOutlines",
-            "        if (coversCount > 9) then",
-            "            coversCount = 9",
-            "        end",
-            "        ai_core_public.draw.Digit(coversCount, pos + lineOffset, 1, 1, 1, 1, 2)",
-            "        DebugLine(pos, pos + lineOffset, 1, 0, 0, 1)",
-            "    end",
-            "end"
-          ]
-        }
-      ]
-    }
-  ],
-  "unlinked-trees": [
-    {
-      "name": "CoverOutlines Requests",
-      "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
+      "name": "Create Defence Area for each FireTeam",
+      "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
       "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "7c85cea8-74ad-4ae8-b178-5143d7c8bdb3",
-            "position": "1674.88810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
       "script": [
-        "loc.coverRequests = {}",
+        "loc.leaderGroup = self:GetLeaderGroup()",
         "",
-        "if loc.sectorPolygons ~= nil then",
-        "    for i, poly in ipairs(loc.sectorPolygons) do",
-        "        loc.coverRequests[i] = GetCoverOutlines(poly);",
+        "local childGroupsCount = self:GetChildGroupCount() - 1",
+        "local step = 2 * math.pi/childGroupsCount;",
+        "local halfStep = step * 0.5;",
+        "",
+        "local center = arg.orderData.destination",
+        "local radians = 0;",
+        "",
+        "local z = center:Z();",
+        "loc.sectorPolygons = {}",
+        "loc.observationPolygons = {}",
+        "local defenceAreaVerts = {}",
+        "",
+        "local x = center:X() + loc.defenceRadius * math.cos(0);",
+        "local y = center:Y() + loc.defenceRadius * math.sin(0);",
+        "",
+        "local lastPoint = Vec3(x,y,z)",
+        "",
+        "x = center:X() + loc.observationRadius * math.cos(0);",
+        "y = center:Y() + loc.observationRadius * math.sin(0);",
+        "",
+        "local observationLastPoint = Vec3(x,y,z)",
+        "",
+        "",
+        "for i = 0, childGroupsCount - 1 do",
+        "    local sectorVerts = {}",
+        "    local observationVerts = {}",
+        "",
+        "",
+        "    table.insert(sectorVerts, center)",
+        "    table.insert(sectorVerts, lastPoint);",
+        "    table.insert(defenceAreaVerts, lastPoint);",
+        "",
+        "",
+        "    table.insert(observationVerts, center)",
+        "    table.insert(observationVerts, observationLastPoint);",
+        "",
+        "    radians = i * step;",
+        "    x = center:X() + loc.defenceRadius * math.cos(radians + halfStep);",
+        "    y = center:Y() + loc.defenceRadius * math.sin(radians + halfStep);",
+        "    lastPoint = Vec3(x,y,z);",
+        "    table.insert(sectorVerts, lastPoint);",
+        "    table.insert(defenceAreaVerts, lastPoint);",
+        "",
+        "    x = center:X() + loc.observationRadius * math.cos(radians + halfStep);",
+        "    y = center:Y() + loc.observationRadius * math.sin(radians + halfStep);",
+        "    table.insert(observationVerts, Vec3(x, y, z));",
+        "",
+        " -- ",
+        "",
+        "    radians = radians + step;",
+        "    x = center:X() + loc.defenceRadius * math.cos(radians);",
+        "    y = center:Y() + loc.defenceRadius * math.sin(radians);",
+        "    lastPoint = Vec3(x,y,z);",
+        "    table.insert(sectorVerts, lastPoint);",
+        "",
+        "    x = center:X() + loc.observationRadius * math.cos(radians);",
+        "    y = center:Y() + loc.observationRadius * math.sin(radians);",
+        "    observationLastPoint = Vec3(x,y,z);",
+        "    table.insert(observationVerts, observationLastPoint);",
+        "",
+        "    local poly = Polygon(sectorVerts);",
+        "    table.insert(loc.sectorPolygons, poly);",
+        "",
+        "    poly = Polygon(observationVerts);",
+        "    table.insert(loc.observationPolygons, poly);",
+        "",
+        "end",
+        "",
+        "loc.defencePolygon = Polygon(defenceAreaVerts)"
+      ]
+    },
+    {
+      "name": "Generate cells & CoverOutlines Requests",
+      "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
+      "type": "scriptAction",
+      "script": [
+        "loc.sectorCells = {}",
+        "for i, sector in ipairs(loc.sectorPolygons) do",
+        "    loc.sectorCells[i] = {sector = sector, cells = {}}",
+        "end",
+        "",
+        "loc.cells = GenerateCells(loc.defencePolygon, loc.cellWidth, loc.cellHeight)",
+        "DetermineCorrespondingSector(loc.cells, loc.sectorPolygons)",
+        "",
+        "for i, cell in ipairs(loc.cells) do",
+        "    cell.coverOutlines = {}",
+        "    if (cell.isValid) then",
+        "        cell.coverOutlines = GetCoverOutlines(cell.polygon);",
         "    end",
         "end"
       ]
     },
     {
       "name": "CoverOutlines ready",
-      "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
+      "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
       "type": "waitUntil",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "a893a4b3-bd25-44be-8382-7daf3ee4d617",
-            "position": "1887.38810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
       "condition": [
-        "for _, coverRequest in ipairs(loc.coverRequests) do",
-        "    if not coverRequest:IsReady() then",
+        "for _, cell in ipairs(loc.cells) do",
+        "    if (cell.isValid and not cell.coverOutlines:IsReady()) then",
         "        return false",
         "    end",
         "end",
         "",
-        "loc.covers = {}",
-        "for i, coverRequest in ipairs(loc.coverRequests) do",
-        "    loc.covers[i] = coverRequest:Value()",
+        "for i, cell in ipairs(loc.cells) do",
+        "    if (cell.isValid) then",
+        "        cell.coverOutlines = cell.coverOutlines:Value()",
+        "    end",
         "end",
         "",
+        "loc.cells.coversReady = true;",
         "return true"
       ]
     },
     {
-      "name": "Generate Lattice Points",
-      "id": "9db278a8-1982-45c8-a2f2-89974da30720",
+      "name": "Set sector cells",
+      "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
       "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "9db278a8-1982-45c8-a2f2-89974da30720",
-            "position": "2087.38810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
       "script": [
-        "loc.latticePoints = {}",
-        "",
-        "for i, poly in ipairs(loc.sectorPolygons) do",
-        "    table.insert(loc.latticePoints, GenerateGridPoints(poly, loc.latticePointsStep))",
-        "end"
-      ]
-    },
-    {
-      "name": "Generate Cover Clusters",
-      "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b63f0725-5e93-4e91-9830-b396a230a6f4",
-            "position": "2312.38810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.coverClusters = {}",
-        "for i, poly in ipairs(loc.sectorPolygons) do",
-        "    local coverGrid, pointNeighbors, pointMeta = GetCoverGrid(poly, loc.latticePointsStep, loc.covers[i])",
-        "    local sectorClusters = GetClusters(coverGrid, pointNeighbors, pointMeta, loc.clusterScale)",
-        "    for j, cluster in ipairs(sectorClusters) do",
-        "        cluster.polygon = SortPolygonVertices(cluster.polygon)",
-        "        cluster.distance = cluster.center:Distance(GetPolygonCenter(poly))",
-        "        cluster.area = PolygonArea(cluster.polygon)",
-        "    end",
-        "    sectorClusters.sector = poly",
-        "    table.insert(loc.coverClusters, sectorClusters)",
-        "end"
-      ]
-    },
-    {
-      "name": "Check Clusters Neighbors ",
-      "id": "812c24ef-d88f-4ab6-b2c2-1887ef9edf16",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "812c24ef-d88f-4ab6-b2c2-1887ef9edf16",
-            "position": "2524.88810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.clustersPathRequests = {}",
-        "",
-        "for i = 1, #loc.coverClusters - 1 do",
-        "    local startSectorClusters = loc.coverClusters[i]",
-        "    for j, startCluster in ipairs(startSectorClusters) do",
-        "        for k = i + 1, #loc.coverClusters do",
-        "            local goalSectorClusters = loc.coverClusters[k]",
-        "            for l, goalCluster in ipairs(goalSectorClusters) do",
-        "                local index = #loc.clustersPathRequests + 1",
-        "                loc.clustersPathRequests[index] = {path = FindPath(startCluster.center, goalCluster.center, { threats = {{avoidance = 3}}})}  ",
-        "                --loc.clustersPathRequests[index] = {path = FindPath(startCluster.center, goalCluster.center)}  ",
-        "                loc.clustersPathRequests[index].startClusterIndex = {i, j}",
-        "                loc.clustersPathRequests[index].endClusterIndex = {k, l}",
-        "            end",
-        "        end",
+        "for i, cell in ipairs(loc.cells) do",
+        "    if (cell.isValid) then",
+        "        table.insert(loc.sectorCells[cell.sectorId].cells, cell)",
         "    end",
         "end"
       ]
     },
     {
-      "name": "FindPath",
-      "id": "a0ca8976-5522-496e-a7ad-7e0909a1dcdc",
-      "type": "waitUntil",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "a0ca8976-5522-496e-a7ad-7e0909a1dcdc",
-            "position": "2774.88810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "condition": [
-        "for _, clustersPathRequest in ipairs(loc.clustersPathRequests) do",
-        "    if not clustersPathRequest.path:IsReady() then",
-        "        return false",
+      "name": "Sort cells",
+      "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
+      "type": "scriptAction",
+      "script": [
+        "local cellsNumber = 3",
+        "local cellRange = 5",
+        "loc.destinationCells = {}",
+        "for i, sector in ipairs(loc.sectorCells) do",
+        "    loc.destinationCells[i] = {sector = sector.sector, cells = {}}",
+        "",
+        "    local sectorCenter = GetPolygonCenter(sector.sector)",
+        "    table.sort(sector.cells, function(a, b)",
+        "        return #a.coverOutlines > #b.coverOutlines",
+        "    end)",
+        "    cellsNumber = math.min(cellsNumber, #sector.cells)",
+        "    for j = 1, cellsNumber do",
+        "        sector.cells[j].mostCoveredNeighbor = GetMostCoveredNeighbor(loc.cells, sector.cells[j], cellRange)",
+        "        table.insert(loc.destinationCells[i].cells, sector.cells[j])",
         "    end",
         "end",
         "",
-        "for i, clustersPathRequest in ipairs(loc.clustersPathRequests) do",
-        "    loc.clustersPathRequests[i].path = clustersPathRequest.path:Value()",
-        "end",
-        "return true"
-      ]
-    },
-    {
-      "name": "Calculate cluster neighbors ",
-      "id": "62eda2e6-d1a1-47c9-a5e4-f4df6274a27f",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "62eda2e6-d1a1-47c9-a5e4-f4df6274a27f",
-            "position": "2962.38810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "if loc.clustersPathRequests ~= nil then",
-        "    for i, clustersPath in ipairs(loc.clustersPathRequests) do",
-        "        local segmentCount = clustersPath.path:GetSegmentCount()",
-        "\t\tlocal open = 0;",
-        "        local closed = 0;",
-        "        local urban = 0;",
-        "\t\tfor i = 0, segmentCount-1 do",
-        "            local estimation = EstimateTerrainTypes(clustersPath.path:GetSegmentStart(i))",
-        "            open = open + estimation[TerrainType.Open]",
-        "            closed = closed + estimation[TerrainType.Closed]",
-        "            urban = urban + estimation[TerrainType.Urban]",
-        "\t\tend",
-        "    ",
-        "        clustersPath.type = TerrainType.Open",
-        "        if closed >= segmentCount * 0.7 then",
-        "            clustersPath.type = TerrainType.Closed",
+        "",
+        "for i, sectorCells in ipairs(loc.destinationCells) do",
+        "    table.sort(sectorCells.cells, function(a, b)",
+        "        local ca = #(a.coverOutlines or {})",
+        "        local cb = #(b.coverOutlines or {})",
+        "",
+        "        if ca > cb * 1.25 then return true end",
+        "        if cb > ca * 1.25 then return false end",
+        "",
+        "        local na = a.mostCoveredNeighbor or 0",
+        "        local nb = b.mostCoveredNeighbor or 0",
+        "",
+        "        if na ~= nb then",
+        "            return na > nb",
         "        end",
-        "        ",
         "",
-        "        if clustersPath.type == TerrainType.Closed then ",
-        "            local index1 = clustersPath.startClusterIndex[1]",
-        "            local index2 = clustersPath.startClusterIndex[2]",
-        "            local neighbors = loc.coverClusters[index1][index2].neighbors or 0",
-        "            loc.coverClusters[index1][index2].neighbors = neighbors + 1",
-        "",
-        "            index1 = clustersPath.endClusterIndex[1]",
-        "            index2 = clustersPath.endClusterIndex[2]",
-        "            neighbors = loc.coverClusters[index1][index2].neighbors or 0",
-        "            loc.coverClusters[index1][index2].neighbors = neighbors + 1",
-        "        end",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Sort clusters",
-      "id": "83cf8836-f6a3-4c5e-82cc-6f4d635f30d1",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "83cf8836-f6a3-4c5e-82cc-6f4d635f30d1",
-            "position": "3237.38810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "if loc.coverClusters ~= nil then",
-        "    for i, sectorcoverClusters in ipairs(loc.coverClusters) do",
-        "        table.sort(sectorcoverClusters, function(a, b)",
-        "            local a_area = a.area or 0",
-        "            local b_area = b.area or 1",
-        "            local a_neighbors = a.neighbors or 0",
-        "            local b_neighbors = b.neighbors or 1",
-        "            local a_distance = a.distance or 0",
-        "            local b_distance = b.distance or 0",
-        "",
-        "",
-        "            if a_neighbors == 0 and b_neighbors ~= 0 then",
-        "                return false",
-        "            elseif a_neighbors ~= 0 and b_neighbors == 0 then",
-        "                return true",
-        "            end",
-        "",
-        "            local areaDiff = a_area / b_area",
-        "            local neighborsDiff = a_neighbors / b_neighbors",
-        "",
-        "            if neighborsDiff >= 1.25 and areaDiff >= 0.75 then",
-        "                return a_neighbors > b_neighbors",
-        "            end",
-        "    ",
-        "            if a_area ~= b_area then",
-        "                return a_area > b_area",
-        "            end",
-        "",
-        "            if a_neighbors ~= b_neighbors then",
-        "                return a_neighbors > b_neighbors",
-        "            end",
-        "",
-        "            return a_distance < b_distance",
-        "        end)",
-        "    end",
+        "        return ca > cb",
+        "    end)",
         "end"
       ]
     },
     {
       "name": "Prepare order data",
-      "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
+      "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
       "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "610e0d3d-5b14-4ac2-8c75-ee98dca5f06c",
-            "position": "3474.88810793913,1358.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
       "script": [
         "loc.subOrderData = {orderName = \"Defend\", destination = arg.orderData.destination, heading = HeadingMode.AtPos}",
         "",
@@ -711,7 +215,7 @@
         "",
         "loc.subordinateData = InternalTable()",
         "-- list of subordinates",
-        "if(self:GetChildGroupCount() - 1 ~= #loc.coverClusters) then",
+        "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
         "    DebugLog(\"Error 1\");",
         "end",
         "",
@@ -724,9 +228,10 @@
         "    if subordinate ~= loc.leaderGroup then",
         "        table.insert(loc.subordinates, subordinate)",
         "       ",
-        "        local destination = GetPolygonCenter(loc.sectorPolygons[index])",
-        "        if #loc.coverClusters[index] > 0 then",
-        "            destination = loc.coverClusters[index][1].center",
+        "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
+        "",
+        "        if #loc.sectorCells[index].cells > 0 then",
+        "            destination = loc.sectorCells[index].cells[1].center",
         "        end",
         "",
         "        loc.destinations[#loc.destinations + 1] = destination",
@@ -751,38 +256,167 @@
       ]
     },
     {
-      "name": "Draw covers",
-      "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
+      "name": "DEBUG: GENERATE CELLS COLOR",
+      "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
       "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "e7ccb4f4-3372-43be-8b06-52e9e41a204e",
-            "position": "5424.88810793913,1021.16936086136"
-          }
-        ],
-        "editorObjects": []
-      },
       "script": [
-        "--[[if loc.covers then",
-        "    for i, cover in ipairs(loc.covers) do",
-        "        if #cover > 0 then",
-        "            ai_core_public.draw.PolygonOnSurface(cover[2].vertices, 1, 1, 0, 1, Vec3(0,0,1))",
-        "        end",
-        "    end",
-        "end]]",
-        "local offset = Vec3(0,0,20)",
-        "if loc.covers ~= nil then",
-        "    for i, sectorCover in ipairs(loc.covers) do",
-        "        for j, cover in ipairs(sectorCover) do",
-        "            if cover.firingPosition then",
-        "                DebugLine(cover.firingPosition, cover.firingPosition + offset, 1, 0, 0, 1)",
-        "            end",
-        "        end",
-        "    end",
+        "loc.debugColors = {}",
+        "",
+        "for i = 1, #loc.sectorPolygons do",
+        "    local colors = {",
+        "        math.random(),",
+        "        math.random(),",
+        "        math.random(),",
+        "    }",
+        "",
+        "    loc.debugColors[i] = colors",
         "end"
       ]
     },
+    {
+      "name": "Root",
+      "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Wait Forever",
+          "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
+          "type": "waitForever"
+        },
+        {
+          "name": "Logic",
+          "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Set restart false",
+              "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
+              "type": "scriptAction",
+              "script": [
+                "loc.restart = false"
+              ]
+            },
+            {
+              "name": "<unnamed>",
+              "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
+              "type": "scriptAction"
+            }
+          ]
+        },
+        {
+          "name": "Set all soldiers idle",
+          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+          "type": "reference",
+          "decorators": [
+            {
+              "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
+              "type": "restartIf",
+              "name": "Some stuff",
+              "script": [
+                "loc.restart"
+              ]
+            }
+          ],
+          "target": [
+            "standard_behaviors",
+            "ExecuteSubordinateOrder"
+          ],
+          "arguments": {
+            "orderData": "return loc.subOrderData",
+            "subordinates": "return loc.subordinates",
+            "subordinateData": "return loc.subordinateData",
+            "update": "return false"
+          }
+        },
+        {
+          "name": "Debug",
+          "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Draw Sectors",
+              "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
+              "type": "scriptAction",
+              "script": [
+                "if loc.sectorPolygons ~= nil then",
+                "    for i, poly in ipairs(loc.sectorPolygons) do",
+                "        ai_core_public.draw.PolygonOnSurface(poly, 0, 0, 1, 1, Vec3(0,0,1));",
+                "    end",
+                "end",
+                "",
+                "if loc.observationPolygons ~= nil then",
+                "    for i, poly in ipairs(loc.observationPolygons) do",
+                "        ai_core_public.draw.PolygonOnSurface(poly, 1, 1, 0, 1, Vec3(0,0,1));",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Draw centers",
+              "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
+              "type": "scriptAction",
+              "script": [
+                "if loc.sectorPolygons ~= nil then",
+                "    for i, poly in ipairs(loc.sectorPolygons) do",
+                "        ai_core_public.draw.SpotMarkerOnSurface(GetPolygonCenter(poly), 1,1,1, Vec3(0,0,1), 1, 1);",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Draw polygon",
+              "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
+              "type": "scriptAction",
+              "script": [
+                "local offset = Vec3(0,0,3)",
+                "if loc.defencePolygon ~= nil then",
+                "    for i = 1, loc.defencePolygon:Count() do",
+                "        local point = GetSurfacePosition(loc.defencePolygon:Vertex(i))",
+                "        ai_core_public.draw.Line(point, point + offset, 1, 0, 0, 1)",
+                "    end",
+                "    ai_core_public.draw.PolygonOnSurface(loc.defencePolygon, 1, 0, 0, 0, Vec3(0,0,1))",
+                "end"
+              ]
+            },
+            {
+              "name": "Draw cells",
+              "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
+              "type": "scriptAction",
+              "script": [
+                "local digitOffset = Vec3(0,0,40)",
+                "local lineOffset = Vec3(0,0,50)",
+                "if loc.cells ~= nil and loc.cells.coversReady then",
+                "    for i, cell in ipairs(loc.cells) do",
+                "        local color = {1, 0, 0}",
+                "        if (cell.isValid) then",
+                "            color = loc.debugColors[cell.sectorId]",
+                "            if (#cell.coverOutlines ~= 0) then",
+                "                -- ai_core_public.draw.Digit(#cell.coverOutlines, cell.center + digitOffset, 1, 1, 1, 1, 2)",
+                "            end",
+                "        end",
+                "        ai_core_public.draw.PolygonOnSurface(cell.polygon, color[1], color[2], color[3], 1, Vec3(0,0,1));",
+                "    end",
+                "end",
+                "",
+                "if loc.destinationCells ~= nil then",
+                "    for i, sectorCells in ipairs(loc.destinationCells) do",
+                "        local pos = sectorCells.cells[1].center",
+                "        local coversCount = #sectorCells.cells[1].coverOutlines",
+                "        if (coversCount > 9) then",
+                "            coversCount = 9",
+                "        end",
+                "        -- ai_core_public.draw.Digit(coversCount, pos + lineOffset, 1, 1, 1, 1, 2)",
+                "        -- DebugLine(pos, pos + lineOffset, 1, 0, 0, 1)",
+                "    end",
+                "end"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
     {
       "name": "Draw cover outlines",
       "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
@@ -791,179 +425,19 @@
         "nodesInfo": [
           {
             "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-            "position": "5587.38810793913,1021.16936086136"
+            "position": "6016.64182326223,1107.66936086136"
           }
         ],
         "editorObjects": []
       },
       "script": [
         "if loc.covers ~= nil then",
-        "    for i, sectorCover in ipairs(loc.covers) do",
-        "        for j, cover in ipairs(sectorCover) do",
-        "            local color = math.random()",
-        "            ai_core_public.draw.PolylineOnSurface(cover.vertices, color, color, color, 1, Vec3(0,0,2))",
+        "    for i, cell in ipairs(loc.cells) do",
+        "        if (cell.isValid) then",
+        "            ai_core_public.draw.PolylineOnSurface(cell.coverOutlines, color, color, color, 1, Vec3(0,0,2))",
         "        end",
         "    end",
         "end"
-      ]
-    },
-    {
-      "name": "Draw clusters",
-      "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "51e583b8-3ad8-433f-b2f5-052e2b4edff7",
-            "position": "5937.38810793913,1021.16936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local offset = Vec3(0,0,3)",
-        "local digitOffset = Vec3(0,0,20)",
-        "",
-        "if loc.coverClusters ~= nil then",
-        "    for i, sectorcoverClusters in ipairs(loc.coverClusters) do",
-        "        for j, coverCluster in ipairs(sectorcoverClusters) do",
-        "            ai_core_public.draw.PolygonOnSurface(coverCluster.polygon, 1, 0, 0, 1, offset)",
-        "            ai_core_public.draw.Digit(coverCluster.neighbors, GetSurfacePosition(coverCluster.center) + digitOffset, 1, 0, 0, 1, 2)",
-        "        end",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Draw destinations",
-      "id": "b990de0f-dabf-4f7c-8827-ce9882fa642f",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b990de0f-dabf-4f7c-8827-ce9882fa642f",
-            "position": "6324.88810793913,1021.16936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local offset = Vec3(0,0,50)",
-        "",
-        "if loc.destinations ~= nil then",
-        "    for i, destination in ipairs(loc.destinations) do",
-        "        local pos = GetSurfacePosition(destination)",
-        "        DebugLine(pos, pos + offset, 1, 1, 0, 1)",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Draw path",
-      "id": "d6041fd1-936c-4d05-8bcc-21b4a41c5bed",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "d6041fd1-936c-4d05-8bcc-21b4a41c5bed",
-            "position": "6149.88810793913,1021.16936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local offset = Vec3(0,0,3)",
-        "",
-        "if loc.clustersPathRequests ~= nil then",
-        "    for i, clustersPath in ipairs(loc.clustersPathRequests) do",
-        "        if clustersPath.type == TerrainType.Open then",
-        "            --ai_core_public.draw.Path(clustersPath.path, 1, 0, 0, 1, offset)",
-        "        end",
-        "",
-        "        if clustersPath.type == TerrainType.Closed then",
-        "            ai_core_public.draw.Path(clustersPath.path, 0, 1, 0, 1, offset)",
-        "        end",
-        "        ",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Draw lattice points",
-      "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b15b4388-d664-4940-b470-8aee28a3cbaa",
-            "position": "5762.38810793913,1021.16936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "local offset = Vec3(0,0,3)",
-        "if loc.covers ~= nil then",
-        "    for i, sectorLatticePoints in ipairs(loc.latticePoints) do",
-        "        for j, latticePoint in ipairs(sectorLatticePoints) do",
-        "            DebugLine(latticePoint, latticePoint + offset, 1, 0, 0, 1)",
-        "        end",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Cover Requests",
-      "id": "69696262-3782-4fbe-9cab-324297208c87",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "69696262-3782-4fbe-9cab-324297208c87",
-            "position": "3249.88810793913,1658.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.coverRequests = {}",
-        "local params = { weights = { distance = -1, protection = 50}}",
-        "",
-        "if loc.sectorPolygons ~= nil then",
-        "    for i, poly in ipairs(loc.sectorPolygons) do",
-        "        local center = GetPolygonCenter(poly)",
-        "        local threats = {{area = Circle(center, loc.defenceRadius), avoidance = 10}, {avoidance = 0}}",
-        "        loc.coverRequests[i] = FindCovers(threats, poly, loc.sectorPolygonCenters, params);",
-        "    end",
-        "end"
-      ]
-    },
-    {
-      "name": "Covers ready",
-      "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
-      "type": "waitUntil",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "a661ffed-33a6-452a-ac34-fed0aa89f798",
-            "position": "3449.88810793913,1658.66936086136"
-          }
-        ],
-        "editorObjects": []
-      },
-      "condition": [
-        "for _, coverRequest in ipairs(loc.coverRequests) do",
-        "    if not coverRequest:IsReady() then",
-        "        return false",
-        "    end",
-        "end",
-        "",
-        "loc.covers = {}",
-        "for i, coverRequest in ipairs(loc.coverRequests) do",
-        "    loc.covers[i] = coverRequest:Value()",
-        "end",
-        "",
-        "return true"
       ]
     },
     {
@@ -974,7 +448,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "4724.88810793914,833.669360861361"
+            "position": "5191.64182326223,1107.66936086136"
           }
         ],
         "editorObjects": []
@@ -1005,81 +479,105 @@
   "meta": {
     "nodesInfo": [
       {
-        "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "4387.38810793914,508.669360861361"
-      },
-      {
-        "id": "5c997368-ea99-43d4-afdd-e0f645e22233",
-        "position": "4024.88810793914,646.169360861361"
-      },
-      {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "2637.38810793914,846.169360861361"
+        "position": "3979.14182326223,445.169360861361"
+      },
+      {
+        "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
+        "position": "3804.14182326223,1095.16936086136"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "1099.88810793913,1033.66936086136"
+        "position": "2391.64182326222,595.16936086136"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "1324.88810793913,1033.66936086136"
+        "position": "2579.14182326223,595.16936086136"
       },
       {
         "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-        "position": "1674.88810793913,1033.66936086136"
+        "position": "2904.14182326223,595.16936086136"
       },
       {
         "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-        "position": "2037.38810793913,1033.66936086136"
+        "position": "3241.64182326223,595.16936086136"
       },
       {
         "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
-        "position": "2287.38810793913,1033.66936086136"
+        "position": "3429.14182326223,595.16936086136"
       },
       {
         "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
-        "position": "2537.38810793913,1033.66936086136"
+        "position": "3604.14182326223,595.16936086136"
       },
       {
         "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
-        "position": "2812.38810793913,1033.66936086136"
+        "position": "3766.64182326223,595.16936086136"
       },
       {
         "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
-        "position": "3249.88810793913,1033.66936086136"
+        "position": "3929.14182326223,595.16936086136"
       },
       {
-        "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "3937.38810793914,971.169360861361"
+        "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
+        "position": "4541.64182326223,732.669360861361"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "4474.88810793914,871.169360861361"
+        "position": "3141.64182326223,945.169360861361"
+      },
+      {
+        "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
+        "position": "3641.64182326223,957.669360861361"
+      },
+      {
+        "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
+        "position": "3379.14182326223,1095.16936086136"
+      },
+      {
+        "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
+        "position": "3641.64182326223,1095.16936086136"
+      },
+      {
+        "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+        "position": "4454.14182326223,970.169360861361"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "5012.38810793914,658.669360861361"
+        "position": "5191.64182326223,995.169360861361"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "4874.88810793914,833.669360861361"
+        "position": "5341.64182326223,1107.66936086136"
       },
       {
         "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-        "position": "5024.88810793914,833.669360861361"
+        "position": "5491.64182326223,1107.66936086136"
       },
       {
         "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-        "position": "5187.38810793913,833.669360861361"
+        "position": "5654.14182326222,1107.66936086136"
       },
       {
         "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-        "position": "5374.88810793913,833.669360861361"
+        "position": "5841.64182326222,1107.66936086136"
       }
     ],
-    "editorObjects": [],
-    "canvasSize": "7600.4285088574,3108.32255655455",
-    "gridPadding": "12.3881079391322,8.66936086136116"
+    "editorObjects": [
+      {
+        "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
+        "type": "comment",
+        "header": "",
+        "body": "Added sector check, if some enemy is here -> update flag that this secor is active.\r\nThen if there're too much enemies -> assign supplementary squad to this enemies\r\nIf line of fire also then find safe movement",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "7754.68222418049,3333.32255655455",
+    "gridPadding": "4.14182326222593,7.66936086136116"
   },
   "parameters": [
     {
@@ -1093,21 +591,11 @@
     "subordinates": "return nil",
     "subordinateData": "return nil",
     "areaOfDefence": "return nil",
-    "childGroupsCount": "return nil",
     "defenceRadius": "return 50",
     "sectorPolygons": "return nil",
-    "sectorPolygonCenters": "return nil",
     "leaderGroup": "return nil",
-    "leader": "return nil",
     "observationRadius": "return 100",
     "observationPolygons": "return nil",
-    "coverRequests": "return nil",
-    "covers": "return nil",
-    "latticePoints": "return nil",
-    "latticePointsStep": "return 1",
-    "coverClusters": "return nil",
-    "clusterScale": "return 3",
-    "clustersPathRequests": "return nil",
     "destinations": "return nil",
     "defencePolygon": "return nil",
     "cells": "return nil",
@@ -1115,6 +603,7 @@
     "cellWidth": "return 5",
     "debugColors": "return nil",
     "sectorCells": "return nil",
-    "destinationCells": "return nil"
+    "destinationCells": "return nil",
+    "restart": "false"
   }
 }

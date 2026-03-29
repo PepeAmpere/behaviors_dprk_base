@@ -144,7 +144,6 @@ GetMostCoveredNeighbor = function(cells, cell, range)
     local neighbors = GetCellsInCellRange(cells, cell.gx, cell.gy, range)
     local mostCovered = 0
     for i, neighbor in ipairs(neighbors) do
-        DebugLog(tostring(neighbor.sectorId))
         if (neighbor.isValid and neighbor.sectorId ~= cell.sectorId) then
             if (#neighbor.coverOutlines > mostCovered) then
                 mostCovered = #neighbor.coverOutlines
