@@ -370,7 +370,7 @@
                           "id": "8f419371-e574-4e85-9ec6-793994fc2a89",
                           "type": "scriptAction",
                           "script": [
-                            "local sideOffset = 30",
+                            "local sideOffset = 50",
                             "local startOffset = 30",
                             "local startAngle = 45",
                             "local endOffset = 30",
@@ -401,7 +401,7 @@
                               "script": [
                                 "",
                                 "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Move\", destination = arg.orderData.destination}",
+                                "loc.subOrderData = {orderName = \"Move\"}",
                                 "loc.subordinates = {}",
                                 "",
                                 "loc.subordinateData = InternalTable()",
@@ -411,7 +411,10 @@
                                 "--for i = 0, listOfSubordinates do",
                                 "local subordinate = loc.teamGroups[runningTeamGroups][1]",
                                 "loc.subordinates[#loc.subordinates+1] = subordinate",
-                                "",
+                                "   ",
+                                "loc.subordinateData[subordinate] = {",
+                                "    destination = loc.path.outputPoints",
+                                "}",
                                 "DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
                                 "    ",
                                 "--end"
@@ -529,6 +532,26 @@
                 "            1, 0, 0, 1",
                 "        )",
                 "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "debugPoints",
+              "id": "94ed06fe-199a-484c-b58c-a7877c8c85b4",
+              "type": "scriptAction",
+              "script": [
+                "if loc.nextPositions.outputPoints == nil or arg.orderData.debugPosition ~= true  then",
+                "    return false",
+                "end",
+                "",
+                "for i=1, #loc.nextPositions.outputPoints do",
+                "    local pt = loc.nextPositions.outputPoints[i]",
+                "    local OFFSET = Vec3(0,0,1.5)",
+                "    DebugLine(",
+                "        pt + OFFSET,",
+                "        pt + OFFSET + OFFSET,",
+                "        0, 1, 0, 1",
+                "    )",
                 "end"
               ]
             },
@@ -1118,11 +1141,15 @@
       },
       {
         "id": "b0bf9dae-c7e5-4050-a9ea-46938a4d886c",
-        "position": "2525,801.9"
+        "position": "2425,801.9"
+      },
+      {
+        "id": "94ed06fe-199a-484c-b58c-a7877c8c85b4",
+        "position": "2612.5,801.9"
       },
       {
         "id": "06494189-ce62-41fb-871c-607a491c146d",
-        "position": "2725,801.9",
+        "position": "2800,801.9",
         "height": 50.0
       }
     ],
