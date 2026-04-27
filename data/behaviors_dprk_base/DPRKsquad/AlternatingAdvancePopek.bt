@@ -217,7 +217,8 @@
                     "loc.subordinateData = InternalTable()",
                     "-- liat of subordinates",
                     "",
-                    "for team in self:GetChildGroups() do",
+                    "for i=1, #loc.healthyTeams do",
+                    "    local team = loc.healthyTeams[i]",
                     "    local subordinate = team",
                     "    local pos = team:GetEntity(0):GetPosition()",
                     "    for soldier in team:GetEntities() do",
@@ -532,130 +533,119 @@
                       ]
                     },
                     {
-                      "name": "Advance step",
-                      "id": "31788224-f729-499a-8bb6-1d5ad4432855",
-                      "type": "parallel",
+                      "name": "Do Advance",
+                      "id": "8fb78e8f-f671-4cf4-b23d-711644ea5e78",
+                      "type": "sequence",
                       "subtrees": [
                         {
-                          "name": "Do Advance",
-                          "id": "8fb78e8f-f671-4cf4-b23d-711644ea5e78",
-                          "type": "sequence",
-                          "subtrees": [
-                            {
-                              "name": "prepare order data",
-                              "id": "28366c37-f40a-48ad-b808-5faf04d9c552",
-                              "type": "scriptAction",
-                              "script": [
-                                "",
-                                "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Advance\", destination = loc.path.outputPoints[1], completionRadius = 1}",
-                                "loc.subordinates = {}",
-                                "",
-                                "loc.subordinateData = InternalTable()",
-                                "-- liat of subordinates",
-                                "local listOfSubordinates = self:GetChildGroups()",
-                                "",
-                                "--for i = 0, listOfSubordinates do",
-                                "local subordinate = loc.teamGroups[loc.runningTeamGroup][1]",
-                                "",
-                                "table.insert(loc.subordinates, subordinate)",
-                                "loc.subordinateData[subordinate] = {",
-                                "    destination = loc.path.outputPoints[1]",
-                                "}",
-                                "",
-                                "    ",
-                                "--end"
-                              ]
-                            },
-                            {
-                              "name": "Typical AA advance order",
-                              "id": "fbfd30f4-2eb2-4c69-9193-2feffdb0a5f6",
-                              "type": "reference",
-                              "target": [
-                                "standard_behaviors",
-                                "ExecuteSubordinateOrder"
-                              ],
-                              "arguments": {
-                                "orderData": "return loc.subOrderData",
-                                "subordinates": "return loc.subordinates",
-                                "subordinateData": "return loc.subordinateData",
-                                "update": "return false"
-                              }
-                            },
-                            {
-                              "name": "Wait Forever",
-                              "id": "817efc2e-bfae-4cdc-9423-abc144b1a0e4",
-                              "type": "waitForever"
-                            }
+                          "name": "prepare order data",
+                          "id": "28366c37-f40a-48ad-b808-5faf04d9c552",
+                          "type": "scriptAction",
+                          "script": [
+                            "",
+                            "-- content for every message",
+                            "loc.subOrderData = {orderName = \"Advance\", destination = loc.path.outputPoints[1]}",
+                            "loc.subordinates = {}",
+                            "",
+                            "loc.subordinateData = InternalTable()",
+                            "-- liat of subordinates",
+                            "local listOfSubordinates = self:GetChildGroups()",
+                            "",
+                            "--for i = 0, listOfSubordinates do",
+                            "local subordinate = loc.teamGroups[loc.runningTeamGroup][1]",
+                            "",
+                            "table.insert(loc.subordinates, subordinate)",
+                            "loc.subordinateData[subordinate] = {",
+                            "    --destination = loc.path.outputPoints[1]",
+                            "}",
+                            "",
+                            "    ",
+                            "--end"
                           ]
                         },
                         {
-                          "name": "Do Follow",
-                          "id": "155d0ece-9932-4aeb-9971-814a232b7a52",
-                          "type": "sequence",
-                          "subtrees": [
-                            {
-                              "name": "prepare order data",
-                              "id": "bdfc2fa8-4f93-4645-b81c-c0a9f4566554",
-                              "type": "scriptAction",
-                              "script": [
-                                "",
-                                "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Follow\", followedUnit = loc.teamGroups[loc.runningTeamGroup][1]}",
-                                "loc.subordinates = {}",
-                                "",
-                                "loc.subordinateData = InternalTable()",
-                                "-- liat of subordinates",
-                                "",
-                                "for i = 2, #loc.teamGroups[loc.runningTeamGroup] do",
-                                "    local subordinate = loc.teamGroups[loc.runningTeamGroup][i]",
-                                "    loc.subordinates[#loc.subordinates+1] = subordinate",
-                                "end",
-                                "",
-                                "--[[",
-                                "table.insert(loc.subordinates, subordinate)    ",
-                                "loc.subordinateData[subordinate] = {",
-                                "    destination = position",
-                                "}]]--",
-                                "",
-                                "--self:SendMessage(subordinate, \"NewActionRequest\", {treePath = {\"standard_behaviors\", \"Advance\"}})",
-                                "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
-                                "--self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
-                                "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
-                                "--DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
-                                "    ",
-                                "--end"
-                              ]
-                            },
-                            {
-                              "name": "Rush to destination",
-                              "id": "204f1d99-b80c-4fcd-a6c8-eb33d817c12b",
-                              "type": "reference",
-                              "target": [
-                                "standard_behaviors",
-                                "ExecuteSubordinateOrder"
-                              ],
-                              "arguments": {
-                                "orderData": "return loc.subOrderData",
-                                "subordinates": "return loc.subordinates",
-                                "subordinateData": "return loc.subordinateData",
-                                "update": "return false"
-                              }
-                            },
-                            {
-                              "name": "Wait Forever",
-                              "id": "1194ffe6-9945-4226-b4a7-92ea3ab95939",
-                              "type": "waitForever"
-                            }
+                          "name": "Typical AA advance order",
+                          "id": "fbfd30f4-2eb2-4c69-9193-2feffdb0a5f6",
+                          "type": "reference",
+                          "target": [
+                            "standard_behaviors",
+                            "ExecuteSubordinateOrder"
+                          ],
+                          "arguments": {
+                            "orderData": "return loc.subOrderData",
+                            "subordinates": "return loc.subordinates",
+                            "subordinateData": "return loc.subordinateData",
+                            "update": "return false"
+                          }
+                        },
+                        {
+                          "name": "<unnamed>",
+                          "id": "beac8591-e8a3-482b-9d64-d9347f5d4161",
+                          "type": "waitUntil",
+                          "condition": [
+                            "for soldier in loc.teamGroups[loc.runningTeamGroup][1]:GetEntities() do",
+                            "    if soldier:GetPosition():DistanceXY(loc.path.outputPoints[1]) < 10 then return true end",
+                            "end",
+                            "",
+                            "return false"
                           ]
                         }
-                      ],
-                      "waitForAll": false
+                      ]
                     }
                   ]
                 }
               ],
               "active": true
+            }
+          ]
+        },
+        {
+          "name": "<unnamed>",
+          "id": "6e7ec535-fec0-40c3-be9b-cce8094e34db",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "prepare order data",
+              "id": "bdfc2fa8-4f93-4645-b81c-c0a9f4566554",
+              "type": "scriptAction",
+              "script": [
+                "",
+                "-- content for every message",
+                "loc.subOrderData = {orderName = \"Follow\"}",
+                "loc.subordinates = {}",
+                "",
+                "loc.subordinateData = InternalTable()",
+                "",
+                "for j = 1, #loc.teamGroups do",
+                "    for i = 2, #loc.teamGroups[j] do",
+                "        local subordinate = loc.teamGroups[j][i]",
+                "        table.insert(loc.subordinates, subordinate)",
+                "        loc.subordinateData[subordinate] = {",
+                "            followedUnit = loc.teamGroups[j][1]",
+                "        }",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Follow healthy team",
+              "id": "204f1d99-b80c-4fcd-a6c8-eb33d817c12b",
+              "type": "reference",
+              "target": [
+                "standard_behaviors",
+                "ExecuteSubordinateOrder"
+              ],
+              "arguments": {
+                "orderData": "return loc.subOrderData",
+                "subordinates": "return loc.subordinates",
+                "subordinateData": "return loc.subordinateData",
+                "update": "return false"
+              }
+            },
+            {
+              "name": "Wait Forever",
+              "id": "991736f6-7e1e-4d2d-977a-f0b84a6fbc7a",
+              "type": "waitForever"
             }
           ]
         },
@@ -744,23 +734,6 @@
       },
       "script": [
         "loc.iterator = 1"
-      ]
-    },
-    {
-      "name": "<unnamed>",
-      "id": "4504b188-7dac-43da-9464-63088ee433da",
-      "type": "countedLoop",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "4504b188-7dac-43da-9464-63088ee433da",
-            "position": "1731.97134920635,801.6"
-          }
-        ],
-        "editorObjects": []
-      },
-      "count": [
-        "return #loc.healthyTeams"
       ]
     }
   ],
@@ -905,56 +878,52 @@
         "height": 50.0
       },
       {
-        "id": "31788224-f729-499a-8bb6-1d5ad4432855",
-        "position": "3906.97134920635,1426.6"
-      },
-      {
         "id": "8fb78e8f-f671-4cf4-b23d-711644ea5e78",
-        "position": "3631.97134920635,1489.1"
+        "position": "3644.47134920635,1526.6"
       },
       {
         "id": "28366c37-f40a-48ad-b808-5faf04d9c552",
-        "position": "3394.47134920635,1601.6"
+        "position": "3381.97134920635,1664.1"
       },
       {
         "id": "fbfd30f4-2eb2-4c69-9193-2feffdb0a5f6",
-        "position": "3556.97134920635,1601.6"
+        "position": "3544.47134920635,1664.1"
       },
       {
-        "id": "817efc2e-bfae-4cdc-9423-abc144b1a0e4",
-        "position": "3869.47134920635,1601.6"
+        "id": "beac8591-e8a3-482b-9d64-d9347f5d4161",
+        "position": "3894.47134920635,1651.6"
       },
       {
-        "id": "155d0ece-9932-4aeb-9971-814a232b7a52",
-        "position": "4256.97134920635,1526.6"
+        "id": "6e7ec535-fec0-40c3-be9b-cce8094e34db",
+        "position": "2906.97134920635,914.1"
       },
       {
         "id": "bdfc2fa8-4f93-4645-b81c-c0a9f4566554",
-        "position": "4019.47134920635,1614.1"
+        "position": "2644.47134920635,1039.1"
       },
       {
         "id": "204f1d99-b80c-4fcd-a6c8-eb33d817c12b",
-        "position": "4174.20602466129,1611.92857142857"
+        "position": "2844.47134920635,1014.1"
       },
       {
-        "id": "1194ffe6-9945-4226-b4a7-92ea3ab95939",
-        "position": "4481.97134920635,1626.6"
+        "id": "991736f6-7e1e-4d2d-977a-f0b84a6fbc7a",
+        "position": "3219.47134920635,1026.6"
       },
       {
         "id": "a24aafe3-e4e5-49fd-b592-b6d6770841b0",
-        "position": "2894.47134920635,889.1"
+        "position": "3594.47134920635,889.1"
       },
       {
         "id": "b0bf9dae-c7e5-4050-a9ea-46938a4d886c",
-        "position": "2794.47134920635,989.1"
+        "position": "3494.47134920635,989.1"
       },
       {
         "id": "94ed06fe-199a-484c-b58c-a7877c8c85b4",
-        "position": "2981.97134920635,989.1"
+        "position": "3681.97134920635,989.1"
       },
       {
         "id": "06494189-ce62-41fb-871c-607a491c146d",
-        "position": "3169.47134920635,989.1",
+        "position": "3869.47134920635,989.1",
         "height": 50.0
       }
     ],
