@@ -415,9 +415,6 @@
                           "type": "scriptAction",
                           "script": [
                             "loc.pathDone = {}",
-                            "loc.path = null",
-                            "loc.path = {}",
-                            "",
                             "loc.iterator = 1"
                           ]
                         },
@@ -551,7 +548,7 @@
                               "script": [
                                 "",
                                 "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Move\"}",
+                                "loc.subOrderData = {orderName = \"Advance\", destination = loc.path.outputPoints[1], completionRadius = 1}",
                                 "loc.subordinates = {}",
                                 "",
                                 "loc.subordinateData = InternalTable()",
@@ -559,13 +556,13 @@
                                 "local listOfSubordinates = self:GetChildGroups()",
                                 "",
                                 "--for i = 0, listOfSubordinates do",
-                                "local subordinate = loc.teamGroups[runningTeamGroups][1]",
-                                "loc.subordinates[#loc.subordinates+1] = subordinate",
-                                "   ",
+                                "local subordinate = loc.teamGroups[loc.runningTeamGroup][1]",
+                                "",
+                                "table.insert(loc.subordinates, subordinate)",
                                 "loc.subordinateData[subordinate] = {",
-                                "    destination = loc.path.outputPoints",
+                                "    destination = loc.path.outputPoints[1]",
                                 "}",
-                                "DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
+                                "",
                                 "    ",
                                 "--end"
                               ]
@@ -586,9 +583,9 @@
                               }
                             },
                             {
-                              "name": "Succeed",
-                              "id": "71f208f9-bd99-4e8b-b31d-7cd091d14a39",
-                              "type": "success"
+                              "name": "Wait Forever",
+                              "id": "817efc2e-bfae-4cdc-9423-abc144b1a0e4",
+                              "type": "waitForever"
                             }
                           ]
                         },
@@ -604,14 +601,14 @@
                               "script": [
                                 "",
                                 "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Follow\", destination = loc.teamGroup[loc.runningTeamGroup][1]}",
+                                "loc.subOrderData = {orderName = \"Follow\", followedUnit = loc.teamGroups[loc.runningTeamGroup][1]}",
                                 "loc.subordinates = {}",
                                 "",
                                 "loc.subordinateData = InternalTable()",
                                 "-- liat of subordinates",
                                 "",
-                                "for i = 2, #loc.teamGroup[loc.runningTeamGroup] do",
-                                "    local subordinate = loc.teamGroup[loc.runningTeamGroup][i]",
+                                "for i = 2, #loc.teamGroups[loc.runningTeamGroup] do",
+                                "    local subordinate = loc.teamGroups[loc.runningTeamGroup][i]",
                                 "    loc.subordinates[#loc.subordinates+1] = subordinate",
                                 "end",
                                 "",
@@ -924,8 +921,8 @@
         "position": "3556.97134920635,1601.6"
       },
       {
-        "id": "71f208f9-bd99-4e8b-b31d-7cd091d14a39",
-        "position": "3869.47134920635,1614.1"
+        "id": "817efc2e-bfae-4cdc-9423-abc144b1a0e4",
+        "position": "3869.47134920635,1601.6"
       },
       {
         "id": "155d0ece-9932-4aeb-9971-814a232b7a52",
