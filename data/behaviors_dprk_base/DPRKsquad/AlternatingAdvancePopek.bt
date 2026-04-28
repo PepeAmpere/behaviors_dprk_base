@@ -513,7 +513,7 @@
                                 "local longestPathLength = 0",
                                 "",
                                 "for i=1, #loc.pathDone do",
-                                "    if loc.pathDone[i].outputPath:Length() < shortestPathLength then",
+                                "    if loc.pathDone[i].outputPath:Length() < shortestPathLength and loc.pathDone[i].outputPath:Length() > 15 then",
                                 "        shortestPathIndex = i",
                                 "        shortestPathLength = loc.pathDone[i].outputPath:Length()",
                                 "    end",
@@ -559,7 +559,7 @@
                               "script": [
                                 "",
                                 "-- content for every message",
-                                "loc.subOrderData = {orderName = \"Advance\", destination = loc.path.outputPoints[1]}",
+                                "loc.subOrderData = {orderName = \"Move\", destination = loc.path.outputPoints[1]}",
                                 "loc.subordinates = {}",
                                 "",
                                 "loc.subordinateData = InternalTable()",
@@ -592,18 +592,6 @@
                                 "subordinateData": "return loc.subordinateData",
                                 "update": "return false"
                               }
-                            },
-                            {
-                              "name": "<unnamed>",
-                              "id": "beac8591-e8a3-482b-9d64-d9347f5d4161",
-                              "type": "waitUntil",
-                              "condition": [
-                                "for soldier in loc.teamGroups[loc.runningTeamGroup][1]:GetEntities() do",
-                                "    if soldier:GetPosition():DistanceXY(loc.path.outputPoints[1]) < 10 then return true end",
-                                "end",
-                                "",
-                                "return false"
-                              ]
                             }
                           ]
                         }
@@ -672,6 +660,8 @@
           "id": "5771a310-933e-4cfa-95a1-4272c3542ad7",
           "type": "scriptAction",
           "script": [
+            "if #loc.healthyTeams < 2 then return end",
+            "",
             "for i = 1, #loc.healthyTeams do",
             "    local soldierCount = 0",
             "    for soldier in loc.healthyTeams[i]:GetEntities() do",
@@ -999,11 +989,7 @@
       },
       {
         "id": "fbfd30f4-2eb2-4c69-9193-2feffdb0a5f6",
-        "position": "3544.47134920635,1669.27"
-      },
-      {
-        "id": "beac8591-e8a3-482b-9d64-d9347f5d4161",
-        "position": "3894.47134920635,1656.77"
+        "position": "3581.97134920635,1656.77"
       },
       {
         "id": "6e7ec535-fec0-40c3-be9b-cce8094e34db",
