@@ -306,6 +306,18 @@ class CfgAvailableBehaviors
 				value = "true";
 				type = "boolean";
 			};
+			class pathDebugEnabled
+			{
+				displayName = "pathDebugEnabled";
+				value = "true";
+				type = "boolean";
+			};
+			class volumeDebugEnabled
+			{
+				displayName = "volumeDebugEnabled";
+				value = "false";
+				type = "boolean";
+			};
 			class advancedDebugType
 			{
 				displayName = "advancedDebugType";
