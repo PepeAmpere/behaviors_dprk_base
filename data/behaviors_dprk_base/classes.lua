@@ -1,6 +1,7 @@
 return {
     classes = {
         "DPRKsquad",
-        "DPRKteam"
+        "DPRKteam",
+        "DPRKman"
     },
 }

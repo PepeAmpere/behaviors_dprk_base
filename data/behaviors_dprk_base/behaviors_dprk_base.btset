@@ -5,6 +5,7 @@
     "Analysis\\FindMultiplePaths.bt",
     "Analysis\\FindPathDirect.bt",
     "Analysis\\FindPathSquadSafe.bt",
+    "DPRKman\\soldierFireAt.bt",
     "DPRKsquad\\AllTeamsDefendBack.bt",
     "DPRKsquad\\AllTeamsDefendFront.bt",
     "DPRKsquad\\AllTeamsIdle.bt",
@@ -14,6 +15,8 @@
     "DPRKsquad\\AlternatingRetreat.bt",
     "DPRKsquad\\GetPath.bt",
     "DPRKsquad\\SuccesiveAdvance.bt",
+    "DPRKteam\\DefendMudrak.bt",
+    "DPRKteam\\subteamMoveToDefensivePosition.bt",
     "Tests\\TestGetPath.bt",
     "Tests\\TestPathVolume.bt",
     "AutonomousBehavior.bt",
@@ -22,7 +25,9 @@
   ],
   "initScripts": [
     "Analysis\\analytics.lua",
+    "DPRKman\\DPRKman.class.lua",
     "DPRKsquad\\DPRKsquad.class.lua",
+    "DPRKteam\\DPRKteam.class.lua",
     "Helpers\\Geometry.lua",
     "Sensors\\PathVolumeSensors.lua",
     "classes.lua"

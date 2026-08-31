@@ -226,7 +226,12 @@
       "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
       "type": "scriptAction",
       "script": [
-        "loc.subOrderData = {orderName = \"DefendMudrak\", position = arg.orderData.destination, heading = HeadingMode.AtPos}",
+        "loc.subOrderData = {",
+        "    orderName = \"DefendMudrak\",",
+        "    position = arg.orderData.destination,",
+        "    heading = HeadingMode.AimAtPos,",
+        "    polyVerts = {}",
+        "}",
         "",
         "-- content for every message",
         "loc.subordinates = {}",
@@ -251,6 +256,13 @@
         "",
         "        local sector = loc.sectorPolygons[index]",
         "        local observationSector = loc.observationPolygons[index]",
+        "",
+        "",
+        "        local verts = {}",
+        "        for v = 1, observationSector:Count() do",
+        "            table.insert(verts, observationSector:Vertex(v))",
+        "        end",
+        "",
         "        table.insert(loc.data, {squad = subordinate, sector = sector, observationSector = observationSector})",
         "",
         "        for member in subordinate:GetChildGroups() do",
@@ -266,10 +278,18 @@
         "        loc.subordinateData[subordinate] = {",
         "            orderName = \"DefendMudrak\",",
         "            position = destination,",
-        "            heading = HeadingMode.AimAtPos",
+        "            heading = HeadingMode.AimAtPos,",
+        "            polyVerts = verts",
         "        }",
         "",
         "        index = index + 1",
+        "    end",
+        "end",
+        "",
+        "local leaderVerts = {}",
+        "if loc.defencePolygon ~= nil then",
+        "    for v = 1, loc.defencePolygon:Count() do",
+        "        table.insert(leaderVerts, loc.defencePolygon:Vertex(v))",
         "    end",
         "end",
         "",
@@ -278,7 +298,8 @@
         "loc.subordinateData[loc.leaderGroup] = {",
         "    orderName = \"DefendMudrak\",",
         "    position = arg.orderData.destination,",
-        "    heading = HeadingMode.AimAtPos",
+        "    heading = HeadingMode.AimAtPos,",
+        "    polyVerts = leaderVerts",
         "}"
       ]
     },
@@ -389,7 +410,7 @@
         "nodesInfo": [
           {
             "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-            "position": "5641.64182326223,1534.83103255855"
+            "position": "5641.64182326223,1567.83103255855"
           }
         ],
         "editorObjects": []
@@ -410,7 +431,7 @@
         "nodesInfo": [
           {
             "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-            "position": "5804.14182326222,1534.83103255855"
+            "position": "5804.14182326222,1567.83103255855"
           }
         ],
         "editorObjects": []
@@ -434,7 +455,7 @@
         "nodesInfo": [
           {
             "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-            "position": "5991.64182326222,1534.83103255855"
+            "position": "5991.64182326222,1567.83103255855"
           }
         ],
         "editorObjects": []
@@ -476,7 +497,7 @@
         "nodesInfo": [
           {
             "id": "c40b5f8a-9b3b-4b9e-8f1b-937fc9f66b66",
-            "position": "3179.14182326223,2047.33103255855"
+            "position": "3179.14182326223,2080.33103255855"
           }
         ],
         "editorObjects": []
@@ -486,42 +507,6 @@
       ]
     },
     {
-      "name": "Logic",
-      "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
-      "type": "sequence",
-      "subtrees": [
-        {
-          "name": "<unnamed>",
-          "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
-          "type": "scriptAction",
-          "script": [
-            "loc.currentSituation = {}",
-            "for i, sectorData in ipairs(loc.data) do",
-            "    local enemies = GetEntitiesInArea( sectorData.observationSector, { hasBrain = true, enemyOf = self })",
-            "    if (#enemies > 5) then",
-            "        loc.currentSituation.mainSquad = sectorData.squad",
-            "        loc.currentSituation.supplementarySquad = GetClosestSquadToEnemies(loc.data, enemies, sectorData.squad)",
-            "",
-            "    end",
-            "end"
-          ]
-        }
-      ],
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "b50ce011-d8d4-4a66-972c-2efb5e1a8877",
-            "position": "3704.14182326223,1809.83103255855"
-          },
-          {
-            "id": "49f09595-d62c-43bd-b154-a5800bde6fb7",
-            "position": "3654.14182326223,1959.83103255855"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
       "name": "Draw cover outlines",
       "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
       "type": "scriptAction",
@@ -529,7 +514,7 @@
         "nodesInfo": [
           {
             "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-            "position": "6166.64182326223,1534.83103255855"
+            "position": "6166.64182326223,1567.83103255855"
           }
         ],
         "editorObjects": []
@@ -552,7 +537,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "5341.64182326223,1534.83103255855"
+            "position": "5341.64182326223,1567.83103255855"
           }
         ],
         "editorObjects": []
@@ -578,110 +563,93 @@
         "    end",
         "end"
       ]
-    },
-    {
-      "name": "Some stuff",
-      "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
-      "type": "restartIf",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "6690d2bc-90ac-4ae9-8171-a2a42fa46727",
-            "position": "3841.64182326223,1984.83103255855"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "loc.restart"
-      ]
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "3979.14182326223,872.331032558553"
+        "position": "3979.14182326223,905.331032558553"
       },
       {
-        "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
-        "position": "3716.64182326223,2059.83103255855"
+        "id": "dff4414a-1e9a-4b15-ac4d-5853207023a2",
+        "position": "3866.64182326223,1205.33103255855"
       },
       {
         "id": "ee334cbb-4b80-4c29-b3cc-99a4ef4ba5d4",
-        "position": "2179.14182326223,1022.33103255855"
+        "position": "2179.14182326223,1055.33103255855"
       },
       {
         "id": "afebcdf3-b4cc-4258-9a42-3b8d6357718c",
-        "position": "2391.64182326222,1022.33103255855"
+        "position": "2391.64182326222,1055.33103255855"
       },
       {
         "id": "b42620a8-dcd4-4a56-8838-6a02c84bfd43",
-        "position": "2579.14182326223,1022.33103255855"
+        "position": "2579.14182326223,1055.33103255855"
       },
       {
         "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-        "position": "2904.14182326223,1022.33103255855"
+        "position": "2904.14182326223,1055.33103255855"
       },
       {
         "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-        "position": "3241.64182326223,1022.33103255855"
+        "position": "3241.64182326223,1055.33103255855"
       },
       {
         "id": "2e63aea4-b426-42da-b0ff-da05dbeb245c",
-        "position": "3429.14182326223,1022.33103255855"
+        "position": "3429.14182326223,1055.33103255855"
       },
       {
         "id": "ae805344-e302-4cf2-b7c2-7833d835913b",
-        "position": "3604.14182326223,1022.33103255855"
+        "position": "3604.14182326223,1055.33103255855"
       },
       {
         "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
-        "position": "3766.64182326223,1022.33103255855"
+        "position": "3766.64182326223,1055.33103255855"
       },
       {
         "id": "9a4fe716-a639-4827-9277-55ceb6f1953e",
-        "position": "3929.14182326223,1022.33103255855"
+        "position": "3929.14182326223,1055.33103255855"
       },
       {
         "id": "bcd8f8ac-18dd-470c-ba1a-20e3059de6a6",
-        "position": "4666.64182326223,1184.83103255855"
+        "position": "4666.64182326223,1217.83103255855"
       },
       {
         "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-        "position": "4279.14182326223,1372.33103255855"
+        "position": "4279.14182326223,1405.33103255855"
       },
       {
         "id": "69a39a0a-8d38-4a21-82f2-a831a6044bcf",
-        "position": "4666.64182326223,1359.83103255855"
+        "position": "4666.64182326223,1392.83103255855"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "4529.14182326223,1572.33103255855"
+        "position": "4529.14182326223,1605.33103255855"
       },
       {
         "id": "65205d65-a307-4820-9eb0-a13ec84b6549",
-        "position": "4954.14182326223,1547.33103255855"
+        "position": "4954.14182326223,1580.33103255855"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "5154.14182326223,1297.33103255855"
+        "position": "5154.14182326223,1330.33103255855"
       },
       {
         "id": "870c70c7-0efb-430f-85fb-05aa2fc3cf63",
-        "position": "5154.14182326223,1534.83103255855"
+        "position": "5154.14182326223,1567.83103255855"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "5491.64182326223,1534.83103255855"
+        "position": "5491.64182326223,1567.83103255855"
       }
     ],
     "editorObjects": [
       {
-        "id": "0406c92c-d60a-4294-afd9-89537a1b4f5e",
+        "id": "dff4414a-1e9a-4b15-ac4d-5853207023a2",
         "type": "comment",
         "header": "",
-        "body": "Added sector check, if some enemy is here -> update flag that this secor is active.\r\nThen if there're too much enemies -> assign supplementary squad to this enemies\r\nIf line of fire also then find safe movement",
+        "body": "Add reaction on fireteam death -> like immediately reorder free fireteams on the free sector, merge them or anything",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -689,8 +657,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "7755.68222418049,3763.48422825174",
-    "gridPadding": "4.14182326222593,9.83103255855261"
+    "canvasSize": "7755.68222418049,3796.48422825174",
+    "gridPadding": "4.14182326222593,5.33103255855261"
   },
   "parameters": [
     {
@@ -707,7 +675,7 @@
     "defenceRadius": "return 50",
     "sectorPolygons": "return nil",
     "leaderGroup": "return nil",
-    "observationRadius": "return 100",
+    "observationRadius": "return 150",
     "observationPolygons": "return nil",
     "destinations": "return nil",
     "defencePolygon": "return nil",

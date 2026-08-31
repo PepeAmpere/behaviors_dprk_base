@@ -148,7 +148,8 @@
               "script": [
                 "local fren = self:GetEntity(0)",
                 "",
-                "loc.enemies = GetEntitiesInArea(Circle(arg.orderData.position, loc.outerRadius), { enemyOf = fren , excludeMapObjects = true})",
+                "local myPoly = Polygon(arg.orderData.polyVerts)",
+                "loc.enemies = GetEntitiesInArea(myPoly, { enemyOf = fren , excludeMapObjects = true})",
                 "",
                 "local count = 1",
                 "for i = 1, #loc.enemies do",
@@ -462,53 +463,55 @@
               "subtrees": [
                 {
                   "name": "Fill OrderData1",
-                  "id": "cc2ede74-5fdf-4129-85bd-d797ace14e49",
+                  "id": "7bf2fff0-dee1-43d1-a43d-aa99f1d02684",
                   "type": "scriptAction",
                   "script": [
-                    "loc.firstPolyChanged = false",
+                    "if not loc.enemies or #loc.enemies == 0 then",
+                    "    loc.subOrderData1 = { orderName = \"Fire\" }",
+                    "    loc.subordinates1 = {}",
+                    "    loc.subordinateData1 = InternalTable()",
+                    "    return",
+                    "end",
                     "",
-                    "loc.subOrderData = {",
-                    "    orderName = \"Occupy\",",
-                    "    destination = arg.orderData.position,",
-                    "    sector = loc.firstPoly,",
-                    "    useSafeStance = true",
+                    "local targetForFirstTeam = loc.enemies[1]",
+                    "",
+                    "loc.subOrderData1 = {",
+                    "    orderName = \"Fire\",",
+                    "    entityToFireAt = targetForFirstTeam",
                     "}",
                     "",
-                    "loc.subordinates = {}",
-                    "loc.subordinateData = InternalTable()",
+                    "loc.subordinates1 = {}",
+                    "loc.subordinateData1 = InternalTable()",
                     "",
-                    "local offsetMultiplier = 1",
+                    "if loc.firstTeam ~= nil then",
+                    "    for _, soldierIndex in pairs(loc.firstTeam) do",
+                    "        local soldier = self:GetEntity(soldierIndex)",
                     "",
-                    "for _, soldierIndex in pairs(loc.firstTeam) do",
-                    "    local soldier = self:GetEntity(soldierIndex)",
+                    "        if soldier ~= nil and not soldier:IsDestroyed() then",
+                    "            table.insert(loc.subordinates1, soldier)",
+                    "            loc.subordinateData1[soldier] = {",
+                    "                orderName = \"Fire\",",
+                    "                entityToFireAt = targetForFirstTeam",
+                    "            }",
+                    "        end",
+                    "    end",
+                    "end",
                     "",
-                    "    table.insert(loc.subordinates, soldier)",
-                    "",
-                    "    local pos = arg.orderData.position + Vec3(offsetMultiplier * 2, 0, offsetMultiplier * -1)",
-                    "",
-                    "    loc.subordinateData[soldier] = {",
-                    "        orderName = \"Occupy\",",
-                    "        destination = pos,",
-                    "        sector = loc.firstPoly,",
-                    "        useSafeStance = true",
-                    "    }",
-                    "",
-                    "    offsetMultiplier = offsetMultiplier + 1",
-                    "end"
+                    "loc.firstPolyChanged = false"
                   ]
                 },
                 {
-                  "name": "InfantryMan Occupy",
-                  "id": "3d30a62a-19d3-40de-8921-2b9a017f499d",
+                  "name": "InfantryMan Fire",
+                  "id": "1c6e1a48-a56d-41fc-ad48-96501a787d1e",
                   "type": "reference",
                   "target": [
                     "standard_behaviors",
                     "ExecuteSubordinateOrder"
                   ],
                   "arguments": {
-                    "orderData": "return loc.subOrderData",
-                    "subordinates": "return loc.subordinates",
-                    "subordinateData": "return loc.subordinateData",
+                    "orderData": "return loc.subOrderData1",
+                    "subordinates": "return loc.subordinates1",
+                    "subordinateData": "return loc.subordinateData1",
                     "update": "return false"
                   }
                 }
@@ -561,53 +564,56 @@
               "subtrees": [
                 {
                   "name": "Fill OrderData2",
-                  "id": "4edbe19c-c79d-42cf-962a-443c2e742e37",
+                  "id": "c347992c-7dda-4857-9c4a-7f9c2c856718",
                   "type": "scriptAction",
                   "script": [
-                    "loc.secondPolyChanged = false",
+                    "if not loc.enemies or #loc.enemies == 0 then",
+                    "    loc.subOrderData2 = { orderName = \"Fire\" }",
+                    "    loc.subordinates2 = {}",
+                    "    loc.subordinateData2 = InternalTable()",
+                    "    return",
+                    "end",
                     "",
-                    "loc.subOrderData = {",
-                    "    orderName = \"Occupy\",",
-                    "    destination = arg.orderData.position,",
-                    "    sector = loc.secondPoly,",
-                    "    useSafeStance = true",
+                    "-- \u0411\u0435\u0440\u0435\u043c\u043e \u0434\u0440\u0443\u0433\u043e\u0433\u043e \u0432\u043e\u0440\u043e\u0433\u0430, \u044f\u043a\u0449\u043e \u0432\u0456\u043d \u0454. \u042f\u043a\u0449\u043e \u043d\u0456 \u2014 \u0434\u043e\u043f\u043e\u043c\u0430\u0433\u0430\u0454\u043c\u043e \u043f\u0435\u0440\u0448\u0456\u0439 \u043a\u043e\u043c\u0430\u043d\u0434\u0456.",
+                    "local targetForSecondTeam = loc.enemies[2] or loc.enemies[1]",
+                    "",
+                    "loc.subOrderData2 = {",
+                    "    orderName = \"Fire\",",
+                    "    entityToFireAt = targetForSecondTeam",
                     "}",
                     "",
-                    "loc.subordinates = {}",
-                    "loc.subordinateData = InternalTable()",
+                    "loc.subordinates2 = {}",
+                    "loc.subordinateData2 = InternalTable()",
                     "",
-                    "local offsetMultiplier = 1",
+                    "if loc.secondTeam ~= nil then",
+                    "    for _, soldierIndex in pairs(loc.secondTeam) do",
+                    "        local soldier = self:GetEntity(soldierIndex)",
                     "",
-                    "for _, soldierIndex in pairs(loc.secondTeam) do",
-                    "    local soldier = self:GetEntity(soldierIndex)",
+                    "        if soldier ~= nil and not soldier:IsDestroyed() then",
+                    "            table.insert(loc.subordinates2, soldier)",
+                    "            loc.subordinateData2[soldier] = {",
+                    "                orderName = \"Fire\",",
+                    "                entityToFireAt = targetForSecondTeam",
+                    "            }",
+                    "        end",
+                    "    end",
+                    "end",
                     "",
-                    "    table.insert(loc.subordinates, soldier)",
-                    "",
-                    "    local pos = arg.orderData.position + Vec3(offsetMultiplier * 2, 0, offsetMultiplier * -1)",
-                    "",
-                    "    loc.subordinateData[soldier] = {",
-                    "        orderName = \"Occupy\",",
-                    "        destination = pos,",
-                    "        sector = loc.secondPoly,",
-                    "        useSafeStance = true",
-                    "    }",
-                    "",
-                    "    offsetMultiplier = offsetMultiplier + 1",
-                    "end"
+                    "loc.secondPolyChanged = false"
                   ]
                 },
                 {
-                  "name": "InfantryMan Occupy",
-                  "id": "267306b9-4335-449e-ac8c-181cc8d074d2",
+                  "name": "InfantryMan Fire",
+                  "id": "94ed1def-e2c6-4837-b124-bef5ae24964b",
                   "type": "reference",
                   "target": [
                     "standard_behaviors",
                     "ExecuteSubordinateOrder"
                   ],
                   "arguments": {
-                    "orderData": "return loc.subOrderData",
-                    "subordinates": "return loc.subordinates",
-                    "subordinateData": "return loc.subordinateData",
+                    "orderData": "return loc.subOrderData2",
+                    "subordinates": "return loc.subordinates2",
+                    "subordinateData": "return loc.subordinateData2",
                     "update": "return false"
                   }
                 }
@@ -632,28 +638,28 @@
           "type": "sequence",
           "subtrees": [
             {
-              "name": "DrawOuterArea",
-              "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+              "name": "DrawInnerArea",
+              "id": "b54fed3e-f257-4741-aa72-01c3611fcafe",
               "type": "scriptAction",
               "script": [
                 "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
-                "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
-                "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
+                "    local pX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i))",
+                "    local pY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i))",
                 "    local pZ = arg.orderData.position:Z() + 1",
-                "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
-                "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
+                "    local nextPX = arg.orderData.position:X() + (loc.innerRadius * math.sin(i + math.pi/12))",
+                "    local nextPY = arg.orderData.position:Y() + (loc.innerRadius * math.cos(i + math.pi/12))",
                 "    local nextPZ = arg.orderData.position:Z() + 1",
                 "",
                 "    local p = Vec3(pX, pY, pZ)",
                 "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
                 "",
-                "    DebugLine(p, nextP, 1, 0, 0, 1)",
+                "    DebugLine(p, nextP, 1, 1, 1, 1)",
                 "end"
               ]
             },
             {
               "name": "DrawFirstPoly",
-              "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
+              "id": "562ae55e-3d4d-4488-9644-2118cc0346b5",
               "type": "scriptAction",
               "script": [
                 "if loc.firstPoly == nil then return end",
@@ -673,7 +679,7 @@
             },
             {
               "name": "DrawSecondPoly",
-              "id": "11967b85-c341-49f3-93ff-297aaf52c779",
+              "id": "1c18ff9a-28f3-4635-bde3-47b1495206b1",
               "type": "scriptAction",
               "script": [
                 "if loc.secondPoly == nil then return end",
@@ -712,20 +718,6 @@
   ],
   "unlinked-trees": [
     {
-      "name": "DrawInnerArea",
-      "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
-            "position": "4035.58040457142,1022.03866666667"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
       "name": "Send Wait",
       "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
       "type": "scriptAction",
@@ -733,7 +725,7 @@
         "nodesInfo": [
           {
             "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
-            "position": "2823.08040457143,1609.53866666667"
+            "position": "2834.92052601514,1695.53866666667"
           }
         ],
         "editorObjects": []
@@ -758,7 +750,7 @@
         "nodesInfo": [
           {
             "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
-            "position": "3523.08040457143,1597.03866666667"
+            "position": "3534.92052601514,1683.03866666667"
           }
         ],
         "editorObjects": []
@@ -774,177 +766,265 @@
         "",
         "loc.secondPolyChanged = false"
       ]
+    },
+    {
+      "name": "DrawOuterArea",
+      "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
+            "position": "4247.42052601514,1520.53866666667"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+        "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
+        "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
+        "    local pZ = arg.orderData.position:Z() + 1",
+        "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
+        "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
+        "    local nextPZ = arg.orderData.position:Z() + 1",
+        "",
+        "    local p = Vec3(pX, pY, pZ)",
+        "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+        "",
+        "    DebugLine(p, nextP, 1, 0, 0, 1)",
+        "end"
+      ]
+    },
+    {
+      "name": "<unnamed>",
+      "id": "3e98a2bd-ca5a-4c31-87b9-0e70ba837b40",
+      "type": "countedLoop",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "3e98a2bd-ca5a-4c31-87b9-0e70ba837b40",
+            "position": "3147.42052601514,1458.03866666667"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
         "id": "ab891452-fe04-441b-8168-327c9ffba298",
-        "position": "1910.58040457142,809.538666666666"
+        "position": "1922.42052601514,895.538666666666"
       },
       {
-        "id": "5b45bd06-69c0-458b-bcad-26203af58b70",
-        "position": "3023.08040457142,1059.53866666667"
+        "id": "cf79bb2f-ddf2-44b7-a791-6ed0cfaa2240",
+        "position": "1097.42052601514,895.538666666665"
+      },
+      {
+        "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
+        "position": "1097.42052601514,945.538666666665"
+      },
+      {
+        "id": "09967029-b608-4f16-98f6-13656f2beb19",
+        "position": "3572.42052601514,2120.53866666667"
+      },
+      {
+        "id": "ed35da93-41ce-41d8-9835-02c502e611e5",
+        "position": "3084.92052601514,1908.03866666667"
       },
       {
         "id": "b15cf8fb-58d4-4674-9493-c69780825219",
-        "position": "1223.08040457142,1047.03866666666"
+        "position": "1234.92052601514,1133.03866666666"
       },
       {
         "id": "24ad5ac1-39a9-4b57-82a3-f41f51900df7",
-        "position": "1523.08040457142,1034.53866666666"
+        "position": "1759.92052601514,1133.03866666667"
       },
       {
         "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
-        "position": "2185.58040457143,1247.03866666667"
+        "position": "2197.42052601514,1333.03866666667"
       },
       {
         "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
-        "position": "1010.58040457142,1347.03866666667"
+        "position": "1022.42052601513,1433.03866666667"
       },
       {
         "id": "5471dfd4-f482-4dfd-a040-93f007fbc15e",
-        "position": "1198.08040457142,1472.03866666667"
+        "position": "1209.92052601514,1558.03866666667"
       },
       {
         "id": "4fe2d57b-d640-4d53-9420-11929357c18e",
-        "position": "1023.08040457142,1609.53866666667"
+        "position": "1034.92052601513,1695.53866666667"
       },
       {
         "id": "24bfd93f-03aa-4e65-8bfe-67148ece64e3",
-        "position": "1198.08040457142,1609.53866666667"
+        "position": "1209.92052601514,1695.53866666667"
       },
       {
         "id": "bce65f3b-f205-44a9-b99f-a7a27f8a4b0f",
-        "position": "1373.08040457143,1609.53866666667"
+        "position": "1384.92052601515,1695.53866666667"
       },
       {
         "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
-        "position": "2073.08040457143,1422.03866666667"
+        "position": "2084.92052601514,1508.03866666667"
       },
       {
         "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
-        "position": "1610.58040457143,1572.03866666667"
+        "position": "1622.42052601515,1658.03866666667"
       },
       {
         "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
-        "position": "1835.58040457143,1572.03866666667"
+        "position": "1847.42052601515,1658.03866666667"
       },
       {
         "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
-        "position": "2035.58040457143,1572.03866666667"
+        "position": "2047.42052601515,1658.03866666667"
       },
       {
         "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
-        "position": "2273.08040457143,1572.03866666667"
+        "position": "2284.92052601514,1658.03866666667"
       },
       {
         "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
-        "position": "2273.08040457143,1634.53866666667"
+        "position": "2284.92052601514,1720.53866666667"
       },
       {
         "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
-        "position": "2110.58040457143,1772.03866666667"
+        "position": "2122.42052601514,1858.03866666667"
       },
       {
         "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
-        "position": "2110.58040457143,1909.53866666667"
+        "position": "2122.42052601514,1995.53866666667"
       },
       {
         "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
-        "position": "2298.08040457143,1772.03866666667"
+        "position": "2309.92052601514,1858.03866666667"
       },
       {
         "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
-        "position": "2298.08040457143,1959.53866666667"
+        "position": "2309.92052601514,2045.53866666667"
       },
       {
         "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
-        "position": "2485.58040457143,1772.03866666667"
+        "position": "2497.42052601514,1858.03866666667"
       },
       {
         "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
-        "position": "2485.58040457143,1959.53866666667"
+        "position": "2497.42052601514,2045.53866666667"
       },
       {
         "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-        "position": "2660.58040457143,1772.03866666667"
+        "position": "2672.42052601514,1858.03866666667"
       },
       {
         "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
-        "position": "2460.58040457143,1647.03866666667"
+        "position": "2472.42052601514,1733.03866666667"
       },
       {
         "id": "79a558cf-959f-4fbb-8b90-03f53b30b249",
-        "position": "3098.08040457143,1447.03866666667"
+        "position": "3109.92052601514,1533.03866666667"
       },
       {
         "id": "595b7508-dce2-4a4e-b7bb-f919702ac429",
-        "position": "2898.08040457143,1484.53866666667"
+        "position": "2909.92052601514,1570.53866666667"
       },
       {
         "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
-        "position": "2973.08040457143,1609.53866666667"
+        "position": "2984.92052601514,1695.53866666667"
       },
       {
         "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
-        "position": "3248.08040457143,1622.03866666667"
+        "position": "3259.92052601514,1708.03866666667"
       },
       {
-        "id": "cc2ede74-5fdf-4129-85bd-d797ace14e49",
-        "position": "3085.58040457142,1822.03866666667"
+        "id": "7bf2fff0-dee1-43d1-a43d-aa99f1d02684",
+        "position": "3122.42052601514,1820.53866666667"
       },
       {
-        "id": "3d30a62a-19d3-40de-8921-2b9a017f499d",
-        "position": "3323.08040457142,1784.53866666667"
+        "id": "1c6e1a48-a56d-41fc-ad48-96501a787d1e",
+        "position": "3297.42052601514,1833.03866666667"
       },
       {
         "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
-        "position": "3798.08040457143,1434.53866666667"
+        "position": "3809.92052601514,1520.53866666667"
       },
       {
         "id": "9bf845a0-c81c-4547-9228-d9639a738262",
-        "position": "3598.08040457143,1472.03866666667"
+        "position": "3609.92052601514,1558.03866666667"
       },
       {
         "id": "660d6a22-22bb-41d2-af8c-98609e1dd347",
-        "position": "3673.08040457143,1597.03866666667"
+        "position": "3684.92052601514,1683.03866666667"
       },
       {
         "id": "a8ae8cbc-f532-4fc1-8de9-4be86e159fce",
-        "position": "3948.08040457143,1609.53866666667"
+        "position": "3959.92052601514,1695.53866666667"
       },
       {
-        "id": "4edbe19c-c79d-42cf-962a-443c2e742e37",
-        "position": "3785.58040457142,1822.03866666667"
+        "id": "c347992c-7dda-4857-9c4a-7f9c2c856718",
+        "position": "3884.92052601514,1870.53866666667"
       },
       {
-        "id": "267306b9-4335-449e-ac8c-181cc8d074d2",
-        "position": "3985.58040457142,1797.03866666667"
+        "id": "94ed1def-e2c6-4837-b124-bef5ae24964b",
+        "position": "4059.92052601514,1858.03866666667"
       },
       {
         "id": "61534d3d-d838-48a3-8226-e9676450f630",
-        "position": "4185.58040457143,1284.53866666667"
+        "position": "4197.42052601514,1370.53866666667"
       },
       {
-        "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
-        "position": "4023.08040457142,1409.53866666667"
+        "id": "b54fed3e-f257-4741-aa72-01c3611fcafe",
+        "position": "4059.92052601514,1520.53866666667"
       },
       {
-        "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
-        "position": "4185.58040457142,1409.53866666667"
+        "id": "562ae55e-3d4d-4488-9644-2118cc0346b5",
+        "position": "4409.92052601514,1520.53866666667"
       },
       {
-        "id": "11967b85-c341-49f3-93ff-297aaf52c779",
-        "position": "4348.08040457142,1409.53866666667"
+        "id": "1c18ff9a-28f3-4635-bde3-47b1495206b1",
+        "position": "4572.42052601514,1520.53866666667"
       }
     ],
     "editorObjects": [
       {
-        "id": "5b45bd06-69c0-458b-bcad-26203af58b70",
+        "id": "cf79bb2f-ddf2-44b7-a791-6ed0cfaa2240",
         "type": "comment",
         "header": "",
-        "body": "Firstly check if it works with simple move to, even without any sector. \r\nIf it ends and we get out of loop - nice.\r\nAfter that we set behavior to standard implementation.\r\n",
+        "body": "FT4 is not going from the start",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
+        "type": "comment",
+        "header": "",
+        "body": "heading would be nice",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "09967029-b608-4f16-98f6-13656f2beb19",
+        "type": "comment",
+        "header": "",
+        "body": "Occupy works bad, we can try different one behaviors, if sitll bad - add manual behaviors",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "ed35da93-41ce-41d8-9835-02c502e611e5",
+        "type": "comment",
+        "header": "",
+        "body": "We can add loop, but it works so",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -952,8 +1032,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "5301.09560457143,3684.53866666666",
-    "gridPadding": "10.5804045714244,9.53866666666545"
+    "canvasSize": "5312.93572601514,3770.53866666666",
+    "gridPadding": "9.92052601513931,8.03866666666545"
   },
   "parameters": [
     {
@@ -963,18 +1043,22 @@
     }
   ],
   "locals": {
-    "outerRadius": "100",
-    "enemies": "nil",
-    "firstPoly": "nil",
-    "secondPoly": "nil",
-    "enemiesInFirstPoly": "nil",
-    "enemiesInSecondPoly": "nil",
+    "innerRadius": "25",
+    "outerRadius": "150",
+    "enemies": "return nil",
+    "firstPoly": "return nil",
+    "secondPoly": "return nil",
+    "enemiesInFirstPoly": "return nil",
+    "enemiesInSecondPoly": "return nil",
     "firstPolyChanged": "false",
     "secondPolyChanged": "false",
-    "firstTeam": "nil",
-    "secondTeam": "nil",
-    "subOrderData": "return nil",
-    "subordinates": "return nil",
-    "subordinateData": "return nil"
+    "firstTeam": "return nil",
+    "secondTeam": "return nil",
+    "subOrderData1": "return nil",
+    "subordinates1": "return nil",
+    "subordinateData1": "return nil",
+    "subOrderData2": "return nil",
+    "subordinates2": "return nil",
+    "subordinateData2": "return nil"
   }
 }
