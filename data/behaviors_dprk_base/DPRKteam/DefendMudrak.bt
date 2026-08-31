@@ -1,0 +1,980 @@
+{
+  "name": "ROOT",
+  "id": "ab891452-fe04-441b-8168-327c9ffba298",
+  "type": "sequence",
+  "subtrees": [
+    {
+      "name": "Init Values",
+      "id": "b15cf8fb-58d4-4674-9493-c69780825219",
+      "type": "scriptAction",
+      "script": [
+        "loc.enemiesInFirstPoly = {}",
+        "loc.enemiesInSecondPoly = {}",
+        "loc.enemies = {} -- should not break, but did anyway",
+        "",
+        "loc.firstTeam = {}",
+        "loc.secondTeam = {}",
+        "",
+        "for i = 0, self:GetEntityCount() / 2 - 1 do",
+        "    loc.firstTeam[#loc.firstTeam] = i",
+        "end",
+        "",
+        "for i = self:GetEntityCount() / 2, self:GetEntityCount() - 1 do",
+        "    loc.secondTeam[#loc.secondTeam] = i",
+        "end"
+      ]
+    },
+    {
+      "name": "Find safe position",
+      "id": "24ad5ac1-39a9-4b57-82a3-f41f51900df7",
+      "type": "reference",
+      "target": [
+        "behaviors_dprk_base",
+        "subteamMoveToDefensivePosition"
+      ],
+      "arguments": {
+        "orderData": "return {position = arg.orderData.position}"
+      }
+    },
+    {
+      "name": "Parallel",
+      "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
+      "type": "supervisedParallel",
+      "subtrees": [
+        {
+          "name": "Wait Forever",
+          "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
+          "type": "waitForever"
+        },
+        {
+          "name": "Check Teams wellfare",
+          "id": "5471dfd4-f482-4dfd-a040-93f007fbc15e",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "Remove Dead",
+              "id": "4fe2d57b-d640-4d53-9420-11929357c18e",
+              "type": "scriptAction",
+              "script": [
+                "local count = 0",
+                "for i = 0, #loc.firstTeam - 1 do",
+                "    if self:GetEntity(loc.firstTeam[count]):IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.firstTeam, count)",
+                "        loc.firstPolyChanged = true",
+                "    end",
+                "end",
+                "",
+                "count = 0",
+                "for i = 0, #loc.secondTeam - 1 do",
+                "    if self:GetEntity(loc.secondTeam[count]):IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.secondTeam, count)",
+                "        loc.secondPolyChanged = true",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Add alive",
+              "id": "24bfd93f-03aa-4e65-8bfe-67148ece64e3",
+              "type": "scriptAction",
+              "script": [
+                "for sI = 0, self:GetEntityCount() - 1 do",
+                "    if not self:GetEntity(sI):IsAlive() then break end",
+                "",
+                "    local isInTeam = false",
+                " -- check first team",
+                "    for i = 0, #loc.firstTeam - 1 do",
+                "        if sI == loc.firstTeam[i] then",
+                "            isInTeam = true",
+                "            break",
+                "        end",
+                "    end",
+                " -- check second team",
+                "    if not isInTeam then",
+                "        for i = 0, #loc.secondTeam - 1 do",
+                "            if sI == loc.secondTeam[i] then",
+                "                isInTeam = true",
+                "                break",
+                "            end",
+                "        end",
+                "    end",
+                "",
+                " -- add to team with less soldiers",
+                "    if not isInTeam then",
+                "        if #loc.secondTeam < #loc.firstTeam then",
+                "            loc.secondTeam[#loc.secondTeam] = sI",
+                "            loc.secondPolyChanged = true",
+                "        else",
+                "            loc.firstTeam[#loc.firstTeam] = sI",
+                "            loc.firstPolyChanged = true",
+                "        end",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Move to weak",
+              "id": "bce65f3b-f205-44a9-b99f-a7a27f8a4b0f",
+              "type": "scriptAction",
+              "script": [
+                "if #loc.firstTeam - #loc.secondTeam >= 2 then",
+                "    loc.secondTeam[#loc.secondTeam] = loc.firstTeam[#loc.firstTeam - 1]",
+                "    loc.firstTeam[#loc.firstTeam - 1] = nil",
+                "    return",
+                "end",
+                "",
+                "if #loc.secondTeam - #loc.firstTeam >= 2 then",
+                "    loc.firstTeam[#loc.firstTeam] = loc.secondTeam[#loc.secondTeam - 1]",
+                "    loc.secondTeam[#loc.secondTeam - 1] = nil",
+                "    return",
+                "end"
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Polygon Manager",
+          "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "CheckEnemiesInOuterRadius",
+              "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
+              "type": "scriptAction",
+              "script": [
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemies = GetEntitiesInArea(Circle(arg.orderData.position, loc.outerRadius), { enemyOf = fren , excludeMapObjects = true})",
+                "",
+                "local count = 1",
+                "for i = 1, #loc.enemies do",
+                "    if loc.enemies[count]:IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.enemies, count)",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "CheckEnemiesInFirstPoly",
+              "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
+              "type": "scriptAction",
+              "script": [
+                "if loc.firstPoly == nil then return end",
+                "",
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemiesInFirstPoly = GetEntitiesInArea(loc.firstPoly, { enemyOf = fren , excludeMapObjects = true} )",
+                "",
+                "local count = 1",
+                "for i = 1, #loc.enemiesInFirstPoly do",
+                "    if loc.enemiesInFirstPoly[count]:IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.enemiesInFirstPoly, count)",
+                "    end",
+                "end",
+                "",
+                "if #loc.enemiesInFirstPoly == 0 or #loc.firstTeam == 0 then",
+                "    loc.firstPoly = nil",
+                "    loc.firstPolyChanged = false",
+                "end"
+              ]
+            },
+            {
+              "name": "CheckEnemiesInSecondPoly",
+              "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
+              "type": "scriptAction",
+              "script": [
+                "if loc.secondPoly == nil then return end",
+                "",
+                "local fren = self:GetEntity(0)",
+                "",
+                "loc.enemiesInSecondPoly = GetEntitiesInArea(loc.secondPoly, { enemyOf = fren , excludeMapObjects = true} )",
+                "",
+                "local count = 1",
+                "for i = 1, #loc.enemiesInSecondPoly do",
+                "    if loc.enemiesInSecondPoly[count]:IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.enemiesInSecondPoly, count)",
+                "    end",
+                "end",
+                "",
+                "if #loc.enemiesInSecondPoly == 0 or #loc.secondTeam == 0 then",
+                "    loc.secondPoly = nil",
+                "    loc.secondPolyChanged = false",
+                "end"
+              ]
+            },
+            {
+              "name": "Create Polygons",
+              "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
+              "type": "selector",
+              "subtrees": [
+                {
+                  "name": "Choose subsquad",
+                  "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
+                  "type": "selector",
+                  "subtrees": [
+                    {
+                      "name": "Create First Poly",
+                      "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create First Poly",
+                          "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
+                          "type": "scriptAction",
+                          "script": [
+                            "local enemy = loc.enemies[1]",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "if #loc.firstTeam > 0 and #loc.secondTeam > 0 then",
+                            "    local dist1 = self:GetEntity(loc.firstTeam[0]):GetPosition():Distance(arg.orderData.position + 20 * normDir)",
+                            "    local dist2 = self:GetEntity(loc.secondTeam[0]):GetPosition():Distance(arg.orderData.position + 20 * normDir)",
+                            "    if(dist1 < dist2) then",
+                            "        loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "        loc.firstPolyChanged = true",
+                            "    else",
+                            "        loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "        loc.secondPolyChanged = true",
+                            "    end",
+                            "",
+                            "elseif #loc.firstTeam > 0 then",
+                            "",
+                            "    loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "    loc.firstPolyChanged = true",
+                            "elseif #loc.secondTeam > 0 then",
+                            "    loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "    loc.secondPolyChanged = true",
+                            "end"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "5c17d5eb-5cfd-4563-a581-c2220113b15a",
+                          "type": "scriptCondition",
+                          "name": "No defenses?",
+                          "script": [
+                            "return loc.firstPoly == nil and loc.secondPoly == nil"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Create First Poly",
+                      "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create First Poly",
+                          "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
+                          "type": "scriptAction",
+                          "script": [
+                            "local target = nil",
+                            "",
+                            "for i, enemy in ipairs(loc.enemies) do",
+                            "    if loc.secondPoly:Contains(enemy:GetPosition()) then",
+                            "",
+                            "    else",
+                            "        target = enemy",
+                            "        break",
+                            "    end",
+                            "end",
+                            "",
+                            "if target == nil then return end",
+                            "",
+                            "local enemy = target",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "loc.firstPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "loc.firstPolyChanged = true"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "ff09fc0e-a814-428f-a492-f3b294a61aed",
+                          "type": "scriptCondition",
+                          "name": "Is First Team alive",
+                          "script": [
+                            "return #loc.firstTeam > 0"
+                          ]
+                        },
+                        {
+                          "id": "d297b217-f880-4515-bac8-bf8fab1eee61",
+                          "type": "scriptCondition",
+                          "name": "No First Poly",
+                          "script": [
+                            "return loc.firstPoly == nil"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Create Second Poly",
+                      "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
+                      "type": "sequence",
+                      "subtrees": [
+                        {
+                          "name": "Create Second Poly",
+                          "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
+                          "type": "scriptAction",
+                          "script": [
+                            "local target = nil",
+                            "",
+                            "for i, enemy in ipairs(loc.enemies) do",
+                            "    if loc.firstPoly:Contains(enemy:GetPosition()) then",
+                            "",
+                            "    else",
+                            "        target = enemy",
+                            "        break",
+                            "    end",
+                            "end",
+                            "",
+                            "if target == nil then return end",
+                            "",
+                            "local enemy = target",
+                            "",
+                            "local dir = enemy:GetPosition() - arg.orderData.position",
+                            "",
+                            "local normDir = dir:NormalizedXY()",
+                            "",
+                            "local rotatedDirLeft = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(-30)",
+                            "local rotatedDirRight = loc.outerRadius * 1.15 * normDir:RotatedAroundZ(30)",
+                            "",
+                            "loc.secondPoly = Polygon({arg.orderData.position, arg.orderData.position + rotatedDirLeft, arg.orderData.position + rotatedDirRight})",
+                            "loc.secondPolyChanged = true"
+                          ]
+                        }
+                      ],
+                      "decorators": [
+                        {
+                          "id": "e1a685bb-2a75-4177-88dd-bc67fdc39298",
+                          "type": "scriptCondition",
+                          "name": "Is Second Team alive",
+                          "script": [
+                            "return #loc.secondTeam > 0"
+                          ]
+                        },
+                        {
+                          "id": "d52e94a4-9095-4a32-83b4-389d661489ef",
+                          "type": "scriptCondition",
+                          "name": "No Second Poly",
+                          "script": [
+                            "return loc.secondPoly == nil"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "Succeed",
+                      "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
+                      "type": "success"
+                    }
+                  ],
+                  "decorators": [
+                    {
+                      "id": "9eee539b-ce4f-4244-89b1-439d4cc9f8ef",
+                      "type": "scriptCondition",
+                      "name": "AreEnemies?",
+                      "script": [
+                        "return #loc.enemies ~= 0"
+                      ]
+                    }
+                  ],
+                  "active": true
+                },
+                {
+                  "name": "Delete Polygons",
+                  "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.firstPoly = nil",
+                    "loc.secondPoly = nil",
+                    "",
+                    "loc.firstPolyChanged = false",
+                    "loc.secondPolyChanged = false"
+                  ]
+                }
+              ],
+              "active": true
+            }
+          ],
+          "decorators": [
+            {
+              "id": "560a5d6d-ba7f-40e6-97b2-f1c7d8c25bd8",
+              "type": "loopForever",
+              "name": "Loop"
+            }
+          ]
+        },
+        {
+          "name": "Manage Subteam 1",
+          "id": "79a558cf-959f-4fbb-8b90-03f53b30b249",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Wait",
+              "id": "595b7508-dce2-4a4e-b7bb-f919702ac429",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Wait Forever",
+                  "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
+                  "type": "waitForever"
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "aaeccf34-b9de-4a4f-ba50-7854379e5c21",
+                  "type": "scriptCondition",
+                  "name": "No poly",
+                  "script": [
+                    "return loc.firstPoly == nil"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "GetToDefensivePositionAndFire",
+              "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Fill OrderData1",
+                  "id": "cc2ede74-5fdf-4129-85bd-d797ace14e49",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.firstPolyChanged = false",
+                    "",
+                    "loc.subOrderData = {",
+                    "    orderName = \"Occupy\",",
+                    "    destination = arg.orderData.position,",
+                    "    sector = loc.firstPoly,",
+                    "    useSafeStance = true",
+                    "}",
+                    "",
+                    "loc.subordinates = {}",
+                    "loc.subordinateData = InternalTable()",
+                    "",
+                    "local offsetMultiplier = 1",
+                    "",
+                    "for _, soldierIndex in pairs(loc.firstTeam) do",
+                    "    local soldier = self:GetEntity(soldierIndex)",
+                    "",
+                    "    table.insert(loc.subordinates, soldier)",
+                    "",
+                    "    local pos = arg.orderData.position + Vec3(offsetMultiplier * 2, 0, offsetMultiplier * -1)",
+                    "",
+                    "    loc.subordinateData[soldier] = {",
+                    "        orderName = \"Occupy\",",
+                    "        destination = pos,",
+                    "        sector = loc.firstPoly,",
+                    "        useSafeStance = true",
+                    "    }",
+                    "",
+                    "    offsetMultiplier = offsetMultiplier + 1",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "InfantryMan Occupy",
+                  "id": "3d30a62a-19d3-40de-8921-2b9a017f499d",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderData",
+                    "subordinates": "return loc.subordinates",
+                    "subordinateData": "return loc.subordinateData",
+                    "update": "return false"
+                  }
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "b9b0d23a-d77a-487f-a847-06df11b7c27f",
+              "type": "restartIf",
+              "name": "If change",
+              "script": [
+                "return loc.firstPolyChanged"
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Manage Subteam 2",
+          "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Wait",
+              "id": "9bf845a0-c81c-4547-9228-d9639a738262",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Wait Forever",
+                  "id": "660d6a22-22bb-41d2-af8c-98609e1dd347",
+                  "type": "waitForever"
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "fb23cf52-a8f6-4adc-b356-46286ce81e44",
+                  "type": "scriptCondition",
+                  "name": "No poly",
+                  "script": [
+                    "return loc.secondPoly == nil"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "GetToDefensivePositionAndFire",
+              "id": "a8ae8cbc-f532-4fc1-8de9-4be86e159fce",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Fill OrderData2",
+                  "id": "4edbe19c-c79d-42cf-962a-443c2e742e37",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.secondPolyChanged = false",
+                    "",
+                    "loc.subOrderData = {",
+                    "    orderName = \"Occupy\",",
+                    "    destination = arg.orderData.position,",
+                    "    sector = loc.secondPoly,",
+                    "    useSafeStance = true",
+                    "}",
+                    "",
+                    "loc.subordinates = {}",
+                    "loc.subordinateData = InternalTable()",
+                    "",
+                    "local offsetMultiplier = 1",
+                    "",
+                    "for _, soldierIndex in pairs(loc.secondTeam) do",
+                    "    local soldier = self:GetEntity(soldierIndex)",
+                    "",
+                    "    table.insert(loc.subordinates, soldier)",
+                    "",
+                    "    local pos = arg.orderData.position + Vec3(offsetMultiplier * 2, 0, offsetMultiplier * -1)",
+                    "",
+                    "    loc.subordinateData[soldier] = {",
+                    "        orderName = \"Occupy\",",
+                    "        destination = pos,",
+                    "        sector = loc.secondPoly,",
+                    "        useSafeStance = true",
+                    "    }",
+                    "",
+                    "    offsetMultiplier = offsetMultiplier + 1",
+                    "end"
+                  ]
+                },
+                {
+                  "name": "InfantryMan Occupy",
+                  "id": "267306b9-4335-449e-ac8c-181cc8d074d2",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderData",
+                    "subordinates": "return loc.subordinates",
+                    "subordinateData": "return loc.subordinateData",
+                    "update": "return false"
+                  }
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "b715299c-08bc-4a30-a495-7db9134e66f4",
+              "type": "restartIf",
+              "name": "If changed",
+              "script": [
+                "return loc.secondPolyChanged"
+              ]
+            }
+          ],
+          "active": true
+        },
+        {
+          "name": "Debug Draw",
+          "id": "61534d3d-d838-48a3-8226-e9676450f630",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "DrawOuterArea",
+              "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+              "type": "scriptAction",
+              "script": [
+                "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+                "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
+                "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
+                "    local pZ = arg.orderData.position:Z() + 1",
+                "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
+                "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
+                "    local nextPZ = arg.orderData.position:Z() + 1",
+                "",
+                "    local p = Vec3(pX, pY, pZ)",
+                "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+                "",
+                "    DebugLine(p, nextP, 1, 0, 0, 1)",
+                "end"
+              ]
+            },
+            {
+              "name": "DrawFirstPoly",
+              "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
+              "type": "scriptAction",
+              "script": [
+                "if loc.firstPoly == nil then return end",
+                "",
+                "local count = loc.firstPoly:Count()",
+                "",
+                "for i = 1, count - 1 do",
+                "    local vertex1 = Vec3(loc.firstPoly:Vertex(i):X(), loc.firstPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
+                "    local vertex2 = Vec3(loc.firstPoly:Vertex(i + 1):X(), loc.firstPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
+                "    DebugLine(vertex1, vertex2, 0, 1, 0, 1)",
+                "end",
+                "",
+                "local vertex1 = Vec3(loc.firstPoly:Vertex(count):X(), loc.firstPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
+                "local vertex2 = Vec3(loc.firstPoly:Vertex(1):X(), loc.firstPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
+                "DebugLine(vertex1, vertex2, 0, 1, 0, 1)"
+              ]
+            },
+            {
+              "name": "DrawSecondPoly",
+              "id": "11967b85-c341-49f3-93ff-297aaf52c779",
+              "type": "scriptAction",
+              "script": [
+                "if loc.secondPoly == nil then return end",
+                "",
+                "local count = loc.secondPoly:Count()",
+                "",
+                "for i = 1, count - 1 do",
+                "    local vertex1 = Vec3(loc.secondPoly:Vertex(i):X(), loc.secondPoly:Vertex(i):Y(), arg.orderData.position:Z() + 3)",
+                "    local vertex2 = Vec3(loc.secondPoly:Vertex(i + 1):X(), loc.secondPoly:Vertex(i + 1):Y(), arg.orderData.position:Z() + 3)",
+                "    DebugLine(vertex1, vertex2, 0, 0, 1, 1)",
+                "end",
+                "",
+                "local vertex1 = Vec3(loc.secondPoly:Vertex(count):X(), loc.secondPoly:Vertex(count):Y(), arg.orderData.position:Z() + 3)",
+                "local vertex2 = Vec3(loc.secondPoly:Vertex(1):X(), loc.secondPoly:Vertex(1):Y(), arg.orderData.position:Z() + 3)",
+                "DebugLine(vertex1, vertex2, 0, 0, 1, 1)"
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "2a48dc44-4c8b-46a1-90d0-b55517e9744c",
+              "type": "loopForever",
+              "name": "Loop"
+            }
+          ]
+        }
+      ],
+      "decorators": [
+        {
+          "id": "763ae792-094d-4940-96c4-cf1b83dfd93c",
+          "type": "loopForever",
+          "name": "Loop"
+        }
+      ]
+    }
+  ],
+  "unlinked-trees": [
+    {
+      "name": "DrawInnerArea",
+      "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "06665545-a341-432c-bf7a-a32ce5967fe3",
+            "position": "4035.58040457142,1022.03866666667"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Send Wait",
+      "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
+            "position": "2823.08040457143,1609.53866666667"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"OccupyMaty\"",
+        "",
+        "for i, sI in pairs(loc.firstTeam) do",
+        "    orderData.position = self:GetEntity(sI):GetPosition()",
+        "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
+        "end",
+        "",
+        "loc.firstPolyChanged = false"
+      ]
+    },
+    {
+      "name": "Send Wait",
+      "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
+      "type": "scriptAction",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "64f009c3-02e5-44a0-ab86-6b0ef4beb7b7",
+            "position": "3523.08040457143,1597.03866666667"
+          }
+        ],
+        "editorObjects": []
+      },
+      "script": [
+        "local orderData = {}",
+        "orderData.orderName = \"OccupyMaty\"",
+        "",
+        "for i, sI in pairs(loc.secondTeam) do",
+        "    orderData.position = self:GetEntity(sI):GetPosition()",
+        "    self:SendMessage(self:GetEntity(sI), \"NewOrder\", orderData)",
+        "end",
+        "",
+        "loc.secondPolyChanged = false"
+      ]
+    }
+  ],
+  "meta": {
+    "nodesInfo": [
+      {
+        "id": "ab891452-fe04-441b-8168-327c9ffba298",
+        "position": "1910.58040457142,809.538666666666"
+      },
+      {
+        "id": "5b45bd06-69c0-458b-bcad-26203af58b70",
+        "position": "3023.08040457142,1059.53866666667"
+      },
+      {
+        "id": "b15cf8fb-58d4-4674-9493-c69780825219",
+        "position": "1223.08040457142,1047.03866666666"
+      },
+      {
+        "id": "24ad5ac1-39a9-4b57-82a3-f41f51900df7",
+        "position": "1523.08040457142,1034.53866666666"
+      },
+      {
+        "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
+        "position": "2185.58040457143,1247.03866666667"
+      },
+      {
+        "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
+        "position": "1010.58040457142,1347.03866666667"
+      },
+      {
+        "id": "5471dfd4-f482-4dfd-a040-93f007fbc15e",
+        "position": "1198.08040457142,1472.03866666667"
+      },
+      {
+        "id": "4fe2d57b-d640-4d53-9420-11929357c18e",
+        "position": "1023.08040457142,1609.53866666667"
+      },
+      {
+        "id": "24bfd93f-03aa-4e65-8bfe-67148ece64e3",
+        "position": "1198.08040457142,1609.53866666667"
+      },
+      {
+        "id": "bce65f3b-f205-44a9-b99f-a7a27f8a4b0f",
+        "position": "1373.08040457143,1609.53866666667"
+      },
+      {
+        "id": "4073cbbf-fed0-40a5-a939-ebc5cfbd6b8c",
+        "position": "2073.08040457143,1422.03866666667"
+      },
+      {
+        "id": "6063b895-f8f0-4cb2-a33e-76b4de0c4b39",
+        "position": "1610.58040457143,1572.03866666667"
+      },
+      {
+        "id": "df3c6972-9bd4-4ef0-b4f6-1bb9728b76e1",
+        "position": "1835.58040457143,1572.03866666667"
+      },
+      {
+        "id": "d0a57d9f-bdeb-4789-a320-552081be5d1e",
+        "position": "2035.58040457143,1572.03866666667"
+      },
+      {
+        "id": "6a02a9f6-0a3c-4704-ae69-5faa9fde1768",
+        "position": "2273.08040457143,1572.03866666667"
+      },
+      {
+        "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
+        "position": "2273.08040457143,1634.53866666667"
+      },
+      {
+        "id": "4e5ee0bd-8bd4-42f6-a7aa-f9fe7c38e525",
+        "position": "2110.58040457143,1772.03866666667"
+      },
+      {
+        "id": "9208e654-5335-44c4-af26-d88a8b7e4e2b",
+        "position": "2110.58040457143,1909.53866666667"
+      },
+      {
+        "id": "a237ec52-7bdd-449c-b13c-58ccf7d5ab08",
+        "position": "2298.08040457143,1772.03866666667"
+      },
+      {
+        "id": "fee0c89c-9d30-41ac-8b86-bb42beea94f6",
+        "position": "2298.08040457143,1959.53866666667"
+      },
+      {
+        "id": "2d605559-93d4-4d09-a99d-7b2629b7a020",
+        "position": "2485.58040457143,1772.03866666667"
+      },
+      {
+        "id": "157b5370-a8d9-4695-a7c9-6b0756eaaff4",
+        "position": "2485.58040457143,1959.53866666667"
+      },
+      {
+        "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
+        "position": "2660.58040457143,1772.03866666667"
+      },
+      {
+        "id": "4da110be-27c8-40da-af7a-eb1fdf7fde40",
+        "position": "2460.58040457143,1647.03866666667"
+      },
+      {
+        "id": "79a558cf-959f-4fbb-8b90-03f53b30b249",
+        "position": "3098.08040457143,1447.03866666667"
+      },
+      {
+        "id": "595b7508-dce2-4a4e-b7bb-f919702ac429",
+        "position": "2898.08040457143,1484.53866666667"
+      },
+      {
+        "id": "48f2b341-466c-426f-9dea-6a473f0b8810",
+        "position": "2973.08040457143,1609.53866666667"
+      },
+      {
+        "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
+        "position": "3248.08040457143,1622.03866666667"
+      },
+      {
+        "id": "cc2ede74-5fdf-4129-85bd-d797ace14e49",
+        "position": "3085.58040457142,1822.03866666667"
+      },
+      {
+        "id": "3d30a62a-19d3-40de-8921-2b9a017f499d",
+        "position": "3323.08040457142,1784.53866666667"
+      },
+      {
+        "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
+        "position": "3798.08040457143,1434.53866666667"
+      },
+      {
+        "id": "9bf845a0-c81c-4547-9228-d9639a738262",
+        "position": "3598.08040457143,1472.03866666667"
+      },
+      {
+        "id": "660d6a22-22bb-41d2-af8c-98609e1dd347",
+        "position": "3673.08040457143,1597.03866666667"
+      },
+      {
+        "id": "a8ae8cbc-f532-4fc1-8de9-4be86e159fce",
+        "position": "3948.08040457143,1609.53866666667"
+      },
+      {
+        "id": "4edbe19c-c79d-42cf-962a-443c2e742e37",
+        "position": "3785.58040457142,1822.03866666667"
+      },
+      {
+        "id": "267306b9-4335-449e-ac8c-181cc8d074d2",
+        "position": "3985.58040457142,1797.03866666667"
+      },
+      {
+        "id": "61534d3d-d838-48a3-8226-e9676450f630",
+        "position": "4185.58040457143,1284.53866666667"
+      },
+      {
+        "id": "dce5fbe3-f4fc-4198-9ffd-4c17c7f52959",
+        "position": "4023.08040457142,1409.53866666667"
+      },
+      {
+        "id": "222f70e5-b80a-4f53-814e-3ac17034c4f5",
+        "position": "4185.58040457142,1409.53866666667"
+      },
+      {
+        "id": "11967b85-c341-49f3-93ff-297aaf52c779",
+        "position": "4348.08040457142,1409.53866666667"
+      }
+    ],
+    "editorObjects": [
+      {
+        "id": "5b45bd06-69c0-458b-bcad-26203af58b70",
+        "type": "comment",
+        "header": "",
+        "body": "Firstly check if it works with simple move to, even without any sector. \r\nIf it ends and we get out of loop - nice.\r\nAfter that we set behavior to standard implementation.\r\n",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      }
+    ],
+    "canvasSize": "5301.09560457143,3684.53866666666",
+    "gridPadding": "10.5804045714244,9.53866666666545"
+  },
+  "parameters": [
+    {
+      "name": "orderData",
+      "isOptional": false,
+      "defaultValue": ""
+    }
+  ],
+  "locals": {
+    "outerRadius": "100",
+    "enemies": "nil",
+    "firstPoly": "nil",
+    "secondPoly": "nil",
+    "enemiesInFirstPoly": "nil",
+    "enemiesInSecondPoly": "nil",
+    "firstPolyChanged": "false",
+    "secondPolyChanged": "false",
+    "firstTeam": "nil",
+    "secondTeam": "nil",
+    "subOrderData": "return nil",
+    "subordinates": "return nil",
+    "subordinateData": "return nil"
+  }
+}
