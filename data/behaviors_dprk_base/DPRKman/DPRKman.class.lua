@@ -20,6 +20,11 @@ return {
                 description = 'soldierFireAt',
 				tree = 'soldierFireAt',
                 parameters = {},
+            },
+            Move = {
+                description = 'soldierMove',
+				tree = 'soldierMove',
+                parameters = {},
             }
         },
     },

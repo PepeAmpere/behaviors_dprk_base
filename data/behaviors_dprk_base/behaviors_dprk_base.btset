@@ -6,6 +6,7 @@
     "Analysis\\FindPathDirect.bt",
     "Analysis\\FindPathSquadSafe.bt",
     "DPRKman\\soldierFireAt.bt",
+    "DPRKman\\soldierMove.bt",
     "DPRKsquad\\AllTeamsDefendBack.bt",
     "DPRKsquad\\AllTeamsDefendFront.bt",
     "DPRKsquad\\AllTeamsIdle.bt",
@@ -29,6 +30,7 @@
     "DPRKsquad\\DPRKsquad.class.lua",
     "DPRKteam\\DPRKteam.class.lua",
     "Helpers\\Geometry.lua",
+    "Sensors\\EnemySensors.lua",
     "Sensors\\PathVolumeSensors.lua",
     "classes.lua"
   ],
