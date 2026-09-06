@@ -112,7 +112,7 @@
                         "",
                         "arg.orderData.state = loc.move",
                         "self:SendMessage(",
-                        "        loc.updateData[1].unit, ",
+                        "        loc.updateData[1].unit,",
                         "        orderName,",
                         "        arg.orderData)",
                         "",
@@ -219,13 +219,13 @@
                             "    end",
                             "",
                             "",
-                            "    loc.coversRequest = FindCovers(threats, loc.coverArea.polygon, positions,     ",
+                            "    loc.coversRequest = FindCovers(threats, loc.coverArea.polygon, positions,",
                             "    {",
                             "    weights = {",
                             "        protection = 50,",
                             "        distance = -1,",
                             "        lineOfFire = 20,",
-                            "        }   ",
+                            "        }",
                             "    })",
                             "    end",
                             "end"
@@ -299,7 +299,7 @@
                         "            if loc.previousCoverSpot ~= nil and loc.previousCoverSpot.position:Distance(cover.position) < avoidanceRadius then",
                         "                goto continue",
                         "            end",
-                        "            ",
+                        "",
                         "            local coverDistanceToTarget = cover.position:Distance(target)",
                         "            if coverDistanceToTarget <= distanceToTarget then",
                         "                loc.coverSpot = cover",
@@ -366,19 +366,19 @@
                         "            loc.moveStarted = true",
                         "        end",
                         "",
-                        "        local offsetPos = nextPos + offset * perp ",
+                        "        local offsetPos = nextPos + offset * perp",
                         "        table.insert(offsetPositions, offsetPos)",
                         "        -- end",
                         "",
                         "        arg.orderData.offsetPositions = offsetPositions",
                         "        arg.orderData.state = loc.move",
                         "        self:SendMessage(",
-                        "                data.unit, ",
+                        "                data.unit,",
                         "                orderName,",
                         "                arg.orderData)",
                         "    end",
                         "    if data.state == loc.cover then",
-                        "        ",
+                        "",
                         "        arg.orderData.stance = 0",
                         "        if loc.previousCoverSpot ~= nil then",
                         "            arg.orderData.stance = loc.previousCoverSpot.stance",
@@ -387,7 +387,7 @@
                         "",
                         "        arg.orderData.state = loc.cover",
                         "        self:SendMessage(",
-                        "            data.unit, ",
+                        "            data.unit,",
                         "            orderName,",
                         "            arg.orderData)",
                         "    end",
@@ -471,7 +471,7 @@
                 "            DebugLine(",
                 "                cover.position,",
                 "                cover.position + Vec3(0, 0, 5),",
-                "                0, 1, 0, 1 ",
+                "                0, 1, 0, 1",
                 "            )",
                 "",
                 "            if cover.edgeStart and cover.edgeEnd then",
@@ -585,118 +585,118 @@
     "nodesInfo": [
       {
         "id": "5e53c10e-e460-4051-b8dc-5c4d74c180cf",
-        "position": "2672.90952380952,614.483517316017"
+        "position": "2672.90952380952,640.483517316017"
       },
       {
         "id": "b81ec0d6-b111-44fe-bc1b-c2d0223d6ec3",
-        "position": "2360.40952380952,839.483517316017"
+        "position": "2360.40952380952,865.483517316017"
       },
       {
         "id": "30f7eafd-e1ac-4198-af6c-1c78091bd2dc",
-        "position": "2547.90952380952,839.483517316017"
+        "position": "2547.90952380952,865.483517316017"
       },
       {
         "id": "c969f41d-f475-4a90-adbb-363180db33d1",
-        "position": "2735.40952380952,839.483517316017"
+        "position": "2735.40952380952,865.483517316017"
       },
       {
         "id": "2b4db328-6cfb-4b6f-9d35-624f503eefe9",
-        "position": "3472.90952380952,1039.48351731602"
+        "position": "3472.90952380952,1065.48351731602"
       },
       {
         "id": "d2761efa-0615-40b3-ba21-f4cdfe95f665",
-        "position": "2472.90952380952,1251.98351731602"
+        "position": "2472.90952380952,1277.98351731602"
       },
       {
         "id": "9e6e7e50-d1cd-4323-8fa5-bb59a5d1f3d9",
-        "position": "1435.40952380952,1514.48351731602"
+        "position": "1435.40952380952,1540.48351731602"
       },
       {
         "id": "824943a6-be89-462b-b90b-d13af569544e",
-        "position": "2970.90952380952,1339.48351731602"
+        "position": "2970.90952380952,1365.48351731602"
       },
       {
         "id": "798fe6bf-78e5-4de5-ba44-de04cb1376e4",
-        "position": "2472.90952380952,1476.98351731602"
+        "position": "2472.90952380952,1502.98351731602"
       },
       {
         "id": "a8e58c7b-5f9f-461a-89d3-7d3a6cf43b66",
-        "position": "2295.90952380952,1676.98351731602"
+        "position": "2295.90952380952,1702.98351731602"
       },
       {
         "id": "d0475b7d-cb0a-4ac2-b9ec-bbc7e0e6b8a4",
-        "position": "2620.90952380952,1689.48351731602",
+        "position": "2620.90952380952,1715.48351731602",
         "height": 50.0
       },
       {
         "id": "370f83f1-3c48-4d02-bd06-ff1ea8b512f2",
-        "position": "3697.90952380952,1689.48351731602"
+        "position": "3697.90952380952,1715.48351731602"
       },
       {
         "id": "a390967c-24b8-4c30-98df-94948a04328b",
-        "position": "3010.40952380952,1864.48351731602"
+        "position": "3010.40952380952,1890.48351731602"
       },
       {
         "id": "ccb8a974-dcc4-4b0f-a6e6-2c08f14caa09",
-        "position": "2597.90952380952,2026.98351731602"
+        "position": "2597.90952380952,2052.98351731602"
       },
       {
         "id": "29793eeb-a9f9-4766-bb5f-714695bb56a1",
-        "position": "2822.90952380952,2026.98351731602"
+        "position": "2822.90952380952,2052.98351731602"
       },
       {
         "id": "9db1807c-e571-4ebd-9fdb-e4ca9a3f6d94",
-        "position": "3072.90952380952,2026.98351731602"
+        "position": "3072.90952380952,2052.98351731602"
       },
       {
         "id": "97bc9c16-b2eb-4517-8c5a-c75bbd5165eb",
-        "position": "3297.90952380952,2026.98351731602"
+        "position": "3297.90952380952,2052.98351731602"
       },
       {
         "id": "9ee21c46-225d-4801-8a47-9870391a5124",
-        "position": "3435.40952380952,1864.48351731602"
+        "position": "3435.40952380952,1890.48351731602"
       },
       {
         "id": "88dfa407-8333-4a74-bc3d-58930ab7f9ac",
-        "position": "3685.40952380952,1864.48351731602"
+        "position": "3685.40952380952,1890.48351731602"
       },
       {
         "id": "771f542e-f62b-43da-9040-369b12d1dc46",
-        "position": "3910.40952380952,1864.48351731602"
+        "position": "3910.40952380952,1890.48351731602"
       },
       {
         "id": "3088c855-bdfe-472c-9b35-9ea749861600",
-        "position": "4197.90952380952,1864.48351731602",
+        "position": "4197.90952380952,1890.48351731602",
         "height": 50.0
       },
       {
         "id": "53347215-4595-4d31-9145-cb3a137bdd5d",
-        "position": "3470.90952380952,1276.98351731602"
+        "position": "3470.90952380952,1302.98351731602"
       },
       {
         "id": "4ce9e26a-470e-4356-94ad-e6acc2f6c5f6",
-        "position": "3785.40952380952,1276.98351731602"
+        "position": "3785.40952380952,1302.98351731602"
       },
       {
         "id": "e94d9362-1bff-4477-9ca5-b13cf71ac734",
-        "position": "4297.90952380952,1114.48351731602"
+        "position": "4297.90952380952,1140.48351731602"
       },
       {
         "id": "01f6ce22-5191-44aa-96d8-98c4eaae5ac2",
-        "position": "4060.40952380952,1276.98351731602"
+        "position": "4060.40952380952,1302.98351731602"
       },
       {
         "id": "8319e276-61b8-47db-83fe-04856806bdce",
-        "position": "4297.90952380952,1276.98351731602"
+        "position": "4297.90952380952,1302.98351731602"
       },
       {
         "id": "7382235e-0cb3-4c1c-b099-dd5fd40cc7d5",
-        "position": "4535.40952380952,1276.98351731602"
+        "position": "4535.40952380952,1302.98351731602"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5253.92761904762,3314.48351731602",
-    "gridPadding": "8.40952380952297,1.98351731601684"
+    "canvasSize": "5253.92761904762,3340.48351731602",
+    "gridPadding": "8.40952380952297,2.98351731601684"
   },
   "parameters": [
     {

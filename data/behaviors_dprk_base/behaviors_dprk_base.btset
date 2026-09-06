@@ -30,6 +30,7 @@
     "DPRKsquad\\DPRKsquad.class.lua",
     "DPRKteam\\DPRKteam.class.lua",
     "Helpers\\Geometry.lua",
+    "Helpers\\IdleHelpers.lua",
     "Sensors\\EnemySensors.lua",
     "Sensors\\PathVolumeSensors.lua",
     "classes.lua"
