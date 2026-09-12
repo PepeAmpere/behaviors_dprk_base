@@ -52,6 +52,14 @@
       "active": true
     },
     {
+      "name": "<unnamed>",
+      "id": "ecce16b7-7437-43aa-aff7-27314d23fdf2",
+      "type": "scriptAction",
+      "script": [
+        "loc.test = self:GetPosition()"
+      ]
+    },
+    {
       "name": "Debug",
       "id": "f99adf6a-9d73-46d7-8886-006712621e3b",
       "type": "sequence",
@@ -72,7 +80,7 @@
             "    local p = Vec3(pX, pY, pZ)",
             "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
             "",
-            "    DebugLine(p, nextP, 1, 1, 1, 1)",
+            "    DebugLine(p, nextP, 1, 0, 1, 1)",
             "end"
           ]
         }
@@ -90,32 +98,36 @@
     "nodesInfo": [
       {
         "id": "0f4c961c-cce4-4d00-9f0d-fc785a0d1648",
-        "position": "2037.5,437.075037462538"
+        "position": "2037.5,449.075037462538"
       },
       {
         "id": "1c2b5911-e21f-4386-85f0-3ff2fff36548",
-        "position": "1875,637.075037462538"
+        "position": "1875,649.075037462538"
       },
       {
         "id": "a4ea5060-ecce-4799-9c66-68abb4f64694",
-        "position": "1387.5,812.075037462537"
+        "position": "1387.5,824.075037462537"
       },
       {
         "id": "f3dee67d-2d23-45dd-ab70-1d04298ef5b1",
-        "position": "2150,862.075037462537"
+        "position": "2150,874.075037462537"
+      },
+      {
+        "id": "ecce16b7-7437-43aa-aff7-27314d23fdf2",
+        "position": "2387.5,836.575037462537"
       },
       {
         "id": "f99adf6a-9d73-46d7-8886-006712621e3b",
-        "position": "2486.25,595.125037462538"
+        "position": "2486.25,607.125037462538"
       },
       {
         "id": "1c78618e-0fbb-449f-b813-e19bba21f100",
-        "position": "2687.5,737.075037462537"
+        "position": "2687.5,749.075037462537"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,3090.87503746254",
-    "gridPadding": "0,12.0750374625375"
+    "canvasSize": "3840,3103.87503746254",
+    "gridPadding": "0,11.5750374625375"
   },
   "parameters": [
     {
@@ -126,6 +138,7 @@
     }
   ],
   "locals": {
-    "reactRadius": "10"
+    "reactRadius": "10",
+    "test": "return nil"
   }
 }

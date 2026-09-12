@@ -4,7 +4,6 @@ return {
     end,
 
     SetInCombat = function(teamStates, index)
-        DebugLog(tostring(index + 1))
         teamStates[index + 1] = "IN_COMBAT"
     end,
 
