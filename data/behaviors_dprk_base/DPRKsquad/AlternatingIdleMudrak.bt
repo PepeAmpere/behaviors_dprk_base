@@ -1,8 +1,13 @@
 {
-  "name": "Start",
-  "id": "49276bdb-3e58-455e-b656-70bca0d8bcb0",
+  "name": "Root",
+  "id": "6782acb8-7d9c-41b2-9eff-b4a29e08579e",
   "type": "supervisedParallel",
   "subtrees": [
+    {
+      "name": "Wait Forever",
+      "id": "3796bdc9-d291-4058-a9c0-6ab85ea29117",
+      "type": "waitForever"
+    },
     {
       "name": "Setup order",
       "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
@@ -234,33 +239,20 @@
             }
           ],
           "script": [
-            "loc.teamStates = {}",
-            "",
-            "for i = 0, self:GetChildGroupCount() - 1 do",
-            "    local group = self:GetChildGroup(i)",
-            "    local actualIndex = group:GetIndexInParent()",
-            "    SetFree(loc.teamStates, actualIndex)",
-            "end",
-            "",
-            "",
             "loc.subOrderData = {",
-            "    orderName = \"DefendMudrak\",",
+            "    orderName = \"Move\",",
             "    position = arg.orderData.destination,",
-            "    heading = HeadingMode.AimAtPos,",
-            "    polyVerts = {},",
-            "    sharedStates = loc.teamStates,",
-            "    teamIndex = -1",
+            "    defendDirection = Vec3(0, 0, 0)",
             "}",
             "",
             "-- content for every message",
             "loc.subordinates = {}",
-            "",
             "loc.subordinateData = InternalTable()",
+            "",
             "-- list of subordinates",
             "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
-            "    DebugLog(\"Error 1\");",
+            "    DebugLog(\"self:GetChildGroupCount() - 1 ~= #loc.sectorCells\");",
             "end",
-            "",
             "",
             "local index = 1;",
             "",
@@ -273,12 +265,6 @@
             "        local sector = loc.sectorPolygons[index]",
             "        local observationSector = loc.observationPolygons[index]",
             "",
-            "",
-            "        local verts = {}",
-            "        for v = 1, observationSector:Count() do",
-            "            table.insert(verts, observationSector:Vertex(v))",
-            "        end",
-            "",
             "        for member in subordinate:GetChildGroups() do",
             "            member.ReqHeadingAimAtPos(GetPolygonCenter(observationSector), 1)",
             "        end",
@@ -288,37 +274,22 @@
             "            destination = loc.sectorCells[index].cells[1].center",
             "        end",
             "",
-            "        SetFree(loc.teamStates, index)",
-            "",
             "        loc.subordinateData[subordinate] = {",
-            "            orderName = \"DefendMudrak\",",
+            "            orderName = \"Move\",",
             "            position = destination,",
-            "            heading = HeadingMode.AimAtPos,",
-            "            polyVerts = verts,",
-            "            sharedStates = loc.teamStates,",
-            "            teamIndex = subordinate:GetIndexInParent()",
+            "            defendDirection = Vec3(0, 0, 0)",
             "        }",
             "",
             "        index = index + 1",
             "    end",
             "end",
             "",
-            "local leaderVerts = {}",
-            "if loc.defencePolygon ~= nil then",
-            "    for v = 1, loc.defencePolygon:Count() do",
-            "        table.insert(leaderVerts, loc.defencePolygon:Vertex(v))",
-            "    end",
-            "end",
-            "",
             "table.insert(loc.subordinates, loc.leaderGroup)",
             "",
             "loc.subordinateData[loc.leaderGroup] = {",
-            "    orderName = \"DefendMudrak\",",
+            "    orderName = \"Move\",",
             "    position = arg.orderData.destination,",
-            "    heading = HeadingMode.AimAtPos,",
-            "    polyVerts = leaderVerts,",
-            "    sharedStates = loc.teamStates,",
-            "    teamIndex = loc.leaderGroup:GetIndexInParent()",
+            "    defendDirection = Vec3(0, 0, 0)",
             "}"
           ]
         },
@@ -353,8 +324,8 @@
           ]
         },
         {
-          "name": "Set all soldiers idle",
-          "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+          "name": "Move fireteams",
+          "id": "5aa3f4bd-967f-47a2-b525-7609ed0981d2",
           "type": "reference",
           "target": [
             "standard_behaviors",
@@ -366,6 +337,176 @@
             "subordinateData": "return loc.subordinateData",
             "update": "return false"
           }
+        },
+        {
+          "name": "Simulation Sequence",
+          "id": "85f1e27a-a08e-4551-b7fb-748f109be5c9",
+          "type": "sequence",
+          "subtrees": [
+            {
+              "name": "CheckEnemiesInDefensePolygon",
+              "id": "cfbf482f-db2a-4dfc-9e1f-d6f5ceb51cab",
+              "type": "scriptAction",
+              "script": [
+                "local fren = loc.leaderGroup:GetEntity(0)",
+                "",
+                "loc.enemies = GetEntitiesInArea(loc.defencePolygon, { enemyOf = fren , excludeMapObjects = true})",
+                "",
+                "local count = 1",
+                "for i = 1, #loc.enemies do",
+                "    if loc.enemies[count]:IsAlive() then",
+                "        count = count + 1",
+                "    else",
+                "        table.remove(loc.enemies, count)",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "CheckIfSomeFireteamDead",
+              "id": "19c4f290-18ec-43bd-8025-a48da5d15944",
+              "type": "scriptAction",
+              "script": [
+                "loc.isAnyFireteamDead = false",
+                "",
+                "for fireteam in self:GetChildGroups() do",
+                "    if fireteam ~= loc.leaderGroup then",
+                "        local isTeamDead = true",
+                "",
+                "        for soldier in fireteam:GetEntities() do",
+                "            if soldier ~= nil and soldier:IsAlive() then",
+                "                isTeamDead = false",
+                "                break",
+                "            end",
+                "        end",
+                "",
+                "        if isTeamDead then",
+                "            loc.isAnyFireteamDead = true",
+                "            break",
+                "        end",
+                "    end",
+                "end"
+              ]
+            },
+            {
+              "name": "Defend Sequence",
+              "id": "81bac818-1678-41ae-abd1-39865e9ef893",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Prepare order data",
+                  "id": "02bc3d0f-9b2e-4272-add2-0e899c534f7c",
+                  "type": "scriptAction",
+                  "script": [
+                    "loc.subOrderData = {",
+                    "    orderName = \"DefendMudrak\",",
+                    "    position = arg.orderData.destination,",
+                    "    heading = HeadingMode.AimAtPos,",
+                    "    polyVerts = {},",
+                    "    teamIndex = -1",
+                    "}",
+                    "",
+                    "-- content for every message",
+                    "loc.subordinates = {}",
+                    "",
+                    "loc.subordinateData = InternalTable()",
+                    "-- list of subordinates",
+                    "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
+                    "    DebugLog(\"Error 1\");",
+                    "end",
+                    "",
+                    "",
+                    "local index = 1;",
+                    "",
+                    "for i = 0, self:GetChildGroupCount() - 1 do",
+                    "    local subordinate = self:GetChildGroup(i)",
+                    "",
+                    "    if subordinate ~= loc.leaderGroup then",
+                    "        table.insert(loc.subordinates, subordinate)",
+                    "",
+                    "        local sector = loc.sectorPolygons[index]",
+                    "        local observationSector = loc.observationPolygons[index]",
+                    "",
+                    "",
+                    "        local verts = {}",
+                    "        for v = 1, observationSector:Count() do",
+                    "            table.insert(verts, observationSector:Vertex(v))",
+                    "        end",
+                    "",
+                    "        for member in subordinate:GetChildGroups() do",
+                    "            member.ReqHeadingAimAtPos(GetPolygonCenter(observationSector), 1)",
+                    "        end",
+                    "",
+                    "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
+                    "        if #loc.sectorCells[index].cells > 0 then",
+                    "            destination = loc.sectorCells[index].cells[1].center",
+                    "        end",
+                    "",
+                    "        loc.subordinateData[subordinate] = {",
+                    "            orderName = \"DefendMudrak\",",
+                    "            position = destination,",
+                    "            heading = HeadingMode.AimAtPos,",
+                    "            polyVerts = verts,",
+                    "            teamIndex = subordinate:GetIndexInParent()",
+                    "        }",
+                    "",
+                    "        index = index + 1",
+                    "    end",
+                    "end",
+                    "",
+                    "local leaderVerts = {}",
+                    "if loc.defencePolygon ~= nil then",
+                    "    for v = 1, loc.defencePolygon:Count() do",
+                    "        table.insert(leaderVerts, loc.defencePolygon:Vertex(v))",
+                    "    end",
+                    "end",
+                    "",
+                    "table.insert(loc.subordinates, loc.leaderGroup)",
+                    "",
+                    "loc.subordinateData[loc.leaderGroup] = {",
+                    "    orderName = \"DefendMudrak\",",
+                    "    position = arg.orderData.destination,",
+                    "    heading = HeadingMode.AimAtPos,",
+                    "    polyVerts = leaderVerts,",
+                    "    teamIndex = loc.leaderGroup:GetIndexInParent()",
+                    "}"
+                  ]
+                },
+                {
+                  "name": "Defend Order",
+                  "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderData",
+                    "subordinates": "return loc.subordinates",
+                    "subordinateData": "return loc.subordinateData",
+                    "update": "return false"
+                  }
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "6cc75b79-2b8a-43bf-b605-3158a56b8210",
+                  "type": "restartIf",
+                  "name": "no enemies and some fireteam dead",
+                  "script": [
+                    "return loc.isAnyFireteamDead and #loc.enemies == 0"
+                  ]
+                }
+              ]
+            }
+          ],
+          "decorators": [
+            {
+              "id": "b305c26c-1f81-4b81-86f0-cdc41641fdef",
+              "type": "loopForever",
+              "name": "Simulation Loop"
+            }
+          ]
         }
       ]
     },
@@ -403,27 +544,16 @@
             "if loc.subordinates ~= nil then",
             "    for _, subordinate in ipairs(loc.subordinates) do",
             "        local data = loc.subordinateData[subordinate]",
-            "",
-            "        if data ~= nil and data.position ~= nil then",
+            "        if data ~= nil and data.position ~= nil and data.teamIndex ~= nil then",
             "            local pos = data.position",
-            "            -- Get the fireteam index assigned earlier",
             "            local teamDigit = data.teamIndex + 1",
-            "",
-            "            -- Prevent rendering errors if leader is -1 or index exceeds single digits",
             "            if teamDigit < 0 then teamDigit = 0 end",
             "            if teamDigit > 9 then teamDigit = 9 end",
             "",
             "            local lineEndPos = pos + lineOffset",
-            "            local digitPos = lineEndPos + Vec3(0, 0, 10) -- Slightly above the line",
-            "",
-            "            -- Draw a line from the destination on the ground up into the air",
+            "            local digitPos = lineEndPos + Vec3(0, 0, 10)",
             "            DebugLine(pos, lineEndPos, 0, 1, 0, 1)",
-            "",
-            "            -- Draw the digit representing the assigned fireteam index",
             "            ai_core_public.draw.Digit(teamDigit, digitPos, 1, 1, 1, 1, 2)",
-            "",
-            "            -- Optional: Highlight the assigned observation sector polygon",
-            "            -- ai_core_public.draw.PolygonOnSurface(data.polyVerts, 0, 1, 0, 1, Vec3(0,0,1))",
             "        end",
             "    end",
             "end"
@@ -456,7 +586,7 @@
         "nodesInfo": [
           {
             "id": "5561bf3d-b90f-43fd-b662-0f98c6970970",
-            "position": "5066.64182326223,1358.33103255855"
+            "position": "5079.14182326223,1507.13509447886"
           }
         ],
         "editorObjects": []
@@ -500,7 +630,7 @@
         "nodesInfo": [
           {
             "id": "6255a376-0c75-4c7b-a79b-880ef8116725",
-            "position": "5441.64182326223,1245.83103255855"
+            "position": "5366.64182326223,1319.63509447886"
           }
         ],
         "editorObjects": []
@@ -516,20 +646,6 @@
       ]
     },
     {
-      "name": "Wait Forever",
-      "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-      "type": "waitForever",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "271d03c4-73b9-4fc8-8896-4cccc27493cf",
-            "position": "4504.14182326223,1045.83103255855"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
       "name": "Draw Area ",
       "id": "37511152-7fa0-4b6b-a879-434aff25b436",
       "type": "scriptAction",
@@ -537,7 +653,7 @@
         "nodesInfo": [
           {
             "id": "37511152-7fa0-4b6b-a879-434aff25b436",
-            "position": "5254.14182326223,995.831032558553"
+            "position": "5179.14182326223,1069.63509447886"
           }
         ],
         "editorObjects": []
@@ -572,7 +688,7 @@
         "nodesInfo": [
           {
             "id": "00bca17e-338f-4f46-8256-0b56de76fb3d",
-            "position": "5454.14182326223,1033.33103255855"
+            "position": "5379.14182326223,1107.13509447886"
           }
         ],
         "editorObjects": []
@@ -596,7 +712,7 @@
         "nodesInfo": [
           {
             "id": "dbfab38d-3b0e-4e98-b3d9-6299ef5e251a",
-            "position": "5266.64182326223,1083.33103255855"
+            "position": "5191.64182326223,1157.13509447886"
           }
         ],
         "editorObjects": []
@@ -608,65 +724,324 @@
         "    end",
         "end"
       ]
+    },
+    {
+      "name": "Debug Loop",
+      "id": "dfe21b30-1875-4651-aca4-34af5b47ce82",
+      "type": "loopForever",
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "dfe21b30-1875-4651-aca4-34af5b47ce82",
+            "position": "4766.64182326223,882.135094478858"
+          }
+        ],
+        "editorObjects": []
+      }
+    },
+    {
+      "name": "Simulation Sequence",
+      "id": "42255320-ac56-43ca-97ed-6d851d5ab1f8",
+      "type": "sequence",
+      "subtrees": [
+        {
+          "name": "CheckEnemiesInDefensePolygon",
+          "id": "88e26029-c218-4ae6-9601-71eda2571bb4",
+          "type": "scriptAction",
+          "script": [
+            "local fren = loc.leaderGroup:GetEntity(0)",
+            "",
+            "loc.enemies = GetEntitiesInArea(loc.defencePolygon, { enemyOf = fren , excludeMapObjects = true})",
+            "",
+            "local count = 1",
+            "for i = 1, #loc.enemies do",
+            "    if loc.enemies[count]:IsAlive() then",
+            "        count = count + 1",
+            "    else",
+            "        table.remove(loc.enemies, count)",
+            "    end",
+            "end"
+          ]
+        },
+        {
+          "name": "Decision",
+          "id": "cf0fd9b1-2a5d-4f6a-baf4-8c426715f9b1",
+          "type": "selector",
+          "subtrees": [
+            {
+              "name": "Defend Sequence",
+              "id": "8bc86737-102e-42e3-ae58-f37b327fa6e4",
+              "type": "sequence",
+              "subtrees": [
+                {
+                  "name": "Prepare order data",
+                  "id": "39612791-071e-4827-a00f-fc107ad7a2ed",
+                  "type": "scriptAction",
+                  "script": [
+                    "local childGroupsCount = self:GetChildGroupCount() - 1",
+                    "local step = 2 * math.pi / childGroupsCount",
+                    "local halfStep = step * 0.5",
+                    "",
+                    "loc.subOrderData = {",
+                    "    orderName = \"Move\",",
+                    "    position = arg.orderData.destination,",
+                    "    teamIndex = -1,",
+                    "    defendDirection = Vec3(0, 0, 0)",
+                    "}",
+                    "",
+                    "-- content for every message",
+                    "loc.subordinates = {}",
+                    "",
+                    "loc.subordinateData = InternalTable()",
+                    "-- list of subordinates",
+                    "if(self:GetChildGroupCount() - 1 ~= #loc.sectorCells) then",
+                    "    DebugLog(\"Error 1\");",
+                    "end",
+                    "",
+                    "",
+                    "local index = 1;",
+                    "",
+                    "for i = 0, self:GetChildGroupCount() - 1 do",
+                    "    local subordinate = self:GetChildGroup(i)",
+                    "",
+                    "    if subordinate ~= loc.leaderGroup then",
+                    "        table.insert(loc.subordinates, subordinate)",
+                    "",
+                    "        local sector = loc.sectorPolygons[index]",
+                    "        local observationSector = loc.observationPolygons[index]",
+                    "",
+                    "",
+                    "        local verts = {}",
+                    "        for v = 1, observationSector:Count() do",
+                    "            table.insert(verts, observationSector:Vertex(v))",
+                    "        end",
+                    "",
+                    "        for member in subordinate:GetChildGroups() do",
+                    "            member.ReqHeadingAimAtPos(GetPolygonCenter(observationSector), 1)",
+                    "        end",
+                    "",
+                    "        local destination = GetPolygonCenter(loc.sectorCells[index].sector)",
+                    "        if #loc.sectorCells[index].cells > 0 then",
+                    "            destination = loc.sectorCells[index].cells[1].center",
+                    "        end",
+                    "",
+                    "        local currentAngle = (index - 1) * step + halfStep",
+                    "        local directionVec = Vec3(math.cos(currentAngle), math.sin(currentAngle), 0)",
+                    "",
+                    "        loc.subordinateData[subordinate] = {",
+                    "            orderName = \"Move\",",
+                    "            position = destination,",
+                    "            teamIndex = subordinate:GetIndexInParent(),",
+                    "            defendDirection = directionVec",
+                    "        }",
+                    "",
+                    "        index = index + 1",
+                    "    end",
+                    "end",
+                    "",
+                    "table.insert(loc.subordinates, loc.leaderGroup)",
+                    "",
+                    "loc.subordinateData[loc.leaderGroup] = {",
+                    "    orderName = \"Move\",",
+                    "    position = arg.orderData.destination,",
+                    "    teamIndex = loc.leaderGroup:GetIndexInParent(),",
+                    "    defendDirection = Vec3(0, 0, 0)",
+                    "}"
+                  ]
+                },
+                {
+                  "name": "Defend Order",
+                  "id": "abc86652-3eea-412c-beac-a40eaeb6cf76",
+                  "type": "reference",
+                  "target": [
+                    "standard_behaviors",
+                    "ExecuteSubordinateOrder"
+                  ],
+                  "arguments": {
+                    "orderData": "return loc.subOrderData",
+                    "subordinates": "return loc.subordinates",
+                    "subordinateData": "return loc.subordinateData",
+                    "update": "return false"
+                  }
+                }
+              ],
+              "decorators": [
+                {
+                  "id": "2972c90f-c35a-46e2-8a89-30661ca38f12",
+                  "type": "scriptCondition",
+                  "name": "AreEnemies?",
+                  "script": [
+                    "return #loc.enemies ~= 0"
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "Succeed",
+              "id": "102f91fa-c363-4c23-acb7-04a0efecdee3",
+              "type": "success"
+            }
+          ],
+          "active": true
+        }
+      ],
+      "decorators": [
+        {
+          "id": "f39e6a08-4654-4c67-be07-3ece7666969a",
+          "type": "loopForever",
+          "name": "Simulation Loop"
+        }
+      ],
+      "meta": {
+        "nodesInfo": [
+          {
+            "id": "42255320-ac56-43ca-97ed-6d851d5ab1f8",
+            "position": "5745.3203946908,2979.43114731491"
+          },
+          {
+            "id": "88e26029-c218-4ae6-9601-71eda2571bb4",
+            "position": "5395.3203946908,3316.93114731491"
+          },
+          {
+            "id": "cf0fd9b1-2a5d-4f6a-baf4-8c426715f9b1",
+            "position": "6007.8203946908,3279.43114731491"
+          },
+          {
+            "id": "8bc86737-102e-42e3-ae58-f37b327fa6e4",
+            "position": "5845.3203946908,3429.43114731491"
+          },
+          {
+            "id": "39612791-071e-4827-a00f-fc107ad7a2ed",
+            "position": "5682.8203946908,3641.93114731491"
+          },
+          {
+            "id": "abc86652-3eea-412c-beac-a40eaeb6cf76",
+            "position": "5882.8203946908,3641.93114731491"
+          },
+          {
+            "id": "102f91fa-c363-4c23-acb7-04a0efecdee3",
+            "position": "6307.8203946908,3604.43114731491"
+          }
+        ],
+        "editorObjects": []
+      }
     }
   ],
   "meta": {
     "nodesInfo": [
       {
-        "id": "49276bdb-3e58-455e-b656-70bca0d8bcb0",
-        "position": "4266.64182326223,720.831032558553"
+        "id": "6782acb8-7d9c-41b2-9eff-b4a29e08579e",
+        "position": "3854.14182326223,682.135094478858"
       },
       {
-        "id": "dff4414a-1e9a-4b15-ac4d-5853207023a2",
-        "position": "3191.64182326223,1470.83103255855"
+        "id": "81fa36ea-bd13-452f-9f0a-37ffc534b5f9",
+        "position": "3966.64182326223,2219.63509447886"
+      },
+      {
+        "id": "977a57ee-e48d-40b3-91af-c3f18efca10a",
+        "position": "5245.3203946908,3579.43114731491"
+      },
+      {
+        "id": "c1ddc946-4cbf-4ab4-a2fa-3b7a9d0d2822",
+        "position": "3591.64182326223,2282.13509447886"
+      },
+      {
+        "id": "3796bdc9-d291-4058-a9c0-6ab85ea29117",
+        "position": "3366.64182326223,1094.63509447886"
       },
       {
         "id": "4b6e0786-9261-42cd-8922-b5e9e3ce4539",
-        "position": "3916.64182326223,970.831032558553"
+        "position": "3854.14182326223,1119.63509447886"
       },
       {
         "id": "5a04761b-f7f9-4f5c-86cc-b30833d7a059",
-        "position": "3129.14182326223,1195.83103255855"
+        "position": "2616.64182326223,1357.13509447886"
       },
       {
         "id": "bf8eea96-c1eb-40e5-ad33-53854e961d1f",
-        "position": "3491.64182326223,1220.83103255855"
+        "position": "3029.14182326223,1444.63509447886"
       },
       {
         "id": "338ae938-e35f-4276-9e49-eb5141e7b7e3",
-        "position": "3791.64182326223,1245.83103255855"
+        "position": "3279.14182326223,1432.13509447886"
       },
       {
         "id": "d7ce7df0-d300-4e4b-91de-a7540ca72119",
-        "position": "4054.14182326223,1258.33103255855"
+        "position": "3516.64182326223,1457.13509447886"
+      },
+      {
+        "id": "5aa3f4bd-967f-47a2-b525-7609ed0981d2",
+        "position": "3816.64182326223,1444.63509447886"
+      },
+      {
+        "id": "85f1e27a-a08e-4551-b7fb-748f109be5c9",
+        "position": "4691.64182326223,1794.63509447886"
+      },
+      {
+        "id": "cfbf482f-db2a-4dfc-9e1f-d6f5ceb51cab",
+        "position": "4066.64182326223,2157.13509447886"
+      },
+      {
+        "id": "19c4f290-18ec-43bd-8025-a48da5d15944",
+        "position": "4454.14182326223,2157.13509447886"
+      },
+      {
+        "id": "81bac818-1678-41ae-abd1-39865e9ef893",
+        "position": "4791.64182326223,2119.63509447886"
+      },
+      {
+        "id": "02bc3d0f-9b2e-4272-add2-0e899c534f7c",
+        "position": "4629.14182326223,2332.13509447886"
       },
       {
         "id": "a037ac79-51de-4ff9-b6a6-de046c32fd13",
-        "position": "4641.64182326223,1420.83103255855"
+        "position": "4829.14182326223,2332.13509447886"
       },
       {
         "id": "58eaef06-e683-4d90-80ce-a5dc89d4c544",
-        "position": "4904.14182326223,1008.33103255855"
+        "position": "4779.14182326223,1069.63509447886"
       },
       {
         "id": "0b0d8dd4-b552-467b-9c10-9be4c7126207",
-        "position": "4754.14182326223,1158.33103255855"
+        "position": "4629.14182326223,1307.13509447886"
       },
       {
         "id": "055d5b31-d326-4a54-a01e-436e6a936785",
-        "position": "4954.14182326223,1270.83103255855"
+        "position": "4829.14182326223,1419.63509447886"
       },
       {
         "id": "870c70c7-0efb-430f-85fb-05aa2fc3cf63",
-        "position": "5079.14182326223,1183.33103255855"
+        "position": "4954.14182326223,1332.13509447886"
       }
     ],
     "editorObjects": [
       {
-        "id": "dff4414a-1e9a-4b15-ac4d-5853207023a2",
+        "id": "81fa36ea-bd13-452f-9f0a-37ffc534b5f9",
         "type": "comment",
         "header": "",
-        "body": "Add reaction on fireteam death -> like immediately reorder free fireteams on the free sector, merge them or anything",
+        "body": "Check dead team. If someone dead -> expand sector for some other guys",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "977a57ee-e48d-40b3-91af-c3f18efca10a",
+        "type": "comment",
+        "header": "",
+        "body": "Check dead team. If someone dead -> expand sector for some other guys",
+        "bodyAlignment": "Left",
+        "headerBackground": "#FF00FF00",
+        "headerForeground": "#FF000000",
+        "boxBackground": "#FF90EE90",
+        "boxForeground": "#FF000000"
+      },
+      {
+        "id": "c1ddc946-4cbf-4ab4-a2fa-3b7a9d0d2822",
+        "type": "comment",
+        "header": "",
+        "body": "Set availability by manually checking teams and if they have enemies. If so -> don't touch them. If no -> extend the first free team polygon and fuck opfors immediately",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -674,8 +1049,8 @@
         "boxForeground": "#FF000000"
       }
     ],
-    "canvasSize": "7755.68222418049,3974.48422825174",
-    "gridPadding": "4.14182326222593,8.33103255855261"
+    "canvasSize": "8633.68222418049,4185.78829017205",
+    "gridPadding": "4.14182326222593,7.13509447885841"
   },
   "parameters": [
     {
@@ -701,6 +1076,8 @@
     "debugColors": "return nil",
     "sectorCells": "return nil",
     "destinationCells": "return nil",
-    "teamStates": "return nil"
+    "teamStates": "return nil",
+    "enemies": "return nil",
+    "isAnyFireteamDead": "false"
   }
 }

@@ -25,18 +25,6 @@
       ]
     },
     {
-      "name": "Find safe position",
-      "id": "24ad5ac1-39a9-4b57-82a3-f41f51900df7",
-      "type": "reference",
-      "target": [
-        "behaviors_dprk_base",
-        "subteamMoveToDefensivePosition"
-      ],
-      "arguments": {
-        "orderData": "return {position = arg.orderData.position}"
-      }
-    },
-    {
       "name": "Parallel",
       "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
       "type": "supervisedParallel",
@@ -223,14 +211,6 @@
                   "id": "d4bd8282-d31b-4764-8a48-4a2158d546fa",
                   "type": "sequence",
                   "subtrees": [
-                    {
-                      "name": "Update team status",
-                      "id": "c4cdb06e-0f2c-4113-93ec-46cfdadc9d7a",
-                      "type": "scriptAction",
-                      "script": [
-                        "SetInCombat(arg.orderData.sharedStates, arg.orderData.teamIndex)"
-                      ]
-                    },
                     {
                       "name": "Choose subsquad",
                       "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
@@ -838,23 +818,19 @@
     "nodesInfo": [
       {
         "id": "ab891452-fe04-441b-8168-327c9ffba298",
-        "position": "1922.42052601514,899.538666666666"
-      },
-      {
-        "id": "cf79bb2f-ddf2-44b7-a791-6ed0cfaa2240",
-        "position": "1097.42052601514,899.538666666665"
+        "position": "2197.42052601514,1187.03866666667"
       },
       {
         "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
         "position": "1097.42052601514,949.538666666665"
       },
       {
-        "id": "b15cf8fb-58d4-4674-9493-c69780825219",
-        "position": "1234.92052601514,1137.03866666666"
+        "id": "1947d47d-ed65-49f3-8486-081f3703e864",
+        "position": "1522.42052601514,1337.03866666667"
       },
       {
-        "id": "24ad5ac1-39a9-4b57-82a3-f41f51900df7",
-        "position": "1759.92052601514,1137.03866666667"
+        "id": "b15cf8fb-58d4-4674-9493-c69780825219",
+        "position": "1697.42052601514,1262.03866666667"
       },
       {
         "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
@@ -903,10 +879,6 @@
       {
         "id": "d4bd8282-d31b-4764-8a48-4a2158d546fa",
         "position": "2297.42052601514,1762.03866666667"
-      },
-      {
-        "id": "c4cdb06e-0f2c-4113-93ec-46cfdadc9d7a",
-        "position": "2072.42052601514,1899.53866666667"
       },
       {
         "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
@@ -958,11 +930,11 @@
       },
       {
         "id": "7bf2fff0-dee1-43d1-a43d-aa99f1d02684",
-        "position": "3359.92052601514,1874.53866666667"
+        "position": "3172.42052601514,1874.53866666667"
       },
       {
         "id": "1c6e1a48-a56d-41fc-ad48-96501a787d1e",
-        "position": "3534.92052601514,1887.03866666667"
+        "position": "3347.42052601514,1887.03866666667"
       },
       {
         "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
@@ -1007,10 +979,10 @@
     ],
     "editorObjects": [
       {
-        "id": "cf79bb2f-ddf2-44b7-a791-6ed0cfaa2240",
+        "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
         "type": "comment",
         "header": "",
-        "body": "FT4 is not going from the start",
+        "body": "heading would be nice",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -1018,10 +990,10 @@
         "boxForeground": "#FF000000"
       },
       {
-        "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
+        "id": "1947d47d-ed65-49f3-8486-081f3703e864",
         "type": "comment",
         "header": "",
-        "body": "heading would be nice",
+        "body": "At start if enemy pos far -> move to safe spot, if near - skip and shoot already",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",

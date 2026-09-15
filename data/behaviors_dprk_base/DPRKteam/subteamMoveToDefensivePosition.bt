@@ -34,8 +34,12 @@
             "        validIndex = validIndex + 1",
             "    end",
             "end",
+            "",
+            "loc.threatDirectionPos = arg.orderData.position + (30 * arg.orderData.defendDirection)",
+            "",
+            "local threats = { { position = loc.threatDirectionPos, avoidance = 1.0 } }",
+            "",
             "local params = { weights = { distance = -2, protection = 10, preferenceTowardThreats = 0.6 }, constraints = { coneOfFire = 15 } }",
-            "local threats = {}",
             "",
             "loc.futureCovers = FindCovers(threats, Circle(arg.orderData.position, loc.coverSearchRadius), groupPos, params)"
           ]
@@ -138,6 +142,10 @@
             "            end",
             "        end",
             "    end",
+            "end",
+            "",
+            "if loc.threatDirectionPos ~= nil then",
+            "    DebugLine(loc.threatDirectionPos, loc.threatDirectionPos + Vec3(0, 0, 15), 1, 0, 0, 1)",
             "end"
           ]
         }
@@ -155,44 +163,44 @@
     "nodesInfo": [
       {
         "id": "7eecd028-bf5a-41b6-a8c8-0a439388668b",
-        "position": "1425,657.143246753247"
+        "position": "1425,766.143246753247"
       },
       {
         "id": "f18bc06f-8a3e-4548-86da-655d3b0925ba",
-        "position": "1337.5,857.143246753247"
+        "position": "1337.5,966.143246753247"
       },
       {
         "id": "b8add01e-da3c-449d-bd59-d3ea6820b09c",
-        "position": "1000,1069.64324675325"
+        "position": "1000,1178.64324675325"
       },
       {
         "id": "dae81ccc-2b9a-43e6-ae4f-6593284b8ac5",
-        "position": "1187.5,1069.64324675325"
+        "position": "1187.5,1178.64324675325"
       },
       {
         "id": "4e31b308-411f-4cc2-8e3e-da0260bbf64d",
-        "position": "1362.5,1069.64324675325"
+        "position": "1362.5,1178.64324675325"
       },
       {
         "id": "6dd5a92d-40a5-4767-92ff-28a01015c6d4",
-        "position": "1575,1072.34324675325"
+        "position": "1575,1181.34324675325"
       },
       {
         "id": "6eaa11b5-6b35-4306-858b-1c6b0d00c3e2",
-        "position": "1800,1059.84324675325"
+        "position": "1800,1168.84324675325"
       },
       {
         "id": "e4c3c7a8-400d-4331-bac2-f0c7449a207c",
-        "position": "1800,659.843246753247"
+        "position": "1837.5,893.843246753247"
       },
       {
         "id": "8cacb7f8-24be-4d05-9f00-a8f23a089e78",
-        "position": "2325,872.343246753247"
+        "position": "2362.5,1218.84324675325"
       }
     ],
     "editorObjects": [],
-    "canvasSize": "3840,3010.14324675325",
-    "gridPadding": "0,9.84324675324672"
+    "canvasSize": "3840,3120.14324675325",
+    "gridPadding": "0,7.34324675324672"
   },
   "parameters": [
     {
@@ -210,6 +218,7 @@
     "subOrderData": "return nil",
     "subordinates": "return nil",
     "subordinateData": "return nil",
-    "coverSearchRadius": "7"
+    "coverSearchRadius": "7",
+    "threatDirectionPos": "return nil"
   }
 }

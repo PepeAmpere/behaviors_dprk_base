@@ -56,7 +56,7 @@
             "        loc.teamGroups[intoGroup][#loc.teamGroups[intoGroup] + 1] = team",
             "        intoGroup = intoGroup + 1",
             "        if intoGroup > #loc.teamGroups then",
-            "            intoGroup = 1    ",
+            "            intoGroup = 1",
             "        end",
             "    end",
             "end"
@@ -179,8 +179,8 @@
                 "local endOffset = 100",
                 "local endAngle = 45",
                 "loc.pathVolume = BuildPathVolume(",
-                "    loc.path.outputPath, sideOffset, ",
-                "    startOffset, startAngle, ",
+                "    loc.path.outputPath, sideOffset,",
+                "    startOffset, startAngle,",
                 "    endOffset, endAngle",
                 ")"
               ]
@@ -259,7 +259,7 @@
                         "end",
                         "",
                         "--[[",
-                        "table.insert(loc.subordinates, subordinate)    ",
+                        "table.insert(loc.subordinates, subordinate)",
                         "loc.subordinateData[subordinate] = {",
                         "    destination = position",
                         "}]]--",
@@ -269,7 +269,7 @@
                         "--self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
                         "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
                         "--DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
-                        "    ",
+                        "",
                         "--end"
                       ]
                     },
@@ -332,7 +332,7 @@
                             "    for soldier in team:GetEntities() do",
                             "        if soldier:IsAlive() then return false end",
                             "    end",
-                            "    ",
+                            "",
                             "end",
                             "",
                             "return true"
@@ -365,7 +365,7 @@
                             "end",
                             "",
                             "--[[",
-                            "table.insert(loc.subordinates, subordinate)    ",
+                            "table.insert(loc.subordinates, subordinate)",
                             "loc.subordinateData[subordinate] = {",
                             "    destination = position",
                             "}]]--",
@@ -375,7 +375,7 @@
                             "--self:SendMessage(subordinate, \"NewOrder\", loc.subordinateData)",
                             "--self:SendMessage(subordinate, \"NewOrder\", {orderName = \"ReturnToFormation\"})",
                             "--DebugLog(self .. \" - Sent Message - \" .. subordinate .. \" . \" .. arg.orderData.destination)",
-                            "    ",
+                            "",
                             "--end"
                           ]
                         },
@@ -539,8 +539,8 @@
                                 "local endOffset = 100",
                                 "local endAngle = 45",
                                 "loc.pathVolume = BuildPathVolume(",
-                                "    loc.path.outputPath, sideOffset, ",
-                                "    startOffset, startAngle, ",
+                                "    loc.path.outputPath, sideOffset,",
+                                "    startOffset, startAngle,",
                                 "    endOffset, endAngle",
                                 ")"
                               ]
@@ -574,7 +574,7 @@
                                 "    --destination = loc.path.outputPoints[1]",
                                 "}",
                                 "",
-                                "    ",
+                                "",
                                 "--end"
                               ]
                             },
@@ -672,18 +672,18 @@
             "        local smallestTeamGroup = 0",
             "        local smallestTeamGroupSize = 9999",
             "        for j=1, #loc.teamGroups do",
-            "            if i ~= j then ",
+            "            if i ~= j then",
             "                if #loc.teamGroups[j] < smallestTeamGroupSize then",
             "                    smallestTeamGroup = j",
             "                    smallestTeamGroupSize = #loc.teamGroups[j]",
             "                end",
             "            end",
             "        end",
-            "        ",
+            "",
             "        for k=1, #loc.teamGroups[i] do",
             "            table.insert(loc.teamGroups[smallestTeamGroup], loc.teamGroups[i][k])",
             "        end",
-            "        ",
+            "",
             "        table.remove(loc.teamGroups, i)",
             "        table.remove(loc.healthyTeams, i)",
             "        loc.reset = true",
@@ -1060,7 +1060,7 @@
       }
     ],
     "editorObjects": [],
-    "canvasSize": "5456.2646031746,3714.57",
+    "canvasSize": "5456.2646031746,3761.57",
     "gridPadding": "6.97134920634792,2.06999999999997"
   },
   "parameters": [
