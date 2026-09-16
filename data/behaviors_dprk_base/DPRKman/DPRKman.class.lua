@@ -16,12 +16,12 @@ return {
         end,
 
         behaviors = {
-            Fire = {
+            FireMudrak = {
                 description = 'soldierFireAt',
 				tree = 'soldierFireAt',
                 parameters = {},
             },
-            Move = {
+            MoveMudrak = {
                 description = 'soldierMove',
 				tree = 'soldierMove',
                 parameters = {},

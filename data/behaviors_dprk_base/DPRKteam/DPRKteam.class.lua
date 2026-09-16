@@ -21,7 +21,7 @@ return {
 				tree = 'DefendMudrak',
                 parameters = {},
             },
-            Move = {
+            MoveMudrak = {
                 description = 'subteamMoveToDefensivePosition',
 				tree = 'subteamMoveToDefensivePosition',
                 parameters = {},

@@ -212,6 +212,60 @@
                   "type": "sequence",
                   "subtrees": [
                     {
+                      "name": "Start action",
+                      "id": "a1ec9cee-3a1b-4e65-9127-b0029b3ebe18",
+                      "type": "selector",
+                      "subtrees": [
+                        {
+                          "name": "<unnamed>",
+                          "id": "d0b9e8df-3848-4437-9928-7b71bacebcd3",
+                          "type": "sequence",
+                          "subtrees": [
+                            {
+                              "name": "Set movedAway",
+                              "id": "f4d8cd7e-3b6a-4661-a91a-743f5a6a57ef",
+                              "type": "scriptAction",
+                              "script": [
+                                "loc.movedAway = true"
+                              ]
+                            },
+                            {
+                              "name": "Move away from enemies",
+                              "id": "909b96b7-412c-4d8d-978b-b1269f209352",
+                              "type": "reference",
+                              "target": [
+                                "behaviors_dprk_base",
+                                "subteamMoveToDefensivePosition"
+                              ],
+                              "arguments": {
+                                "orderData": "return arg.orderData"
+                              }
+                            }
+                          ],
+                          "decorators": [
+                            {
+                              "id": "ca855862-1077-4fba-b2b6-177f2199d677",
+                              "type": "scriptCondition",
+                              "name": "If enemy far away",
+                              "script": [
+                                "local leader = self:GetLeader()",
+                                "local myPosition = leader:GetPosition()",
+                                "local distanceToThreat = myPosition:DistanceXY(loc.enemies[1]:GetPosition())",
+                                "",
+                                "return distanceToThreat >= loc.safeDistance and not loc.movedAway"
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "Succeed",
+                          "id": "3f6d12e9-0bce-4067-a196-27844bc34b7a",
+                          "type": "success"
+                        }
+                      ],
+                      "active": true
+                    },
+                    {
                       "name": "Choose subsquad",
                       "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
                       "type": "selector",
@@ -404,7 +458,8 @@
                     "loc.secondPoly = nil",
                     "",
                     "loc.firstPolyChanged = false",
-                    "loc.secondPolyChanged = false"
+                    "loc.secondPolyChanged = false",
+                    "loc.movedAway = false"
                   ]
                 }
               ],
@@ -457,7 +512,7 @@
                   "type": "scriptAction",
                   "script": [
                     "if not loc.enemies or #loc.enemies == 0 then",
-                    "    loc.subOrderData1 = { orderName = \"Fire\" }",
+                    "    loc.subOrderData1 = { orderName = \"FireMudrak\" }",
                     "    loc.subordinates1 = {}",
                     "    loc.subordinateData1 = InternalTable()",
                     "    return",
@@ -466,7 +521,7 @@
                     "local targetForFirstTeam = loc.enemies[1]",
                     "",
                     "loc.subOrderData1 = {",
-                    "    orderName = \"Fire\",",
+                    "    orderName = \"FireMudrak\",",
                     "    entityToFireAt = targetForFirstTeam",
                     "}",
                     "",
@@ -480,7 +535,7 @@
                     "        if soldier ~= nil and soldier:IsAlive() then",
                     "            table.insert(loc.subordinates1, soldier)",
                     "            loc.subordinateData1[soldier] = {",
-                    "                orderName = \"Fire\",",
+                    "                orderName = \"FireMudrak\",",
                     "                entityToFireAt = targetForFirstTeam",
                     "            }",
                     "        end",
@@ -558,7 +613,7 @@
                   "type": "scriptAction",
                   "script": [
                     "if not loc.enemies or #loc.enemies == 0 then",
-                    "    loc.subOrderData2 = { orderName = \"Fire\" }",
+                    "    loc.subOrderData2 = { orderName = \"FireMudrak\" }",
                     "    loc.subordinates2 = {}",
                     "    loc.subordinateData2 = InternalTable()",
                     "    return",
@@ -567,7 +622,7 @@
                     "local targetForSecondTeam = loc.enemies[2] or loc.enemies[1]",
                     "",
                     "loc.subOrderData2 = {",
-                    "    orderName = \"Fire\",",
+                    "    orderName = \"FireMudrak\",",
                     "    entityToFireAt = targetForSecondTeam",
                     "}",
                     "",
@@ -581,7 +636,7 @@
                     "        if soldier ~= nil and soldier:IsAlive() then",
                     "            table.insert(loc.subordinates2, soldier)",
                     "            loc.subordinateData2[soldier] = {",
-                    "                orderName = \"Fire\",",
+                    "                orderName = \"FireMudrak\",",
                     "                entityToFireAt = targetForSecondTeam",
                     "            }",
                     "        end",
@@ -647,6 +702,26 @@
               ]
             },
             {
+              "name": "DrawOuterArea",
+              "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
+              "type": "scriptAction",
+              "script": [
+                "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
+                "    local pX = arg.orderData.position:X() + (loc.safeDistance * math.sin(i))",
+                "    local pY = arg.orderData.position:Y() + (loc.safeDistance * math.cos(i))",
+                "    local pZ = arg.orderData.position:Z() + 1",
+                "    local nextPX = arg.orderData.position:X() + (loc.safeDistance * math.sin(i + math.pi/12))",
+                "    local nextPY = arg.orderData.position:Y() + (loc.safeDistance * math.cos(i + math.pi/12))",
+                "    local nextPZ = arg.orderData.position:Z() + 1",
+                "",
+                "    local p = Vec3(pX, pY, pZ)",
+                "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
+                "",
+                "    DebugLine(p, nextP, 1, 0, 0, 1)",
+                "end"
+              ]
+            },
+            {
               "name": "DrawFirstPoly",
               "id": "562ae55e-3d4d-4488-9644-2118cc0346b5",
               "type": "scriptAction",
@@ -706,49 +781,6 @@
     }
   ],
   "unlinked-trees": [
-    {
-      "name": "Succeed",
-      "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-      "type": "success",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "78ffbc7a-0abd-4f3c-be72-360a12642258",
-            "position": "2734.92052601514,2037.03866666667"
-          }
-        ],
-        "editorObjects": []
-      }
-    },
-    {
-      "name": "DrawOuterArea",
-      "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
-      "type": "scriptAction",
-      "meta": {
-        "nodesInfo": [
-          {
-            "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
-            "position": "4247.42052601514,1524.53866666667"
-          }
-        ],
-        "editorObjects": []
-      },
-      "script": [
-        "for i = 0, math.pi * 2 - math.pi/12, math.pi/12 do",
-        "    local pX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i))",
-        "    local pY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i))",
-        "    local pZ = arg.orderData.position:Z() + 1",
-        "    local nextPX = arg.orderData.position:X() + (loc.outerRadius * math.sin(i + math.pi/12))",
-        "    local nextPY = arg.orderData.position:Y() + (loc.outerRadius * math.cos(i + math.pi/12))",
-        "    local nextPZ = arg.orderData.position:Z() + 1",
-        "",
-        "    local p = Vec3(pX, pY, pZ)",
-        "    local nextP = Vec3(nextPX, nextPY, nextPZ)",
-        "",
-        "    DebugLine(p, nextP, 1, 0, 0, 1)",
-        "end"
-      ]
-    },
     {
       "name": "Send Wait",
       "id": "c4d4bffe-d8ba-4c77-85f5-559e2b467bcd",
@@ -818,23 +850,19 @@
     "nodesInfo": [
       {
         "id": "ab891452-fe04-441b-8168-327c9ffba298",
-        "position": "2197.42052601514,1187.03866666667"
+        "position": "2197.42052601514,749.538666666665"
       },
       {
         "id": "6bfbf185-63df-4ecf-a3c5-efdd7db5d45d",
         "position": "1097.42052601514,949.538666666665"
       },
       {
-        "id": "1947d47d-ed65-49f3-8486-081f3703e864",
-        "position": "1522.42052601514,1337.03866666667"
-      },
-      {
         "id": "b15cf8fb-58d4-4674-9493-c69780825219",
-        "position": "1697.42052601514,1262.03866666667"
+        "position": "1409.92052601514,924.538666666665"
       },
       {
         "id": "54776d10-a2a0-4105-a61a-4d35dead146d",
-        "position": "2197.42052601514,1337.03866666667"
+        "position": "2197.42052601514,1162.03866666667"
       },
       {
         "id": "46a61db8-7c61-4a92-99ed-85565a0ca11e",
@@ -879,6 +907,27 @@
       {
         "id": "d4bd8282-d31b-4764-8a48-4a2158d546fa",
         "position": "2297.42052601514,1762.03866666667"
+      },
+      {
+        "id": "a1ec9cee-3a1b-4e65-9127-b0029b3ebe18",
+        "position": "1709.92052601514,1924.53866666667",
+        "height": 50.0
+      },
+      {
+        "id": "d0b9e8df-3848-4437-9928-7b71bacebcd3",
+        "position": "1472.42052601514,2049.53866666667"
+      },
+      {
+        "id": "f4d8cd7e-3b6a-4661-a91a-743f5a6a57ef",
+        "position": "1343.25385934847,2235.01485714286"
+      },
+      {
+        "id": "909b96b7-412c-4d8d-978b-b1269f209352",
+        "position": "1534.92052601514,2262.03866666667"
+      },
+      {
+        "id": "3f6d12e9-0bce-4067-a196-27844bc34b7a",
+        "position": "1847.42052601514,2074.53866666667"
       },
       {
         "id": "4f82c6e0-787d-4901-8c09-b95e282a0643",
@@ -926,15 +975,15 @@
       },
       {
         "id": "5147166e-60a1-4704-bff2-ba1fa1840b72",
-        "position": "3259.92052601514,1712.03866666667"
+        "position": "3172.42052601514,1712.03866666666"
       },
       {
         "id": "7bf2fff0-dee1-43d1-a43d-aa99f1d02684",
-        "position": "3172.42052601514,1874.53866666667"
+        "position": "3084.92052601514,1874.53866666667"
       },
       {
         "id": "1c6e1a48-a56d-41fc-ad48-96501a787d1e",
-        "position": "3347.42052601514,1887.03866666667"
+        "position": "3309.92052601514,1874.53866666667"
       },
       {
         "id": "44f5c7b1-ff06-4198-a910-1c0deac968cb",
@@ -969,6 +1018,10 @@
         "position": "4059.92052601514,1524.53866666667"
       },
       {
+        "id": "427bb647-8a17-447b-af3d-aa2564ead2fc",
+        "position": "4247.42052601514,1524.53866666667"
+      },
+      {
         "id": "562ae55e-3d4d-4488-9644-2118cc0346b5",
         "position": "4409.92052601514,1524.53866666667"
       },
@@ -983,17 +1036,6 @@
         "type": "comment",
         "header": "",
         "body": "heading would be nice",
-        "bodyAlignment": "Left",
-        "headerBackground": "#FF00FF00",
-        "headerForeground": "#FF000000",
-        "boxBackground": "#FF90EE90",
-        "boxForeground": "#FF000000"
-      },
-      {
-        "id": "1947d47d-ed65-49f3-8486-081f3703e864",
-        "type": "comment",
-        "header": "",
-        "body": "At start if enemy pos far -> move to safe spot, if near - skip and shoot already",
         "bodyAlignment": "Left",
         "headerBackground": "#FF00FF00",
         "headerForeground": "#FF000000",
@@ -1029,6 +1071,8 @@
     "subordinateData1": "return nil",
     "subOrderData2": "return nil",
     "subordinates2": "return nil",
-    "subordinateData2": "return nil"
+    "subordinateData2": "return nil",
+    "safeDistance": "30",
+    "movedAway": "false"
   }
 }

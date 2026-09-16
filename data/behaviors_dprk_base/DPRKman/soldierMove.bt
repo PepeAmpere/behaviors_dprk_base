@@ -9,7 +9,7 @@
       "type": "selector",
       "subtrees": [
         {
-          "name": "<unnamed>",
+          "name": "Fire at enemy",
           "id": "a4ea5060-ecce-4799-9c66-68abb4f64694",
           "type": "reference",
           "decorators": [
@@ -50,14 +50,6 @@
         }
       ],
       "active": true
-    },
-    {
-      "name": "<unnamed>",
-      "id": "ecce16b7-7437-43aa-aff7-27314d23fdf2",
-      "type": "scriptAction",
-      "script": [
-        "loc.test = self:GetPosition()"
-      ]
     },
     {
       "name": "Debug",
@@ -113,10 +105,6 @@
         "position": "2150,874.075037462537"
       },
       {
-        "id": "ecce16b7-7437-43aa-aff7-27314d23fdf2",
-        "position": "2387.5,836.575037462537"
-      },
-      {
         "id": "f99adf6a-9d73-46d7-8886-006712621e3b",
         "position": "2486.25,607.125037462538"
       },
@@ -138,7 +126,6 @@
     }
   ],
   "locals": {
-    "reactRadius": "10",
-    "test": "return nil"
+    "reactRadius": "10"
   }
 }

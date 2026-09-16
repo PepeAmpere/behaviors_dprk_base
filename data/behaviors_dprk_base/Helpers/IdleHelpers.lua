@@ -9,5 +9,9 @@ return {
 
     SetDead = function(teamStates, index)
         teamStates[index + 1] = "DEAD"
+    end,
+
+    IsDead = function(teamStates, index)
+        return teamStates[index + 1] == "DEAD"
     end
 }
